@@ -46,7 +46,7 @@ class Log:
             f.write('\n'+'-'*80+'\n'*3)
             f.write('kinetic Monte Carlo Log \n\n')
             f.write('{:<10s} {:^20s} {:^30s} {:<10s}'.format('Step',
-                    'time[hr:min:s]','Sim time [s]','Events called\n'))
+                    'time[hr:min:s]','Sim time [s]','Events called (ordered as in user_events.py)\n'))
 
             
 
@@ -82,6 +82,6 @@ class Log:
         with open(self.fn, 'a') as f:
             time_str = time.strftime('%H:%M:%S')
             f.write('{:<10s} {:^20s} {:^30s} {:<10s}'.format(str(step),
-                    time_str,str(sim_time),str(ev_called)+'\n'))
+                    time_str,str(sim_time),str(["%.0f"%item for item in ev_called])+'\n'))
 
 

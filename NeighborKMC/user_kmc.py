@@ -4,6 +4,7 @@ from base.logging import Log
 from user_constants import *
 from user_sites import Site
 from user_events import *
+import pyclbr
 
 class NeighborKMC(NeighborKMCBase):
 
@@ -35,7 +36,7 @@ class NeighborKMC(NeighborKMCBase):
 
         """
         
-        self.load_events(parameters['T'],parameters['pCO'],parameters['pO2'])
+        self.load_events(parameters)
         self.evs_exec = np.zeros(len(self.events))
         NeighborKMCBase.__init__(self,particle=particle,tend=tend,parameters=parameters)
 
@@ -61,7 +62,7 @@ class NeighborKMC(NeighborKMCBase):
 
         
 
-    def load_events(self,T,pCO,pO2):
+    def load_events(self,parameters):
         r"""Loads the events list.
     
             User-overridden method.
@@ -71,21 +72,23 @@ class NeighborKMC(NeighborKMCBase):
     
             Parameters
             ----------
-            T : float
-                The temperature in K.
-
-            pCO  : float
-                The CO pressure in Pa.
+            parameters : dict
+                The parameters to pass to the simulation events.
 
         """
         self.events = []
-        self.events.append(COAdsEvent(T,pCO))
-        self.events.append(CODesEvent(T,pCO))
-        self.events.append(OAdsEvent(T,pO2))
-        self.events.append(ODesEvent(T,pO2))
-        self.events.append(CODiffEvent(T))
-        self.events.append(ODiffEvent(T))
-        self.events.append(COOxEvent(T))
+        classes = pyclbr.readmodule("user_events")
+        event_names = []
+        line_nrs = []
+        for c in classes:
+            if classes[c].file.endswith("user_events.py"):
+                event_names.append(c)
+                line_nrs.append(classes[c].lineno)
+        # Sort events by line number:
+        event_names_srt = [event_names[n] for n in np.argsort(line_nrs)] 
+        for n in event_names_srt:            
+            exec("self.events.append("+n+"(parameters))")
+
 
 
     def run_kmc(self):

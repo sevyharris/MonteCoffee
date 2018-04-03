@@ -34,8 +34,7 @@ class COAdsEvent(EventBase):
 
     """
 
-    def __init__(self,T,pCO):
-        params = {'T':T,'pCO':pCO,'Asite':Asite,'mCO':mCO,'s0CO':s0CO}
+    def __init__(self,params):
         EventBase.__init__(self,params)
 
            
@@ -71,11 +70,10 @@ class CODesEvent(EventBase):
     """
 
 
-    def __init__(self,T,pCO):
-        SCOads = get_entropy_ads(T,modes_COads)
-        SCOgas = get_entropy_CO(T,pCO)
-        dS = SCOads-SCOgas
-        params = {'T':T,'pCO':pCO,'mCO':mCO,'dS':dS,'Asite':Asite,'s0CO':s0CO}
+    def __init__(self,params):
+        SCOads = get_entropy_ads(params["T"],modes_COads)
+        SCOgas = get_entropy_CO(params["T"],params["pCO"])
+        self.dS = SCOads-SCOgas
         EventBase.__init__(self,params)
         
            
@@ -90,7 +88,7 @@ class CODesEvent(EventBase):
         stype = particle.sites[i_site].stype
         Ncovs = particle.get_ncovs(i_site)
         ECO = max(EadsCO[stype]-get_repulsion(1,Ncovs,stype),0)
-        K = np.exp((ECO+self.params['T']*self.params['dS'])/
+        K = np.exp((ECO+self.params['T']*self.dS)/
                    (kB*self.params['T']))
 
         
@@ -117,11 +115,10 @@ class OAdsEvent(EventBase):
     Performing the event adds O to the two empty neighbor sites.
     """
 
-    def __init__(self,T,pO2):
-        S2Oads = 2.*get_entropy_ads(T,modes_Oads)
-        SO2gas = get_entropy_O2(T,pO2)
-        dS = S2Oads-SO2gas
-        params = {'T':T,'pO2':pO2,'dS':dS,'Asite':Asite,'mO2':mO2,'s0O':s0O}
+    def __init__(self,params):
+        S2Oads = 2.*get_entropy_ads(params["T"],modes_Oads)
+        SO2gas = get_entropy_O2(params["T"],params["pO2"])
+        self.dS = S2Oads-SO2gas
         EventBase.__init__(self,params)
 
            
@@ -155,11 +152,10 @@ class ODesEvent(EventBase):
     Performing the event adds O to the two empty neighbor sites.
     """
 
-    def __init__(self,T,pO2):
-        S2Oads = 2.*get_entropy_ads(T,modes_Oads)
-        SO2gas = get_entropy_O2(T,pO2)
-        dS = S2Oads-SO2gas
-        params = {'T':T,'dS':dS,'pO2':pO2,'Asite':Asite,'mO2':mO2,'s0O':s0O}
+    def __init__(self,params):
+        S2Oads = 2.*get_entropy_ads(params["T"],modes_Oads)
+        SO2gas = get_entropy_O2(params["T"],params["pO2"])
+        self.dS = S2Oads-SO2gas
         EventBase.__init__(self,params)
 
            
@@ -180,7 +176,7 @@ class ODesEvent(EventBase):
         Rf = (self.params['s0O']*self.params['pO2']*self.params['Asite']/
             np.sqrt(2.*np.pi*self.params['mO2']*kB*eV2J*self.params['T']) )
 
-        K = np.exp((E2O+self.params['T']*self.params['dS'])/
+        K = np.exp((E2O+self.params['T']*self.dS)/
                    (kB*self.params['T']))
 
 
@@ -208,9 +204,10 @@ class CODiffEvent(EventBase):
 
     """
 
-    def __init__(self,T): 
-        dS = get_entropy_ads(T,modes_COads[1:])-get_entropy_ads(T,modes_COads) # Entropic barrier from translation
-        params = {'T':T,'dS':dS,'Ediff':0.0}
+    def __init__(self,params): 
+        self.dS = get_entropy_ads(params["T"],modes_COads[1:])-get_entropy_ads(params["T"],modes_COads) # Entropic barrier from translation
+        params["EdiffCO"] = EdiffCO
+        params["Ediff"] = 0.4
         EventBase.__init__(self,params)
         
            
@@ -233,9 +230,9 @@ class CODiffEvent(EventBase):
         Eother  =  max(0,EadsCO[stype_other] - get_repulsion(1, Nothercovs,stype_other))
         
         dE = max(E-Eother,0.)
-        Eact = dE+self.params['Ediff']+EdiffCO
+        Eact = dE+self.params['Ediff']+self.params["EdiffCO"]
 
-        return np.exp(self.params['dS']/kB)*np.exp(-Eact/
+        return np.exp(self.dS/kB)*np.exp(-Eact/
                (kB*self.params['T']))*kB*self.params['T']/(h)
 
 
@@ -258,10 +255,11 @@ class ODiffEvent(EventBase):
 
     """
 
-    def __init__(self,T):
-        SOads = get_entropy_ads(T,modes_Oads)
-        dS = SOads*(1./2.9-1.) # Entropic barrier from translation
-        params = {'T':T,'dS':dS,'Ediff':0.0}
+    def __init__(self,params):
+        SOads = get_entropy_ads(params["T"],modes_Oads)
+        self.dS = SOads*(1./2.9-1.) # Entropic barrier from translation
+        params["EdiffO"] = EdiffO
+        params["Ediff"] = 0.0
         EventBase.__init__(self,params)
         
            
@@ -286,7 +284,7 @@ class ODiffEvent(EventBase):
         dE = max(0.,E-Eother)
         Eact = dE+self.params['Ediff']+EdiffO
 
-        return np.exp(self.params['dS']/kB)*np.exp(-Eact/
+        return np.exp(self.dS/kB)*np.exp(-Eact/
                (kB*self.params['T']))*kB*self.params['T']/(h)
 
 
@@ -308,9 +306,8 @@ class COOxEvent(EventBase):
     Performing the event removes a CO+O from the site.
     """
 
-    def __init__(self,T):
-        Zratio = (get_Zvib(T,modes_COads)*get_Zvib(T,modes_Oads))**0.66
-        params = {'T':T,'Zratio':Zratio}
+    def __init__(self,params):
+        self.Zratio = (get_Zvib(params["T"],modes_COads)*get_Zvib(params["T"],modes_Oads))**0.66
         EventBase.__init__(self,params)
         
            
@@ -335,7 +332,7 @@ class COOxEvent(EventBase):
         EO  -= get_repulsion(2, Nothercovs,stype_other)
         Ea = max(0.,get_Ea(ECO,EO))
 
-        return self.params['Zratio']*np.exp(-Ea/
+        return self.Zratio*np.exp(-Ea/
                (kB*self.params['T']))*kB*self.params['T']/(h)
 
 
