@@ -56,8 +56,7 @@ for i,b in enumerate(atoms):
         b.tag = maxtag+1
 
 
-parameters = {"pCO":pCO,"pO2":pO2,"T":T,"mCO":mCO,"mO2":mO2,
-              "s0CO":s0CO,"s0O":s0O,"Asite":Asite,
+parameters = {"pCO":pCO,"pO2":pO2,"T":T,
               "Name":"COOx Simulation"}
 
 sim = NeighborKMC(particle = p,tend = 1.0, parameters=parameters)

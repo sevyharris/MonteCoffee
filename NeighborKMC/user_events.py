@@ -46,8 +46,8 @@ class COAdsEvent(EventBase):
             return False
 
     def get_rate(self,particle,i_site,other_site):
-        R = (self.params['s0CO']*self.params['pCO']*self.params['Asite']/
-            np.sqrt(2.*np.pi*self.params['mCO']*kB*eV2J*self.params['T']) )
+        R = (s0CO*self.params['pCO']*Asite/
+            np.sqrt(2.*np.pi*mCO*kB*eV2J*self.params['T']) )
 
         return R
 
@@ -93,8 +93,8 @@ class CODesEvent(EventBase):
 
         
         
-        RF = (self.params['pCO']*self.params['s0CO']*self.params['Asite']/
-             np.sqrt(2.*np.pi*self.params['mCO']*kB*eV2J*self.params['T']) ) 
+        RF = (self.params['pCO']*s0CO*Asite/
+             np.sqrt(2.*np.pi*mCO*kB*eV2J*self.params['T']) ) 
         #print "ECO :", stype, ECO, K, RF
         return RF/K
 
@@ -124,14 +124,15 @@ class OAdsEvent(EventBase):
            
     def possible(self,particle,site,other_site):
         
-        if particle.sites[site].covered == 0 and particle.sites[other_site].covered == 0:
+        if particle.sites[site].covered == 0 and\
+           particle.sites[other_site].covered == 0:
             return True
         else:
             return False
 
     def get_rate(self,particle,i_site,other_site):
-        R = (self.params['s0O']*self.params['pO2']*self.params['Asite']/
-            np.sqrt(2.*np.pi*self.params['mO2']*kB*eV2J*self.params['T']) )
+        R = (s0O*self.params['pO2']*Asite/
+            np.sqrt(2.*np.pi*mO2*kB*eV2J*self.params['T']) )
 
         return R
 
@@ -161,7 +162,8 @@ class ODesEvent(EventBase):
            
     def possible(self,particle,site,other_site):
         
-        if particle.sites[site].covered == 2 and particle.sites[other_site].covered == 2:
+        if particle.sites[site].covered == 2 and\
+           particle.sites[other_site].covered == 2:
             return True
         else:
             return False
@@ -171,10 +173,11 @@ class ODesEvent(EventBase):
         stype_other = particle.sites[other_site].stype
         Ncovs = particle.get_ncovs(i_site)
         Ncovsother = particle.get_ncovs(other_site)
-        E2O = max(2.*EadsO[stype]-get_repulsion(1,Ncovs,stype)-get_repulsion(1,Ncovsother,stype_other),0.)
+        E2O = max(2.*EadsO[stype]-get_repulsion(1,Ncovs,stype)\
+              -get_repulsion(1,Ncovsother,stype_other),0.)
 
-        Rf = (self.params['s0O']*self.params['pO2']*self.params['Asite']/
-            np.sqrt(2.*np.pi*self.params['mO2']*kB*eV2J*self.params['T']) )
+        Rf = (s0O*self.params['pO2']*Asite/
+            np.sqrt(2.*np.pi*mO2*kB*eV2J*self.params['T']) )
 
         K = np.exp((E2O+self.params['T']*self.dS)/
                    (kB*self.params['T']))
@@ -205,7 +208,8 @@ class CODiffEvent(EventBase):
     """
 
     def __init__(self,params): 
-        self.dS = get_entropy_ads(params["T"],modes_COads[1:])-get_entropy_ads(params["T"],modes_COads) # Entropic barrier from translation
+        self.dS = get_entropy_ads(params["T"],modes_COads[1:])-\
+                  get_entropy_ads(params["T"],modes_COads) 
         params["EdiffCO"] = EdiffCO
         params["Ediff"] = 0.4
         EventBase.__init__(self,params)
@@ -223,11 +227,14 @@ class CODiffEvent(EventBase):
         stype = particle.sites[i_site].stype
         stype_other = particle.sites[other_site].stype
 
-        Ncovs = [particle.sites[n].covered for n in particle.neighbors[i_site] ]
-        Nothercovs = [particle.sites[n].covered for n in particle.neighbors[other_site] ]
+        Ncovs = [particle.sites[n].covered for n in\
+                particle.neighbors[i_site] ]
+        Nothercovs = [particle.sites[n].covered for\
+                     n in particle.neighbors[other_site] ]
 
         E = max(0.,EadsCO[stype] - get_repulsion(1,Ncovs,stype))
-        Eother  =  max(0,EadsCO[stype_other] - get_repulsion(1, Nothercovs,stype_other))
+        Eother  =  max(0,EadsCO[stype_other] - get_repulsion\
+                    (1, Nothercovs,stype_other))
         
         dE = max(E-Eother,0.)
         Eact = dE+self.params['Ediff']+self.params["EdiffCO"]
@@ -257,7 +264,7 @@ class ODiffEvent(EventBase):
 
     def __init__(self,params):
         SOads = get_entropy_ads(params["T"],modes_Oads)
-        self.dS = SOads*(1./2.9-1.) # Entropic barrier from translation
+        self.dS = SOads*(1./2.9-1.) 
         params["EdiffO"] = EdiffO
         params["Ediff"] = 0.0
         EventBase.__init__(self,params)
@@ -275,11 +282,14 @@ class ODiffEvent(EventBase):
         stype = particle.sites[i_site].stype
         stype_other = particle.sites[other_site].stype
 
-        Ncovs = [particle.sites[n].covered for n in particle.neighbors[i_site] ]
-        Nothercovs = [particle.sites[n].covered for n in particle.neighbors[other_site] ]
+        Ncovs = [particle.sites[n].covered for n in\
+                particle.neighbors[i_site] ]
+        Nothercovs = [particle.sites[n].covered for n in\
+                      particle.neighbors[other_site] ]
 
         E = EadsO[stype] - get_repulsion(2,Ncovs,stype) 
-        Eother  =  EadsO[stype_other] - get_repulsion(2, Nothercovs,stype_other)
+        Eother  =  EadsO[stype_other] - get_repulsion\
+                    (2, Nothercovs,stype_other)
 
         dE = max(0.,E-Eother)
         Eact = dE+self.params['Ediff']+EdiffO
@@ -289,8 +299,8 @@ class ODiffEvent(EventBase):
 
 
     def do_event(self,particle,site,other_site):
-        particle.sites[site].covered = 0 # Remove the O from the site
-        particle.sites[other_site].covered = 2 # Add the O to the other site
+        particle.sites[site].covered = 0
+        particle.sites[other_site].covered = 2 
 
 
 
@@ -307,7 +317,8 @@ class COOxEvent(EventBase):
     """
 
     def __init__(self,params):
-        self.Zratio = (get_Zvib(params["T"],modes_COads)*get_Zvib(params["T"],modes_Oads))**0.66
+        self.Zratio = (get_Zvib(params["T"],modes_COads)*\
+                      get_Zvib(params["T"],modes_Oads))**0.66
         EventBase.__init__(self,params)
         
            
@@ -326,8 +337,10 @@ class COOxEvent(EventBase):
         ECO =  EadsCO[stype]
         EO = EadsO[stype_other]
         # Find the Nearest neighbor repulsion
-        Ncovs = [particle.sites[n].covered for n in particle.neighbors[i_site] ]
-        Nothercovs = [particle.sites[n].covered for n in particle.neighbors[other_site] ]
+        Ncovs = [particle.sites[n].covered for n in\
+                particle.neighbors[i_site] ]
+        Nothercovs = [particle.sites[n].covered for n\
+                     in particle.neighbors[other_site] ]
         ECO -= get_repulsion(1,Ncovs,stype)
         EO  -= get_repulsion(2, Nothercovs,stype_other)
         Ea = max(0.,get_Ea(ECO,EO))
@@ -337,5 +350,5 @@ class COOxEvent(EventBase):
 
 
     def do_event(self,particle,site,other_site):
-        particle.sites[site].covered = 0 # Remove the CO from the site
-        particle.sites[other_site].covered = 0 # Remove the O from the other site
+        particle.sites[site].covered = 0 
+        particle.sites[other_site].covered = 0 

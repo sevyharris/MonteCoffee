@@ -35,7 +35,6 @@ class ParticleBase:
         self.neighbors = [s.neighbors for s in sites]
         self.lattice = self.define_lattice()
         
-        self.set_pbc_2d()
 
 
     def identify_neighbors(self):
@@ -74,7 +73,7 @@ class ParticleBase:
         return [self.sites[n].covered for n in self.neighbors[i_site]]
 
 
-   def define_lattice(self):
+    def define_lattice(self):
         r"""Initialize a lattice based on the sites lattice_positions.
 
             The method returns a lattice if all sites in self.sites
