@@ -7,7 +7,7 @@ The particle module defines the SiteBase Class.
 class SiteBase:
 
 
-    def __init__(self, stype = 0,covered=0, ind=[]):
+    def __init__(self, stype = 0,covered=0, ind=[], lattice_pos=None):
         r"""Constructor for SiteBase objects.
             
             Method assigns an site type 'stype' to the site, the
@@ -32,6 +32,11 @@ class SiteBase:
                 that constiture the site. This is convenient
                 to define for later visualization purposes.
 
+            lattice_pos : list of int
+                The lattice position of the site. Can be used
+                for sytems that obey periodic boundary 
+                conditions, and to determine neighbor-lists. 
+
 
             Returns
             -------
@@ -44,3 +49,4 @@ class SiteBase:
         self.covered = covered 
         self.ind = ind
         self.neighbors = []
+        self.lattice_pos = lattice_pos
