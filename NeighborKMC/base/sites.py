@@ -7,7 +7,7 @@ The particle module defines the SiteBase Class.
 class SiteBase:
 
 
-    def __init__(self, stype = 0,covered=0, ind=[], lattice_pos):
+    def __init__(self, stype = 0,covered=0, ind=[], lattice_pos=None):
         r"""Constructor for SiteBase objects.
             
             Method assigns an site type 'stype' to the site, the
