@@ -74,38 +74,5 @@ class ParticleBase:
         return [self.sites[n].covered for n in self.neighbors[i_site]]
 
 
-    def define_lattice(self):
-        r"""Initialize a lattice based on the sites lattice_positions.
-
-            The method returns a lattice if all sites in self.sites
-            have a unique lattice position, with the same 
-            dimensions.
-
-            Returns
-            -------
-            multidimensional list int
-                Site indices as a function
-                of lattice position.
-            
-        """
-        lp = [s.lattice_pos for s in self.sites]
-        if None in lp or len(lp)==0:
-            return None
-
-        dims = [len(l) for l in lp]
-        if len(set(dims)) > 1:
-            raise Warning("""Lattice dimensions differs for some 
-                            sites.""")
-
-        if len([l for l in lp if lp.count(l) > 1]) > 0:
-            raise Warning(r"""Some sites are on the same lattice 
-                          positions.""")
-        
-        dim = len(lp[0])
-        lattice = -1*np.ones(shape=shap,dtype=int)
-        for sp,l in enumerate(lp):
-            lattice[tuple(l)] = self.sites[sp].ind
-           
-        return lattice
 
 
