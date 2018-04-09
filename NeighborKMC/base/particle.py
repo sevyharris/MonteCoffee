@@ -3,6 +3,7 @@ Module: particle.py
 The particle module defines the ParticleBase Class.
 
 """
+import numpy as np
 
 class ParticleBase:
     
