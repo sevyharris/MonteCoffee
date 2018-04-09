@@ -34,8 +34,7 @@ class ParticleBase:
         self.atoms= atoms
         self.sites = sites
         self.neighbors = [s.neighbors for s in sites]
-        self.lattice = self.define_lattice()
-        
+                
 
 
     def identify_neighbors(self):
