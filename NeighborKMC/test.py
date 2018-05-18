@@ -4,7 +4,7 @@ from ase import Atom,Atoms
 from ase.visualize import view
 from ase.cluster import Octahedron
 from user_sites import Site
-from user_particle import Particle
+from user_system import System
 from user_kmc import NeighborKMC
 from user_constants import mCO,mO2,s0CO,s0O,Asite
 
@@ -43,7 +43,7 @@ for i,indic in enumerate(surface_atom_ids):
                  covered=0,ind = [indic]))
 
 # Instantiate a particle
-p = Particle(atoms=atoms,sites=sites)
+p = System(atoms=atoms,sites=sites)
 
 # Tagged the ase.atoms by site-types:
 
@@ -59,5 +59,5 @@ for i,b in enumerate(atoms):
 parameters = {"pCO":pCO,"pO2":pO2,"T":T,
               "Name":"COOx Simulation"}
 
-sim = NeighborKMC(particle = p,tend = 1.0, parameters=parameters)
+sim = NeighborKMC(system = p,tend = 1.0, parameters=parameters)
 result = sim.run_kmc()

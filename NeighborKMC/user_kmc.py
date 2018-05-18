@@ -8,7 +8,7 @@ import pyclbr
 
 class NeighborKMC(NeighborKMCBase):
 
-    def __init__(self,particle,tend,parameters={}):
+    def __init__(self,system,tend,parameters={}):
         r"""Constructor for NeighborKMC objects.
             
             Method calls constructor of NeighborKMCBase objects, and
@@ -19,8 +19,8 @@ class NeighborKMC(NeighborKMCBase):
     
             Parameters
             ----------
-            particle : Particle instance
-                A particle instance with defined neighborlists.
+            system : System instance
+                A system instance with defined neighborlists.
 
             tend : float
                 Defines when the simulation has ended.
@@ -38,12 +38,12 @@ class NeighborKMC(NeighborKMCBase):
         
         self.load_events(parameters)
         self.evs_exec = np.zeros(len(self.events))
-        NeighborKMCBase.__init__(self,particle=particle,tend=tend,parameters=parameters)
+        NeighborKMCBase.__init__(self,system=system,tend=tend,parameters=parameters)
 
-    def cover_particle(self,species,coverage):
-        r"""Covers the particle with a certain species.
+    def cover_system(self,species,coverage):
+        r"""Covers the system with a certain species.
             
-            Method covers the particle with a species 'species', at a 
+            Method covers the system with a species 'species', at a 
             certain coverage 'coverage'.
     
             Parameters
@@ -55,10 +55,10 @@ class NeighborKMC(NeighborKMCBase):
                 The fractional coverage to load lattice with.
 
         """
-        n_covered = int(np.round(coverage*len(self.particle.sites)))
-        chosen_sites = np.random.choice(len(self.particle.sites),n_covered)
+        n_covered = int(np.round(coverage*len(self.system.sites)))
+        chosen_sites = np.random.choice(len(self.system.sites),n_covered)
         for c in chosen_sites:
-            self.particle.sites[c].covered = species
+            self.system.sites[c].covered = species
 
         
 
@@ -152,7 +152,7 @@ class NeighborKMC(NeighborKMCBase):
                 self.times.append(self.t)
                 self.MCstep.append(stepNMC)
 
-                covs_cur = [s.covered for s in self.particle.sites]
+                covs_cur = [s.covered for s in self.system.sites]
                 self.covered.append(covs_cur)
         
                 tlast=float(self.t)

@@ -38,23 +38,23 @@ class COAdsEvent(EventBase):
         EventBase.__init__(self,params)
 
            
-    def possible(self,particle,site,other_site):
+    def possible(self,system,site,other_site):
         
-        if particle.sites[site].covered == 0:
+        if system.sites[site].covered == 0:
             return True
         else:
             return False
 
-    def get_rate(self,particle,i_site,other_site):
+    def get_rate(self,system,i_site,other_site):
         R = (s0CO*self.params['pCO']*Asite/
             np.sqrt(2.*np.pi*mCO*kB*eV2J*self.params['T']) )
 
         return R
 
 
-    def do_event(self,particle,site,other_site):
+    def do_event(self,system,site,other_site):
         # Cover it with CO, which is species number 1.
-        particle.sites[site].covered = 1 
+        system.sites[site].covered = 1 
 
 
 
@@ -77,16 +77,16 @@ class CODesEvent(EventBase):
         EventBase.__init__(self,params)
         
            
-    def possible(self,particle,site,other_site):
+    def possible(self,system,site,other_site):
         # If site is covered with CO (species no. 1).
-        if particle.sites[site].covered == 1: 
+        if system.sites[site].covered == 1: 
             return True
         else:
             return False
 
-    def get_rate(self,particle,i_site,other_site):
-        stype = particle.sites[i_site].stype
-        Ncovs = particle.get_ncovs(i_site)
+    def get_rate(self,system,i_site,other_site):
+        stype = system.sites[i_site].stype
+        Ncovs = system.get_ncovs(i_site)
         ECO = max(EadsCO[stype]-get_repulsion(1,Ncovs,stype),0)
         K = np.exp((ECO+self.params['T']*self.dS)/
                    (kB*self.params['T']))
@@ -99,8 +99,8 @@ class CODesEvent(EventBase):
         return RF/K
 
 
-    def do_event(self,particle,site,other_site):
-        particle.sites[site].covered = 0 
+    def do_event(self,system,site,other_site):
+        system.sites[site].covered = 0 
 
 
 
@@ -122,25 +122,25 @@ class OAdsEvent(EventBase):
         EventBase.__init__(self,params)
 
            
-    def possible(self,particle,site,other_site):
+    def possible(self,system,site,other_site):
         
-        if particle.sites[site].covered == 0 and\
-           particle.sites[other_site].covered == 0:
+        if system.sites[site].covered == 0 and\
+           system.sites[other_site].covered == 0:
             return True
         else:
             return False
 
-    def get_rate(self,particle,i_site,other_site):
+    def get_rate(self,system,i_site,other_site):
         R = (s0O*self.params['pO2']*Asite/
             np.sqrt(2.*np.pi*mO2*kB*eV2J*self.params['T']) )
 
         return R
 
 
-    def do_event(self,particle,site,other_site):
+    def do_event(self,system,site,other_site):
         # Cover it with O, which is species number 2.
-        particle.sites[site].covered = 2
-        particle.sites[other_site].covered = 2
+        system.sites[site].covered = 2
+        system.sites[other_site].covered = 2
 
 
 class ODesEvent(EventBase):
@@ -160,19 +160,19 @@ class ODesEvent(EventBase):
         EventBase.__init__(self,params)
 
            
-    def possible(self,particle,site,other_site):
+    def possible(self,system,site,other_site):
         
-        if particle.sites[site].covered == 2 and\
-           particle.sites[other_site].covered == 2:
+        if system.sites[site].covered == 2 and\
+           system.sites[other_site].covered == 2:
             return True
         else:
             return False
 
-    def get_rate(self,particle,i_site,other_site):
-        stype = particle.sites[i_site].stype
-        stype_other = particle.sites[other_site].stype
-        Ncovs = particle.get_ncovs(i_site)
-        Ncovsother = particle.get_ncovs(other_site)
+    def get_rate(self,system,i_site,other_site):
+        stype = system.sites[i_site].stype
+        stype_other = system.sites[other_site].stype
+        Ncovs = system.get_ncovs(i_site)
+        Ncovsother = system.get_ncovs(other_site)
         E2O = max(2.*EadsO[stype]-get_repulsion(1,Ncovs,stype)\
               -get_repulsion(1,Ncovsother,stype_other),0.)
 
@@ -187,10 +187,10 @@ class ODesEvent(EventBase):
         return Rf/K
 
 
-    def do_event(self,particle,site,other_site):
+    def do_event(self,system,site,other_site):
         # Cover it with O, which is species number 2.
-        particle.sites[site].covered = 0
-        particle.sites[other_site].covered = 0 
+        system.sites[site].covered = 0
+        system.sites[other_site].covered = 0 
 
 
 
@@ -215,22 +215,22 @@ class CODiffEvent(EventBase):
         EventBase.__init__(self,params)
         
            
-    def possible(self,particle,site,other_site):
+    def possible(self,system,site,other_site):
         # If site is covered with CO and other site free
-        if (particle.sites[site].covered == 1 and
-           particle.sites[other_site].covered == 0): 
+        if (system.sites[site].covered == 1 and
+           system.sites[other_site].covered == 0): 
             return True
         else:
             return False
 
-    def get_rate(self,particle,i_site,other_site):
-        stype = particle.sites[i_site].stype
-        stype_other = particle.sites[other_site].stype
+    def get_rate(self,system,i_site,other_site):
+        stype = system.sites[i_site].stype
+        stype_other = system.sites[other_site].stype
 
-        Ncovs = [particle.sites[n].covered for n in\
-                particle.neighbors[i_site] ]
-        Nothercovs = [particle.sites[n].covered for\
-                     n in particle.neighbors[other_site] ]
+        Ncovs = [system.sites[n].covered for n in\
+                system.neighbors[i_site] ]
+        Nothercovs = [system.sites[n].covered for\
+                     n in system.neighbors[other_site] ]
 
         E = max(0.,EadsCO[stype] - get_repulsion(1,Ncovs,stype))
         Eother  =  max(0,EadsCO[stype_other] - get_repulsion\
@@ -243,9 +243,9 @@ class CODiffEvent(EventBase):
                (kB*self.params['T']))*kB*self.params['T']/(h)
 
 
-    def do_event(self,particle,site,other_site):
-        particle.sites[site].covered = 0 # Remove the CO from the site
-        particle.sites[other_site].covered = 1 # Add the CO to the other site
+    def do_event(self,system,site,other_site):
+        system.sites[site].covered = 0 # Remove the CO from the site
+        system.sites[other_site].covered = 1 # Add the CO to the other site
 
 
 
@@ -270,22 +270,22 @@ class ODiffEvent(EventBase):
         EventBase.__init__(self,params)
         
            
-    def possible(self,particle,site,other_site):
+    def possible(self,system,site,other_site):
         # If site is covered with CO and other site free
-        if (particle.sites[site].covered == 2 and
-           particle.sites[other_site].covered == 0): 
+        if (system.sites[site].covered == 2 and
+           system.sites[other_site].covered == 0): 
             return True
         else:
             return False
 
-    def get_rate(self,particle,i_site,other_site):
-        stype = particle.sites[i_site].stype
-        stype_other = particle.sites[other_site].stype
+    def get_rate(self,system,i_site,other_site):
+        stype = system.sites[i_site].stype
+        stype_other = system.sites[other_site].stype
 
-        Ncovs = [particle.sites[n].covered for n in\
-                particle.neighbors[i_site] ]
-        Nothercovs = [particle.sites[n].covered for n in\
-                      particle.neighbors[other_site] ]
+        Ncovs = [system.sites[n].covered for n in\
+                system.neighbors[i_site] ]
+        Nothercovs = [system.sites[n].covered for n in\
+                      system.neighbors[other_site] ]
 
         E = EadsO[stype] - get_repulsion(2,Ncovs,stype) 
         Eother  =  EadsO[stype_other] - get_repulsion\
@@ -298,9 +298,9 @@ class ODiffEvent(EventBase):
                (kB*self.params['T']))*kB*self.params['T']/(h)
 
 
-    def do_event(self,particle,site,other_site):
-        particle.sites[site].covered = 0
-        particle.sites[other_site].covered = 2 
+    def do_event(self,system,site,other_site):
+        system.sites[site].covered = 0
+        system.sites[other_site].covered = 2 
 
 
 
@@ -322,25 +322,25 @@ class COOxEvent(EventBase):
         EventBase.__init__(self,params)
         
            
-    def possible(self,particle,site,other_site):
+    def possible(self,system,site,other_site):
         # If site is covered with CO and other site free
-        if (particle.sites[site].covered == 1 and
-           particle.sites[other_site].covered == 2): 
+        if (system.sites[site].covered == 1 and
+           system.sites[other_site].covered == 2): 
             return True
         else:
             return False
 
-    def get_rate(self,particle,i_site,other_site):
+    def get_rate(self,system,i_site,other_site):
         # Find the adsorption energy
-        stype = particle.sites[i_site].stype
-        stype_other = particle.sites[other_site].stype
+        stype = system.sites[i_site].stype
+        stype_other = system.sites[other_site].stype
         ECO =  EadsCO[stype]
         EO = EadsO[stype_other]
         # Find the Nearest neighbor repulsion
-        Ncovs = [particle.sites[n].covered for n in\
-                particle.neighbors[i_site] ]
-        Nothercovs = [particle.sites[n].covered for n\
-                     in particle.neighbors[other_site] ]
+        Ncovs = [system.sites[n].covered for n in\
+                system.neighbors[i_site] ]
+        Nothercovs = [system.sites[n].covered for n\
+                     in system.neighbors[other_site] ]
         ECO -= get_repulsion(1,Ncovs,stype)
         EO  -= get_repulsion(2, Nothercovs,stype_other)
         Ea = max(0.,get_Ea(ECO,EO))
@@ -349,6 +349,6 @@ class COOxEvent(EventBase):
                (kB*self.params['T']))*kB*self.params['T']/(h)
 
 
-    def do_event(self,particle,site,other_site):
-        particle.sites[site].covered = 0 
-        particle.sites[other_site].covered = 0 
+    def do_event(self,system,site,other_site):
+        system.sites[site].covered = 0 
+        system.sites[other_site].covered = 0 

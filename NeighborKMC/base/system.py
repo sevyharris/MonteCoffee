@@ -1,15 +1,15 @@
 r"""
-Module: particle.py
-The particle module defines the ParticleBase Class.
+Module: system.py
+The system module defines the SystemBase Class.
 
 """
 import numpy as np
 
-class ParticleBase:
+class SystemBase:
     
 
     def __init__(self,atoms=None,sites=[]):
-        r"""Constructor for ParticleBase objects.
+        r"""Constructor for SystemBase objects.
             
             Method assigns an ASE.Atoms object 'atoms'
             to the object and assigns a list of sites: 'sites'
@@ -20,14 +20,14 @@ class ParticleBase:
             ----------
             atoms : ASE.Atoms
                 Can be passed to connect an ASE atoms 
-                object to the particle.
+                object to the system.
             sites : list of sites.Site
-                The sites that constitute the particle
+                The sites that constitute the system
 
 
             Returns
             -------
-            ParticleBase instance
+            SystemBase instance
 
         """
 
@@ -40,7 +40,7 @@ class ParticleBase:
     def identify_neighbors(self):
         r"""Template method to identify site connectivity
             
-            Method needs to be overridden in user_particle.py.
+            Method needs to be overridden in user_system.py.
             The method should identify which sites that are
             to be connected during the kMC simulation, e.g. based
             on site indices or positions defined by 'self.atoms'
@@ -48,7 +48,7 @@ class ParticleBase:
         """
 
         raise NotImplementedError(r"""Called purely abstract method
-                                  identify_neighbors() of Particle""")
+                                  identify_neighbors() of System""")
 
     
     def get_ncovs(self,i_site):

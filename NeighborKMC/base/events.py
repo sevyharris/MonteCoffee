@@ -1,6 +1,6 @@
 r"""
 Module: events.py
-The particle module defines the EventBase Class.
+The system module defines the EventBase Class.
 """
 
 
@@ -29,7 +29,7 @@ class EventBase:
         self.params = params
 
 
-    def possible(self,particle,i_site,i_other):
+    def possible(self,system,i_site,i_other):
         r"""Template method to determine if event is possible.
             
             Method needs to be overridden in user_events.py.
@@ -39,10 +39,10 @@ class EventBase:
             
             Parameters
             ----------
-            particle : particle.
-                particle that the simulation is performed on
+            system : system.
+                system that the simulation is performed on
             i_site : int
-                index of site in the particle.sites list.
+                index of site in the system.sites list.
             i_other : int
                 index of other site involved in reaction.
 
@@ -52,7 +52,7 @@ class EventBase:
                                    method possible() of Event""")
 
 
-    def get_rate(self,particle,i_site,i_other):
+    def get_rate(self,system,i_site,i_other):
         r"""Template method to determine the rate constant.
             
             Method needs to be overridden in user_events.py.
@@ -62,10 +62,10 @@ class EventBase:
             
             Parameters
             ----------
-            particle : particle.
-                particle that the simulation is performed on
+            system : system.
+                system that the simulation is performed on
             i_site : int
-                index of site in the particle.sites list.
+                index of site in the system.sites list.
             i_other : int
                 index of other site involved in reaction.
 
@@ -75,20 +75,20 @@ class EventBase:
                                   method get_rate() of Event""")
 
     
-    def do_event(self,particle, i_site ,i_other):
+    def do_event(self,system, i_site ,i_other):
         r"""Template method to perform the event.
             
             Method needs to be overridden in user_events.py.
-            Should change particle site coverages by changing
-            'particle.sites[i_site].covered' and
-            'particle.sites[other_site].covered'.
+            Should change system site coverages by changing
+            'system.sites[i_site].covered' and
+            'system.sites[other_site].covered'.
             
             Parameters
             ----------
-            particle : particle.
-                particle that the simulation is performed on
+            system : system.
+                system that the simulation is performed on
             i_site : int
-                index of site in the particle.sites list.
+                index of site in the system.sites list.
             i_other : int
                 index of other site involved in reaction.
 

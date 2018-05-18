@@ -1,7 +1,7 @@
 r"""
 Module: user_sites.py
 
-The particle module defines the Site Class derived 
+The user_sites module defines the Site Class derived 
 from base.site.SiteBase.
 """
 

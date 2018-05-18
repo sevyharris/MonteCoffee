@@ -1,23 +1,23 @@
 r"""
-Module: user_particle.py
+Module: user_system.py
 
-The particle module defines the Particle Class, which is
-a derived class from the base.particle module.
+The system module defines the System Class, which is
+a derived class from the base.system module.
 
-See also: particle.py in base package.
+See also: system.py in base package.
 """
 
 import numpy as np
-from base.particle import ParticleBase
+from base.system import SystemBase
 from user_constants import Ncut
 
-class Particle(ParticleBase):
+class System(SystemBase):
     
 
     def __init__(self,atoms=None,sites=[]):
-        r"""Constructor for Particle objects.
+        r"""Constructor for System objects.
             
-            Method calls the base class particle.py constructor, 
+            Method calls the base class system.py constructor, 
             defines a nearest neighbor cutoof distance, and 
             calculates the neighborlist.
 
@@ -26,21 +26,21 @@ class Particle(ParticleBase):
             ----------
             atoms : ASE.Atoms
                 Can be passed to connect an ASE atoms object to 
-                the particle.
+                the system.
             sites : list of sites.Site
-                The sites that constitute the particle
+                The sites that constitute the system
 
             Returns
             -------
-            Particle instance
+            System instance
 
             See Also
             --------
-            The module base.particle
+            The module base.system
 
         """
         
-        ParticleBase.__init__(self,atoms=atoms,sites=sites)
+        SystemBase.__init__(self,atoms=atoms,sites=sites)
         # Nearest neighbor cutoff
         self.Ncutoff = Ncut         
         self.identify_neighbors()

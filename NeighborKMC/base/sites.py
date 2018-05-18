@@ -1,6 +1,6 @@
 r"""
 Module: sites.py
-The particle module defines the SiteBase Class.
+The sites module defines the SiteBase Class.
 
 """
 
