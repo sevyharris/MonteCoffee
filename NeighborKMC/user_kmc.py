@@ -35,7 +35,7 @@ class NeighborKMC(NeighborKMCBase):
             NeighborKMC instance
 
         """
-        
+        self.reverses = {} # Reverse steps 
         self.load_events(parameters)
         self.evs_exec = np.zeros(len(self.events))
         NeighborKMCBase.__init__(self,system=system,tend=tend,parameters=parameters)
@@ -88,6 +88,11 @@ class NeighborKMC(NeighborKMCBase):
         event_names_srt = [event_names[n] for n in np.argsort(line_nrs)] 
         for n in event_names_srt:            
             exec("self.events.append("+n+"(parameters))")
+
+        # Track which steps are considered each others inverse.
+        for i in range(len(self.events)): 
+            if self.events[i].rev is not None:
+                self.reverses[i] = self.events[i].rev
 
 
 

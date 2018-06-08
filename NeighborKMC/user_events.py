@@ -36,7 +36,7 @@ class COAdsEvent(EventBase):
 
     def __init__(self,params):
         EventBase.__init__(self,params)
-
+        self.rev = 1 # Reverse event is CO des
            
     def possible(self,system,site,other_site):
         
@@ -49,7 +49,7 @@ class COAdsEvent(EventBase):
         R = (s0CO*self.params['pCO']*Asite/
             np.sqrt(2.*np.pi*mCO*kB*eV2J*self.params['T']) )
 
-        return R
+        return self.alpha*R
 
 
     def do_event(self,system,site,other_site):
@@ -75,6 +75,7 @@ class CODesEvent(EventBase):
         SCOgas = get_entropy_CO(params["T"],params["pCO"])
         self.dS = SCOads-SCOgas
         EventBase.__init__(self,params)
+        self.rev = 0 # Reverse event is CO ads
         
            
     def possible(self,system,site,other_site):
@@ -96,7 +97,7 @@ class CODesEvent(EventBase):
         RF = (self.params['pCO']*s0CO*Asite/
              np.sqrt(2.*np.pi*mCO*kB*eV2J*self.params['T']) ) 
         #print "ECO :", stype, ECO, K, RF
-        return RF/K
+        return self.alpha*RF/K
 
 
     def do_event(self,system,site,other_site):
@@ -120,7 +121,7 @@ class OAdsEvent(EventBase):
         SO2gas = get_entropy_O2(params["T"],params["pO2"])
         self.dS = S2Oads-SO2gas
         EventBase.__init__(self,params)
-
+        self.rev = 3 # Reverse event is O2 des
            
     def possible(self,system,site,other_site):
         
@@ -134,7 +135,7 @@ class OAdsEvent(EventBase):
         R = (s0O*self.params['pO2']*Asite/
             np.sqrt(2.*np.pi*mO2*kB*eV2J*self.params['T']) )
 
-        return R
+        return self.alpha*R
 
 
     def do_event(self,system,site,other_site):
@@ -158,6 +159,7 @@ class ODesEvent(EventBase):
         SO2gas = get_entropy_O2(params["T"],params["pO2"])
         self.dS = S2Oads-SO2gas
         EventBase.__init__(self,params)
+        self.rev = 2 # Reverse event is O2 des
 
            
     def possible(self,system,site,other_site):
@@ -184,7 +186,7 @@ class ODesEvent(EventBase):
 
 
        # print "RO2ads ", Rf, " RO2des ", Rf/K
-        return Rf/K
+        return self.alpha*Rf/K
 
 
     def do_event(self,system,site,other_site):
@@ -210,9 +212,9 @@ class CODiffEvent(EventBase):
     def __init__(self,params): 
         self.dS = get_entropy_ads(params["T"],modes_COads[1:])-\
                   get_entropy_ads(params["T"],modes_COads) 
-        params["EdiffCO"] = EdiffCO
-        params["Ediff"] = 0.4
         EventBase.__init__(self,params)
+        self.rev = 4 # Reverse event is itself
+        self.diffev = True
         
            
     def possible(self,system,site,other_site):
@@ -237,9 +239,9 @@ class CODiffEvent(EventBase):
                     (1, Nothercovs,stype_other))
         
         dE = max(E-Eother,0.)
-        Eact = dE+self.params['Ediff']+self.params["EdiffCO"]
+        Eact = dE+EdiffCO
 
-        return np.exp(self.dS/kB)*np.exp(-Eact/
+        return self.alpha*np.exp(self.dS/kB)*np.exp(-Eact/
                (kB*self.params['T']))*kB*self.params['T']/(h)
 
 
@@ -265,9 +267,9 @@ class ODiffEvent(EventBase):
     def __init__(self,params):
         SOads = get_entropy_ads(params["T"],modes_Oads)
         self.dS = SOads*(1./2.9-1.) 
-        params["EdiffO"] = EdiffO
-        params["Ediff"] = 0.0
         EventBase.__init__(self,params)
+        self.rev = 5 # Reverse event is itself
+        self.diffev = True
         
            
     def possible(self,system,site,other_site):
@@ -292,9 +294,9 @@ class ODiffEvent(EventBase):
                     (2, Nothercovs,stype_other)
 
         dE = max(0.,E-Eother)
-        Eact = dE+self.params['Ediff']+EdiffO
+        Eact = dE+EdiffO
 
-        return np.exp(self.dS/kB)*np.exp(-Eact/
+        return self.alpha*np.exp(self.dS/kB)*np.exp(-Eact/
                (kB*self.params['T']))*kB*self.params['T']/(h)
 
 
@@ -345,7 +347,7 @@ class COOxEvent(EventBase):
         EO  -= get_repulsion(2, Nothercovs,stype_other)
         Ea = max(0.,get_Ea(ECO,EO))
 
-        return self.Zratio*np.exp(-Ea/
+        return self.alpha*self.Zratio*np.exp(-Ea/
                (kB*self.params['T']))*kB*self.params['T']/(h)
 
 

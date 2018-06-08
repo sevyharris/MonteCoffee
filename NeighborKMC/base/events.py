@@ -27,6 +27,9 @@ class EventBase:
         """
 
         self.params = params
+        self.rev = None
+        self.alpha = 1.
+        self.diffev = False # Is it a diffusion event.
 
 
     def possible(self,system,i_site,i_other):

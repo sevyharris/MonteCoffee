@@ -81,6 +81,42 @@ class NeighborKMCBase:
         for i in self.Nstypes:
             self.stype_ev[i] = list(evnl)
             self.stype_ev_other[i] = list(evnl)
+
+
+        # Variables connected to temporal acceleration
+        # --------------------------------------------------
+        self.equilEV = [] # Track equilibrated events.
+
+        # Parameters
+        self.delta = 0.1 # reversibility tolerance
+        self.Nf = 100 # Avg event observance in superbasins
+        self.Ns = 2000 # update the barriers every Ns step.        
+        self.ne = 50 # Nsteps for sufficeint executed events.
+
+        # Lists for rescaling barriers
+        self.tgen = [] # times generated.
+        self.us = [] # random deviates used
+        self.ks = []# rate-constants used
+        
+        # Lists for tracking superbasin
+        self.r_S= {} #all rates in current superbasin
+        self.dt_S = {} # dt used to compute rs in current superbasin
+        for e in range(len(self.events)):
+            self.r_S[e] = [] # rates in superbasin
+            self.dt_S[e] = [] # dt to compute rs in superbasin
+        
+        # nem is the number of events performed in current superbasin.
+        self.nem = np.zeros(len(self.events),dtype=int) 
+        # Nm is the number of events performed the last Nf steps.
+        self.Nm = [np.zeros(self.ne,dtype=int) \
+                  for i in range(len(self.events))] 
+
+        self.Suffex = []# suffiently executed quasi-equilibrated events
+
+        # Variables for time and step-keeping
+        self.isup = 0 # Superbasin step counter
+        self.pm = 0
+        # --------------------------------------------------     
         
         # FRM method variables
         self.frm_times = [] # Needed later
@@ -108,6 +144,8 @@ class NeighborKMCBase:
         self.lastother = self.system.neighbors[0][0]
         self.rindex = [[[] for b in range(len(self.events))] for\
                       a in range(len(self.system.sites))]
+
+        self.possible_evs = [] # used for superbasin.
         
         for i,s in enumerate(self.system.sites):
             NNcur = self.system.neighbors[i]
@@ -115,15 +153,20 @@ class NeighborKMCBase:
                 for k, other_site in enumerate(NNcur):
                     if e.possible(self.system,i,other_site):
                         rcur = e.get_rate(self.system,i,other_site)
-
-                        self.frm_times.append(self.t -
-                             np.log(uniform(0.,1.)) /rcur )
+                        u = uniform(0.,1.)
+                        self.frm_times.append(self.t - np.log(u) /rcur)
+                        self.tgen.append(self.t)
+                        self.us.append(u)
+                        self.possible_evs.append(True)
                         
                     else:
                         rcur = 0.
-                        # Take infinite time do an impossible event.
-                        self.frm_times.append(1E9) 
+                        self.frm_times.append(1E9)
+                        self.tgen.append(self.t)
+                        self.us.append(uniform(0.,1.))
+                        self.possible_evs.append(False)
                     
+
                     self.rindex[i][j].append(len(self.rs))
                     self.evs.append(j)            
                     self.rs.append(rcur)
@@ -131,6 +174,7 @@ class NeighborKMCBase:
                     self.other_sitelist.append(other_site)
 
         self.frm_times = np.array(self.frm_times)
+        self.evs = np.array(self.evs)
         # Find the chronologically next event
         self.frm_arg = self.frm_times.argmin()
     
@@ -166,25 +210,42 @@ class NeighborKMCBase:
         search.extend(NNNother)
         search = list(set(search)) # Remove doubles
 
+        # Save reference to function calls
+        # To reduce overhead
+        get_r_func = [e.get_rate for e in self.events]
+        possible_func = [e.possible for e in self.events]
+
         for i in search:
             # Determine if any events have become possible.
             for j, e in enumerate(self.events):
                 for k, other in enumerate(self.system.neighbors[i]):
                     poslist = self.rindex[i][j][k]
                      # Only newly avaible events
-                    if e.possible(self.system,i,other) and\
+                    if possible_func[j](self.system,i,other) and\
                                    self.frm_times[poslist] > 1E8:
 
-                        rcur = e.get_rate(self.system,i,other)
-
+                        rcur = get_r_func[j](self.system,i,other)
                         self.rs[poslist] = rcur
+                        u = uniform(0.,1.)
+                        if rcur > 0:
+                           self.frm_times[poslist] = self.t -\
+                                np.log(u) /rcur
 
-                        self.frm_times[poslist] = self.t -\
-                                np.log(uniform(0.,1.)) /rcur 
+                        else:
+                           self.frm_times[poslist] = 1E9
+
+                        self.tgen[poslist] = self.t
+                        self.us[poslist] = uniform(0.,1.)
+                        self.possible_evs[poslist] = True
+
                        
                     else:
                         self.rs[poslist] = 0.
-                        self.frm_times[poslist] = 1E9 
+                        self.frm_times[poslist] = 1E9
+                        self.tgen[poslist] = 1E9
+                        self.us[poslist] = uniform(0.,1.)
+                        self.possible_evs[poslist] = False
+
         # New first reaction ?
         self.frm_arg = self.frm_times.argmin()
        
@@ -210,6 +271,9 @@ class NeighborKMCBase:
             self.events[self.evs[self.frm_arg]].do_event(self.system,
                                                 site,othersite)
             # Update time
+            dt = float(self.frm_times[self.frm_arg]-self.t)
+            evtype = self.evs[self.frm_arg] 
+
             self.t = self.frm_times[self.frm_arg]
             # Save where the event happened:
             self.lastsel = int(site)
@@ -222,15 +286,177 @@ class NeighborKMCBase:
 
             self.stype_ev_other[self.system.sites[othersite].stype]\
                                [self.evs[self.frm_arg]] += 1
-            
-            self.frm_update()
+
+            # Update superbasin
+            self.superbasin(evtype,dt)   
+
             
         else:
             # Event not possible, disable it.
             self.rs[self.frm_arg] = 0.
             self.frm_times[self.frm_arg] = 1E9
+            self.tgen[self.frm_arg] = self.t
             # New first reaction must be determined
+            self.leave_superbasin()
             self.frm_arg = np.argmin(self.frm_times)
+
+        
+        self.frm_update()
+
+
+    def rescaling(self):
+        """
+        Rescales the times with alphas.
+        Events that are now in the past are set as 
+        immediate events if still possible.
+        """
+        for ev in self.equilEV:
+            # Raise the barrier
+            i_up = [i for i in range(len(self.evs)) if self.evs[i] == ev]
+            for i in i_up:
+                site=self.siteslist[i] # The site to do event.
+                othersite =self.other_sitelist[i]
+                poss = self.events[self.evs[i]].possible(self.system,
+                                                        site,othersite)
+                if poss:
+                    self.rs[i] = self.events[self.evs[i]].\
+                                    get_rate(self.system,site,othersite)
+                    try:
+                        u0 = -np.log(self.us[i])/self.rs[i]
+                        if self.t < self.tgen[i]+u0:
+                            self.frm_times[i] =  self.tgen[i]+u0
+                        else:
+                            self.us[i] = uniform(0,1)
+                            self.tgen[i] = self.t
+                            self.frm_times[i] = self.t-\
+                                        np.log(self.us[i])/self.rs[i]
+                    except:
+                        self.frm_times[i] = 1E9
+
+        self.frm_arg = np.argmin(self.frm_times)
+
+
+
+    def leave_superbasin(self):
+        """
+        Resets all rate-scalings and
+        connected statistics connected to
+        the superbasin.
+        """
+        for e in self.equilEV:
+            self.events[e].alpha = 1.
+        self.rescaling()          
+
+        self.Suffex = []
+        self.r_S = {}
+        self.dt_S = {}
+        self.nem = np.zeros(len(self.events),dtype=int)
+        for e in range(len(self.events)):
+            self.r_S[e] = [] # rates in superbasin
+            self.dt_S[e] = [] # dt for ratess in superbasin 
+
+        self.isup =0
+
+
+    def superbasin(self,evtype,dt):
+        """
+        Keeps track and performs barrier adjustments,
+        of the generalized temporal acceleration scheme
+        (DOI: 10.1021/acs.jctc.6b00859)
+        """
+        # Update the rates in the current superbasin
+        #dtsup = dt
+        farg = int(self.frm_arg) 
+        self.pm = (self.pm+1) %  self.ne
+        self.nem[evtype] += 1.
+        self.Nm[evtype][self.pm] = 1.
+
+        self.r_S[evtype].append(self.rs[farg])
+        self.dt_S[evtype].append(dt)
+
+        
+        
+        # See if event is quasi-equilibrated
+        if evtype in self.reverses:
+            rev = abs(self.Nm[evtype].sum()-\
+                      self.Nm[self.reverses[evtype]].sum())
+
+            Nexm = self.Nm[evtype].sum()+\
+                        self.Nm[self.reverses[evtype]].sum()
+
+            if evtype not in self.equilEV:
+                if Nexm >= self.ne/2. and rev < self.delta*self.ne:
+                    self.equilEV.append(evtype)
+                    if evtype != self.reverses[evtype]:
+                        self.equilEV.append(self.reverses[evtype])
+            
+                else:
+                    self.leave_superbasin()
+
+
+            if evtype in self.equilEV and self.nem[evtype]+\
+                        self.nem[self.reverses[evtype]] >= self.ne \
+                        and evtype in self.equilEV\
+                        and evtype not in self.Suffex: 
+
+                self.Suffex.append(evtype)
+
+                if evtype != self.reverses[evtype]:
+                    self.Suffex.append(self.reverses[evtype])
+
+        else: # Not reversible
+            self.leave_superbasin()        
+
+
+        if self.isup > self.Ns: # Scale events
+                    r_S = 0.
+                    dtS = sum([sum(self.dt_S[ev]) for\
+                             ev in range(len(self.events))])
+
+                    E = [i for i in range(len(self.events))\
+                            if i not in self.Suffex]
+                    for neqev in E: # Loop over non-equilibrated events
+                        r_S += (np.array(self.r_S[neqev])*\
+                                self.dt_S[neqev]).sum()/dtS
+                       
+                    
+                    for ev in [e for e in self.equilEV if e in self.Suffex]:
+                        rmev = (np.array(self.r_S[ev])*\
+                                self.dt_S[ev]).sum()/dtS
+    
+                        rmrev = (np.array(self.r_S[self.reverses[ev]])*\
+                                self.dt_S[self.reverses[ev]]).sum()/dtS
+
+
+                        alpham = min(self.Nf*r_S/(rmev+rmrev),1)
+                        # Raise the barrier
+                        self.events[ev].alpha = alpham
+
+
+                    # Impossible events cannot be equilibrated)
+                    nposs = []
+                    for ev in self.equilEV:
+                        ind = np.where(self.evs==ev)[0]
+                        poss = [self.possible_evs[i] for i in ind]
+                        if True not in poss and\
+                          self.events[ev].diffev==True:
+                            nposs.append(ev)
+                            self.events[ev].alpha = 1.0
+                            self.events[self.reverses[ev]].alpha = 1.0
+
+
+                    self.rescaling()
+                    for ev in nposs:
+                        self.equilEV = [s for s in self.equilEV if s!= ev\
+                                         and s!= self.reverses[ev]] 
+                        self.Suffex = [s for s in self.Suffex if s!= ev\
+                                        and s!= self.reverses[ev]]
+
+                    
+                    self.isup = 0
+
+        self.isup += 1
+
    
 
 
