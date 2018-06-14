@@ -91,7 +91,7 @@ class NeighborKMCBase:
         self.delta = 0.1 # reversibility tolerance
         self.Nf = 100 # Avg event observance in superbasins
         self.Ns = 2000 # update the barriers every Ns step.        
-        self.ne = 50 # Nsteps for sufficeint executed events.
+        self.ne = 100 # Nsteps for sufficeint executed events.
 
         # Lists for rescaling barriers
         self.tgen = [] # times generated.
@@ -337,12 +337,16 @@ class NeighborKMCBase:
 
 
 
+
+
     def leave_superbasin(self):
         """
         Resets all rate-scalings and
         connected statistics connected to
         the superbasin.
         """
+       
+        
         for e in self.equilEV:
             self.events[e].alpha = 1.
         self.rescaling()          
@@ -352,10 +356,11 @@ class NeighborKMCBase:
         self.dt_S = {}
         self.nem = np.zeros(len(self.events),dtype=int)
         for e in range(len(self.events)):
-            self.r_S[e] = [] # rates in superbasin
-            self.dt_S[e] = [] # dt for ratess in superbasin 
+            self.r_S[e] = []
+            self.dt_S[e] = []  
 
         self.isup =0
+
 
 
     def superbasin(self,evtype,dt):
@@ -408,49 +413,43 @@ class NeighborKMCBase:
             self.leave_superbasin()        
 
 
-        if self.isup > self.Ns: # Scale events
-                    r_S = 0.
-                    dtS = sum([sum(self.dt_S[ev]) for\
-                             ev in range(len(self.events))])
+        if self.isup > self.Ns: # If observation perioud is over, scale events.
+                    print "ENTERING SCALING: Suffex, Nonsuffex", self.Suffex, [ev for ev in self.equilEV if ev not in self.Suffex]
 
-                    E = [i for i in range(len(self.events))\
-                            if i not in self.Suffex]
-                    for neqev in E: # Loop over non-equilibrated events
-                        r_S += (np.array(self.r_S[neqev])*\
-                                self.dt_S[neqev]).sum()/dtS
+                    # Find if events are impossible (then they cannot be equilibrated)
+                    nposs = []
+                    for ev in self.equilEV:
+                        ind = np.where(self.evs==ev)[0]
+                        poss = np.array([self.possible_evs[i] for i in ind])
+                        if True not in poss and self.events[ev].diffev==True: # Only diffusion events
+                            nposs.append(ev)
+                            # Set the alpha value
+                            self.events[ev].alpha = 1.0
+                            self.events[self.reverses[ev]].alpha = 1.0
+
+
+
+                    r_S = 0.
+                    dtS = sum([sum(self.dt_S[ev]) for ev in range(len(self.events))])
+                    E = [i for i in range(len(self.events)) if i not in self.Suffex and i not in nposs]
+                    for neqev in E:
+                        # Loop over non-equilibrated events
+                        r_S += (np.array(self.r_S[neqev])*self.dt_S[neqev]).sum()/dtS
                        
                     
-                    for ev in [e for e in self.equilEV if e in self.Suffex]:
-                        rmev = (np.array(self.r_S[ev])*\
-                                self.dt_S[ev]).sum()/dtS
-    
-                        rmrev = (np.array(self.r_S[self.reverses[ev]])*\
-                                self.dt_S[self.reverses[ev]]).sum()/dtS
+                    for ev in [e for e in self.equilEV if e in self.Suffex and e not in nposs]:
+                        rmev = (np.array(self.r_S[ev])*self.dt_S[ev]).sum()/dtS
+                        rmrev = (np.array(self.r_S[self.reverses[ev]])*self.dt_S[self.reverses[ev]]).sum()/dtS
 
 
                         alpham = min(self.Nf*r_S/(rmev+rmrev),1)
                         # Raise the barrier
                         self.events[ev].alpha = alpham
+                        print "Scaling k of event ", ev ," with ", alpham
 
 
-                    # Impossible events cannot be equilibrated)
-                    nposs = []
-                    for ev in self.equilEV:
-                        ind = np.where(self.evs==ev)[0]
-                        poss = [self.possible_evs[i] for i in ind]
-                        if True not in poss and\
-                          self.events[ev].diffev==True:
-                            nposs.append(ev)
-                            self.events[ev].alpha = 1.0
-                            self.events[self.reverses[ev]].alpha = 1.0
-
-
+                   
                     self.rescaling()
-                    for ev in nposs:
-                        self.equilEV = [s for s in self.equilEV if s!= ev\
-                                         and s!= self.reverses[ev]] 
-                        self.Suffex = [s for s in self.Suffex if s!= ev\
-                                        and s!= self.reverses[ev]]
 
                     
                     self.isup = 0
