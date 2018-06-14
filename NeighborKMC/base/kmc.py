@@ -88,10 +88,10 @@ class NeighborKMCBase:
         self.equilEV = [] # Track equilibrated events.
 
         # Parameters
-        self.delta = 0.1 # reversibility tolerance
-        self.Nf = 100 # Avg event observance in superbasins
-        self.Ns = 2000 # update the barriers every Ns step.        
-        self.ne = 100 # Nsteps for sufficeint executed events.
+        self.delta = config.getfloat('Options','Delta') # reversibility tolerance
+        self.Nf = config.getint('Options','Nf') # Avg event observance in superbasins
+        self.Ns = config.getint('Options','Ns') # update the barriers every Ns step.        
+        self.ne = self.Nsites/4 # Nsteps for sufficeint executed events.
 
         # Lists for rescaling barriers
         self.tgen = [] # times generated.

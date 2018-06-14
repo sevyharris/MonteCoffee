@@ -13,6 +13,10 @@ config.set('Parameters', 'PicklePrefix', 'transitions_step')
 config.add_section('Options')
 config.set('Options', 'SaveCovs', True)
 config.set('Options', 'Verbose', True)
+config.set('Options', 'Delta', '0.1')
+config.set('Options', 'Nf', '100')
+config.set('Options', 'Ns', '2000')
+
 
 # Writing our configuration file to 'example.cfg'
 with open('kMC_options.cfg', 'wb') as configfile:
