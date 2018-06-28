@@ -154,7 +154,7 @@ class NeighborKMCBase:
                     if e.possible(self.system,i,other_site):
                         rcur = e.get_rate(self.system,i,other_site)
                         u = uniform(0.,1.)
-                        self.frm_times.append(self.t - np.log(u) /rcur)
+                        self.frm_times.append(min(self.t - np.log(u) /rcur,1E8))
                         self.tgen.append(self.t)
                         self.us.append(u)
                         self.possible_evs.append(True)
@@ -228,8 +228,8 @@ class NeighborKMCBase:
                         self.rs[poslist] = rcur
                         u = uniform(0.,1.)
                         if rcur > 0:
-                           self.frm_times[poslist] = self.t -\
-                                np.log(u) /rcur
+                           self.frm_times[poslist] = min(self.t -\
+                                np.log(u) /rcur,1E8)
 
                         else:
                            self.frm_times[poslist] = 1E9
