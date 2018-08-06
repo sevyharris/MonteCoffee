@@ -99,11 +99,9 @@ class NeighborKMCBase:
         self.ks = []# rate-constants used
         
         # Lists for tracking superbasin
-        self.r_S= {} #all rates in current superbasin
-        self.dt_S = {} # dt used to compute rs in current superbasin
-        for e in range(len(self.events)):
-            self.r_S[e] = [] # rates in superbasin
-            self.dt_S[e] = [] # dt to compute rs in superbasin
+        self.r_S= np.zeros(len(self.events)) #all rates in current superbasin
+        self.dt_S = [] # dt used to compute rs in current superbasin
+        
         
         # nem is the number of events performed in current superbasin.
         self.nem = np.zeros(len(self.events),dtype=int) 
@@ -154,7 +152,7 @@ class NeighborKMCBase:
                     if e.possible(self.system,i,other_site):
                         rcur = e.get_rate(self.system,i,other_site)
                         u = uniform(0.,1.)
-                        self.frm_times.append(min(self.t - np.log(u) /rcur,1E8))
+                        self.frm_times.append(self.t - np.log(u) /rcur)
                         self.tgen.append(self.t)
                         self.us.append(u)
                         self.possible_evs.append(True)
@@ -220,16 +218,16 @@ class NeighborKMCBase:
             for j, e in enumerate(self.events):
                 for k, other in enumerate(self.system.neighbors[i]):
                     poslist = self.rindex[i][j][k]
+                    poss_now = possible_func[j](self.system,i,other)
                      # Only newly avaible events
-                    if possible_func[j](self.system,i,other) and\
-                                   self.frm_times[poslist] > 1E8:
+                    if poss_now and self.possible_evs[poslist]==False:
 
                         rcur = get_r_func[j](self.system,i,other)
                         self.rs[poslist] = rcur
                         u = uniform(0.,1.)
                         if rcur > 0:
-                           self.frm_times[poslist] = min(self.t -\
-                                np.log(u) /rcur,1E8)
+                           self.frm_times[poslist] = self.t -np.log(u)\
+                                                            /rcur
 
                         else:
                            self.frm_times[poslist] = 1E9
@@ -352,13 +350,9 @@ class NeighborKMCBase:
         self.rescaling()          
 
         self.Suffex = []
-        self.r_S = {}
-        self.dt_S = {}
+        self.r_S = np.zeros(len(self.events))
+        self.dt_S = []
         self.nem = np.zeros(len(self.events),dtype=int)
-        for e in range(len(self.events)):
-            self.r_S[e] = []
-            self.dt_S[e] = []  
-
         self.isup =0
 
 
@@ -376,8 +370,10 @@ class NeighborKMCBase:
         self.nem[evtype] += 1.
         self.Nm[evtype][self.pm] = 1.
 
-        self.r_S[evtype].append(self.rs[farg])
-        self.dt_S[evtype].append(dt)
+        for e in range(len(self.rs)):
+            self.r_S[self.evs[e]] += self.rs[e]*dt
+        
+        self.dt_S.append(dt)
 
         
         
@@ -423,23 +419,19 @@ class NeighborKMCBase:
                         poss = np.array([self.possible_evs[i] for i in ind])
                         if True not in poss and self.events[ev].diffev==True: # Only diffusion events
                             nposs.append(ev)
-                            # Set the alpha value
-                            self.events[ev].alpha = 1.0
-                            self.events[self.reverses[ev]].alpha = 1.0
-
 
 
                     r_S = 0.
-                    dtS = sum([sum(self.dt_S[ev]) for ev in range(len(self.events))])
+                    dtS = sum(dt_S[ev])
                     E = [i for i in range(len(self.events)) if i not in self.Suffex and i not in nposs]
                     for neqev in E:
                         # Loop over non-equilibrated events
-                        r_S += (np.array(self.r_S[neqev])*self.dt_S[neqev]).sum()/dtS
+                        r_S += self.r_S[neqev]/dtS
                        
                     
                     for ev in [e for e in self.equilEV if e in self.Suffex and e not in nposs]:
-                        rmev = (np.array(self.r_S[ev])*self.dt_S[ev]).sum()/dtS
-                        rmrev = (np.array(self.r_S[self.reverses[ev]])*self.dt_S[self.reverses[ev]]).sum()/dtS
+                        rmev = self.r_S[ev]/dtS
+                        rmrev = self.r_S[self.reverses[ev]]/dtS
 
 
                         alpham = min(self.Nf*r_S/(rmev+rmrev),1)
