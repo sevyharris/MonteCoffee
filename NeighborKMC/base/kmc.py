@@ -173,6 +173,7 @@ class NeighborKMCBase:
 
         self.frm_times = np.array(self.frm_times)
         self.evs = np.array(self.evs)
+        self.rs =  np.array(self.rs)
         # Find the chronologically next event
         self.frm_arg = self.frm_times.argmin()
     
@@ -370,9 +371,7 @@ class NeighborKMCBase:
         self.nem[evtype] += 1.
         self.Nm[evtype][self.pm] = 1.
 
-        for e in range(len(self.rs)):
-            self.r_S[self.evs[e]] += self.rs[e]*dt
-        
+        self.r_S[self.evs] += self.rs*dt
         self.dt_S.append(dt)
 
         
