@@ -40,25 +40,6 @@ class NeighborKMC(NeighborKMCBase):
         self.evs_exec = np.zeros(len(self.events))
         NeighborKMCBase.__init__(self,system=system,tend=tend,parameters=parameters)
 
-    def cover_system(self,species,coverage):
-        r"""Covers the system with a certain species.
-            
-            Method covers the system with a species 'species', at a 
-            certain coverage 'coverage'.
-    
-            Parameters
-            ----------
-            species : int
-                The species as defined by hte user (e.g. empty=0,CO=1)
-
-            coverage  : float
-                The fractional coverage to load lattice with.
-
-        """
-        n_covered = int(np.round(coverage*len(self.system.sites)))
-        chosen_sites = np.random.choice(len(self.system.sites),n_covered)
-        for c in chosen_sites:
-            self.system.sites[c].covered = species
 
         
 

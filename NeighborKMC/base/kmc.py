@@ -85,7 +85,7 @@ class NeighborKMCBase:
 
         # Variables connected to temporal acceleration
         # --------------------------------------------------
-        self.equilEV = [] # Track equilibrated events.
+        self.equilEV = [e for e in range(len(self.events)) if self.events[e].diffev] # Track equilibrated events.
 
         # Parameters
         self.delta = config.getfloat('Options','Delta') # reversibility tolerance
@@ -174,6 +174,7 @@ class NeighborKMCBase:
         self.frm_times = np.array(self.frm_times)
         self.evs = np.array(self.evs)
         self.rs = np.array(self.rs)
+        self.wheres = [np.where(self.evs==i) for i in range(len(self.events))]
         # Find the chronologically next event
         self.frm_arg = self.frm_times.argmin()
     
@@ -226,19 +227,13 @@ class NeighborKMCBase:
                         rcur = get_r_func[j](self.system,i,other)
                         self.rs[poslist] = rcur
                         u = uniform(0.,1.)
-                        if rcur > 0:
-                           self.frm_times[poslist] = self.t -np.log(u)\
-                                                            /rcur
-
-                        else:
-                           self.frm_times[poslist] = 1E9
-
+                        self.frm_times[poslist] = self.t -np.log(u)/rcur
                         self.tgen[poslist] = self.t
-                        self.us[poslist] = uniform(0.,1.)
+                        self.us[poslist] = u
                         self.possible_evs[poslist] = True
 
                        
-                    else:
+                    elif not poss_now:
                         self.rs[poslist] = 0.
                         self.frm_times[poslist] = 1E9
                         self.tgen[poslist] = 1E9
@@ -262,7 +257,8 @@ class NeighborKMCBase:
         # Choose the first reaction if possible
         site=self.siteslist[self.frm_arg] # The site to do event.
         othersite =self.other_sitelist[self.frm_arg]
-
+        self.lastsel = int(site)
+        self.lastother = int(othersite)
 
         if self.events[self.evs[self.frm_arg]].possible(self.system,
                                                site,othersite):
@@ -274,9 +270,7 @@ class NeighborKMCBase:
             evtype = self.evs[self.frm_arg] 
 
             self.t = self.frm_times[self.frm_arg]
-            # Save where the event happened:
-            self.lastsel = int(site)
-            self.lastother = int(othersite)
+            
             # Find new enabled processes.
             self.evs_exec[self.evs[self.frm_arg]] += 1
 
@@ -299,7 +293,8 @@ class NeighborKMCBase:
             self.leave_superbasin()
             self.frm_arg = np.argmin(self.frm_times)
 
-        
+        # Save where the event happened:
+
         self.frm_update()
 
 
@@ -371,12 +366,8 @@ class NeighborKMCBase:
         self.nem[evtype] += 1.
         self.Nm[evtype][self.pm] = 1.
 
-        for e in range(len(self.rs)):
-            self.r_S[self.evs[e]] += self.rs[e]*dt
-        
+        self.r_S += [(self.rs*dt)[self.wheres[i][0]].sum() for i in range(len(self.events))] 
         self.dt_S.append(dt)
-
-        
         
         # See if event is quasi-equilibrated
         if evtype in self.reverses:
@@ -411,34 +402,24 @@ class NeighborKMCBase:
 
 
         if self.isup > self.Ns: # If observation perioud is over, scale events.
-                    print "ENTERING SCALING: Suffex, Nonsuffex", self.Suffex, [ev for ev in self.equilEV if ev not in self.Suffex]
-
-                    # Find if events are impossible (then they cannot be equilibrated)
-                    nposs = []
-                    for ev in self.equilEV:
-                        ind = np.where(self.evs==ev)[0]
-                        poss = np.array([self.possible_evs[i] for i in ind])
-                        if True not in poss and self.events[ev].diffev==True: # Only diffusion events
-                            nposs.append(ev)
-
-
+                    #print "ENTERING SCALING: Suffex, Nonsuffex", self.Suffex, [ev for ev in self.equilEV if ev not in self.Suffex]
                     r_S = 0.
-                    dtS = sum(dt_S[ev])
-                    E = [i for i in range(len(self.events)) if i not in self.Suffex and i not in nposs]
+                    dtS = sum(self.dt_S)
+                    E = [i for i in range(len(self.events)) if i not in self.Suffex and self.nem[i]>0]
                     for neqev in E:
                         # Loop over non-equilibrated events
                         r_S += self.r_S[neqev]/dtS
                        
                     
-                    for ev in [e for e in self.equilEV if e in self.Suffex and e not in nposs]:
+                    for ev in [e for e in self.equilEV if e in self.Suffex]:
                         rmev = self.r_S[ev]/dtS
                         rmrev = self.r_S[self.reverses[ev]]/dtS
 
 
                         alpham = min(self.Nf*r_S/(rmev+rmrev),1)
                         # Raise the barrier
-                        self.events[ev].alpha = alpham
-                        print "Scaling k of event ", ev ," with ", alpham
+                        self.events[ev].alpha *= alpham
+                        #print "Scaling k of event ", ev ," with ", alpham, "current alpha ", self.events[ev].alpha
 
 
                    
@@ -535,8 +516,24 @@ class NeighborKMCBase:
 
 
     def cover_system(self,species,coverage):
-        raise NotImplementedError(r"""User needs to define cover_system
-                                  method in derived NeighborKMC class""") 
+        r"""Covers the system with a certain species.
+            
+            Method covers the system with a species 'species', at a 
+            certain coverage 'coverage'.
+    
+            Parameters
+            ----------
+            species : int
+                The species as defined by hte user (e.g. empty=0,CO=1)
+
+            coverage  : float
+                The fractional coverage to load lattice with.
+
+        """
+        n_covered = int(np.round(coverage*len(self.system.sites)))
+        chosen_sites = np.random.choice(len(self.system.sites),n_covered)
+        for c in chosen_sites:
+            self.system.sites[c].covered = species
         
 
     def run_kmc(self):
