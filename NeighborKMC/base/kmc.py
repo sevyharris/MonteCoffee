@@ -405,7 +405,7 @@ class NeighborKMCBase:
                     #print "ENTERING SCALING: Suffex, Nonsuffex", self.Suffex, [ev for ev in self.equilEV if ev not in self.Suffex]
                     r_S = 0.
                     dtS = sum(self.dt_S)
-                    E = [i for i in range(len(self.events)) if i not in self.Suffex and self.nem[i]>0]
+                    E = [i for i in range(len(self.events)) if i not in self.Suffex]
                     for neqev in E:
                         # Loop over non-equilibrated events
                         r_S += self.r_S[neqev]/dtS
