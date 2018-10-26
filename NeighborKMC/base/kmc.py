@@ -402,7 +402,6 @@ class NeighborKMCBase:
 
 
         if self.isup > self.Ns: # If observation perioud is over, scale events.
-                    #print "ENTERING SCALING: Suffex, Nonsuffex", self.Suffex, [ev for ev in self.equilEV if ev not in self.Suffex]
                     r_S = 0.
                     dtS = sum(self.dt_S)
                     E = [i for i in range(len(self.events)) if i not in self.Suffex]
@@ -419,7 +418,6 @@ class NeighborKMCBase:
                         alpham = min(self.Nf*r_S/(rmev+rmrev),1)
                         # Raise the barrier
                         self.events[ev].alpha *= alpham
-                        #print "Scaling k of event ", ev ," with ", alpham, "current alpha ", self.events[ev].alpha
 
 
                    
