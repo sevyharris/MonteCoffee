@@ -57,7 +57,6 @@ class COAdsEvent(EventBase):
         system.sites[site].covered = 1 
 
 
-
 class CODesEvent(EventBase):
     r"""
     CO desorption event class
