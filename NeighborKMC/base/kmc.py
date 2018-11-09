@@ -90,8 +90,9 @@ class NeighborKMCBase:
         # Parameters
         self.delta = config.getfloat('Options','Delta') # reversibility tolerance
         self.Nf = config.getint('Options','Nf') # Avg event observance in superbasins
-        self.Ns = config.getint('Options','Ns') # update the barriers every Ns step.        
-        self.ne = self.Nsites/4 # Nsteps for sufficeint executed events.
+        self.Ns = config.getint('Options','Ns') # update the barriers every Ns step.
+        self.ne = config.getint('Options','Ne') # Nsteps for sufficeint executed events.
+        self.dtmax = config.getfloat('Options', 'dtmax')        
 
         # Lists for rescaling barriers
         self.tgen = [] # times generated.
@@ -259,14 +260,15 @@ class NeighborKMCBase:
         othersite =self.other_sitelist[self.frm_arg]
         self.lastsel = int(site)
         self.lastother = int(othersite)
+        dt = float(self.frm_times[self.frm_arg]-self.t)
 
         if self.events[self.evs[self.frm_arg]].possible(self.system,
-                                               site,othersite):
+                                               site,othersite) and dt <self.dtmax:
             # Event is possible, change state
             self.events[self.evs[self.frm_arg]].do_event(self.system,
                                                 site,othersite)
             # Update time
-            dt = float(self.frm_times[self.frm_arg]-self.t)
+
             evtype = self.evs[self.frm_arg] 
 
             self.t = self.frm_times[self.frm_arg]
@@ -285,13 +287,8 @@ class NeighborKMCBase:
 
             
         else:
-            # Event not possible, disable it.
-            self.rs[self.frm_arg] = 0.
-            self.frm_times[self.frm_arg] = 1E9
-            self.tgen[self.frm_arg] = self.t
             # New first reaction must be determined
             self.leave_superbasin()
-            self.frm_arg = np.argmin(self.frm_times)
 
         # Save where the event happened:
 
@@ -456,9 +453,21 @@ class NeighborKMCBase:
 
         if self.save_coverages is True:
             out['covered'] = self.covered
+            with open("coverages.txt","a") as f2:
+                np.savetxt(f2,self.covered)
 
         pickle.dump(out,f)
         f.close()
+        # Save additional txt files:
+        with open("stype_ev.txt","rb") as f2:
+            stype_evcur = np.loadtxt(f2)
+
+        with open("stype_ev.txt","ab") as f2:
+            np.savetxt(f2,[self.stype_ev[k]+np.array(stype_evcur[k]) for k in self.stype_ev.keys()])
+ 
+        with open("time.txt","ab") as f2:
+            np.savetxt(f2,self.times)
+
         # Clear up arrays that grow with time:
         self.times = []
         evnl = [0 for i in range(len(self.events))]
@@ -471,7 +480,7 @@ class NeighborKMCBase:
             self.stype_ev[i] = list(evnl)
             self.stype_ev_other[i] = list(evnl)
 
-        #self.atom_cfgs=[]
+        
 
 
 

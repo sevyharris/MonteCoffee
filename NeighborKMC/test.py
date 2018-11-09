@@ -8,7 +8,7 @@ from user_system import System
 from user_kmc import NeighborKMC
 from user_constants import mCO,mO2,s0CO,s0O,Asite
 
-T=1100. # Temperature
+T=1000. # Temperature
 pCO = 2E3 # CO pressure
 pO2 = 1E3 # O2 pressure
 a = 4.00 # Lattice Parameter (only for ase.atoms)
@@ -59,5 +59,9 @@ for i,b in enumerate(atoms):
 parameters = {"pCO":pCO,"pO2":pO2,"T":T,
               "Name":"COOx Simulation"}
 
-sim = NeighborKMC(system = p,tend = 1E9, parameters=parameters)
+sim = NeighborKMC(system = p,tend = 5E-9, parameters=parameters)
 result = sim.run_kmc()
+
+# Print out the TOF:
+print "Simualtion end time reached"
+
