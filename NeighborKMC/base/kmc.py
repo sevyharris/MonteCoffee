@@ -459,11 +459,8 @@ class NeighborKMCBase:
         pickle.dump(out,f)
         f.close()
         # Save additional txt files:
-        with open("stype_ev.txt","rb") as f2:
-            stype_evcur = np.loadtxt(f2)
-
         with open("stype_ev.txt","ab") as f2:
-            np.savetxt(f2,[self.stype_ev[k]+np.array(stype_evcur[k]) for k in self.stype_ev.keys()])
+            np.savetxt(f2,list(self.stype_ev.values()))
  
         with open("time.txt","ab") as f2:
             np.savetxt(f2,self.times)
@@ -473,14 +470,6 @@ class NeighborKMCBase:
         evnl = [0 for i in range(len(self.events))]
     
         self.covered = []
-        self.stype_ev = {}
-        self.stype_ev_other = {}
-        
-        for i in self.Nstypes:
-            self.stype_ev[i] = list(evnl)
-            self.stype_ev_other[i] = list(evnl)
-
-        
 
 
 
