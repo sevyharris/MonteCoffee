@@ -324,8 +324,6 @@ class NeighborKMCBase:
                     except:
                         self.frm_times[i] = 1E9
 
-        self.frm_arg = np.argmin(self.frm_times)
-
 
 
 
@@ -461,6 +459,9 @@ class NeighborKMCBase:
         # Save additional txt files:
         with open("stype_ev.txt","ab") as f2:
             np.savetxt(f2,list(self.stype_ev.values()))
+
+        with open("stype_ev_other.txt","ab") as f2:
+            np.savetxt(f2,list(self.stype_ev_other.values()))
  
         with open("time.txt","ab") as f2:
             np.savetxt(f2,self.times)
