@@ -92,7 +92,6 @@ class NeighborKMCBase:
         self.Nf = config.getint('Options','Nf') # Avg event observance in superbasins
         self.Ns = config.getint('Options','Ns') # update the barriers every Ns step.
         self.ne = config.getint('Options','Ne') # Nsteps for sufficeint executed events.
-        self.dtmax = config.getfloat('Options', 'dtmax')        
 
         # Lists for rescaling barriers
         self.tgen = [] # times generated.
@@ -263,7 +262,7 @@ class NeighborKMCBase:
         dt = float(self.frm_times[self.frm_arg]-self.t)
 
         if self.events[self.evs[self.frm_arg]].possible(self.system,
-                                               site,othersite) and dt <self.dtmax:
+                                               site,othersite):
             # Event is possible, change state
             self.events[self.evs[self.frm_arg]].do_event(self.system,
                                                 site,othersite)
@@ -288,7 +287,7 @@ class NeighborKMCBase:
             
         else:
             # New first reaction must be determined
-            self.leave_superbasin()
+            raise Warning("Impossible event were next in que and was attempted")
 
         # Save where the event happened:
 
@@ -356,6 +355,8 @@ class NeighborKMCBase:
         """
         # Update the rates in the current superbasin
         #dtsup = dt
+        if dt < 0:
+            raise Warning("Time-step is < 0. Quitting")
         farg = int(self.frm_arg) 
         self.pm = (self.pm+1) %  self.ne
         self.nem[evtype] += 1.

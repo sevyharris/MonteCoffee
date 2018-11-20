@@ -17,7 +17,6 @@ config.set('Options', 'Delta', '0.25')
 config.set('Options', 'Nf', '1000')
 config.set('Options', 'Ns', '2000')
 config.set('Options', 'Ne', '100')
-config.set('Options', 'dtmax', '1')
 
 # Writing our configuration file to 'example.cfg'
 with open('kMC_options.cfg', 'wb') as configfile:
