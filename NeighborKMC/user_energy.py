@@ -20,7 +20,11 @@ EadsO = [0.97+0.2*(9-CN) for CN in [6,7,8,9]]
 
 
 def get_Ea(ECO,EO):
-    return 2.95-0.824*(EO+ECO)
+    dEO = EO-EadsO[-1] # Oxygen energy relative to uncovered Pt(111)
+    dECO = ECO-EadsCO[-1] # CO energy relative to uncovered Pt(111)
+    dETS = 0.824*(dEO+dECO) # How much larger is the energy of CO and O wrt Pt(111)
+    Ea = 1.08 + dETS - dECO - dEO # Translate the barriers relative to Pt(111)
+    return Ea
 
 
 def get_repulsion(cov_self,cov_NN,stype):

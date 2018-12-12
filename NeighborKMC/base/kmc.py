@@ -144,7 +144,7 @@ class NeighborKMCBase:
                       a in range(len(self.system.sites))]
 
         self.possible_evs = [] # used for superbasin.
-        
+        ks = []
         for i,s in enumerate(self.system.sites):
             NNcur = self.system.neighbors[i]
             for j, e in enumerate(self.events):
@@ -164,7 +164,7 @@ class NeighborKMCBase:
                         self.us.append(uniform(0.,1.))
                         self.possible_evs.append(False)
                     
-
+                    ks.append(e.get_rate(self.system,i,other_site))
                     self.rindex[i][j].append(len(self.rs))
                     self.evs.append(j)            
                     self.rs.append(rcur)
@@ -175,7 +175,8 @@ class NeighborKMCBase:
         self.evs = np.array(self.evs)
         self.rs = np.array(self.rs)
         self.wheres = [np.where(self.evs==i) for i in range(len(self.events))]
-        # Find the chronologically next event
+        self.ks = np.array(ks)
+        self.ksavg = [np.mean([self.ks[i] for i in self.wheres[j][0]]) for j in range(len(self.events))]
         self.frm_arg = self.frm_times.argmin()
     
 
@@ -401,10 +402,8 @@ class NeighborKMCBase:
                     r_S = 0.
                     dtS = sum(self.dt_S)
                     E = [i for i in range(len(self.events)) if i not in self.Suffex]
-                    for neqev in E:
-                        # Loop over non-equilibrated events
-                        r_S += self.r_S[neqev]/dtS
-                       
+
+                    r_S = max([self.ksavg[neqev] for neqev in E]) 
                     
                     for ev in [e for e in self.equilEV if e in self.Suffex]:
                         rmev = self.r_S[ev]/dtS
@@ -412,7 +411,6 @@ class NeighborKMCBase:
 
 
                         alpham = min(self.Nf*r_S/(rmev+rmrev),1)
-                        # Raise the barrier
                         self.events[ev].alpha *= alpham
 
 
