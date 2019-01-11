@@ -1,5 +1,6 @@
 # Script that tests MC Code
 from __future__ import print_function, division
+import sys
 import numpy as np
 from ase import Atom,Atoms
 from ase.visualize import view
@@ -65,10 +66,12 @@ for i,b in enumerate(atoms):
         b.tag = maxtag+1
 
 
-parameters = {"pCO":pCO,"pO2":pO2,"T":T,
-              "Name":"COOx Simulation"}
+parameters = {"pCO": pCO,"pO2": pO2,"T": T, "Name": "COOx Simulation"}
 
 sim = NeighborKMC(system = p,tend = 1E-8, parameters=parameters)
+
+sys.exit(0)
+
 result = sim.run_kmc()
 
 # Plot the result:

@@ -1,5 +1,6 @@
 from __future__ import print_function
 import numpy as np
+import ase.io
 from base.kmc import NeighborKMCBase
 from base.logging import Log
 from user_constants import *
@@ -38,6 +39,7 @@ class NeighborKMC(NeighborKMCBase):
         """
         self.reverses = {} # Reverse steps 
         self.load_events(parameters)
+        print(dir(self))
         self.evs_exec = np.zeros(len(self.events))
         NeighborKMCBase.__init__(self,system=system,tend=tend,parameters=parameters)
 
@@ -141,16 +143,14 @@ class NeighborKMC(NeighborKMCBase):
 
                 covs_cur = [s.covered for s in self.system.sites]
                 self.covered.append(covs_cur)
-        
                 tlast=float(self.t)
-             
-            
                 stepN_CNT = 0
     
             stepSaveN+=1
 
             #Save every self.SaveSteps steps.
             if stepSaveN == self.SaveSteps: 
+                #ase.io.write('user_kmc.traj', self.system.atoms)
                 #self.write_atoms('test_step'+str(stepNMC)+'.traj')
                 self.save_pickle(filename=self.PicklePrefix+str(stepNMC))
                 stepSaveN = 0.
