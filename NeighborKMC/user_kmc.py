@@ -150,7 +150,7 @@ class NeighborKMC(NeighborKMCBase):
 
             #Save every self.SaveSteps steps.
             if stepSaveN == self.SaveSteps: 
-                #Sim.write_atoms('test_step'+str(stepNMC)+'.traj')                
+                #self.write_atoms('test_step'+str(stepNMC)+'.traj')
                 self.save_pickle(filename=self.PicklePrefix+str(stepNMC))
                 stepSaveN = 0.
             
