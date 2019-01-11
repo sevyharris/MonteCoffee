@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 from base.kmc import NeighborKMCBase
 from base.logging import Log
@@ -109,7 +110,7 @@ class NeighborKMC(NeighborKMCBase):
 
          # Initialize the log and timekeepers
         if self.verbose:
-            print 'Loading logging and counters...'
+            print('Loading logging and counters...')
 
         log = Log(self.parameters)
         tlast = float(self.t)
@@ -121,7 +122,7 @@ class NeighborKMC(NeighborKMCBase):
         # Initialize Coverage list
         covs = [] 
         if self.verbose:
-            print '\nRunning simulation.'
+            print('\nRunning simulation.')
 
         while self.t < self.tend:
 
@@ -131,7 +132,7 @@ class NeighborKMC(NeighborKMCBase):
             if stepN_CNT>=self.LogSteps:
                 if self.verbose:
                     #print 'Time : ', self.t
-                    print "Covs :", self.get_coverages()
+                    print("Covs :", self.get_coverages())
                     
                 log.dump_point(stepNMC,self.t,self.evs_exec)
 

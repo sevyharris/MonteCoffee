@@ -1,4 +1,5 @@
 # Script that tests MC Code
+from __future__ import print_function, division
 import numpy as np
 from ase import Atom,Atoms
 from ase.visualize import view
@@ -44,7 +45,7 @@ stypes = {}
 for i,k in enumerate(sorted(list(set(CNS)))):
     stypes[k] = i
 
-print "SITE TYPES, ", sorted(list(set(CNS) ))
+print("SITE TYPES, ", sorted(list(set(CNS) )))
 # Create a site for each surface-atom:
 for i,indic in enumerate(surface_atom_ids):
     sites.append(Site(stype=stypes[CNS[indic]],
@@ -100,5 +101,5 @@ plt.gca().tick_params(axis='both', labelsize=fs,length=14, width=3.5, which='maj
 
 plt.show()
 # Print out the TOF:
-print "Simualtion end time reached"
+print("Simualtion end time reached")
 
