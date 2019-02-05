@@ -39,7 +39,6 @@ class NeighborKMC(NeighborKMCBase):
         """
         self.reverses = {} # Reverse steps 
         self.load_events(parameters)
-        print(dir(self))
         self.evs_exec = np.zeros(len(self.events))
         NeighborKMCBase.__init__(self,system=system,tend=tend,parameters=parameters)
 

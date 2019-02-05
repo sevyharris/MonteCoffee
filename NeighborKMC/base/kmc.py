@@ -7,7 +7,7 @@ simulations with the First reaction method.
 """
 
 from __future__ import print_function
-import configparser
+import ConfigParser
 import numpy as np
 import pickle
 from random import randint, uniform
@@ -55,7 +55,7 @@ class NeighborKMCBase:
         self.parameters = parameters
         
         # Load software configuration
-        config = configparser.RawConfigParser()
+        config = ConfigParser.RawConfigParser()
         config.read('kMC_options.cfg')
         self.SaveSteps = config.getint('Parameters', 'SaveSteps')
         self.LogSteps = config.getint('Parameters', 'LogSteps')

@@ -70,8 +70,6 @@ parameters = {"pCO": pCO,"pO2": pO2,"T": T, "Name": "COOx Simulation"}
 
 sim = NeighborKMC(system = p,tend = 1E-8, parameters=parameters)
 
-sys.exit(0)
-
 result = sim.run_kmc()
 
 # Plot the result:
