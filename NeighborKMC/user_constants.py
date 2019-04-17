@@ -46,6 +46,5 @@ IO2  = 2.06218774e-46 #Moment of Inertia
 
 # Misc
 # ---------------------------
-Ncut = 4./np.sqrt(2)+0.1 # Nearest neighbor cutoff for negihborlists
 s0CO = 0.9 # Sticking coefficient of CO
 s0O = 0.1

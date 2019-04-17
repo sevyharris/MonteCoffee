@@ -37,19 +37,6 @@ class SystemBase:
                 
 
 
-    def identify_neighbors(self):
-        r"""Template method to identify site connectivity
-            
-            Method needs to be overridden in user_system.py.
-            The method should identify which sites that are
-            to be connected during the kMC simulation, e.g. based
-            on site indices or positions defined by 'self.atoms'
-
-        """
-
-        raise NotImplementedError(r"""Called purely abstract method
-                                  identify_neighbors() of System""")
-
     
     def get_ncovs(self,i_site):
         r"""Method that gets the coverage on Nearest neighbor sites.

@@ -5,4 +5,4 @@ import user_energy
 import user_events
 import user_kmc
 
-__version__ = 1.0
+__version__ = 1.1

@@ -11,8 +11,8 @@ from user_constants import mCO,mO2,s0CO,s0O,Asite
 T=800. # Temperature
 pCO = 2E3 # CO pressure
 pO2 = 1E3 # O2 pressure
-a = 4.00 # Lattice Parameter (only for ase.atoms)
-
+a = 4.00 # Lattice Parameter (not related to DFT!)
+Ncutoff = a/np.sqrt(2.)+0.05 # Nearest neighbor cutoff
 
 # Clear up old output files:
 np.savetxt("time.txt",[])
@@ -25,7 +25,6 @@ atoms = Octahedron("Pt",length=12,cutoff=3,latticeconstant=a)
 sites = []
 
 # Define a site for each atom that is free with no pre-defined neighbors.
-
 # First find CN of each atom:
 CNS = np.zeros(len(atoms))
 for i, at in enumerate(atoms):
@@ -39,29 +38,42 @@ for i, at in enumerate(atoms):
 # Define surface atoms as non-bulk:
 surface_atom_ids = [i for i in range(len(CNS)) if CNS[i]<12]
 
-stypes = {}
-
+stypes = {} # site-types: (111),(100),edge,corner
 for i,k in enumerate(sorted(list(set(CNS)))):
     stypes[k] = i
 
-print "SITE TYPES, ", sorted(list(set(CNS) ))
+
 # Create a site for each surface-atom:
 for i,indic in enumerate(surface_atom_ids):
     sites.append(Site(stype=stypes[CNS[indic]],
                  covered=0,ind = [indic]))
 
-# Instantiate a particle
+
+# Set the neighborlist for each site using
+# the distances between atoms
+positions = atoms.positions
+        
+for i, s in enumerate(sites):
+    # Position of site
+    pcur = atoms[s.ind[0]].position  
+
+    for j, sother in enumerate(sites):
+        # Position of potential neigbor site:
+        pother = atoms[sother.ind[0]].position
+
+        # Length of distance vector:
+        dpabs = np.sqrt((pother[0]-pcur[0])**2.+
+                        (pother[1]-pcur[1])**2.+
+                        (pother[2]-pcur[2])**2.) 
+                
+        # If the site is a neighbor:
+        if dpabs < Ncutoff and j!=i: 
+            s.neighbors.append(j)
+
+
+
+# Instantiate a system (p for particle)
 p = System(atoms=atoms,sites=sites)
-
-# Tagged the ase.atoms by site-types:
-
-for s in surface_atom_ids:
-    atoms[s].tag = sorted(list(set(CNS))).index(CNS[s])
-
-maxtag = max([a.tag for a in atoms])
-for i,b in enumerate(atoms):
-    if i not in surface_atom_ids:
-        b.tag = maxtag+1
 
 
 parameters = {"pCO":pCO,"pO2":pO2,"T":T,
