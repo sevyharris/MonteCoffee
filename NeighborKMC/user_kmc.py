@@ -1,4 +1,6 @@
+from __future__ import print_function
 import numpy as np
+import ase.io
 from base.kmc import NeighborKMCBase
 from base.logging import Log
 from user_constants import *
@@ -109,7 +111,7 @@ class NeighborKMC(NeighborKMCBase):
 
          # Initialize the log and timekeepers
         if self.verbose:
-            print 'Loading logging and counters...'
+            print('Loading logging and counters...')
 
         log = Log(self.parameters)
         tlast = float(self.t)
@@ -121,7 +123,7 @@ class NeighborKMC(NeighborKMCBase):
         # Initialize Coverage list
         covs = [] 
         if self.verbose:
-            print '\nRunning simulation.'
+            print('\nRunning simulation.')
 
         while self.t < self.tend:
 
@@ -131,7 +133,7 @@ class NeighborKMC(NeighborKMCBase):
             if stepN_CNT>=self.LogSteps:
                 if self.verbose:
                     #print 'Time : ', self.t
-                    print "Covs :", self.get_coverages()
+                    print("Covs :", self.get_coverages())
                     
                 log.dump_point(stepNMC,self.t,self.evs_exec)
 
@@ -140,17 +142,15 @@ class NeighborKMC(NeighborKMCBase):
 
                 covs_cur = [s.covered for s in self.system.sites]
                 self.covered.append(covs_cur)
-        
                 tlast=float(self.t)
-             
-            
                 stepN_CNT = 0
     
             stepSaveN+=1
 
             #Save every self.SaveSteps steps.
             if stepSaveN == self.SaveSteps: 
-                #Sim.write_atoms('test_step'+str(stepNMC)+'.traj')                
+                #ase.io.write('user_kmc.traj', self.system.atoms)
+                #self.write_atoms('test_step'+str(stepNMC)+'.traj')
                 self.save_pickle(filename=self.PicklePrefix+str(stepNMC))
                 stepSaveN = 0.
             

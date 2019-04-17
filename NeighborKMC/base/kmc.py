@@ -6,16 +6,16 @@ simulations with the First reaction method.
 
 """
 
-
+from __future__ import print_function
 import ConfigParser
 import numpy as np
 import pickle
 from random import randint, uniform
 from ase.io import write
 from ase import Atoms
-from system import SystemBase
-from events import EventBase
-from logging import Log
+from .system import SystemBase
+from .events import EventBase
+from .logging import Log
 
 
 
@@ -63,8 +63,8 @@ class NeighborKMCBase:
         self.save_coverages = config.getboolean('Options', 'SaveCovs')
         self.verbose = config.getboolean('Options','Verbose')
         if self.verbose:
-            print '-'*50,'\n', 'MonteCoffee Simulation Running', '\n','-'*50, '\n'
-            print 'kMC simulation loading ...'
+            print('-'*50,'\n', 'MonteCoffee Simulation Running', '\n','-'*50, '\n')
+            print('kMC simulation loading ...')
         
         # Variables connected to after analysis.
         self.Nsites = len(self.system.sites) 
@@ -120,7 +120,7 @@ class NeighborKMCBase:
         self.frm_times = [] # Needed later
         self.frm_arg = None # args that sort frm times
         if self.verbose:
-            print 'Initializing First Reaction method lists ...'
+            print('Initializing First Reaction method lists ...')
         self.frm_init()
         
         
@@ -436,9 +436,9 @@ class NeighborKMCBase:
              Last lists are cleaned from memory.
 
         """
-        f = open(filename+'.pickle','w')
+        f = open(filename+'.pickle','wb')
         if self.verbose:
-                    print 'Saving ', filename+'.pickle', '...'
+                    print('Saving ', filename+'.pickle', '...')
 
         out = {'time':self.times,'nevents':self.evs_exec, 
                     'siteids':[m.ind for m in self.system.sites],
