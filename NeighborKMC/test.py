@@ -112,5 +112,5 @@ plt.gca().tick_params(axis='both', labelsize=fs,length=14, width=3.5, which='maj
 
 plt.show()
 # Print out the TOF:
-print "Simualtion end time reached"
+print("Simualtion end time reached")
 

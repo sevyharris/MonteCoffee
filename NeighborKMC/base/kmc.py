@@ -7,7 +7,16 @@ simulations with the First reaction method.
 """
 
 from __future__ import print_function
-import ConfigParser
+#import ConfigParser
+
+from six.moves import configparser
+import six
+
+if six.PY2:
+  ConfigParser = configparser.SafeConfigParser
+else:
+  ConfigParser = configparser.ConfigParser
+
 import numpy as np
 import pickle
 from random import randint, uniform
@@ -55,7 +64,7 @@ class NeighborKMCBase:
         self.parameters = parameters
         
         # Load software configuration
-        config = ConfigParser.RawConfigParser()
+        config = configparser.RawConfigParser()
         config.read('kMC_options.cfg')
         self.SaveSteps = config.getint('Parameters', 'SaveSteps')
         self.LogSteps = config.getint('Parameters', 'LogSteps')
@@ -450,7 +459,7 @@ class NeighborKMCBase:
 
         if self.save_coverages is True:
             out['covered'] = self.covered
-            with open("coverages.txt","a") as f2:
+            with open("coverages.txt","ab") as f2:
                 np.savetxt(f2,self.covered)
 
         pickle.dump(out,f)
