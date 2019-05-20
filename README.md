@@ -9,6 +9,7 @@ modifies and develops on the code to customize as needed.
 If you find MonteCoffee useful, please make a citation to:
 [M. Jørgensen and H. Grönbeck, *J. Chem. Phys.* **(2018)**, *149*, 114101](https://doi.org/10.1063/1.5046635)
 
+Therein, a description and overview of the code is presented.
 
 # Scientific articles using MonteCoffee
 The following papers have used MonteCoffee:
@@ -25,6 +26,6 @@ The following papers have used MonteCoffee:
 
 [M. Jørgensen and H. Grönbeck, *J. Am. Chem. Soc.* **(2019)**](https://doi.org/10.1021/jacs.9b02132)
 
-# How to run a MonteCoffee simulation
-A good starting point is to look over the examples in *documentation.pdf*.
+# Running a MonteCoffee simulation
+The examples in *documentation.pdf* describe how to run a simulation.
 
