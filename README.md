@@ -29,3 +29,4 @@ The following papers have used MonteCoffee:
 # Running a MonteCoffee simulation
 The examples in *documentation.pdf* describe how to run a simulation.
 
+for a quick-start example of CO oxidation over a nanoparticle, you can run *python test.py* 
