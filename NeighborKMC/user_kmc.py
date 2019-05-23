@@ -10,7 +10,7 @@ import pyclbr
 
 class NeighborKMC(NeighborKMCBase):
 
-    def __init__(self,system,tend,parameters={}):
+    def __init__(self, system, tend, parameters={}, events = []):
         r"""Constructor for NeighborKMC objects.
             
             Method calls constructor of NeighborKMCBase objects, and
@@ -38,18 +38,18 @@ class NeighborKMC(NeighborKMCBase):
 
         """
         self.reverses = {} # Reverse steps 
-        self.load_events(parameters)
+        self.load_events(parameters, events)
         self.evs_exec = np.zeros(len(self.events))
-        NeighborKMCBase.__init__(self,system=system,tend=tend,parameters=parameters)
+        
+        NeighborKMCBase.__init__(self, system=system, 
+                                 tend=tend, parameters=parameters)
 
 
         
 
-    def load_events(self,parameters):
+    def load_events(self, parameters, events):
         r"""Loads the events list.
-    
-            User-overridden method.
-            
+               
             Method loads the event list 'self.events' which is used to
             keep track of event-types in the simualtion.
     
@@ -59,19 +59,8 @@ class NeighborKMC(NeighborKMCBase):
                 The parameters to pass to the simulation events.
 
         """
-        self.events = []
-        classes = pyclbr.readmodule("user_events")
-        event_names = []
-        line_nrs = []
-        for c in classes:
-            if classes[c].file.endswith("user_events.py"):
-                event_names.append(c)
-                line_nrs.append(classes[c].lineno)
-        # Sort events by line number:
-        event_names_srt = [event_names[n] for n in np.argsort(line_nrs)] 
-        for n in event_names_srt:            
-            exec("self.events.append("+n+"(parameters))")
-
+        self.events = [ev(parameters) for ev in events]
+       
         # Track which steps are considered each others inverse.
         for i in range(len(self.events)): 
             if self.events[i].rev is not None:

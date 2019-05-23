@@ -8,6 +8,13 @@ from user_system import System
 from user_kmc import NeighborKMC
 from user_constants import mCO,mO2,s0CO,s0O,Asite
 
+from user_events import (COAdsEvent, CODesEvent, 
+                        OAdsEvent, ODesEvent, 
+                        CODiffEvent, ODiffEvent, 
+                        COOxEvent)
+
+# Define constants
+# ------------------------------------------
 T=800. # Temperature
 pCO = 2E3 # CO pressure
 pO2 = 1E3 # O2 pressure
@@ -15,12 +22,14 @@ a = 4.00 # Lattice Parameter (not related to DFT!)
 Ncutoff = a/np.sqrt(2.)+0.05 # Nearest neighbor cutoff
 
 # Clear up old output files:
+# ------------------------------------------
 np.savetxt("time.txt",[])
 np.savetxt("coverages.txt",[])
 np.savetxt("stype_ev.txt",[])
 np.savetxt("stype_ev_other.txt",[])
-
-# Define the system
+# ------------------------------------------
+# Define the sites from ase.Atoms
+# ------------------------------------------
 atoms = Octahedron("Pt",length=12,cutoff=3,latticeconstant=a)
 sites = []
 
@@ -48,9 +57,10 @@ for i,indic in enumerate(surface_atom_ids):
     sites.append(Site(stype=stypes[CNS[indic]],
                  covered=0,ind = [indic]))
 
-
+# ------------------------------------------
 # Set the neighborlist for each site using
 # the distances between atoms
+# ------------------------------------------
 positions = atoms.positions
         
 for i, s in enumerate(sites):
@@ -70,20 +80,32 @@ for i, s in enumerate(sites):
         if dpabs < Ncutoff and j!=i: 
             s.neighbors.append(j)
 
+# ------------------------------------------
+# Instantiate a system (p for particle) 
+# and simulation 
+# ------------------------------------------
 
-
-# Instantiate a system (p for particle)
+events = [COAdsEvent, CODesEvent, OAdsEvent, 
+         ODesEvent, CODiffEvent, 
+         ODiffEvent, COOxEvent]
+         
 p = System(atoms=atoms,sites=sites)
 
 
 parameters = {"pCO":pCO,"pO2":pO2,"T":T,
               "Name":"COOx Simulation"}
 
-sim = NeighborKMC(system = p,tend = 1E-8, parameters=parameters)
+sim = NeighborKMC(system = p,tend = 1E-8, 
+                  parameters = parameters, 
+                  events = events)
+                  
 result = sim.run_kmc()
+print("Simualtion end time reached")
 
+
+# ------------------------------------------
 # Plot the result:
-# ----------------------------------
+# ------------------------------------------
 import matplotlib.pyplot as plt
 from matplotlib import rc
 import matplotlib.mlab as mlab
@@ -111,6 +133,4 @@ plt.ylabel("Coverage",fontsize=20)
 plt.gca().tick_params(axis='both', labelsize=fs,length=14, width=3.5, which='major',pad=10)
 
 plt.show()
-# Print out the TOF:
-print("Simualtion end time reached")
 
