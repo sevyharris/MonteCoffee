@@ -18,7 +18,7 @@ The following papers have used MonteCoffee:
 
 [M. Jørgensen and H. Grönbeck, *ACS Catal.* **(2017)**, *7*, 5054](https://doi.org/10.1021/acscatal.7b01194)
 
-[M. Jørgensen and H. Grönbeck, *Angew. Chem. Int. Ed.* **(2018)**, *57*, 5086](https://doi.org/10.1021/0.1002/anie.201802113)
+[M. Jørgensen and H. Grönbeck, *Angew. Chem. Int. Ed.* **(2018)**, *57*, 5086](https://doi.org/10.1002/anie.201802113)
 
 [T. N. Pingel, M. Jørgensen, A. B. Yankovich, H. Grönbeck, and E. Olsson, *Nat. Commun.* **(2018)**, *9*, 2722](https://doi.org/10.1038/s41467-018-05055-1)
 
