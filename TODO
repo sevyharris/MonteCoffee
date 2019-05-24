@@ -1,8 +1,6 @@
 TODOLIST:
 --------------------
 
-- Expose the Event-loading to the user to make the loading more transparent.
-
 - Remove unnecessary pickling, and move all textfile information to text files.
 
 - Ensure that local updating of events, in frm_update(), depend on the extent of Nearest-Neighbor interactions.
