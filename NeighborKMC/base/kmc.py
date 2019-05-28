@@ -64,22 +64,14 @@ class NeighborKMCBase:
         self.parameters = parameters
         
         # Load software configuration
-        config = configparser.RawConfigParser()
-        config.read('kMC_options.cfg')
-        self.SaveSteps = config.getint('Parameters', 'SaveSteps')
-        self.LogSteps = config.getint('Parameters', 'LogSteps')
-        self.PicklePrefix = config.get('Parameters', 'PicklePrefix')
-        self.tinfinity = config.getfloat('Parameters','tinfinity')
-        self.nninter = config.getint('Parameters', 'nninteractions')
-        self.save_coverages = config.getboolean('Options', 'SaveCovs')
-        self.verbose = config.getboolean('Options','Verbose')
+        self.load_options()
+        
         if self.verbose:
             print('-'*50,'\n', 'MonteCoffee Simulation Running', '\n','-'*50, '\n')
             print('kMC simulation loading ...')
         
         # Variables connected to after analysis.
-        self.Nsites = len(self.system.sites) 
-        self.Nspecies = config.getint('Parameters','Nspecies')
+        self.Nsites = len(self.system.sites)
         self.times = []
         self.MCstep = []
         self.covered = [] 
@@ -97,39 +89,27 @@ class NeighborKMCBase:
         # Variables connected to temporal acceleration
         # --------------------------------------------------
         self.equilEV = [e for e in range(len(self.events)) if self.events[e].diffev] # Track equilibrated events.
-
-        # Parameters
-        self.delta = config.getfloat('Options','Delta') # reversibility tolerance
-        self.Nf = config.getfloat('Options','Nf') # Avg event observance in superbasins
-        self.Ns = config.getint('Options','Ns') # update the barriers every Ns step.
-        self.ne = config.getint('Options','Ne') # Nsteps for sufficeint executed events.
-        self.usekavg = config.getboolean('Options','usekavg') # Use rate-constants for scaling, not rates
+        
         self.scaling_func = self.scaling_ks if self.usekavg else self.scaling_rs
 
-        # Lists for rescaling barriers
+        # Lists for rescaling barriers and superbasin tracking
         self.tgen = [] # times generated.
         self.us = [] # random deviates used
-        self.ks = []# rate-constants used
-        
-        # Lists for tracking superbasin
+        self.ks = []# rate-constants used        
         self.r_S= np.zeros(len(self.events)) #all rates in current superbasin
         self.dt_S = [] # dt used to compute rs in current superbasin
-        
-        
-        # nem is the number of events performed in current superbasin.
         self.nem = np.zeros(len(self.events),dtype=int) 
-        # Nm is the number of events performed the last Nf steps.
         self.Nm = [np.zeros(self.ne,dtype=int) \
                   for i in range(len(self.events))] 
-
         self.Suffex = [] # suffiently executed quasi-equilibrated events
 
         # Variables for time and step-keeping
         self.isup = 0 # Superbasin step counter
         self.pm = 0
-        # --------------------------------------------------     
         
+
         # FRM method variables
+        # --------------------------------------------------     
         self.frm_times = [] # Needed later
         self.frm_arg = None # args that sort frm times
         if self.verbose:
@@ -140,7 +120,27 @@ class NeighborKMCBase:
          
         self.frm_init()
         
+    
+    def load_options(self):
+        r""" Loads all options set in kMC_options.cfg.
+        """
+        config = configparser.RawConfigParser()
+        config.read('kMC_options.cfg')
         
+        self.SaveSteps = config.getint('Parameters', 'SaveSteps')
+        self.LogSteps = config.getint('Parameters', 'LogSteps')
+        self.PicklePrefix = config.get('Parameters', 'PicklePrefix')
+        self.tinfinity = config.getfloat('Parameters','tinfinity')
+        self.nninter = config.getint('Parameters', 'nninteractions')
+        self.Nspecies = config.getint('Parameters','Nspecies')
+        self.verbose = config.getboolean('Options','Verbose')
+        self.save_coverages = config.getboolean('Options', 'SaveCovs')
+        self.delta = config.getfloat('Options','Delta') # reversibility tolerance
+        self.Nf = config.getfloat('Options','Nf') # Avg event observance in superbasins
+        self.Ns = config.getint('Options','Ns') # update the barriers every Ns step.
+        self.ne = config.getint('Options','Ne') # Nsteps for sufficeint executed events.
+        self.usekavg = config.getboolean('Options','usekavg') # Use rate-constants for scaling, not rates
+    
 
     def frm_init(self):
         r"""Prepare to perform FRM simulation.
