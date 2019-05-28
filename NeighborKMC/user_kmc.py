@@ -101,7 +101,18 @@ class NeighborKMC(NeighborKMCBase):
         if self.verbose:
             print('Loading logging and counters...')
 
-        log = Log(self.parameters)
+        logparams = {}
+        logparams.update(self.parameters)
+        logparams.update({"tend": self.tend,"Nsites": self.Nsites})
+        log = Log(logparams)
+        
+        # Save txt files with site information:
+        with open("siteids.txt","wb") as f2:
+             np.savetxt(f2,[m.ind for m in self.system.sites])
+             
+        with open("stypes.txt","wb") as f2:
+             np.savetxt(f2,[m.stype for m in self.system.sites])
+        
         tlast = float(self.t)
         times = []
         # Initialize step counters
@@ -120,8 +131,7 @@ class NeighborKMC(NeighborKMCBase):
             # Log every self.LogSteps step.
             if stepN_CNT>=self.LogSteps:
                 if self.verbose:
-                    #print 'Time : ', self.t
-                    print("Covs :", self.get_coverages())
+                    print("Time : ", self.t, "\t Covs :", self.get_coverages())
                     
                 log.dump_point(stepNMC,self.t,self.evs_exec)
 
@@ -139,7 +149,7 @@ class NeighborKMC(NeighborKMCBase):
             if stepSaveN == self.SaveSteps: 
                 #ase.io.write('user_kmc.traj', self.system.atoms)
                 #self.write_atoms('test_step'+str(stepNMC)+'.traj')
-                self.save_pickle(filename=self.PicklePrefix+str(stepNMC))
+                self.save_txt()
                 stepSaveN = 0.
             
             
@@ -147,7 +157,7 @@ class NeighborKMC(NeighborKMCBase):
             stepN_CNT+=1
             stepNMC+=1
     
-        self.save_pickle(filename=self.PicklePrefix+str(stepNMC))
+        self.save_txt()
     
 
         return 0

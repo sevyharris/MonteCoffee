@@ -1,7 +1,10 @@
 TODOLIST:
 --------------------
 
-- Remove unnecessary pickling, and move all textfile information to text files.
-
 - Split up the doc into a API reference, quick-start, and specific tutorials. Only have the same info once, just
   link if necessary.
+
+- Log the sid_ev list and sid_ev_other and write them to disk instead of writing stype_ev and stype_ev_other.
+  This should be done because stype_ev(_other) can be reconstructed from stype_ev.
+
+- Add a script that reconstructs stype_ev.txt from sid_ev.txt

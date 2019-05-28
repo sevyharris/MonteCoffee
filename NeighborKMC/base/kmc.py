@@ -129,7 +129,6 @@ class NeighborKMCBase:
         
         self.SaveSteps = config.getint('Parameters', 'SaveSteps')
         self.LogSteps = config.getint('Parameters', 'LogSteps')
-        self.PicklePrefix = config.get('Parameters', 'PicklePrefix')
         self.tinfinity = config.getfloat('Parameters','tinfinity')
         self.nninter = config.getint('Parameters', 'nninteractions')
         self.Nspecies = config.getint('Parameters','Nspecies')
@@ -478,37 +477,34 @@ class NeighborKMCBase:
    
 
 
-    def save_pickle(self,filename='transitions'):
-        r""" Saves a pickle file with the simulation data.
+    def save_txt(self):
+        r""" Saves txt files containing the simulation data.
         
              Method saves the number of events executed on
              the different types of sites, the time vs mcstep,
              the site-types, and optionally the coverages if
              'self.covered' is True.
 
-             Last lists are cleaned from memory.
+             Lastly growing lists are cleaned from memory.
 
         """
-        f = open(filename+'.pickle','wb')
+
         if self.verbose:
-                    print('Saving ', filename+'.pickle', '...')
+            print('Saving .txt files ...')
+              
+        # Save global neighborlist to one file
+       
 
-        out = {'time':self.times,'nevents':self.evs_exec, 
-                    'siteids':[m.ind for m in self.system.sites],
-                    'stypes':[m.stype for m in self.system.sites],
-                    'stype_ev':self.stype_ev,
-                    'stype_ev_other':self.stype_ev_other,
-                    'Nsites':self.Nsites,'mcstep':self.MCstep,
-                    'tend':self.tend,'parameters':self.parameters}
-
-        if self.save_coverages is True:
-            out['covered'] = self.covered
+        if self.save_coverages:
             with open("coverages.txt","ab") as f2:
                 np.savetxt(f2,self.covered)
-
-        pickle.dump(out,f)
-        f.close()
-        # Save additional txt files:
+             
+        with open("mcstep.txt","wb") as f2:
+             np.savetxt(f2,self.MCstep)
+             
+        with open("evs_exec.txt","wb") as f2:
+             np.savetxt(f2,self.evs_exec)
+             
         with open("stype_ev.txt","ab") as f2:
             np.savetxt(f2,list(self.stype_ev.values()))
 

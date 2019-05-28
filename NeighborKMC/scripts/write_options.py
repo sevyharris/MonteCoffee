@@ -6,7 +6,6 @@ config.set('Parameters', 'Nspecies', '2')
 config.set('Parameters', 'NNinteractions', '1')
 config.set('Parameters', 'SaveSteps', '100000') # Save a pickle file every 100000 steps.
 config.set('Parameters', 'LogSteps', '1000')
-config.set('Parameters', 'PicklePrefix', 'transitions_step')
 config.set('Parameters', 'tinfinity', '1E18')
  
 

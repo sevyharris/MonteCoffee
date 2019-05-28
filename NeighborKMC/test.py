@@ -27,6 +27,7 @@ np.savetxt("time.txt",[])
 np.savetxt("coverages.txt",[])
 np.savetxt("stype_ev.txt",[])
 np.savetxt("stype_ev_other.txt",[])
+
 # ------------------------------------------
 # Define the sites from ase.Atoms
 # ------------------------------------------
