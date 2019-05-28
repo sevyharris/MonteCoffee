@@ -70,6 +70,7 @@ class NeighborKMCBase:
         self.LogSteps = config.getint('Parameters', 'LogSteps')
         self.PicklePrefix = config.get('Parameters', 'PicklePrefix')
         self.tinfinity = config.getfloat('Parameters','tinfinity')
+        self.nninter = config.getint('Parameters', 'nninteractions')
         self.save_coverages = config.getboolean('Options', 'SaveCovs')
         self.verbose = config.getboolean('Options','Verbose')
         if self.verbose:
@@ -195,6 +196,31 @@ class NeighborKMCBase:
         self.ksavg = [np.mean([self.ks[i] for i in self.wheres[j][0]]) for j in range(len(self.events))]
         self.frm_arg = self.frm_times.argmin()
     
+    
+    def find_nn_recurse(self,update_sites, recursion=0):
+        r"""Returns the first nearest neighbors to neigh (list).
+        
+        The method takes a list of integers (neigh), and returns
+        these and the first nearest neighbors as a list.
+        
+        For example, when passing neigh = [0,1,2]
+        the method returns [0,1,2,NN_0 of 0, NN_1 of 0, 
+                           NN_0 of 1 ...] 
+        """
+        out = [n for n in update_sites]
+
+        for s in update_sites:
+            out.extend(self.system.neighbors[s])
+            
+        out = list(set(out))
+        
+        if recursion < self.nninter-1:
+            out = self.find_nn_recurse(out,recursion+1)
+            
+        return out
+         
+            
+        
 
     def frm_update(self):
         r"""Updates the FRM related lists.
@@ -209,23 +235,9 @@ class NeighborKMCBase:
             'NNlast', 'NNNlast', 'NNother', and 'NNNother'.
 
         """
-    
-        # First find the site from the index:
-        NNlast = self.system.neighbors[self.lastsel]
-        NNother = self.system.neighbors[self.lastother]
-        NNNlast = []; NNNother=[];
-        for i in NNlast:
-            NNNlast.extend(self.system.neighbors[i])
-        
-        for i in NNother:
-            NNNother.extend(self.system.neighbors[i])
-
-        search = [self.lastsel,self.lastother]
-        search.extend(NNlast)
-        search.extend(NNother)
-        search.extend(NNNlast)
-        search.extend(NNNother)
-        search = list(set(search)) # Remove doubles
+        # Find site indices to update:
+        search = self.find_nn_recurse([self.lastsel,
+                                       self.lastother])
 
         # Save reference to function calls
         # To reduce overhead

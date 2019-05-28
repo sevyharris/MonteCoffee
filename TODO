@@ -3,7 +3,8 @@ TODOLIST:
 
 - Remove unnecessary pickling, and move all textfile information to text files.
 
-- Ensure that local updating of events, in frm_update(), depend on the extent of Nearest-Neighbor interactions.
+- Refactor NeighborKMCBase.frm_init() to call a load_options method, which should load all options.
+  only to enhance code readability.
 
 - Split up the doc into a API reference, quick-start, and specific tutorials. Only have the same info once, just
   link if necessary.
