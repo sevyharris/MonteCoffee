@@ -5,5 +5,4 @@ TODOLIST:
 
 - Ensure that local updating of events, in frm_update(), depend on the extent of Nearest-Neighbor interactions.
 
-- Make two separate acceleration functions. One based on the rates in superbasins, and one based on
-  the rate constants. The settings file should decide which one is used.
+

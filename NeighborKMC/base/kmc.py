@@ -69,6 +69,7 @@ class NeighborKMCBase:
         self.SaveSteps = config.getint('Parameters', 'SaveSteps')
         self.LogSteps = config.getint('Parameters', 'LogSteps')
         self.PicklePrefix = config.get('Parameters', 'PicklePrefix')
+        self.tinfinity = config.getfloat('Parameters','tinfinity')
         self.save_coverages = config.getboolean('Options', 'SaveCovs')
         self.verbose = config.getboolean('Options','Verbose')
         if self.verbose:
@@ -98,9 +99,11 @@ class NeighborKMCBase:
 
         # Parameters
         self.delta = config.getfloat('Options','Delta') # reversibility tolerance
-        self.Nf = config.getint('Options','Nf') # Avg event observance in superbasins
+        self.Nf = config.getfloat('Options','Nf') # Avg event observance in superbasins
         self.Ns = config.getint('Options','Ns') # update the barriers every Ns step.
         self.ne = config.getint('Options','Ne') # Nsteps for sufficeint executed events.
+        self.usekavg = config.getboolean('Options','usekavg') # Use rate-constants for scaling, not rates
+        self.scaling_func = self.scaling_ks if self.usekavg else self.scaling_rs
 
         # Lists for rescaling barriers
         self.tgen = [] # times generated.
@@ -118,7 +121,7 @@ class NeighborKMCBase:
         self.Nm = [np.zeros(self.ne,dtype=int) \
                   for i in range(len(self.events))] 
 
-        self.Suffex = []# suffiently executed quasi-equilibrated events
+        self.Suffex = [] # suffiently executed quasi-equilibrated events
 
         # Variables for time and step-keeping
         self.isup = 0 # Superbasin step counter
@@ -130,6 +133,10 @@ class NeighborKMCBase:
         self.frm_arg = None # args that sort frm times
         if self.verbose:
             print('Initializing First Reaction method lists ...')
+            scalestr = "Scaling based on rate constants ..." if\
+                        self.usekavg else "Scaling based on rates ..."
+            print(scalestr)
+         
         self.frm_init()
         
         
@@ -168,7 +175,7 @@ class NeighborKMCBase:
                         
                     else:
                         rcur = 0.
-                        self.frm_times.append(1E9)
+                        self.frm_times.append(self.tinfinity)
                         self.tgen.append(self.t)
                         self.us.append(uniform(0.,1.))
                         self.possible_evs.append(False)
@@ -245,8 +252,8 @@ class NeighborKMCBase:
                        
                     elif not poss_now:
                         self.rs[poslist] = 0.
-                        self.frm_times[poslist] = 1E9
-                        self.tgen[poslist] = 1E9
+                        self.frm_times[poslist] = self.tinfinity
+                        self.tgen[poslist] = self.tinfinity
                         self.us[poslist] = uniform(0.,1.)
                         self.possible_evs[poslist] = False
 
@@ -331,7 +338,7 @@ class NeighborKMCBase:
                             self.frm_times[i] = self.t-\
                                         np.log(self.us[i])/self.rs[i]
                     except:
-                        self.frm_times[i] = 1E9
+                        self.frm_times[i] = self.tinfinity
 
 
 
@@ -357,6 +364,32 @@ class NeighborKMCBase:
 
 
 
+    def scaling_ks(self,noneqevents, dtS):
+        """
+        Calculates superbasin escape time
+        according to the maximal rate-constant of
+        events escaping the superbasin. 
+        (Can be good for stability of time-step)
+        """
+        return max([self.ksavg[neqev] for neqev in noneqevents]) 
+        
+    
+    def scaling_rs(self,noneqevents, dtS):
+        """
+        Calculates superbasin escape time
+        according to non-equilibrated event rates escaping
+        the superbasin.
+        
+        C.F. The generalized temporal acceleration scheme
+        (DOI: 10.1021/acs.jctc.6b00859)
+        """
+        r_S = 0.
+        for neqev in noneqevents:
+            r_S += self.r_S[neqev]/dtS
+            
+        return r_S
+            
+
     def superbasin(self,evtype,dt):
         """
         Keeps track and performs barrier adjustments,
@@ -366,7 +399,7 @@ class NeighborKMCBase:
         # Update the rates in the current superbasin
         #dtsup = dt
         if dt < 0:
-            raise Warning("Time-step is < 0. Quitting")
+            raise Warning("Time-step is < 0. Are the events and neighborlists correct?")
         farg = int(self.frm_arg) 
         self.pm = (self.pm+1) %  self.ne
         self.nem[evtype] += 1.
@@ -411,8 +444,7 @@ class NeighborKMCBase:
                     r_S = 0.
                     dtS = sum(self.dt_S)
                     E = [i for i in range(len(self.events)) if i not in self.Suffex]
-
-                    r_S = max([self.ksavg[neqev] for neqev in E]) 
+                    r_S = self.scaling_func(E, dtS)
                     
                     for ev in [e for e in self.equilEV if e in self.Suffex]:
                         rmev = self.r_S[ev]/dtS

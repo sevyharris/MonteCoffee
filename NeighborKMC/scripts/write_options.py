@@ -7,7 +7,7 @@ config.set('Parameters', 'NNinteractions', '1')
 config.set('Parameters', 'SaveSteps', '100000') # Save a pickle file every 100000 steps.
 config.set('Parameters', 'LogSteps', '1000')
 config.set('Parameters', 'PicklePrefix', 'transitions_step')
-
+config.set('Parameters', 'tinfinity', '1E18')
  
 
 config.add_section('Options')
@@ -17,6 +17,7 @@ config.set('Options', 'Delta', '0.25')
 config.set('Options', 'Nf', '1000')
 config.set('Options', 'Ns', '2000')
 config.set('Options', 'Ne', '100')
+config.set('Options', 'usekavg', True)
 
 # Writing our configuration file to 'example.cfg'
 with open('kMC_options.cfg', 'wb') as configfile:
