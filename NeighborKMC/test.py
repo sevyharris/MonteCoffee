@@ -79,7 +79,8 @@ for i, s in enumerate(sites):
         # If the site is a neighbor:
         if dpabs < Ncutoff and j!=i: 
             s.neighbors.append(j)
-
+            
+            
 # ------------------------------------------
 # Instantiate a system (p for particle) 
 # and simulation 

@@ -34,6 +34,21 @@ class SystemBase:
         self.atoms= atoms
         self.sites = sites
         self.neighbors = [s.neighbors for s in sites]
+        self.verify_nlist()
+        
+        
+    def verify_nlist(self):
+        r"""Test the neighborlist for inconsistency.
+        
+        The method checks if neighborlists are consistent.
+        For example, if A is a neigbor to B, then is B must
+        also present in the neighborlist of A.
+        """
+        for i, s in enumerate(self.neighbors):
+            for nn in s:
+                if i not in self.neighbors[nn]:
+                    raise Warning("Site "+str(i)+" is a neighbor to site "+
+                                  str(nn)+" but not vice-versa")    
                 
 
 

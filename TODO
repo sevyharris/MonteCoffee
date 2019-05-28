@@ -5,4 +5,5 @@ TODOLIST:
 
 - Ensure that local updating of events, in frm_update(), depend on the extent of Nearest-Neighbor interactions.
 
-
+- Split up the doc into a API reference, quick-start, and specific tutorials. Only have the same info once, just
+  link if necessary.
