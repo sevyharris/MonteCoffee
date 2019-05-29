@@ -1,10 +1,13 @@
 TODOLIST:
 --------------------
 
-- Split up the doc into a API reference, quick-start, and specific tutorials. Only have the same info once, just
-  link if necessary.
+- Make tutorials at the GIT to do both a lattice and nlist based example.
+
+- Make a quick start appear at the GIT front page, together with a "what is kMC. 
+
+- API documentation in code, and extracted with a tool such as EPYDOC.
 
 - Log the sid_ev list and sid_ev_other and write them to disk instead of writing stype_ev and stype_ev_other.
-  This should be done because stype_ev(_other) can be reconstructed from stype_ev.
+  This should be done because stype_ev(_other) can be reconstructed from sid_ev.
 
 - Add a script that reconstructs stype_ev.txt from sid_ev.txt
