@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>user_sites.py</title>
+  <link rel="stylesheet" href="../pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>user_sites.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <h3>Defines the Site Class derived from base.site.SiteBase.</h3>
+<p>The site class is defined here as an interface to the base
+class in base.site.SiteBase.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">base.sites</span> <span class="kn">import</span> <span class="n">SiteBase</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <p>Constructor for site objects.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">Site</span><span class="p">(</span><span class="n">SiteBase</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <pre><code>
+</code></pre>
+<p>Method calls the base class constructor first.<br />
+Then the user can attach custom variables to site<br />
+objects, such as coordination numbers, positions, etc.</p>
+<p><strong>Parameters</strong><br />
+<em>stype</em> (int): the site type, user must decide what that implies.<br />
+             Example: 0 ~ (111) facet ontop, 1 ~ Edge ontop &hellip;  </p>
+<p><em>covered</em> (int): the species that covers the site, user must decide 
+               what the integer implies.<br />
+               Example: 0 ~ empty-site, 1 = Oxygen covered, 2 ~ CO covered.</p>
+<p><em>ind</em> ([int]): the atomic-indices c.f. an ASE.Atoms object that constitute<br />
+             the site. This is can be used later for visualization.</p>
+<p><strong>Returns</strong><br />
+A Site instance</p>
+<p><strong>See Also</strong><br />
+The module <a href="base/sites.html">base.sites</a></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stype</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="n">covered</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ind</span><span class="o">=</span><span class="p">[],</span><span class="n">lattice_pos</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">SiteBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">stype</span><span class="o">=</span><span class="n">stype</span><span class="p">,</span><span class="n">covered</span><span class="o">=</span><span class="n">covered</span><span class="p">,</span><span class="n">ind</span><span class="o">=</span><span class="n">ind</span><span class="p">,</span>
+                          <span class="n">lattice_pos</span><span class="o">=</span><span class="n">lattice_pos</span><span class="p">)</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>user_energy.py</title>
+  <link rel="stylesheet" href="../pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>user_energy.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <h3>Defines constants and methods related to the reaction</h3>
+<h3>energy landscapes.</h3>
+<p>This module is not mandatory to use, but is suitable to 
+   used to keep track of reaction energies that are used
+   in user_events.py</p>
+<p><strong>See Also</strong><br />
+   The module <a href="user_events.html">user_events</a><br />
+   The module <a href="user_entropy.html">user_entropy</a>  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <h2>Constants</h2>
+<p><em>Diffusion barriers</em>  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre> 
+<span class="n">EdiffCO</span> <span class="o">=</span> <span class="mf">0.046</span>
+<span class="n">EdiffO</span> <span class="o">=</span> <span class="mf">0.5</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <p><em>Adsorption energies as functions of CN</em>  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="n">EadsCO</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.36</span><span class="o">+</span><span class="mf">0.25</span><span class="o">*</span><span class="p">(</span><span class="mi">9</span><span class="o">-</span><span class="n">CN</span><span class="p">)</span> <span class="k">for</span> <span class="n">CN</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">]]</span>
+<span class="n">EadsO</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.97</span><span class="o">+</span><span class="mf">0.2</span><span class="o">*</span><span class="p">(</span><span class="mi">9</span><span class="o">-</span><span class="n">CN</span><span class="p">)</span> <span class="k">for</span> <span class="n">CN</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">]]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <h2>get_Ea()</h2>
+<h4>Computes the reaction energy barrier for CO oxidation.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">get_Ea</span><span class="p">(</span><span class="n">ECO</span><span class="p">,</span> <span class="n">EO</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <p>Uses a BEP relation for CO oxidation, relative to Pt(111), 
+to calculate the reaction energy barrier.</p>
+<p><strong>Parameters</strong>  <br />
+<em>ECO</em> (float): Adsorption energy of CO in eV.<br />
+<em>EO</em> (float): Adsorption energy of O in eV.  </p>
+<p><strong>Returns</strong><br />
+<em>Ea</em> (float): Reaction energy barrier of 
+              CO<em>+O</em>-&gt;CO2(g) in eV.  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">dEO</span> <span class="o">=</span> <span class="n">EO</span><span class="o">-</span><span class="n">EadsO</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># Oxygen energy relative to uncovered Pt(111)</span>
+    <span class="n">dECO</span> <span class="o">=</span> <span class="n">ECO</span><span class="o">-</span><span class="n">EadsCO</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># CO energy relative to uncovered Pt(111)</span>
+    <span class="n">dETS</span> <span class="o">=</span> <span class="mf">0.824</span><span class="o">*</span><span class="p">(</span><span class="n">dEO</span><span class="o">+</span><span class="n">dECO</span><span class="p">)</span> <span class="c1"># How much larger is the energy of CO and O wrt Pt(111)</span>
+    <span class="n">Ea</span> <span class="o">=</span> <span class="mf">1.08</span> <span class="o">+</span> <span class="n">dETS</span> <span class="o">-</span> <span class="n">dECO</span> <span class="o">-</span> <span class="n">dEO</span> <span class="c1"># Translate the barriers relative to Pt(111)</span>
+    <span class="k">return</span> <span class="n">Ea</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <h2>get_repulsion()</h2>
+<h4>Computes the adsorbate-adsorbate repulsions.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">get_repulsion</span><span class="p">(</span><span class="n">cov_self</span><span class="p">,</span> <span class="n">cov_NN</span><span class="p">,</span><span class="n">stype</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <p>Calculates the energy perturbation to the adsorption energy<br />
+of CO or O based on: the coverage of the site <em>cov_self</em> <br />
+(determines if it is calculated for CO or O), the 
+nearest neighbor coverages, <em>cov_NN</em>, and site-type <em>stype</em>.</p>
+<p><strong>Parameters</strong>  <br />
+<em>cov_self</em> (int): species on site to calculate the repulsion for.<br />
+<em>cov_NN</em> ([int]): nearest neighbor occupations.<br />
+<em>stype</em> (int): the site-type index.  </p>
+<p><strong>Returns</strong><br />
+<em>repulsion</em> (float): adsorbate-adsorbate repulsion in eV.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">stype_factor</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="k">if</span> <span class="n">stype</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="mf">1.0</span>
+    <span class="n">repulsion</span> <span class="o">=</span> <span class="mf">0.</span>
+    <span class="n">ECOCO</span> <span class="o">=</span> <span class="mf">0.19</span> <span class="c1">#0.38 # How CO affects CO</span>
+    <span class="n">EOO</span> <span class="o">=</span>   <span class="mf">0.32</span>  <span class="c1"># How O affects O - double since it is called from get barrier of O2</span>
+
+    <span class="n">ECOO</span> <span class="o">=</span> <span class="mf">0.3</span> <span class="c1"># How CO affects O  </span>
+    <span class="n">EOCO</span> <span class="o">=</span>  <span class="mf">0.3</span>  <span class="c1"># How O affects CO</span>
+    
+
+    <span class="n">HInttwo</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="n">ECOCO</span><span class="p">,</span><span class="n">EOCO</span><span class="p">],[</span><span class="mf">0.</span><span class="p">,</span><span class="n">ECOO</span><span class="p">,</span><span class="n">EOO</span><span class="p">]]</span> <span class="c1"># Two body interaction Hamiltonian 3x3 beacuse 0 = empty.</span>
+
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">cov_NN</span><span class="p">:</span> <span class="c1"># For each covered Neighbor, give a repulsion:</span>
+        <span class="n">repulsion</span> <span class="o">+=</span> <span class="n">HInttwo</span><span class="p">[</span><span class="n">cov_self</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+    <span class="n">repulsion</span> <span class="o">*=</span> <span class="n">stype_factor</span>
+
+    <span class="k">return</span> <span class="n">repulsion</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

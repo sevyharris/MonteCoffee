@@ -1,4 +1,4 @@
-"""#### Defines the System Class, derived from base.system module.  
+"""### Defines the System Class, derived from base.system module.  
 
 *System* is supposed to be a singleton that
 is passed to a singleton *NeighborKMC* object.

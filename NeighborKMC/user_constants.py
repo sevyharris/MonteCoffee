@@ -1,5 +1,4 @@
-"""Contains physical constants and
-user-defined constants. 
+"""### Contains physical and user-defined constants. 
 
 These constants should be imported into  
 other modules, e.g. user_energy.py and  

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>user_entropy.py</title>
+  <link rel="stylesheet" href="../pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>user_entropy.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <h3>Defines methods to calculate entropy</h3>
+<p>of reaction event rate constants.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">user_constants</span> <span class="kn">import</span> <span class="o">*</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <h2>Constants</h2>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="n">TRANS_FACT</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">kB</span><span class="o">*</span><span class="n">eV2J</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mf">3.</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">h</span><span class="o">*</span><span class="n">eV2J</span><span class="p">)</span><span class="o">**</span><span class="mf">3.0</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <h2>get_Ztrans()</h2>
+<h4>Calculates ideal gas translational partition function.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">get_Ztrans</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <p>Method calculates the partition function for 3<br />
+free translational degrees of freedom. The input <em>V</em><br />
+is the mean-free volume, which determines the gas-pressure.  </p>
+<p><strong>Parameters</strong><br />
+<em>T</em> (float): the temperature in K.<br />
+<em>V</em> (float): the ideal-gas (V = mkBT/p) volume in m^3.<br />
+<em>m</em> (float): mass of the molecule.  </p>
+<p><strong>Returns</strong><br />
+Ztrans (float): the free 3D-translational partition function.  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">Ztrans</span> <span class="o">=</span> <span class="n">TRANS_FACT</span><span class="o">*</span><span class="n">V</span><span class="o">*</span><span class="p">(</span><span class="n">m</span><span class="o">*</span><span class="n">T</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mf">3.</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Ztrans</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <h2>get_Zvib()</h2>
+<h4>Calculates quantum harmonic vibrational partition function.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">get_Zvib</span><span class="p">(</span><span class="n">T</span><span class="p">,</span><span class="n">modes</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <pre><code>
+</code></pre>
+<p>Method calculates the partition function for a quantum
+harmonic oscillator with vibration energies <em>modes</em>, as
+per the harmonic approximation.</p>
+<p><strong>Parameters</strong><br />
+<em>T</em> (float): the temperature in K.<br />
+<em>modes</em> ([float]): vibrational modes in eV.  </p>
+<p><strong>Returns</strong><br />
+<em>Zvib</em> (float): the vibrational partition function.  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    
+    <span class="n">beta</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">kB</span><span class="o">*</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">ZPE</span> <span class="o">=</span> <span class="n">modes</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">ZPE</span><span class="o">*</span><span class="n">beta</span><span class="p">)</span><span class="o">*</span><span class="p">((</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">modes</span><span class="o">*</span><span class="n">beta</span><span class="p">)</span> <span class="p">)</span> <span class="p">)</span><span class="o">.</span><span class="n">prod</span><span class="p">())</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <h2>get_entropy_ads()</h2>
+<h4>Calculates entropy of harmonic oscillator.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">get_entropy_ads</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">modes</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <p>Method calculates the entropy for a quantum
+harmonic oscillator (Adsorbate for example), with 
+vibrational energies <em>modes</em>.</p>
+<p><strong>Parameters</strong><br />
+<em>T</em> (float): the temperature in K.<br />
+<em>modes</em> ([float]): vibrational modes in eV.  </p>
+<p><strong>Returns</strong><br />
+<em>S</em> (float): the vibrational entropy in eV/K.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">S</span><span class="o">=</span><span class="mf">0.</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">kB</span><span class="o">*</span><span class="n">T</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">modes</span><span class="p">:</span>
+        <span class="n">S</span> <span class="o">+=</span> <span class="o">-</span><span class="n">kB</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">m</span><span class="o">*</span><span class="n">beta</span><span class="p">))</span><span class="o">+</span><span class="n">m</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">beta</span><span class="o">*</span><span class="n">m</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">m</span><span class="o">*</span><span class="n">beta</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">S</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      <h2>get_entropy_CO()</h2>
+<h4>Calculates entropy of one ideal gas CO molecule.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">get_entropy_CO</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">pCO</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <pre><code>
+</code></pre>
+<p>Method calculates the entropy for a single
+CO molecule in the ideal gas approximation.</p>
+<p><strong>Parameters</strong><br />
+<em>T</em> (float): the temperature in K.<br />
+<em>pCO</em> (float): the CO pressure in Pa.  </p>
+<p><strong>Returns</strong><br />
+<em>S</em> (float): the single molecule ideal gas entropy 
+             in eV/K.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    
+    
+    <span class="n">V</span>  <span class="o">=</span> <span class="n">kB</span><span class="o">*</span><span class="n">eV2J</span><span class="o">*</span><span class="n">T</span><span class="o">/</span><span class="n">pCO</span>
+
+    <span class="n">Ztrans</span> <span class="o">=</span> <span class="n">get_Ztrans</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">mCO</span><span class="p">)</span>
+    <span class="n">Zrot</span> <span class="o">=</span> <span class="mf">8.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mf">2.</span><span class="o">*</span><span class="n">ICO</span><span class="o">*</span><span class="n">kB</span><span class="o">*</span><span class="n">eV2J</span><span class="o">*</span><span class="n">T</span><span class="o">/</span><span class="n">sigmaCO</span><span class="o">/</span><span class="p">(</span><span class="n">h</span><span class="o">*</span><span class="n">eV2J</span><span class="p">)</span><span class="o">**</span><span class="mf">2.</span>
+
+    <span class="n">Strans</span> <span class="o">=</span> <span class="n">kB</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Ztrans</span><span class="p">)</span><span class="o">+</span><span class="mf">3.</span><span class="o">/</span><span class="mf">2.</span><span class="o">*</span><span class="n">kB</span>
+    <span class="n">Svib</span> <span class="o">=</span> <span class="n">get_entropy_ads</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">modes_COgas</span><span class="p">)</span>
+    <span class="n">Srot</span> <span class="o">=</span> <span class="n">kB</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Zrot</span><span class="p">)</span><span class="o">+</span><span class="n">kB</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">Strans</span><span class="o">+</span><span class="n">Svib</span><span class="o">+</span><span class="n">Srot</span>
+
+    <span class="k">return</span> <span class="n">S</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      <h2>get_entropy_O2()</h2>
+<h4>Calculates entropy of one ideal gas O2 molecule.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">get_entropy_O2</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">pO2</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      <pre><code>
+</code></pre>
+<p>Method calculates the entropy for a single
+O2 molecule in the ideal gas approximation.</p>
+<p><strong>Parameters</strong><br />
+<em>T</em> (float): the temperature in K.<br />
+<em>pO2</em> (float): the O2 pressure in Pa.  </p>
+<p><strong>Returns</strong><br />
+<em>S</em> (float): the single molecule ideal gas entropy 
+             in eV/K.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    
+    <span class="n">V</span> <span class="o">=</span> <span class="n">kB</span><span class="o">*</span><span class="n">eV2J</span><span class="o">*</span><span class="n">T</span><span class="o">/</span><span class="n">pO2</span>  
+
+    <span class="n">Ztrans</span> <span class="o">=</span> <span class="n">get_Ztrans</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">mO2</span><span class="p">)</span>
+    <span class="n">Zvib</span> <span class="o">=</span> <span class="n">get_Zvib</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">modes_O2gas</span><span class="p">)</span>
+    <span class="n">Zrot</span> <span class="o">=</span> <span class="mf">8.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mf">2.</span><span class="o">*</span><span class="n">IO2</span><span class="o">*</span><span class="n">kB</span><span class="o">*</span><span class="n">eV2J</span><span class="o">*</span><span class="n">T</span><span class="o">/</span><span class="n">sigmaO2</span><span class="o">/</span><span class="p">(</span><span class="n">h</span><span class="o">*</span><span class="n">eV2J</span><span class="p">)</span><span class="o">**</span><span class="mf">2.</span> <span class="c1"># Valid for T &gt; h^2/(8pi^2IkB)</span>
+
+    <span class="n">Strans</span> <span class="o">=</span> <span class="n">kB</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Ztrans</span><span class="p">)</span><span class="o">+</span><span class="mf">3.</span><span class="o">/</span><span class="mf">2.</span><span class="o">*</span><span class="n">kB</span>
+    <span class="n">Svib</span> <span class="o">=</span> <span class="n">get_entropy_ads</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">modes_Oads</span><span class="p">)</span>
+    <span class="n">Srot</span> <span class="o">=</span> <span class="n">kB</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Zrot</span><span class="p">)</span><span class="o">+</span><span class="n">kB</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">Strans</span><span class="o">+</span><span class="n">Svib</span><span class="o">+</span><span class="n">Srot</span>
+    <span class="k">return</span> <span class="n">S</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

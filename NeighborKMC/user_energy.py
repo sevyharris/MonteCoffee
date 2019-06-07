@@ -1,5 +1,5 @@
-"""#### Defines constants and methods related to the reaction
-#### energy landscapes.  
+"""### Defines constants and methods related to the reaction
+### energy landscapes.  
    
    This module is not mandatory to use, but is suitable to 
    used to keep track of reaction energies that are used

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>user_constants.py</title>
+  <link rel="stylesheet" href="../pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>user_constants.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <h3>Contains physical and user-defined constants.</h3>
+<p>These constants should be imported into<br />
+other modules, e.g. user_energy.py and<br />
+user_events.py</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <h2>Constants</h2>
+<p><strong>Physical constants</strong></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="n">e</span> <span class="o">=</span> <span class="n">eV2J</span> <span class="o">=</span> <span class="mf">1.60217662E-19</span> <span class="c1"># elementary charge</span>
+<span class="n">J2eV</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">e</span> <span class="c1"># Joule to eV conversion factor</span>
+<span class="n">kB</span> <span class="o">=</span> <span class="mf">8.6173324E-5</span> <span class="c1"># Boltzmann&#39;s constant in eV/K</span>
+<span class="n">Na</span> <span class="o">=</span> <span class="mf">6.0221409E23</span> <span class="c1"># Avogadro&#39;s number in mol^-1</span>
+<span class="n">h</span> <span class="o">=</span> <span class="mf">4.135667662E-15</span> <span class="c1"># Planck&#39;s Constant in eV*s</span>
+<span class="n">pi</span> <span class="o">=</span> <span class="mf">3.14159265359</span> <span class="c1"># pi</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">kB</span><span class="o">*</span><span class="n">Na</span><span class="o">*</span><span class="n">e</span> <span class="c1"># Gas Constant in J/(mol K)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <p><strong>Molecular masses</strong></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="n">mCO</span> <span class="o">=</span> <span class="mf">28.01E-3</span><span class="o">/</span><span class="n">Na</span> <span class="c1"># mass of CO in kg</span>
+<span class="n">mO2</span> <span class="o">=</span> <span class="mf">15.999E-3</span><span class="o">/</span><span class="n">Na</span> <span class="c1"># mass of O2 in kg</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <p><strong>Vibrational energies</strong></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="n">modes_COgas</span> <span class="o">=</span> <span class="mf">1E-3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">263.4</span><span class="p">])</span>
+<span class="n">modes_COads</span> <span class="o">=</span> <span class="mf">1E-3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">17.8</span><span class="p">,</span><span class="mf">18.3</span><span class="p">,</span><span class="mf">36.3</span><span class="p">,</span><span class="mf">36.3</span><span class="p">,</span><span class="mf">39.7</span><span class="p">,</span><span class="mf">216.8</span><span class="p">])</span>
+
+<span class="n">modes_Oads</span> <span class="o">=</span> <span class="mf">1E-3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">47.3</span><span class="p">,</span><span class="mf">47.6</span><span class="p">,</span><span class="mf">55.1</span><span class="p">])</span>
+<span class="n">modes_O2gas</span> <span class="o">=</span> <span class="mf">1E-3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">191.2</span><span class="p">])</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <p><strong>Misc</strong></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="n">sigmaCO</span> <span class="o">=</span> <span class="mf">2.</span> <span class="c1"># Symmetry factor of CO.</span>
+<span class="n">sigmaO2</span> <span class="o">=</span> <span class="mf">2.</span> <span class="c1"># Symmetry factor of O2.</span>
+<span class="n">ICO</span> <span class="o">=</span> <span class="mf">1.50752694e-46</span> <span class="c1"># CO moment of inertia</span>
+<span class="n">IO2</span>  <span class="o">=</span> <span class="mf">2.06218774e-46</span> <span class="c1"># O2 moment of inertia</span>
+<span class="n">s0CO</span> <span class="o">=</span> <span class="mf">0.9</span> <span class="c1"># Sticking coefficient of CO</span>
+<span class="n">s0O</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="c1"># Sticking coefficient of O2</span>
+
+<span class="n">Asite</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10E-10</span><span class="p">)</span><span class="o">**</span><span class="mf">2.</span> <span class="c1"># area of a site in m^2</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

@@ -1,11 +1,17 @@
-"""#### Defines the EventBase class.
+"""### Defines the EventBase class.
 
 The EventBase class is defined as a 
 template-class to derive events from
 in user_events.py
 
 **See Also**  
-The module [events](../user_events.html)
+The module [system](system.html)  
+The module [user_system](../user_system.html)  
+The module [sites](sites.html)  
+The module [user_sites](../user_sites.html)  
+The module [events](../events.html)   
+The module [user_events](../user_events.html)  
+
 """
 
 
@@ -13,7 +19,7 @@ class EventBase:
     """#### Template class for events.
             
     Stores a list of parameters
-    related to reaction events: **params**.  
+    related to reaction events: *params*.  
     The class is only used as a parent, and is in this
     sense purely abstract.
     
@@ -24,14 +30,6 @@ class EventBase:
     **Returns**  
     An EventBase instance.  
 
-    **See Also**  
-        The module [system](system.html)  
-        The module [user_system](../user_system.html)  
-        The module [sites](sites.html)  
-        The module [user_sites](../user_sites.html)  
-        The module [events](../events.html)   
-        The module [user_events](../user_events.html)  
-
     """
     
     def __init__(self,params={}):
@@ -39,12 +37,13 @@ class EventBase:
         self.alpha = 1.
         self.diffev = False # Is it a diffusion event.
 
-
+    # possible()
+    # -------------
     def possible(self,system,i_site,i_other):
         """#### Template method to determine if event is possible.  
             
         Method needs to be overridden in user_events.py.
-        Should return true if an event is possible on
+        Should return True if an event is possible on
         site number *i_site* and possible a neighbor
         site *i_other*, given the current site occupations.
             
@@ -65,7 +64,8 @@ class EventBase:
         raise NotImplementedError("""Called purely abstract 
                                    method possible() of Event""")
 
-
+    # get_rate()
+    # -------------
     def get_rate(self,system,i_site,i_other):
         """#### Template method to determine the rate constant.
             
@@ -89,7 +89,8 @@ class EventBase:
         raise NotImplementedError("""Called purely abstract 
                                   method get_rate() of Event""")
 
-    
+    # do_event()
+    # -------------
     def do_event(self,system, i_site ,i_other):
         """#### Template method to perform the event.
             

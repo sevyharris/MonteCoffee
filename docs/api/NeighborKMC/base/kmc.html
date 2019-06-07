@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>kmc.py</title>
+  <link rel="stylesheet" href="../../pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>kmc.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <h3>Defines the NeighborKMCBase class.</h3>
+<p>The methods are used to perform kMC 
+simulations with the first reaction method.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">six.moves</span> <span class="kn">import</span> <span class="n">configparser</span>
+<span class="kn">import</span> <span class="nn">six</span>
+
+<span class="k">if</span> <span class="n">six</span><span class="o">.</span><span class="n">PY2</span><span class="p">:</span>
+  <span class="n">ConfigParser</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">SafeConfigParser</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="n">ConfigParser</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span><span class="p">,</span> <span class="n">uniform</span>
+<span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">write</span>
+<span class="kn">from</span> <span class="nn">ase</span> <span class="kn">import</span> <span class="n">Atoms</span>
+<span class="kn">from</span> <span class="nn">.system</span> <span class="kn">import</span> <span class="n">SystemBase</span>
+<span class="kn">from</span> <span class="nn">.events</span> <span class="kn">import</span> <span class="n">EventBase</span>
+<span class="kn">from</span> <span class="nn">.logging</span> <span class="kn">import</span> <span class="n">Log</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <h4>Main class for performing MonteCoffe simulations.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">NeighborKMCBase</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <pre><code>
+</code></pre>
+<p>Assigns a system to the simulation, stores parameters, 
+and reads in software configuration from the separate<br />
+file kMC_options.cfg.<br />
+Then it sets the time equal to zero prepares to perform
+FRM simulations.   </p>
+<p><strong>Parameters</strong><br />
+<em>system</em> (System): the system instance to perform the simulation on.  </p>
+<p><em>tend</em> (float): simulation end-time.  </p>
+<p><em>parameters</em> (dict): parameters used, which are dumped to the log file.<br />
+       Example: parameters = {&lsquo;pCO&rsquo;:1E2,&rsquo;T&rsquo;:700,&rsquo;Note&rsquo;:&rsquo;Test simulation&rsquo;}  </p>
+<p><strong>Returns</strong><br />
+A NeighborKMCBase instance.  </p>
+<p><strong>See Also</strong><br />
+The module <a href="../user_kmc.html">user_kmc</a> </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">tend</span><span class="p">,</span><span class="n">parameters</span><span class="o">=</span><span class="p">{}):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">system</span> <span class="o">=</span> <span class="n">system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tend</span> <span class="o">=</span> <span class="n">tend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">parameters</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <p>Load software configuration</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">load_options</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">50</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;MonteCoffee Simulation Running&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">50</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;kMC simulation loading ...&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>Variables connected to after analysis.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">Nsites</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">)</span> <span class="c1"># Number of sites</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># Times of simulation point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MCstep</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># Number of MCSteps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Site-occupations</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <p>Initialize event book keeping variables</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">evnl</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stype_ev</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stype_ev_other</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nstypes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="n">s</span><span class="o">.</span><span class="n">stype</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">]))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nstypes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stype_ev</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">evnl</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stype_ev_other</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">evnl</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <p>Variables connected to temporal acceleration</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">equilEV</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">diffev</span><span class="p">]</span> <span class="c1"># Track equilibrated events.</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      <p>Choose a method of scaling rates c.f. kMC_options.cfg</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">scaling_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaling_ks</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">usekavg</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaling_rs</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <p>Lists for rescaling barriers and superbasin tracking</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">tgen</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># time event was generated.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">us</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># random deviates used</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ks</span> <span class="o">=</span> <span class="p">[]</span><span class="c1"># rate-constants used        </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r_S</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))</span> <span class="c1"># Rates in current superbasin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_S</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># dt used to compute rs in current superbasin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nem</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="c1"># number of event-fires in current basin.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nm</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ne</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> \
+                  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))]</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">Suffex</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># suffiently executed quasi-equilibrated events</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      <p>Variables for time and step-keeping</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">isup</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Superbasin step counter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># variable for checking every N steps.</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      <h2>FRM method variables</h2>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># Times of occourences</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span> <span class="o">=</span> <span class="bp">None</span> <span class="c1"># args that sort frm times</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Initializing First Reaction method lists ...&#39;</span><span class="p">)</span>
+            <span class="n">scalestr</span> <span class="o">=</span> <span class="s2">&quot;Scaling based on rate constants ...&quot;</span> <span class="k">if</span>\
+                        <span class="bp">self</span><span class="o">.</span><span class="n">usekavg</span> <span class="k">else</span> <span class="s2">&quot;Scaling based on rates ...&quot;</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">scalestr</span><span class="p">)</span>
+         
+        <span class="bp">self</span><span class="o">.</span><span class="n">frm_init</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      <h2>load_options()</h2>
+<h4>Loads all options set in kMC_options.cfg.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">load_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      <p>Instantiates a configuration parser, and loads in all
+options from <em>kMC_options.cfg</em>.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">RawConfigParser</span><span class="p">()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;kMC_options.cfg&#39;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">SaveSteps</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;SaveSteps&#39;</span><span class="p">)</span> <span class="c1"># How often to save txt files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LogSteps</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;LogSteps&#39;</span><span class="p">)</span> <span class="c1"># How often to log steps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tinfinity</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="s1">&#39;Parameters&#39;</span><span class="p">,</span><span class="s1">&#39;tinfinity&#39;</span><span class="p">)</span> <span class="c1"># What is considered infinite time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nninter</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;nninteractions&#39;</span><span class="p">)</span> <span class="c1"># Range of ads-ads interactions (affects local update).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nspecies</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Parameters&#39;</span><span class="p">,</span><span class="s1">&#39;Nspecies&#39;</span><span class="p">)</span> <span class="c1"># Number of different specis in simulation.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span><span class="s1">&#39;Verbose&#39;</span><span class="p">)</span> <span class="c1"># Print verbose information?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_coverages</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;SaveCovs&#39;</span><span class="p">)</span> <span class="c1"># Save coverages?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span><span class="s1">&#39;Delta&#39;</span><span class="p">)</span> <span class="c1"># reversibility tolerance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span><span class="s1">&#39;Nf&#39;</span><span class="p">)</span> <span class="c1"># Avg event observance in superbasins</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ns</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span><span class="s1">&#39;Ns&#39;</span><span class="p">)</span> <span class="c1"># update the barriers every Ns step.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ne</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span><span class="s1">&#39;Ne&#39;</span><span class="p">)</span> <span class="c1"># Nsteps for sufficeint executed events.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">usekavg</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span><span class="s1">&#39;usekavg&#39;</span><span class="p">)</span> <span class="c1"># Use rate-constants for scaling, not rates</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-14'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      <h2>frm_init()</h2>
+<h4>Prepare to perform FRM simulation.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">frm_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-15'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-15'>#</a>
+      </div>
+      <pre><code>
+</code></pre>
+<p>Initializes empty rate and event lists to 
+bookkeep the FRM algorithm. The initial times<br />
+of occurence for each event is also calculated<br />
+and stored.  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="o">=</span><span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">siteslist</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">other_sitelist</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastsel</span><span class="o">=</span><span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastother</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rindex</span> <span class="o">=</span> <span class="p">[[[]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))]</span> <span class="k">for</span>\
+                      <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">))]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># used for superbasin.</span>
+        <span class="n">ks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">):</span>
+            <span class="n">NNcur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">other_site</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">NNcur</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">possible</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span>
+                        <span class="n">rcur</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">other_site</span><span class="p">)</span>
+                        <span class="n">u</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">/</span><span class="n">rcur</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">tgen</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">us</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+                        
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">rcur</span> <span class="o">=</span> <span class="mf">0.</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tinfinity</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">tgen</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">us</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">))</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+                    
+                    <span class="n">ks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">other_site</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">rindex</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>            
+                    <span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rcur</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">siteslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">other_sitelist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">other_site</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wheres</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="o">==</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ksavg</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">ks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wheres</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-16'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-16'>#</a>
+      </div>
+      <h2>find_nn_recursive()</h2>
+<h4>Deep serach of first nearest neighbors.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">find_nn_recurse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">update_sites</span><span class="p">,</span> <span class="n">recursion</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-17'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-17'>#</a>
+      </div>
+      <p>Calculates the first nearest neighbors to <em>update_sites</em>.  </p>
+<p>For example, when passing <em>update_sites</em>gh = [0,1,2]<br />
+the method returns [0,1,2,NN0 of 0, NN1 of 0, NN0 of 1 &hellip;]  </p>
+<p>The method is calling itself recursively until the lattice<br />
+is updated, c.f. the locality of nearest neighbor interactions. </p>
+<p><strong>Parameters</strong><br />
+<em>update_sites</em> ([int]): the site indices to return neighborlist of. </p>
+<p><em>recursion</em> (int, optional): the recursive level of 
+which function was called. </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">update_sites</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">update_sites</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">s</span><span class="p">])</span>
+            
+        <span class="n">out</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="n">recursion</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nninter</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_nn_recurse</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">recursion</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">out</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-18'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-18'>#</a>
+      </div>
+      <h2>frm_update()</h2>
+<h4>Updates the FRM related lists.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">frm_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-19'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-19'>#</a>
+      </div>
+      <pre><code>
+</code></pre>
+<p>Method updates the event list locally<br />
+about the site where the last event happened<br />
+by determining if new events have become<br />
+possible due to performing the last event.  </p>
+<p>This is done by keeping track of Nearest<br />
+neighbors and next nearest neighbors in<br />
+<em>NNlast</em>, <em>NNNlast</em>, <em>NNother</em>, and <em>NNNother</em>.</p>
+<p>Find site indices to update:</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">search</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_nn_recurse</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">lastsel</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">lastother</span><span class="p">])</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-20'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-20'>#</a>
+      </div>
+      <p>Save reference to function calls
+to reduce overhead</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">get_r_func</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">get_rate</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">]</span>
+        <span class="n">possible_func</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">possible</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">search</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-21'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-21'>#</a>
+      </div>
+      <p>Determine if any events have become possible.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">other</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+                    <span class="n">poslist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rindex</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+                    <span class="n">poss_now</span> <span class="o">=</span> <span class="n">possible_func</span><span class="p">[</span><span class="n">j</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">other</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">poss_now</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+
+                        <span class="n">rcur</span> <span class="o">=</span> <span class="n">get_r_func</span><span class="p">[</span><span class="n">j</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">other</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="n">rcur</span>
+                        <span class="n">u</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">/</span><span class="n">rcur</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">tgen</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">us</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+
+                       
+                    <span class="k">elif</span> <span class="ow">not</span> <span class="n">poss_now</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tinfinity</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">tgen</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tinfinity</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">us</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-22'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-22'>#</a>
+      </div>
+      <p>New first reaction ?</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-23'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-23'>#</a>
+      </div>
+      <h2>frm_step()</h2>
+<h4>Takes a Monte Carlo Step.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">frm_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-24'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-24'>#</a>
+      </div>
+      <p>Takes a monte carlo step by performing the next<br />
+possible event, which has index <em>self.frm_arg</em> in the <br />
+event list.</p>
+<p>Choose the first reaction if possible</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">site</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">siteslist</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]</span> <span class="c1"># The site to do event.</span>
+        <span class="n">othersite</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">other_sitelist</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastsel</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">site</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastother</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">othersite</span><span class="p">)</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]]</span><span class="o">.</span><span class="n">possible</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span>
+                                               <span class="n">site</span><span class="p">,</span><span class="n">othersite</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-25'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-25'>#</a>
+      </div>
+      <p>Event is possible, change state</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]]</span><span class="o">.</span><span class="n">do_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span>
+                                                <span class="n">site</span><span class="p">,</span><span class="n">othersite</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-26'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-26'>#</a>
+      </div>
+      <p>Update time</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="n">evtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]</span> 
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-27'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-27'>#</a>
+      </div>
+      <p>Find new enabled processes.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="bp">self</span><span class="o">.</span><span class="n">evs_exec</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">stype_ev</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span><span class="p">]</span>\
+                         <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">stype_ev_other</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">othersite</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span><span class="p">]</span>\
+                               <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-28'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-28'>#</a>
+      </div>
+      <p>Update superbasin</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="bp">self</span><span class="o">.</span><span class="n">superbasin</span><span class="p">(</span><span class="n">evtype</span><span class="p">,</span><span class="n">dt</span><span class="p">)</span>   
+
+            
+        <span class="k">else</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-29'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-29'>#</a>
+      </div>
+      <p>New first reaction must be determined</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span><span class="s2">&quot;Impossible event were next in que and was attempted&quot;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-30'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-30'>#</a>
+      </div>
+      <p>Save where the event happened:</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">frm_update</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-31'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-31'>#</a>
+      </div>
+      <h2>rescaling()</h2>
+<h4>Rescales the times of occurences for events.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">rescaling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-32'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-32'>#</a>
+      </div>
+      <p>Rescales the times according to each quasi-equilibrated<br />
+events <em>alpha</em>.  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">for</span> <span class="n">ev</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">equilEV</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-33'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-33'>#</a>
+      </div>
+      <p>Raise the barrier</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="n">i_up</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">ev</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">i_up</span><span class="p">:</span>
+                <span class="n">site</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">siteslist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="c1"># The site to do event.</span>
+                <span class="n">othersite</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">other_sitelist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">poss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">possible</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span>
+                                                        <span class="n">site</span><span class="p">,</span><span class="n">othersite</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">poss</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span>\
+                                    <span class="n">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">othersite</span><span class="p">)</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">u0</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">us</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">tgen</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">u0</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">tgen</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">u0</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">us</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">tgen</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">-</span>\
+                                        <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">us</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tinfinity</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-34'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-34'>#</a>
+      </div>
+      <h2>leave_superbasin()</h2>
+<h4>Leaves the superbasin.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">leave_superbasin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-35'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-35'>#</a>
+      </div>
+      <p>Resets all rate-scalings and statistics 
+connected to the superbasin.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">equilEV</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rescaling</span><span class="p">()</span>          
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Suffex</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r_S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_S</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nem</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isup</span> <span class="o">=</span><span class="mi">0</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-36'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-36'>#</a>
+      </div>
+      <h2>scaling_ks()</h2>
+<h4>Rate-constant based superbasin escape time.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">scaling_ks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">noneqevents</span><span class="p">,</span> <span class="n">dtS</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-37'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-37'>#</a>
+      </div>
+      <p>Calculates superbasin escape time<br />
+according to the maximal rate-constant of<br />
+events escaping the superbasin. <br />
+(Can be good for stability of time-step)  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">return</span> <span class="nb">max</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">ksavg</span><span class="p">[</span><span class="n">neqev</span><span class="p">]</span> <span class="k">for</span> <span class="n">neqev</span> <span class="ow">in</span> <span class="n">noneqevents</span><span class="p">])</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-38'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-38'>#</a>
+      </div>
+      <h2>scaling_rs()</h2>
+<h4>Rate based superbasin escape time.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">scaling_rs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">noneqevents</span><span class="p">,</span> <span class="n">dtS</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-39'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-39'>#</a>
+      </div>
+      <p>Calculates superbasin escape time<br />
+according to non-equilibrated event rates escaping<br />
+the superbasin.  </p>
+<p>c.f. The generalized temporal acceleration scheme<br />
+(DOI: 10.1021/acs.jctc.6b00859)  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">r_S</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="k">for</span> <span class="n">neqev</span> <span class="ow">in</span> <span class="n">noneqevents</span><span class="p">:</span>
+            <span class="n">r_S</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r_S</span><span class="p">[</span><span class="n">neqev</span><span class="p">]</span><span class="o">/</span><span class="n">dtS</span>
+            
+        <span class="k">return</span> <span class="n">r_S</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-40'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-40'>#</a>
+      </div>
+      <h2>superbasin()</h2>
+<h4>Scales rates or leaves the current superbasin.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">superbasin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">evtype</span><span class="p">,</span><span class="n">dt</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-41'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-41'>#</a>
+      </div>
+      <p>Keeps track and performs barrier adjustments, <br />
+of the generalized temporal acceleration scheme<br />
+(DOI: 10.1021/acs.jctc.6b00859)  </p>
+<p>Update the rates in the current superbasin</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="n">dt</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span><span class="s2">&quot;Time-step is &lt; 0. Are the events and neighborlists correct?&quot;</span><span class="p">)</span>
+        <span class="n">farg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">)</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span>  <span class="bp">self</span><span class="o">.</span><span class="n">ne</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nem</span><span class="p">[</span><span class="n">evtype</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nm</span><span class="p">[</span><span class="n">evtype</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">r_S</span> <span class="o">+=</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="o">*</span><span class="n">dt</span><span class="p">)[</span><span class="bp">self</span><span class="o">.</span><span class="n">wheres</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))]</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_S</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-42'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-42'>#</a>
+      </div>
+      <p>See if event is quasi-equilibrated</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="n">evtype</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverses</span><span class="p">:</span>
+            <span class="n">rev</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nm</span><span class="p">[</span><span class="n">evtype</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">-</span>\
+                      <span class="bp">self</span><span class="o">.</span><span class="n">Nm</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">evtype</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+
+            <span class="n">Nexm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nm</span><span class="p">[</span><span class="n">evtype</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">+</span>\
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Nm</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">evtype</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">evtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">equilEV</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">Nexm</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ne</span><span class="o">/</span><span class="mf">2.</span> <span class="ow">and</span> <span class="n">rev</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ne</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">equilEV</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">evtype</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">evtype</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">evtype</span><span class="p">]:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">equilEV</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">evtype</span><span class="p">])</span>
+            
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">leave_superbasin</span><span class="p">()</span>
+
+
+            <span class="k">if</span> <span class="n">evtype</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">equilEV</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nem</span><span class="p">[</span><span class="n">evtype</span><span class="p">]</span><span class="o">+</span>\
+                        <span class="bp">self</span><span class="o">.</span><span class="n">nem</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">evtype</span><span class="p">]]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ne</span> \
+                        <span class="ow">and</span> <span class="n">evtype</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">equilEV</span>\
+                        <span class="ow">and</span> <span class="n">evtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Suffex</span><span class="p">:</span> 
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">Suffex</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">evtype</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">evtype</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">evtype</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Suffex</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">evtype</span><span class="p">])</span>
+
+        <span class="k">else</span><span class="p">:</span> <span class="c1"># Not reversible</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">leave_superbasin</span><span class="p">()</span>        
+
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isup</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ns</span><span class="p">:</span> <span class="c1"># If observation perioud is over, scale events.</span>
+                    <span class="n">r_S</span> <span class="o">=</span> <span class="mf">0.</span>
+                    <span class="n">dtS</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt_S</span><span class="p">)</span>
+                    <span class="n">E</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Suffex</span><span class="p">]</span>
+                    <span class="n">r_S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaling_func</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">dtS</span><span class="p">)</span>
+                    
+                    <span class="k">for</span> <span class="n">ev</span> <span class="ow">in</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">equilEV</span> <span class="k">if</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Suffex</span><span class="p">]:</span>
+                        <span class="n">rmev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r_S</span><span class="p">[</span><span class="n">ev</span><span class="p">]</span><span class="o">/</span><span class="n">dtS</span>
+                        <span class="n">rmrev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r_S</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">ev</span><span class="p">]]</span><span class="o">/</span><span class="n">dtS</span>
+
+
+                        <span class="n">alpham</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="o">*</span><span class="n">r_S</span><span class="o">/</span><span class="p">(</span><span class="n">rmev</span><span class="o">+</span><span class="n">rmrev</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="n">ev</span><span class="p">]</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*=</span> <span class="n">alpham</span>
+ 
+                    <span class="bp">self</span><span class="o">.</span><span class="n">rescaling</span><span class="p">()</span>
+
+                    
+                    <span class="bp">self</span><span class="o">.</span><span class="n">isup</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">isup</span> <span class="o">+=</span> <span class="mi">1</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-43'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-43'>#</a>
+      </div>
+      <h2>save_txt()</h2>
+<h4>Saves txt files containing the simulation data.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">save_txt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-44'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-44'>#</a>
+      </div>
+      <p>Saves the number of events executed on<br />
+ the different types of sites, the time vs mcstep,<br />
+ the site-types, and optionally the coverages if<br />
+<em>self.covered</em> is True.  </p>
+<p>Lastly growing lists are cleaned from memory.  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Saving .txt files ...&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-45'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-45'>#</a>
+      </div>
+      <p>Save global neighborlist to one file</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>       
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_coverages</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;coverages.txt&quot;</span><span class="p">,</span><span class="s2">&quot;ab&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">covered</span><span class="p">)</span>
+             
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;mcstep.txt&quot;</span><span class="p">,</span><span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">MCstep</span><span class="p">)</span>
+             
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;evs_exec.txt&quot;</span><span class="p">,</span><span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">evs_exec</span><span class="p">)</span>
+             
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;stype_ev.txt&quot;</span><span class="p">,</span><span class="s2">&quot;ab&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stype_ev</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;stype_ev_other.txt&quot;</span><span class="p">,</span><span class="s2">&quot;ab&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stype_ev_other</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+ 
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;time.txt&quot;</span><span class="p">,</span><span class="s2">&quot;ab&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-46'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-46'>#</a>
+      </div>
+      <p>Clear up arrays that grow with time:</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">evnl</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))]</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="p">[]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-47'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-47'>#</a>
+      </div>
+      <h2>get_coverages()</h2>
+<h4>Gets the coverages at the present moment.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">get_coverages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-48'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-48'>#</a>
+      </div>
+      <p><strong>Returns</strong><br />
+ret ( <a href="float.html">float</a>): a list of coverages for each species<br />
+and all sites. Thus to find the coverage of species<br />
+<em>i</em> on site number <em>j</em> one calls <em>ret[i][j]</em>.  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nspecies</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">cspec</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="k">for</span> <span class="n">i</span>\
+                    <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nsites</span><span class="p">)</span> <span class="k">if</span>\
+                    <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="n">species</span><span class="p">]</span>
+
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cspec</span><span class="p">))</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nsites</span><span class="p">))</span>
+        
+        <span class="k">return</span> <span class="n">ret</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-49'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-49'>#</a>
+      </div>
+      <h2>write_atoms()</h2>
+<h4>Writes tagged ase.Atoms to file.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">write_atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-50'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-50'>#</a>
+      </div>
+      <p>Writes self.atom_cfgs to file with path <em>filename</em>.</p>
+<p><strong>Parameters</strong><br />
+<em>filename</em> (string): path to file.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">write</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">images</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">atom_cfgs</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-51'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-51'>#</a>
+      </div>
+      <h2>load_events()</h2>
+<h4>Loads events (abstract method).</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">load_events</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-52'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-52'>#</a>
+      </div>
+      <p><strong>See Also</strong><br />
+The module <a href="../user_kmc.html">user_kmc</a></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;User needs to define load_events</span>
+<span class="s1">                                 method in derived NeighborKMC class&#39;&#39;&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-53'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-53'>#</a>
+      </div>
+      <h2>cover_system()</h2>
+<h4>Covers the system with a certain species.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">cover_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">species</span><span class="p">,</span><span class="n">coverage</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-54'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-54'>#</a>
+      </div>
+      <pre><code>
+</code></pre>
+<p>Randomly covers the system with a species <em>species</em>, at a 
+certain fractional coverage <em>coverage</em>.</p>
+<p><strong>Parameters</strong><br />
+<em>species</em> (int): the species as defined by hte user (e.g. empty=0,CO=1).</p>
+<p><em>coverage</em> (float): the fractional coverage to load lattice with.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">n_covered</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">coverage</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">)))</span>
+        <span class="n">chosen_sites</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">),</span><span class="n">n_covered</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chosen_sites</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="n">species</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-55'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-55'>#</a>
+      </div>
+      <h2>run_kmc()</h2>
+<h4>Runs the kMC simulation (abstract method)</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">run_kmc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-56'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-56'>#</a>
+      </div>
+      <p><strong>Raises</strong><br />
+NotImplementedError if called.</p>
+<p><strong>See Also</strong><br />
+The module <a href="../user_kmc.html">user_kmc</a></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;User needs to define run_kmc method </span>
+<span class="s1">                                          in derived NeighborKMC class&#39;&#39;&#39;</span><span class="p">)</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

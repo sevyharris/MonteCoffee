@@ -1,4 +1,4 @@
-"""#### Contains all user-defined event types.
+"""### Contains all user-defined event types.
 
 All user-defined events are defined here, which
 must be derived from the parent class EventBase.  

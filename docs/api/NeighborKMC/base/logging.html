@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>logging.py</title>
+  <link rel="stylesheet" href="../../pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>logging.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <h3>Defines the Log class to log results of a kMC run.</h3>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <h4>Handles logging of kMC simulations.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">Log</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <pre><code>
+</code></pre>
+<p>Initializes a filename based on the CPU date and time.<br />
+All passed <em>parameters</em> will be written to the log.  </p>
+<p><strong>Parameters</strong><br />
+<em>parameters</em> (dict): parameters to dump at the beginning of a log.<br />
+For example &lsquo;dict = {&lsquo;T&rsquo;:300,&rsquo;pCO&rsquo;:1E2}&rsquo;  </p>
+<p><strong>Returns</strong><br />
+A Log instance.</p>
+<p><strong>See Also</strong><br />
+The module <a href="../user_kmc.html">user_kmc</a></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">parameters</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="s1">&#39;kMClog_&#39;</span><span class="o">+</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">_%H:%M&#39;</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.txt&#39;</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;  __  __             _        ____       __  __           </span>
+<span class="s1">|  \/  | ___  _ __ | |_ ___ / ___|___  / _|/ _| ___  ___ </span>
+<span class="s1">| |\/| |/ _ \| &#39;_ \| __/ _ \ |   / _ \| |_| |_ / _ \/ _ \</span>
+<span class="s1">| |  | | (_) | | | | ||  __/ |__| (_) |  _|  _|  __/  __/</span>
+<span class="s1">|_|  |_|\___/|_| |_|\__\___|\____\___/|_| |_|  \___|\___|</span>
+<span class="s1">                                                         </span>
+<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Mikkel Jorgensen</span><span class="se">\n</span><span class="s1">Chalmers University of Technology</span><span class="se">\n</span><span class="s1">Goteborg, Sweden</span><span class="se">\n</span><span class="s1">2015-2019&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">80</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Simulation parameters</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">),</span><span class="s1">&#39;&lt;10&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="s1">&#39;&lt;5&#39;</span><span class="p">)</span><span class="o">+</span>
+                        <span class="nb">str</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">p</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            
+            
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">80</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">*</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;kinetic Monte Carlo Log </span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;{:&lt;10s} {:^20s} {:^30s} {:&lt;10s}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Step&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;time[hr:min:s]&#39;</span><span class="p">,</span><span class="s1">&#39;Sim time [s]&#39;</span><span class="p">,</span><span class="s1">&#39;Events called </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <h2>write_line()</h2>
+<h4>Writes a line to the log.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">write_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">string</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>Appends a string to the end of the log.  </p>
+<p><strong>Parameters</strong><br />
+<em>string</em> (str): string to append.  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">string</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <h2>dump_point()</h2>
+<h4>Writes a simulation point to the log.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">dump_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">sim_time</span><span class="p">,</span><span class="n">ev_called</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <p>Method writes the Monte Carlo step number <em>step</em>,<br />
+the time in the MC simulation <em>sim_time</em>,<br />
+and the number of event calls <em>ev_called</em>.</p>
+<p><strong>Parameters</strong></p>
+<p><em>step</em> (int): the monte carlo step number.</p>
+<p><em>sim_time</em> (float): the simulation time.  </p>
+<p><em>ev_called</em> ([int]): the number of times each event was called.<br />
+For example [N_CO_ads,N_CO_des,&hellip;]  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">time_str</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;{:&lt;10s} {:^20s} {:^30s} {:&lt;10s}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">step</span><span class="p">),</span>
+                    <span class="n">time_str</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">sim_time</span><span class="p">),</span><span class="nb">str</span><span class="p">([</span><span class="s2">&quot;</span><span class="si">%.0f</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ev_called</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

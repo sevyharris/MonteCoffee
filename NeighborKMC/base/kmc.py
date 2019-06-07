@@ -1,14 +1,11 @@
-r"""
-Module: kmc.py
-The kMC simulation base module, which defines the NeighborKMCBase
-class and its methods. The methods are used to perform kMC 
-simulations with the First reaction method.
+"""### Defines the NeighborKMCBase class.  
+
+The methods are used to perform kMC 
+simulations with the first reaction method.
 
 """
 
 from __future__ import print_function
-#import ConfigParser
-
 from six.moves import configparser
 import six
 
@@ -29,34 +26,31 @@ from .logging import Log
 
 
 class NeighborKMCBase:
+    """#### Main class for performing MonteCoffe simulations.
+          
+    Assigns a system to the simulation, stores parameters, 
+    and reads in software configuration from the separate  
+    file kMC_options.cfg.  
+    Then it sets the time equal to zero prepares to perform
+    FRM simulations.   
+    
+    **Parameters**  
+    *system* (System): the system instance to perform the simulation on.  
+
+    *tend* (float): simulation end-time.  
+
+    *parameters* (dict): parameters used, which are dumped to the log file.  
+           Example: parameters = {'pCO':1E2,'T':700,'Note':'Test simulation'}  
+
+    **Returns**  
+    A NeighborKMCBase instance.  
+    
+    **See Also**  
+    The module [user_kmc](../user_kmc.html) 
+
+    """
     
     def __init__(self,system,tend,parameters={}):
-        r"""Constructor for NeighborKMCBase objects.
-            
-            Method assigns a system to the simulation,
-            stores parameters, and reads in software configuration
-            from the separate file kMC_options.cfg.
-            Then it sets the time equal to zero prepares to perform
-            FRM simulations. 
-    
-            Parameters
-            ----------
-            system : System instance
-                A system instance with defined neighborlists.
-
-            tend : float
-                Defines when the simulation has ended.
-
-            parameters : dict
-                Parameters used, which are dumped to the log file.
-                Example: parameters = 
-                {'pCO':1E2,'T':700,'Note':'Test simulation'}
-
-            Returns
-            -------
-            NeighborKMCBase instance
-
-        """
         
         self.system = system
         self.t = 0.
@@ -71,10 +65,10 @@ class NeighborKMCBase:
             print('kMC simulation loading ...')
         
         # Variables connected to after analysis.
-        self.Nsites = len(self.system.sites)
-        self.times = []
-        self.MCstep = []
-        self.covered = [] 
+        self.Nsites = len(self.system.sites) # Number of sites
+        self.times = [] # Times of simulation point
+        self.MCstep = [] # Number of MCSteps
+        self.covered = []  # Site-occupations
         
         # Initialize event book keeping variables
         evnl = [0 for i in range(len(self.events))]
@@ -87,30 +81,30 @@ class NeighborKMCBase:
 
 
         # Variables connected to temporal acceleration
-        # --------------------------------------------------
         self.equilEV = [e for e in range(len(self.events)) if self.events[e].diffev] # Track equilibrated events.
         
+        # Choose a method of scaling rates c.f. kMC_options.cfg
         self.scaling_func = self.scaling_ks if self.usekavg else self.scaling_rs
 
         # Lists for rescaling barriers and superbasin tracking
-        self.tgen = [] # times generated.
+        self.tgen = [] # time event was generated.
         self.us = [] # random deviates used
         self.ks = []# rate-constants used        
-        self.r_S= np.zeros(len(self.events)) #all rates in current superbasin
+        self.r_S= np.zeros(len(self.events)) # Rates in current superbasin
         self.dt_S = [] # dt used to compute rs in current superbasin
-        self.nem = np.zeros(len(self.events),dtype=int) 
+        self.nem = np.zeros(len(self.events),dtype=int) # number of event-fires in current basin.
         self.Nm = [np.zeros(self.ne,dtype=int) \
                   for i in range(len(self.events))] 
         self.Suffex = [] # suffiently executed quasi-equilibrated events
 
         # Variables for time and step-keeping
         self.isup = 0 # Superbasin step counter
-        self.pm = 0
+        self.pm = 0 # variable for checking every N steps.
         
 
         # FRM method variables
         # --------------------------------------------------     
-        self.frm_times = [] # Needed later
+        self.frm_times = [] # Times of occourences
         self.frm_arg = None # args that sort frm times
         if self.verbose:
             print('Initializing First Reaction method lists ...')
@@ -120,34 +114,40 @@ class NeighborKMCBase:
          
         self.frm_init()
         
-    
+            
+    # load_options()
+    # -------------
     def load_options(self):
-        r""" Loads all options set in kMC_options.cfg.
+        """#### Loads all options set in kMC_options.cfg.   
+        
+        Instantiates a configuration parser, and loads in all
+        options from *kMC_options.cfg*.
         """
         config = configparser.RawConfigParser()
         config.read('kMC_options.cfg')
         
-        self.SaveSteps = config.getint('Parameters', 'SaveSteps')
-        self.LogSteps = config.getint('Parameters', 'LogSteps')
-        self.tinfinity = config.getfloat('Parameters','tinfinity')
-        self.nninter = config.getint('Parameters', 'nninteractions')
-        self.Nspecies = config.getint('Parameters','Nspecies')
-        self.verbose = config.getboolean('Options','Verbose')
-        self.save_coverages = config.getboolean('Options', 'SaveCovs')
+        self.SaveSteps = config.getint('Parameters', 'SaveSteps') # How often to save txt files
+        self.LogSteps = config.getint('Parameters', 'LogSteps') # How often to log steps
+        self.tinfinity = config.getfloat('Parameters','tinfinity') # What is considered infinite time
+        self.nninter = config.getint('Parameters', 'nninteractions') # Range of ads-ads interactions (affects local update).
+        self.Nspecies = config.getint('Parameters','Nspecies') # Number of different specis in simulation.
+        self.verbose = config.getboolean('Options','Verbose') # Print verbose information?
+        self.save_coverages = config.getboolean('Options', 'SaveCovs') # Save coverages?
         self.delta = config.getfloat('Options','Delta') # reversibility tolerance
         self.Nf = config.getfloat('Options','Nf') # Avg event observance in superbasins
         self.Ns = config.getint('Options','Ns') # update the barriers every Ns step.
         self.ne = config.getint('Options','Ne') # Nsteps for sufficeint executed events.
         self.usekavg = config.getboolean('Options','usekavg') # Use rate-constants for scaling, not rates
     
-
+    # frm_init()
+    # -------------
     def frm_init(self):
-        r"""Prepare to perform FRM simulation.
+        """#### Prepare to perform FRM simulation.
             
-            Method initializes empty rate and event lists
-            to bookkeep the FRM algorithm. The initial times
-            of occurence for each event at each site is also
-            calculated and stored.
+        Initializes empty rate and event lists to 
+        bookkeep the FRM algorithm. The initial times  
+        of occurence for each event is also calculated  
+        and stored.  
 
         """
         self.rs=[]
@@ -196,15 +196,25 @@ class NeighborKMCBase:
         self.frm_arg = self.frm_times.argmin()
     
     
+    # find_nn_recursive()
+    # --------------------
     def find_nn_recurse(self,update_sites, recursion=0):
-        r"""Returns the first nearest neighbors to neigh (list).
+        """#### Deep serach of first nearest neighbors.  
         
-        The method takes a list of integers (neigh), and returns
-        these and the first nearest neighbors as a list.
+        Calculates the first nearest neighbors to *update\_sites*.  
         
-        For example, when passing neigh = [0,1,2]
-        the method returns [0,1,2,NN_0 of 0, NN_1 of 0, 
-                           NN_0 of 1 ...] 
+        For example, when passing *update\_sites*gh = [0,1,2]  
+        the method returns [0,1,2,NN0 of 0, NN1 of 0, NN0 of 1 ...]  
+                           
+        The method is calling itself recursively until the lattice  
+        is updated, c.f. the locality of nearest neighbor interactions. 
+        
+        **Parameters**  
+        *update_sites* ([int]): the site indices to return neighborlist of. 
+        
+        *recursion* (int, optional): the recursive level of 
+        which function was called. 
+                          
         """
         out = [n for n in update_sites]
 
@@ -221,17 +231,19 @@ class NeighborKMCBase:
             
         
 
+    # frm_update()
+    # --------------------
     def frm_update(self):
-        r"""Updates the FRM related lists.
+        """#### Updates the FRM related lists.  
             
-            Method updates the event list locally
-            about the site where the last event happened
-            by determining if new events have become
-            possible due to performing the last event.
+        Method updates the event list locally  
+        about the site where the last event happened  
+        by determining if new events have become  
+        possible due to performing the last event.  
 
-            This is done by keeping track of Nearest 
-            neighbors and next nearest neighbors in
-            'NNlast', 'NNNlast', 'NNother', and 'NNNother'.
+        This is done by keeping track of Nearest  
+        neighbors and next nearest neighbors in  
+        *NNlast*, *NNNlast*, *NNother*, and *NNNother*.
 
         """
         # Find site indices to update:
@@ -239,7 +251,7 @@ class NeighborKMCBase:
                                        self.lastother])
 
         # Save reference to function calls
-        # To reduce overhead
+        # to reduce overhead
         get_r_func = [e.get_rate for e in self.events]
         possible_func = [e.possible for e in self.events]
 
@@ -249,7 +261,6 @@ class NeighborKMCBase:
                 for k, other in enumerate(self.system.neighbors[i]):
                     poslist = self.rindex[i][j][k]
                     poss_now = possible_func[j](self.system,i,other)
-                     # Only newly avaible events
                     if poss_now and self.possible_evs[poslist]==False:
 
                         rcur = get_r_func[j](self.system,i,other)
@@ -274,12 +285,14 @@ class NeighborKMCBase:
         
 
 
+    # frm_step()
+    # --------------------
     def frm_step(self):
-        r""" Takes a Monte Carlo Step.
+        """#### Takes a Monte Carlo Step.  
         
-            Method takes a monte carlo step by performing the next
-            possible event, which has index 'self.frm_arg'in the 
-            event list.
+        Takes a monte carlo step by performing the next  
+        possible event, which has index *self.frm_arg* in the   
+        event list.
 
         """
         # Choose the first reaction if possible
@@ -322,11 +335,15 @@ class NeighborKMCBase:
         self.frm_update()
 
 
+    
+    # rescaling()
+    # --------------------
     def rescaling(self):
-        """
-        Rescales the times with alphas.
-        Events that are now in the past are set as 
-        immediate events if still possible.
+        """#### Rescales the times of occurences for events.  
+        
+        Rescales the times according to each quasi-equilibrated  
+        events *alpha*.  
+        
         """
         for ev in self.equilEV:
             # Raise the barrier
@@ -354,14 +371,16 @@ class NeighborKMCBase:
 
 
 
-
+    
+    # leave_superbasin()
+    # --------------------
     def leave_superbasin(self):
+        """#### Leaves the superbasin.  
+        
+        Resets all rate-scalings and statistics 
+        connected to the superbasin.
+        
         """
-        Resets all rate-scalings and
-        connected statistics connected to
-        the superbasin.
-        """
-       
         
         for e in self.equilEV:
             self.events[e].alpha = 1.
@@ -374,25 +393,33 @@ class NeighborKMCBase:
         self.isup =0
 
 
-
+    
+    # scaling_ks()
+    # --------------------
     def scaling_ks(self,noneqevents, dtS):
-        """
-        Calculates superbasin escape time
-        according to the maximal rate-constant of
-        events escaping the superbasin. 
-        (Can be good for stability of time-step)
+        """#### Rate-constant based superbasin escape time.   
+        
+        Calculates superbasin escape time  
+        according to the maximal rate-constant of  
+        events escaping the superbasin.   
+        (Can be good for stability of time-step)  
+        
         """
         return max([self.ksavg[neqev] for neqev in noneqevents]) 
         
     
+    # scaling_rs()
+    # --------------------
     def scaling_rs(self,noneqevents, dtS):
-        """
-        Calculates superbasin escape time
-        according to non-equilibrated event rates escaping
-        the superbasin.
+        """#### Rate based superbasin escape time. 
         
-        C.F. The generalized temporal acceleration scheme
-        (DOI: 10.1021/acs.jctc.6b00859)
+        Calculates superbasin escape time  
+        according to non-equilibrated event rates escaping  
+        the superbasin.  
+        
+        c.f. The generalized temporal acceleration scheme  
+        (DOI: 10.1021/acs.jctc.6b00859)  
+        
         """
         r_S = 0.
         for neqev in noneqevents:
@@ -400,15 +427,18 @@ class NeighborKMCBase:
             
         return r_S
             
-
+    
+    # superbasin()
+    # --------------------
     def superbasin(self,evtype,dt):
-        """
-        Keeps track and performs barrier adjustments,
-        of the generalized temporal acceleration scheme
-        (DOI: 10.1021/acs.jctc.6b00859)
+        """#### Scales rates or leaves the current superbasin.   
+        
+        Keeps track and performs barrier adjustments,   
+        of the generalized temporal acceleration scheme  
+        (DOI: 10.1021/acs.jctc.6b00859)  
+        
         """
         # Update the rates in the current superbasin
-        #dtsup = dt
         if dt < 0:
             raise Warning("Time-step is < 0. Are the events and neighborlists correct?")
         farg = int(self.frm_arg) 
@@ -464,9 +494,7 @@ class NeighborKMCBase:
 
                         alpham = min(self.Nf*r_S/(rmev+rmrev),1)
                         self.events[ev].alpha *= alpham
-
-
-                   
+ 
                     self.rescaling()
 
                     
@@ -476,16 +504,18 @@ class NeighborKMCBase:
 
    
 
-
+    
+    # save_txt()
+    # --------------------
     def save_txt(self):
-        r""" Saves txt files containing the simulation data.
+       """#### Saves txt files containing the simulation data.
         
-             Method saves the number of events executed on
-             the different types of sites, the time vs mcstep,
-             the site-types, and optionally the coverages if
-             'self.covered' is True.
+        Saves the number of events executed on  
+        the different types of sites, the time vs mcstep,  
+        the site-types, and optionally the coverages if  
+        *self.covered* is True.  
 
-             Lastly growing lists are cleaned from memory.
+        Lastly growing lists are cleaned from memory.  
 
         """
 
@@ -521,15 +551,16 @@ class NeighborKMCBase:
         self.covered = []
 
 
-
+    
+    # get_coverages()
+    # --------------------
     def get_coverages(self):
-        """Gets the coverages at the present moment.
+        """#### Gets the coverages at the present moment.  
 
-           Returns
-           -------
-           A list of coverages for each species and all sites
-           Thus to find the coverage of species i on site 
-           number j : ret[i][j]
+        **Returns**  
+        ret ([[float]]): a list of coverages for each species  
+        and all sites. Thus to find the coverage of species  
+        *i* on site number *j* one calls *ret[i][j]*.  
 
         """
         ret = []
@@ -542,37 +573,47 @@ class NeighborKMCBase:
         
         return ret
 
+    
+    # write_atoms()
+    # --------------------
     def write_atoms(self,filename):
-        r"""
-        Write self.atom_cfgs to file with filename(string)
+        """#### Writes tagged ase.Atoms to file.  
+        
+        Writes self.atom_cfgs to file with path *filename*.
+        
+        **Parameters**  
+        *filename* (string): path to file.
 
         """
         write(filename,images=self.atom_cfgs)
 
-        
+    
+    # load_events()
+    # --------------------
     def load_events(self):
-       raise NotImplementedError(r"""User needs to define load_events
-                                 method in derived NeighborKMC class""")
+        """#### Loads events (abstract method).
+        
+        **See Also**  
+        The module [user_kmc](../user_kmc.html)
+          
+        """
+        raise NotImplementedError('''User needs to define load_events
+                                 method in derived NeighborKMC class''')
 
-
-    def set_tags(self):
-        raise NotImplementedError(r"""User needs to define set_tags 
-                                  method in derived NeighborKMC class""")
-
-
+    
+    
+    # cover_system()
+    # --------------------
     def cover_system(self,species,coverage):
         """#### Covers the system with a certain species.
             
-            Method covers the system with a species 'species', at a 
-            certain coverage 'coverage'.
+        Randomly covers the system with a species *species*, at a 
+        certain fractional coverage *coverage*.
     
-            Parameters
-            ----------
-            species : int
-                The species as defined by hte user (e.g. empty=0,CO=1)
+        **Parameters**  
+        *species* (int): the species as defined by hte user (e.g. empty=0,CO=1).
 
-            coverage  : float
-                The fractional coverage to load lattice with.
+        *coverage* (float): the fractional coverage to load lattice with.
 
         """
         n_covered = int(np.round(coverage*len(self.system.sites)))
@@ -581,9 +622,21 @@ class NeighborKMCBase:
             self.system.sites[c].covered = species
         
 
+    
+    # run_kmc()
+    # --------------------
     def run_kmc(self):
-        raise NotImplementedError(r"""User needs to define run_kmc method 
-                                          in derived NeighborKMC class""")
+        """#### Runs the kMC simulation (abstract method)
+        
+        **Raises**  
+        NotImplementedError if called.
+        
+        **See Also**  
+        The module [user_kmc](../user_kmc.html)
+
+        """
+        raise NotImplementedError('''User needs to define run_kmc method 
+                                          in derived NeighborKMC class''')
 
 
 

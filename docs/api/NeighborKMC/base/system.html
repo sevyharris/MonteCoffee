@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>system.py</title>
+  <link rel="stylesheet" href="../../pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>system.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <h3>Defines the SystemBase class.</h3>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <h4>Defines a system class to perform kMC.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">SystemBase</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <pre><code>
+</code></pre>
+<p>Method assigns an ASE.Atoms object <em>atoms</em>
+to the object and assigns a list of sites <em>sites</em>.  </p>
+<p>A neighbor list <em>neighbors</em> is initialized<br />
+from <em>sites</em>, which is checked for inconsistencies<br />
+by <em>verify_nlist()</em>.</p>
+<p><strong>Parameters</strong><br />
+<em>atoms</em> (ase.atoms, optional): can be passed to connect an ASE atoms<br />
+object to the system.</p>
+<p><em>sites</em> ([Site]): the list of sites that constitute the system.</p>
+<p><strong>Returns</strong><br />
+A SystemBase instance.</p>
+<p><strong>See Also</strong><br />
+The module <a href="sites.html">sites</a><br />
+The module <a href="../user_sites.html">user_sites</a></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sites</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sites</span> <span class="o">=</span> <span class="n">sites</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">neighbors</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sites</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verify_nlist</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">=</span> <span class="n">atoms</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <h2>verify_nlist()</h2>
+<h4>Tests the neighborlist for inconsistency.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">verify_nlist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>The method checks if neighborlists are assymetric:<br />
+If A is a neigbor to B, then is B must<br />
+also be present in the neighborlist of A.  </p>
+<p><strong>Raises</strong><br />
+Warning if the neighborlist is assymetric.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">nn</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span><span class="s2">&quot;Site &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; is a neighbor to site &quot;</span><span class="o">+</span>
+                                  <span class="nb">str</span><span class="p">(</span><span class="n">nn</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; but not vice-versa&quot;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <h2>get_ncovs()</h2>
+<h4>Gets the coverage on nearest neighbor sites.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">get_ncovs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">i_site</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <pre><code>
+</code></pre>
+<p>Retrieves and returns the occupations of the nearest neighbor
+sites to the site with index <em>i_site</em> in <em>self.sites</em>.</p>
+<p><strong>Parameters</strong><br />
+<em>i_site</em> (int): index of the site relative to <em>self.sites</em>.  </p>
+<p><strong>Returns</strong><br />
+<em>covs</em> ([int]): list of species occupying the nearest neighbor sites.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">covs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">i_site</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">covs</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

@@ -1,4 +1,4 @@
-"""#### Defines the NeigborKMC class used to run a MonteCoffee simulation.
+"""### Defines the NeigborKMC class used to run a MonteCoffee simulation.
 
 """
 
@@ -13,31 +13,30 @@ from user_events import *
 import pyclbr
 
 class NeighborKMC(NeighborKMCBase):
-    """#### Class that controls the kMC simulation.
+    """#### Class that controls the kMC simulation.  
             
-    Calls constructor of NeighborKMCBase objects, and
-    loads in the user-specified event-list, in an overridden
-    method 'load_events'. The variable 'self.evs_exec' is
-    initalized as a list to count the number of times each 
-    event-type is executed.
+    Calls constructor of NeighborKMCBase objects, and  
+    loads in the user-specified event-list in *load_events()*.   
+    The variable *self.evs_exec* is initalized as a list to 
+    count the number of times each event-type is executed.  
     
     **Parameters**          
-    *system* (System): the system instance with defined neighborlists.
+    *system* (System): the system instance to perform the simulation on.  
 
-    *tend* (float): simulation end-time.
+    *tend* (float): simulation end-time.  
 
     *parameters* (dict): parameters used, which are dumped to the log file.  
-           Example: parameters = {'pCO':1E2,'T':700,'Note':'Test simulation'}
+           Example: parameters = {'pCO':1E2,'T':700,'Note':'Test simulation'}  
            
     *events* ([EventBase]): events used to simulate. The order of list is kept   
-             throughout the simulation.
+             throughout the simulation.  
              
     *rev_events* (dict): dict specifying which events are reverse to each other,  
             according to the *events* list order. For example {0:1,2:3,6:6}.  
             This dict is used for temporal acceleration.  
 
     **Returns**  
-    A NeighborKMC instance  
+    A NeighborKMC instance.  
         
     **See Also**  
     The module [base.kmc](base/kmc.html)
@@ -59,7 +58,7 @@ class NeighborKMC(NeighborKMCBase):
     def load_events(self, parameters, events, rev_events):
         """#### Loads the events list.
                
-        Method loads the event list 'self.events' which is used to
+        Method loads the event list *self.events* which is used to
         keep track of event-types in the simulation.
     
         **Parameters**  
@@ -80,7 +79,6 @@ class NeighborKMC(NeighborKMCBase):
         The module [user_events](user_events.html)
 
         """
-        # -------------
         self.events = [ev(parameters) for ev in events]
         self.reverses = dict(rev_events)
         
@@ -100,20 +98,19 @@ class NeighborKMC(NeighborKMCBase):
     def run_kmc(self):
         """#### Runs a kmc simulation.
                
-        Method starts the simulation by initializing the log,
-        initializes lists to keep track of time and step 
-        numbers. 
+        Method starts the simulation by initializing the log,  
+        initializes lists to keep track of time and step  
+        numbers.  
 
-        Then while the simulation time ('self.t' < 'self.tend'), 
-        frm steps are performed by calling self.frm_step().
-        Every 'self.LogSteps', a line is added to the simulation 
-        log. 
+        Then while the simulation runs (*self.t* < *self.tend*), 
+        frm steps are performed by calling self.frm_step().  
+        Every *self.LogSteps*, a line is added to the simulation  
+        log.   
 
         **Returns**  
-        0 if simulation is finshed successfully.
+        0 if simulation is finshed successfully.  
 
         """
-        # -----------  
         if self.verbose:
             print('Loading logging and counters...')
 

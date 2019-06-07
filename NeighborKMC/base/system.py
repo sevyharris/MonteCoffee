@@ -1,48 +1,53 @@
-r"""
-Module: system.py
-The system module defines the SystemBase Class.
+"""### Defines the SystemBase class.
 
 """
 import numpy as np
 
 class SystemBase:
-    
-
-    def __init__(self,atoms=None,sites=[]):
-        r"""Constructor for SystemBase objects.
+    """#### Defines a system class to perform kMC.  
             
-            Method assigns an ASE.Atoms object 'atoms'
-            to the object and assigns a list of sites: 'sites'
-            Finally a neighbor list ('self.neighbors') is 
-            initialized from 'sites'.
+    Method assigns an ASE.Atoms object *atoms*
+    to the object and assigns a list of sites *sites*.  
     
-            Parameters
-            ----------
-            atoms : ASE.Atoms
-                Can be passed to connect an ASE atoms 
-                object to the system.
-            sites : list of sites.Site
-                The sites that constitute the system
+    A neighbor list *neighbors* is initialized  
+    from *sites*, which is checked for inconsistencies  
+    by *verify_nlist()*.
+    
+    **Parameters**  
+    *atoms* (ase.atoms, optional): can be passed to connect an ASE atoms  
+    object to the system.
+    
+    *sites* ([Site]): the list of sites that constitute the system.
 
+    **Returns**  
+    A SystemBase instance.
+    
+    **See Also**  
+    The module [sites](sites.html)  
+    The module [user_sites](../user_sites.html)
 
-            Returns
-            -------
-            SystemBase instance
+    """
+    
 
-        """
-
-        self.atoms= atoms
+    def __init__(self, sites, atoms=None):
         self.sites = sites
         self.neighbors = [s.neighbors for s in sites]
         self.verify_nlist()
+        self.atoms= atoms
         
         
+    # verify_nlist()
+    # -------------
     def verify_nlist(self):
-        r"""Test the neighborlist for inconsistency.
+        """#### Tests the neighborlist for inconsistency.
         
-        The method checks if neighborlists are consistent.
-        For example, if A is a neigbor to B, then is B must
-        also present in the neighborlist of A.
+        The method checks if neighborlists are assymetric:  
+        If A is a neigbor to B, then is B must  
+        also be present in the neighborlist of A.  
+        
+        **Raises**  
+        Warning if the neighborlist is assymetric.
+        
         """
         for i, s in enumerate(self.neighbors):
             for nn in s:
@@ -52,27 +57,24 @@ class SystemBase:
                 
 
 
-    
+    # get_ncovs()
+    # -------------
     def get_ncovs(self,i_site):
-        r"""Method that gets the coverage on Nearest neighbor sites.
+        """#### Gets the coverage on nearest neighbor sites.  
             
-            Computes and returns the coverage of the nearest neighbor
-            sites to the site with index 'i_site' in 'self.sites'.
+        Retrieves and returns the occupations of the nearest neighbor
+        sites to the site with index *i_site* in *self.sites*.
 
-            Parameters
-            ----------
-            i_site : int
-                index of the site relative to 'self.sites'
+        **Parameters**  
+        *i_site* (int): index of the site relative to *self.sites*.  
 
-            Returns
-            -------
-            list int
-                coverage of nearest neighbors, ordered c.f. 
-                'self.neighbors[i_site]'
+        **Returns**  
+        *covs* ([int]): list of species occupying the nearest neighbor sites.
+
             
         """
-
-        return [self.sites[n].covered for n in self.neighbors[i_site]]
+        covs = [self.sites[n].covered for n in self.neighbors[i_site]]
+        return covs
 
 
 

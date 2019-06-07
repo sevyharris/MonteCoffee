@@ -1,4 +1,4 @@
-"""#### Defines the Site Class derived from base.site.SiteBase.
+"""### Defines the Site Class derived from base.site.SiteBase.
 
 The site class is defined here as an interface to the base
 class in base.site.SiteBase.

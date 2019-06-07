@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>user_events.py</title>
+  <link rel="stylesheet" href="../pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>user_events.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <h3>Contains all user-defined event types.</h3>
+<p>All user-defined events are defined here, which
+must be derived from the parent class EventBase.  </p>
+<p><strong>See also</strong><br />
+The module <a href="base/events.html">base.events</a><br />
+to understand the methods implemented here
+for each derived class.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">base.events</span> <span class="kn">import</span> <span class="n">EventBase</span>
+<span class="kn">from</span> <span class="nn">user_entropy</span> <span class="kn">import</span> <span class="n">get_entropy_CO</span><span class="p">,</span> <span class="n">get_entropy_O2</span><span class="p">,</span>\
+                         <span class="n">get_entropy_ads</span><span class="p">,</span> <span class="n">get_Zvib</span>
+
+<span class="kn">from</span> <span class="nn">user_constants</span> <span class="kn">import</span> <span class="n">mCO</span><span class="p">,</span> <span class="n">mO2</span><span class="p">,</span> <span class="n">Asite</span><span class="p">,</span><span class="n">modes_COads</span><span class="p">,</span>\
+                           <span class="n">modes_Oads</span><span class="p">,</span><span class="n">kB</span><span class="p">,</span><span class="n">eV2J</span><span class="p">,</span><span class="n">s0CO</span><span class="p">,</span><span class="n">s0O</span><span class="p">,</span><span class="n">h</span>
+
+<span class="kn">from</span> <span class="nn">user_energy</span> <span class="kn">import</span> <span class="n">EadsCO</span><span class="p">,</span> <span class="n">EadsO</span><span class="p">,</span> <span class="n">get_Ea</span><span class="p">,</span>\
+                        <span class="n">get_repulsion</span><span class="p">,</span><span class="n">EdiffCO</span><span class="p">,</span><span class="n">EdiffO</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <h2>COAdsEvent</h2>
+<h4>CO adsorption event class.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">COAdsEvent</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <p>The event is CO(g) + * -&gt; CO*.  </p>
+<p>The event is possible if the site is empty.  </p>
+<p>The rate comes from collision theory.  </p>
+<p>Performing the event adds a CO to the site.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">params</span><span class="p">):</span>
+        <span class="n">EventBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">params</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">i_site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="p">(</span><span class="n">s0CO</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;pCO&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">Asite</span><span class="o">/</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">mCO</span><span class="o">*</span><span class="n">kB</span><span class="o">*</span><span class="n">eV2J</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">])</span> <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">*</span><span class="n">R</span> <span class="c1"># alpha important for temporal acceleration.</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">do_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <p>Cover it with CO, which is species number 1.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">1</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      <h2>CODesEvent</h2>
+<h4>CO desorption event class.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">CODesEvent</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <p>The event is CO* -&gt; CO(g) + *.  </p>
+<p>The event is possible if the site is CO-covered.  </p>
+<p>The rate comes from the forward rate and the
+equilibrium constant.  </p>
+<p>Performing the event removes a CO from the site.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">params</span><span class="p">):</span>
+        <span class="n">SCOads</span> <span class="o">=</span> <span class="n">get_entropy_ads</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">],</span><span class="n">modes_COads</span><span class="p">)</span>
+        <span class="n">SCOgas</span> <span class="o">=</span> <span class="n">get_entropy_CO</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">],</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;pCO&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dS</span> <span class="o">=</span> <span class="n">SCOads</span><span class="o">-</span><span class="n">SCOgas</span>
+        <span class="n">EventBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">params</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      <p>If site is covered with CO (species no. 1).</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> 
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">i_site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span>
+        <span class="n">stype</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">i_site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span>
+        <span class="n">Ncovs</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">get_ncovs</span><span class="p">(</span><span class="n">i_site</span><span class="p">)</span>
+        <span class="n">ECO</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">EadsCO</span><span class="p">[</span><span class="n">stype</span><span class="p">]</span><span class="o">-</span><span class="n">get_repulsion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">Ncovs</span><span class="p">,</span><span class="n">stype</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">ECO</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dS</span><span class="p">)</span><span class="o">/</span>
+                   <span class="p">(</span><span class="n">kB</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]))</span>
+
+        
+        
+        <span class="n">RF</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;pCO&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">s0CO</span><span class="o">*</span><span class="n">Asite</span><span class="o">/</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">mCO</span><span class="o">*</span><span class="n">kB</span><span class="o">*</span><span class="n">eV2J</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">])</span> <span class="p">)</span> 
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">*</span><span class="n">RF</span><span class="o">/</span><span class="n">K</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-14'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">do_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-15'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-15'>#</a>
+      </div>
+      <h2>OAdsEvent</h2>
+<h4>Oxygen adsorption event class.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">OAdsEvent</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-16'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-16'>#</a>
+      </div>
+      <p>The event is O2(g) + 2* -&gt; 2O*.  </p>
+<p>The event is possible if two neighbor sites are empty.  </p>
+<p>The rate comes from collision theory.  </p>
+<p>Performing the event adds O to the two empty neighbor sites.  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-17'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-17'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">params</span><span class="p">):</span>
+        <span class="n">S2Oads</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">*</span><span class="n">get_entropy_ads</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">],</span><span class="n">modes_Oads</span><span class="p">)</span>
+        <span class="n">SO2gas</span> <span class="o">=</span> <span class="n">get_entropy_O2</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">],</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;pO2&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dS</span> <span class="o">=</span> <span class="n">S2Oads</span><span class="o">-</span><span class="n">SO2gas</span>
+        <span class="n">EventBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">params</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-18'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-18'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span>\
+           <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-19'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-19'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">i_site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="p">(</span><span class="n">s0O</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;pO2&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">Asite</span><span class="o">/</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">mO2</span><span class="o">*</span><span class="n">kB</span><span class="o">*</span><span class="n">eV2J</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">])</span> <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">*</span><span class="n">R</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-20'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-20'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">do_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-21'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-21'>#</a>
+      </div>
+      <p>Cover it with O, which is species number 2.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">2</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-22'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-22'>#</a>
+      </div>
+      <h2>ODesEvent</h2>
+<h4>Oxygen adsorption event class.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">ODesEvent</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-23'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-23'>#</a>
+      </div>
+      <p>The event is O2(g) + 2* -&gt; 2O*.  </p>
+<p>The event is possible if two neighbor 
+sites are empty.  </p>
+<p>The rate comes from the forward rate and the
+equilibrium constant.   </p>
+<p>Performing the event removes O from the empty 
+neighbor sites.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-24'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-24'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">params</span><span class="p">):</span>
+        <span class="n">S2Oads</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">*</span><span class="n">get_entropy_ads</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">],</span><span class="n">modes_Oads</span><span class="p">)</span>
+        <span class="n">SO2gas</span> <span class="o">=</span> <span class="n">get_entropy_O2</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">],</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;pO2&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dS</span> <span class="o">=</span> <span class="n">S2Oads</span><span class="o">-</span><span class="n">SO2gas</span>
+        <span class="n">EventBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">params</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-25'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-25'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span>\
+           <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-26'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-26'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">i_site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span>
+        <span class="n">stype</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">i_site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span>
+        <span class="n">stype_other</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span>
+        <span class="n">Ncovs</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">get_ncovs</span><span class="p">(</span><span class="n">i_site</span><span class="p">)</span>
+        <span class="n">Ncovsother</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">get_ncovs</span><span class="p">(</span><span class="n">other_site</span><span class="p">)</span>
+        <span class="n">E2O</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">EadsO</span><span class="p">[</span><span class="n">stype</span><span class="p">]</span><span class="o">-</span><span class="n">get_repulsion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">Ncovs</span><span class="p">,</span><span class="n">stype</span><span class="p">)</span>\
+              <span class="o">-</span><span class="n">get_repulsion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">Ncovsother</span><span class="p">,</span><span class="n">stype_other</span><span class="p">),</span><span class="mf">0.</span><span class="p">)</span>
+
+        <span class="n">Rf</span> <span class="o">=</span> <span class="p">(</span><span class="n">s0O</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;pO2&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">Asite</span><span class="o">/</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">mO2</span><span class="o">*</span><span class="n">kB</span><span class="o">*</span><span class="n">eV2J</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">])</span> <span class="p">)</span>
+
+        <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">E2O</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dS</span><span class="p">)</span><span class="o">/</span>
+                   <span class="p">(</span><span class="n">kB</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]))</span>
+
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">*</span><span class="n">Rf</span><span class="o">/</span><span class="n">K</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-27'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-27'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">do_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-28'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-28'>#</a>
+      </div>
+      <h2>CODiffEvent</h2>
+<h4>CO diffusion event class.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">CODiffEvent</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-29'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-29'>#</a>
+      </div>
+      <p>The event is CO* + * -&gt; * + CO*.  </p>
+<p>The event is possible if the site is CO-covered,
+and the neighbor site is empty.  </p>
+<p>The rate comes from transition state theory.  </p>
+<p>Performing the event removes a CO from the site,
+and adds it to the neighbor site.  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-30'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-30'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">params</span><span class="p">):</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">dS</span> <span class="o">=</span> <span class="n">get_entropy_ads</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">],</span><span class="n">modes_COads</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">-</span>\
+                  <span class="n">get_entropy_ads</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">],</span><span class="n">modes_COads</span><span class="p">)</span> 
+        <span class="n">EventBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffev</span> <span class="o">=</span> <span class="bp">True</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-31'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-31'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-32'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-32'>#</a>
+      </div>
+      <p>If site is covered with CO and other site free</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span>
+           <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span> 
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-33'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-33'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">i_site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span>
+        <span class="n">stype</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">i_site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span>
+        <span class="n">stype_other</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span>
+
+        <span class="n">Ncovs</span> <span class="o">=</span> <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span>\
+                <span class="n">system</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">i_site</span><span class="p">]</span> <span class="p">]</span>
+        <span class="n">Nothercovs</span> <span class="o">=</span> <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="k">for</span>\
+                     <span class="n">n</span> <span class="ow">in</span> <span class="n">system</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span> <span class="p">]</span>
+
+        <span class="n">E</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="n">EadsCO</span><span class="p">[</span><span class="n">stype</span><span class="p">]</span> <span class="o">-</span> <span class="n">get_repulsion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">Ncovs</span><span class="p">,</span><span class="n">stype</span><span class="p">))</span>
+        <span class="n">Eother</span>  <span class="o">=</span>  <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">EadsCO</span><span class="p">[</span><span class="n">stype_other</span><span class="p">]</span> <span class="o">-</span> <span class="n">get_repulsion</span>\
+                    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nothercovs</span><span class="p">,</span><span class="n">stype_other</span><span class="p">))</span>
+        
+        <span class="n">dE</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">E</span><span class="o">-</span><span class="n">Eother</span><span class="p">,</span><span class="mf">0.</span><span class="p">)</span>
+        <span class="n">Eact</span> <span class="o">=</span> <span class="n">dE</span><span class="o">+</span><span class="n">EdiffCO</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dS</span><span class="o">/</span><span class="n">kB</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">Eact</span><span class="o">/</span>
+               <span class="p">(</span><span class="n">kB</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]))</span><span class="o">*</span><span class="n">kB</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">h</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-34'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-34'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">do_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Remove the CO from the site</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># Add the CO to the other site</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-35'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-35'>#</a>
+      </div>
+      <h2>ODiffEvent</h2>
+<h4>O diffusion event class.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">ODiffEvent</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-36'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-36'>#</a>
+      </div>
+      <p>The event is O* + * -&gt; * + O*.  </p>
+<p>The event is possible if the site is O-covered,
+and the neighbor site is empty.  </p>
+<p>The rate comes from transition state theory.  </p>
+<p>Performing the event removes a O from the site,
+and adds it to the other site.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-37'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-37'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">params</span><span class="p">):</span>
+        <span class="n">SOads</span> <span class="o">=</span> <span class="n">get_entropy_ads</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">],</span><span class="n">modes_Oads</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dS</span> <span class="o">=</span> <span class="n">SOads</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="mf">2.9</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span> 
+        <span class="n">EventBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffev</span> <span class="o">=</span> <span class="bp">True</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-38'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-38'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-39'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-39'>#</a>
+      </div>
+      <p>If site is covered with CO and other site free</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span>
+           <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span> 
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-40'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-40'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">i_site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span>
+        <span class="n">stype</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">i_site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span>
+        <span class="n">stype_other</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span>
+
+        <span class="n">Ncovs</span> <span class="o">=</span> <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span>\
+                <span class="n">system</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">i_site</span><span class="p">]</span> <span class="p">]</span>
+        <span class="n">Nothercovs</span> <span class="o">=</span> <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span>\
+                      <span class="n">system</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span> <span class="p">]</span>
+
+        <span class="n">E</span> <span class="o">=</span> <span class="n">EadsO</span><span class="p">[</span><span class="n">stype</span><span class="p">]</span> <span class="o">-</span> <span class="n">get_repulsion</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">Ncovs</span><span class="p">,</span><span class="n">stype</span><span class="p">)</span> 
+        <span class="n">Eother</span>  <span class="o">=</span>  <span class="n">EadsO</span><span class="p">[</span><span class="n">stype_other</span><span class="p">]</span> <span class="o">-</span> <span class="n">get_repulsion</span>\
+                    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">Nothercovs</span><span class="p">,</span><span class="n">stype_other</span><span class="p">)</span>
+
+        <span class="n">dE</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="n">E</span><span class="o">-</span><span class="n">Eother</span><span class="p">)</span>
+        <span class="n">Eact</span> <span class="o">=</span> <span class="n">dE</span><span class="o">+</span><span class="n">EdiffO</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dS</span><span class="o">/</span><span class="n">kB</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">Eact</span><span class="o">/</span>
+               <span class="p">(</span><span class="n">kB</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]))</span><span class="o">*</span><span class="n">kB</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">h</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-41'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-41'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">do_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">2</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-42'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-42'>#</a>
+      </div>
+      <h2>COOxEvent</h2>
+<h4>CO oxidation event class.</h4>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">COOxEvent</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-43'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-43'>#</a>
+      </div>
+      <p>The event is CO* + O* -&gt; CO2(g)+2*.</p>
+<p>The event is possible if the site is 
+CO-covered and the neighbor is O-covered.</p>
+<p>The rate comes from transition state theory.
+Performing the event removes a CO+O from the site.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-44'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-44'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">params</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Zratio</span> <span class="o">=</span> <span class="p">(</span><span class="n">get_Zvib</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">],</span><span class="n">modes_COads</span><span class="p">)</span><span class="o">*</span>\
+                      <span class="n">get_Zvib</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">],</span><span class="n">modes_Oads</span><span class="p">))</span><span class="o">**</span><span class="mf">0.66</span>
+        <span class="n">EventBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">params</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-45'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-45'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-46'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-46'>#</a>
+      </div>
+      <p>If site is covered with CO and other site free</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span>
+           <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span> 
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-47'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-47'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">i_site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-48'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-48'>#</a>
+      </div>
+      <p>Find the adsorption energy</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">stype</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">i_site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span>
+        <span class="n">stype_other</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span>
+        <span class="n">ECO</span> <span class="o">=</span>  <span class="n">EadsCO</span><span class="p">[</span><span class="n">stype</span><span class="p">]</span>
+        <span class="n">EO</span> <span class="o">=</span> <span class="n">EadsO</span><span class="p">[</span><span class="n">stype_other</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-49'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-49'>#</a>
+      </div>
+      <p>Find the Nearest neighbor repulsion</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">Ncovs</span> <span class="o">=</span> <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span>\
+                <span class="n">system</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">i_site</span><span class="p">]</span> <span class="p">]</span>
+        <span class="n">Nothercovs</span> <span class="o">=</span> <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="k">for</span> <span class="n">n</span>\
+                     <span class="ow">in</span> <span class="n">system</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span> <span class="p">]</span>
+        <span class="n">ECO</span> <span class="o">-=</span> <span class="n">get_repulsion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">Ncovs</span><span class="p">,</span><span class="n">stype</span><span class="p">)</span>
+        <span class="n">EO</span>  <span class="o">-=</span> <span class="n">get_repulsion</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">Nothercovs</span><span class="p">,</span><span class="n">stype_other</span><span class="p">)</span>
+        <span class="n">Ea</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="n">get_Ea</span><span class="p">(</span><span class="n">ECO</span><span class="p">,</span><span class="n">EO</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Zratio</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">Ea</span><span class="o">/</span>
+               <span class="p">(</span><span class="n">kB</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]))</span><span class="o">*</span><span class="n">kB</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">h</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-50'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-50'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">do_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">system</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">other_site</span><span class="p">):</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span> 
+        <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

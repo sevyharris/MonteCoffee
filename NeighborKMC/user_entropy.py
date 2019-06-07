@@ -1,4 +1,4 @@
-"""#### Defines methods to calculate entropy
+"""### Defines methods to calculate entropy
    of reaction event rate constants.
    
 """
