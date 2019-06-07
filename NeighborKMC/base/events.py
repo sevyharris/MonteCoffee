@@ -1,101 +1,111 @@
-r"""
-Module: events.py
-The system module defines the EventBase Class.
+"""#### Defines the EventBase class.
+
+The EventBase class is defined as a 
+template-class to derive events from
+in user_events.py
+
+**See Also**  
+The module [events](../user_events.html)
 """
 
 
 class EventBase:
+    """#### Template class for events.
+            
+    Stores a list of parameters
+    related to reaction events: **params**.  
+    The class is only used as a parent, and is in this
+    sense purely abstract.
+    
+    **Parameters**  
+    *params* (dict): parameter dictionary.  
+    Example: params = {'T': 300, pCO: '1E2'}  
 
+    **Returns**  
+    An EventBase instance.  
+
+    **See Also**  
+        The module [system](system.html)  
+        The module [user_system](../user_system.html)  
+        The module [sites](sites.html)  
+        The module [user_sites](../user_sites.html)  
+        The module [events](../events.html)   
+        The module [user_events](../user_events.html)  
+
+    """
     
     def __init__(self,params={}):
-
-        r"""Constructor for EventBase objects.
-            
-            Method stores a list of parameters
-            related to reaction events: 'params'
-    
-            Parameters
-            ----------
-            params : dict
-                parameter dictionary.
-                Example: params = {'T':300, pCO:'1E2'}
-
-            Returns
-            -------
-            EventBase instance
-
-        """
-
         self.params = params
-        self.rev = None
         self.alpha = 1.
         self.diffev = False # Is it a diffusion event.
 
 
     def possible(self,system,i_site,i_other):
-        r"""Template method to determine if event is possible.
+        """#### Template method to determine if event is possible.  
             
-            Method needs to be overridden in user_events.py.
-            Should return true if an event is possible on
-            site number 'i_site' and possible a neighbor
-            site 'i_other'.
+        Method needs to be overridden in user_events.py.
+        Should return true if an event is possible on
+        site number *i_site* and possible a neighbor
+        site *i_other*, given the current site occupations.
             
-            Parameters
-            ----------
-            system : system.
-                system that the simulation is performed on
-            i_site : int
-                index of site in the system.sites list.
-            i_other : int
-                index of other site involved in reaction.
+        **Parameters**  
+        *system* (System):  the system, which the simulation is performed on. 
+         
+        *i_site* (int):  index of site in the *system*.sites list.  
+        
+        *i_other* (int): index of other/neighbor site in the *system*.sites list.  
+
+        **Returns**  
+        True if event is possible on site-pair *i_site* and *i_other*.  
+        
+        False if event is impossible on site-pair *i_site* and *i_other*. 
 
         """
 
-        raise NotImplementedError(r"""Called purely abstract 
+        raise NotImplementedError("""Called purely abstract 
                                    method possible() of Event""")
 
 
     def get_rate(self,system,i_site,i_other):
-        r"""Template method to determine the rate constant.
+        """#### Template method to determine the rate constant.
             
-            Method needs to be overridden in user_events.py.
-            Should return the reaction rate on site number
-            'i_site' and possibly 'i_other' multi-site
-            reactions.
+        Method needs to be overridden in user_events.py.
+        Should return the reaction rate on site number
+        *i_site*, and *i_other* for multi-site reactions.  
             
-            Parameters
-            ----------
-            system : system.
-                system that the simulation is performed on
-            i_site : int
-                index of site in the system.sites list.
-            i_other : int
-                index of other site involved in reaction.
+        **Parameters**  
+        *system* (System):  the system, which the simulation is performed on. 
+         
+        *i_site* (int):  index of site in the *system*.sites list.  
+        
+        *i_other* (int): index of other/neighbor site in the *system*.sites list.  
+        
+        **Returns**  
+        Rate constant of event, given the current occupation patterns around the  
+        site-pair *i_site* and *i_other*.
 
         """
 
-        raise NotImplementedError(r"""Called purely abstract 
+        raise NotImplementedError("""Called purely abstract 
                                   method get_rate() of Event""")
 
     
     def do_event(self,system, i_site ,i_other):
-        r"""Template method to perform the event.
+        """#### Template method to perform the event.
             
-            Method needs to be overridden in user_events.py.
-            Should change system site coverages by changing
-            'system.sites[i_site].covered' and
-            'system.sites[other_site].covered'.
+        Method needs to be overridden in user_events.py.  
+        Should change system site coverages by changing  
+        *system.sites[i_site].covered* and
+        *system.sites[other_site].covered*.  
             
-            Parameters
-            ----------
-            system : system.
-                system that the simulation is performed on
-            i_site : int
-                index of site in the system.sites list.
-            i_other : int
-                index of other site involved in reaction.
-
+        **Parameters**  
+        *system* (System):  the system, which the simulation is performed on. 
+         
+        *i_site* (int):  index of site in the *system*.sites list.  
+        
+        *i_other* (int): index of other/neighbor site in the *system*.sites list.  
+        
         """
 
-        raise NotImplementedError(r"""Called purely abstract 
+        raise NotImplementedError("""Called purely abstract 
                                   method do_event() of Event""")

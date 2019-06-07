@@ -523,7 +523,7 @@ class NeighborKMCBase:
 
 
     def get_coverages(self):
-        r"""Gets the coverages at the present moment.
+        """Gets the coverages at the present moment.
 
            Returns
            -------
@@ -561,7 +561,7 @@ class NeighborKMCBase:
 
 
     def cover_system(self,species,coverage):
-        r"""Covers the system with a certain species.
+        """#### Covers the system with a certain species.
             
             Method covers the system with a species 'species', at a 
             certain coverage 'coverage'.

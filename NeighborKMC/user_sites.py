@@ -1,45 +1,40 @@
-r"""
-Module: user_sites.py
+"""#### Defines the Site Class derived from base.site.SiteBase.
 
-The user_sites module defines the Site Class derived 
-from base.site.SiteBase.
+The site class is defined here as an interface to the base
+class in base.site.SiteBase.
+
 """
 
 from base.sites import SiteBase
 
 class Site(SiteBase):
-    r"""Constructor for Site objects.
-            
-            Method simply calls the base class constructor.
+    """Constructor for site objects.
+           
+    Method calls the base class constructor first.  
+    Then the user can attach custom variables to site  
+    objects, such as coordination numbers, positions, etc.
     
-            Parameters
-            ----------
-            stype : int
-                The site type, user must decide what that implies.
-                Example: 0 ~ (111) facet ontop, 1 ~ Edge ontop ...
+    
+    **Parameters**  
+    *stype* (int): the site type, user must decide what that implies.  
+                 Example: 0 ~ (111) facet ontop, 1 ~ Edge ontop ...  
 
-            covered : int
-                The species that covers the site, user must decide
-                what the integer implies.
-                Example: 0 ~ empty-site, 1 = Oxygen covered,
-                2 ~ CO covered.
+    *covered* (int): the species that covers the site, user must decide 
+                   what the integer implies.  
+                   Example: 0 ~ empty-site, 1 = Oxygen covered, 2 ~ CO covered.
 
-            ind : list of int
-                The atomic-indices c.f. an ASE.Atoms object 
-                that constiture the site. This is convenient
-                to define for later visualization purposes.
+    *ind* ([int]): the atomic-indices c.f. an ASE.Atoms object that constitute  
+                 the site. This is can be used later for visualization.
 
 
-            Returns
-            -------
-            Site instance
+    **Returns**  
+    A Site instance
 
 
-            See Also
-            --------
-            The module base.sites
+    **See Also**  
+    The module [base.sites](base/sites.html)
 
-        """
+    """
 
     def __init__(self, stype = 0,covered=0, ind=[],lattice_pos=None):
         SiteBase.__init__(self,stype=stype,covered=covered,ind=ind,

@@ -1,4 +1,12 @@
-# Script that tests MC Code
+"""#### Script that runs a full example of CO oxidation.
+
+The script sets up a simulation of CO oxidation over Pt using
+coordination numbers for the reaction energy landscape. First,    
+constants are defined and old output files cleared. 
+Next, the sites, events, system and simulation objects  
+are loaded, and the simulation is performed.
+ 
+"""
 import numpy as np
 from ase import Atom,Atoms
 from ase.visualize import view
@@ -13,28 +21,30 @@ from user_events import (COAdsEvent, CODesEvent,
                         CODiffEvent, ODiffEvent, 
                         COOxEvent)
 
-# Define constants
+# Define constants.
 # ------------------------------------------
 T=800. # Temperature
 pCO = 2E3 # CO pressure
 pO2 = 1E3 # O2 pressure
+tend = 1E-7 # End time of simulation (s)
 a = 4.00 # Lattice Parameter (not related to DFT!)
 Ncutoff = a/np.sqrt(2.)+0.05 # Nearest neighbor cutoff
 
-# Clear up old output files:
+# Clear up old output files.
 # ------------------------------------------
 np.savetxt("time.txt",[])
 np.savetxt("coverages.txt",[])
 np.savetxt("stype_ev.txt",[])
 np.savetxt("stype_ev_other.txt",[])
 
-# ------------------------------------------
-# Define the sites from ase.Atoms
+
+# Define the sites from ase.Atoms.
 # ------------------------------------------
 atoms = Octahedron("Pt",length=12,cutoff=3,latticeconstant=a)
 sites = []
 
-# Define a site for each atom that is free with no pre-defined neighbors.
+# **Define a site for each atom that is free with no pre-defined neighbors.**
+
 # First find CN of each atom:
 CNS = np.zeros(len(atoms))
 for i, at in enumerate(atoms):
@@ -45,10 +55,10 @@ for i, at in enumerate(atoms):
     CNS[i] = len([val for val in dp if val < a/np.sqrt(2)+0.01\
                   and val >0.0])
 
-# Define surface atoms as non-bulk:
+# Define surface atoms as non-bulk.
 surface_atom_ids = [i for i in range(len(CNS)) if CNS[i]<12]
 
-stypes = {} # site-types: (111),(100),edge,corner
+stypes = {} # site-types: (111),(100),edge,corner.
 for i,k in enumerate(sorted(list(set(CNS)))):
     stypes[k] = i
 
@@ -58,9 +68,8 @@ for i,indic in enumerate(surface_atom_ids):
     sites.append(Site(stype=stypes[CNS[indic]],
                  covered=0,ind = [indic]))
 
-# ------------------------------------------
-# Set the neighborlist for each site using
-# the distances between atoms
+
+# Set the neighborlist for each site using distances.
 # ------------------------------------------
 positions = atoms.positions
         
@@ -82,9 +91,7 @@ for i, s in enumerate(sites):
             s.neighbors.append(j)
             
             
-# ------------------------------------------
-# Instantiate a system (p for particle) 
-# and simulation 
+# Instantiate a system and simulation.
 # ------------------------------------------
 
 events = [COAdsEvent, CODesEvent, OAdsEvent, 
@@ -93,27 +100,32 @@ events = [COAdsEvent, CODesEvent, OAdsEvent,
          
 p = System(atoms=atoms,sites=sites)
 
+# Specify what events are each others' reverse.
+reverse_events = {0:1,2:3,4:4,5:5}
 
 parameters = {"pCO":pCO,"pO2":pO2,"T":T,
-              "Name":"COOx Simulation"}
+              "Name":"COOx Simulation",
+              "reverses ": reverse_events}
 
-sim = NeighborKMC(system = p,tend = 1E-8, 
+# Intantiate simulator object.
+sim = NeighborKMC(system = p,tend = tend, 
                   parameters = parameters, 
-                  events = events)
+                  events = events, 
+                  rev_events = reverse_events)
                   
+# Run the simulation.
 result = sim.run_kmc()
-print("Simualtion end time reached")
+print("Simulation end time reached ! ! !")
 
 
-# ------------------------------------------
-# Plot the result:
+# Plot the coverages:
 # ------------------------------------------
 import matplotlib.pyplot as plt
 from matplotlib import rc
 import matplotlib.mlab as mlab
 import matplotlib as mpl
-fs = 20 # Font size
-mpl.rcParams['axes.linewidth'] = 3.5 #set the value globally
+fs = 20
+mpl.rcParams['axes.linewidth'] = 3.5
 mpl.rcParams['mathtext.default']='rm'
 mpl.rcParams['mathtext.rm'] = 'Arial'
 mpl.rcParams['font.family'] = 'Arial'

@@ -1,0 +1,33 @@
+Contributions to MonteCoffee are welcome, given that
+they add value to the project, as determined by the
+author (M. Jorgensen). To contribute, please send an
+email to mikkeljoerg@gmail.com
+
+Contributions that significantly change how the code is
+used in practise, and thus require extensive documentation,
+will likely not be considered.
+
+Contributions must follow the following standards
+in order to be considered:
+---------------------------------------------------
+    - Python code should follow PEP8 standards.
+
+    - API documentation is generated using 'pycco'. 
+      Thus all modules, methods,
+      classes require a docstring.
+
+    - Docstrings must follow Google docstring format.
+
+    - Markdown language may be used for code comments and
+      docstrings, provided that it renders beautifully with 'pycco'.
+      
+    -  The API documentation is built from the root directory
+       by "pycco -i -d docs/api -p NeighborKMC/*.py NeighborKMC/base/*.py"
+
+    -  Tutorials, references(encyclopedia), and how-to-guides are built from 
+       .py files in ./docs/source/.
+       To write a tutorial or how-to, markdown language docstrings are used 
+       together with python code that illustrates the example.
+
+      
+

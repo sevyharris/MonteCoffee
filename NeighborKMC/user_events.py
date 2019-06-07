@@ -1,13 +1,12 @@
-r"""
-Module: user_events.py
+"""#### Contains all user-defined event types.
 
-Module that contains all user defined reaction
-events. All user-defined events must be derived
-from the parent class EventBase. 
+All user-defined events are defined here, which
+must be derived from the parent class EventBase.  
 
-See also
---------
-events.py in base package.
+**See also**  
+The module [base.events](base/events.html)  
+to understand the methods implemented here
+for each derived class.
 
 """
 
@@ -23,20 +22,23 @@ from user_energy import EadsCO, EadsO, get_Ea,\
                         get_repulsion,EdiffCO,EdiffO
 
 
+# COAdsEvent
+# -------------
 class COAdsEvent(EventBase):
-    r"""
-    CO adsorption event class
+    """#### CO adsorption event class.  
     
-    The event is CO(g) + * -> CO*.
-    The event is possible if the site is empty
-    The rate comes from collision theory.
+    The event is CO(g) + \* -> CO\*.  
+    
+    The event is possible if the site is empty.  
+    
+    The rate comes from collision theory.  
+    
     Performing the event adds a CO to the site.
 
     """
 
     def __init__(self,params):
         EventBase.__init__(self,params)
-        self.rev = 1 # Reverse event is CO des
            
     def possible(self,system,site,other_site):
         
@@ -49,7 +51,7 @@ class COAdsEvent(EventBase):
         R = (s0CO*self.params['pCO']*Asite/
             np.sqrt(2.*np.pi*mCO*kB*eV2J*self.params['T']) )
 
-        return self.alpha*R
+        return self.alpha*R # alpha important for temporal acceleration.
 
 
     def do_event(self,system,site,other_site):
@@ -57,13 +59,18 @@ class COAdsEvent(EventBase):
         system.sites[site].covered = 1 
 
 
+# CODesEvent
+# -------------
 class CODesEvent(EventBase):
-    r"""
-    CO desorption event class
+    """#### CO desorption event class.  
     
-    The event is CO* -> CO(g) + *.
-    The event is possible if the site is CO-covered.
-    The rate comes from transition state theory.
+    The event is CO\* -> CO(g) + \*.  
+    
+    The event is possible if the site is CO-covered.  
+      
+    The rate comes from the forward rate and the
+    equilibrium constant.  
+    
     Performing the event removes a CO from the site.
 
     """
@@ -74,7 +81,6 @@ class CODesEvent(EventBase):
         SCOgas = get_entropy_CO(params["T"],params["pCO"])
         self.dS = SCOads-SCOgas
         EventBase.__init__(self,params)
-        self.rev = 0 # Reverse event is CO ads
         
            
     def possible(self,system,site,other_site):
@@ -95,7 +101,7 @@ class CODesEvent(EventBase):
         
         RF = (self.params['pCO']*s0CO*Asite/
              np.sqrt(2.*np.pi*mCO*kB*eV2J*self.params['T']) ) 
-        #print "ECO :", stype, ECO, K, RF
+
         return self.alpha*RF/K
 
 
@@ -105,14 +111,19 @@ class CODesEvent(EventBase):
 
 
 
+# OAdsEvent
+# -------------
 class OAdsEvent(EventBase):
-    r"""
-    Oxygen adsorption event class
+    """#### Oxygen adsorption event class.  
     
-    The event is O2(g) + 2* -> 2O*.
-    The event is possible if two neighbor sites are empty
-    The rate comes from collision theory.
-    Performing the event adds O to the two empty neighbor sites.
+    The event is O2(g) + 2\* -> 2O\*.  
+    
+    The event is possible if two neighbor sites are empty.  
+    
+    The rate comes from collision theory.  
+    
+    Performing the event adds O to the two empty neighbor sites.  
+    
     """
 
     def __init__(self,params):
@@ -120,7 +131,7 @@ class OAdsEvent(EventBase):
         SO2gas = get_entropy_O2(params["T"],params["pO2"])
         self.dS = S2Oads-SO2gas
         EventBase.__init__(self,params)
-        self.rev = 3 # Reverse event is O2 des
+
            
     def possible(self,system,site,other_site):
         
@@ -143,14 +154,22 @@ class OAdsEvent(EventBase):
         system.sites[other_site].covered = 2
 
 
+# ODesEvent
+# -------------
 class ODesEvent(EventBase):
-    r"""
-    Oxygen adsorption event class
+    """#### Oxygen adsorption event class.  
     
-    The event is O2(g) + 2* -> 2O*.
-    The event is possible if two neighbor sites are empty
-    The rate comes from collision theory.
-    Performing the event adds O to the two empty neighbor sites.
+    The event is O2(g) + 2\* -> 2O\*.  
+    
+    The event is possible if two neighbor 
+    sites are empty.  
+    
+    The rate comes from the forward rate and the
+    equilibrium constant.   
+    
+    Performing the event removes O from the empty 
+    neighbor sites.
+    
     """
 
     def __init__(self,params):
@@ -158,7 +177,7 @@ class ODesEvent(EventBase):
         SO2gas = get_entropy_O2(params["T"],params["pO2"])
         self.dS = S2Oads-SO2gas
         EventBase.__init__(self,params)
-        self.rev = 2 # Reverse event is O2 des
+
 
            
     def possible(self,system,site,other_site):
@@ -184,27 +203,28 @@ class ODesEvent(EventBase):
                    (kB*self.params['T']))
 
 
-       # print "RO2ads ", Rf, " RO2des ", Rf/K
         return self.alpha*Rf/K
 
 
     def do_event(self,system,site,other_site):
-        # Cover it with O, which is species number 2.
         system.sites[site].covered = 0
         system.sites[other_site].covered = 0 
 
 
-
+# CODiffEvent
+# -------------
 class CODiffEvent(EventBase):
-    r"""
-    CO diffusion event class
+    """#### CO diffusion event class.  
     
-    The event is CO* + * -> * + CO*.
+    The event is CO\* + \* -> \* + CO\*.  
+    
     The event is possible if the site is CO-covered,
-    and the neighbor site is empty.
-    The rate comes from transition state theory.
+    and the neighbor site is empty.  
+    
+    The rate comes from transition state theory.  
+    
     Performing the event removes a CO from the site,
-    and adds it to the other site.
+    and adds it to the neighbor site.  
 
     """
 
@@ -212,7 +232,6 @@ class CODiffEvent(EventBase):
         self.dS = get_entropy_ads(params["T"],modes_COads[1:])-\
                   get_entropy_ads(params["T"],modes_COads) 
         EventBase.__init__(self,params)
-        self.rev = 4 # Reverse event is itself
         self.diffev = True
         
            
@@ -249,15 +268,18 @@ class CODiffEvent(EventBase):
         system.sites[other_site].covered = 1 # Add the CO to the other site
 
 
-
+# ODiffEvent
+# -------------
 class ODiffEvent(EventBase):
-    r"""
-    O diffusion event class
+    """#### O diffusion event class.  
     
-    The event is O* + * -> * + O*.
+    The event is O\* + \* -> \* + O\*.  
+    
     The event is possible if the site is O-covered,
-    and the neighbor site is empty.
-    The rate comes from transition state theory.
+    and the neighbor site is empty.  
+    
+    The rate comes from transition state theory.  
+    
     Performing the event removes a O from the site,
     and adds it to the other site.
 
@@ -267,7 +289,6 @@ class ODiffEvent(EventBase):
         SOads = get_entropy_ads(params["T"],modes_Oads)
         self.dS = SOads*(1./2.9-1.) 
         EventBase.__init__(self,params)
-        self.rev = 5 # Reverse event is itself
         self.diffev = True
         
            
@@ -305,14 +326,16 @@ class ODiffEvent(EventBase):
 
 
 
-
+# COOxEvent
+# -------------
 class COOxEvent(EventBase):
-    r"""
-    CO oxidation event class
+    """#### CO oxidation event class.  
     
-    The event is CO* + O* -> CO2(g)+2*.
-    The event is possible if the site is CO-covered and the other O-covered,
-    and the neighbor site is empty.
+    The event is CO\* + O\* -> CO2(g)+2\*.
+    
+    The event is possible if the site is 
+    CO-covered and the neighbor is O-covered.
+    
     The rate comes from transition state theory.
     Performing the event removes a CO+O from the site.
     """
@@ -353,3 +376,5 @@ class COOxEvent(EventBase):
     def do_event(self,system,site,other_site):
         system.sites[site].covered = 0 
         system.sites[other_site].covered = 0 
+        
+        
