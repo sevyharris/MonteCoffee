@@ -11,4 +11,4 @@ import user_energy
 import user_events
 import user_kmc
 
-version = 1.2
+version = 0.9

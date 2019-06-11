@@ -41,4 +41,23 @@ class System(SystemBase):
         SystemBase.__init__(self,atoms=atoms,sites=sites)
 
 
+    # cover_system()
+    # --------------------
+    def cover_system(self,species,coverage):
+        """#### Covers the system with a certain species.
+            
+        Randomly covers the system with a species *species*, at a 
+        certain fractional coverage *coverage*.
+    
+        **Parameters**  
+        *species* (int): the species as defined by hte user (e.g. empty=0,CO=1).
+
+        *coverage* (float): the fractional coverage to load lattice with.
+
+        """
+        n_covered = int(np.round(coverage*len(self.system.sites)))
+        chosen_sites = np.random.choice(len(self.system.sites),n_covered)
+        for c in chosen_sites:
+            self.system.sites[c].covered = species
+
 
