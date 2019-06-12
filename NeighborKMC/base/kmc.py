@@ -17,7 +17,7 @@ else:
 import numpy as np
 from random import uniform
 from ase.io import write
-from basin import test_superbasin_import
+from base.basin import superbasin, leave_superbasin, rescaling, scaling_rs, scaling_ks
 
 class NeighborKMCBase:
     """#### Main class for performing MonteCoffe simulations.
@@ -77,7 +77,7 @@ class NeighborKMCBase:
         self.equilEV = [e for e in range(len(self.events)) if self.events[e].diffev]  # Track equilibrated events.
 
         # Choose a method of scaling rates c.f. kMC_options.cfg
-        self.scaling_func = self.scaling_ks if self.usekavg else self.scaling_rs
+        self.scaling_func = scaling_ks if self.usekavg else scaling_rs
 
         # Lists for rescaling barriers and superbasin tracking
         self.tgen = []  # time event was generated.
@@ -298,7 +298,7 @@ class NeighborKMCBase:
                 [self.evs[self.frm_arg]] += 1
 
             # Update superbasin
-            self.superbasin(evtype, dt)
+            superbasin(self,evtype, dt)
 
 
         else:
@@ -308,149 +308,6 @@ class NeighborKMCBase:
         # Save where the event happened:
 
         self.frm_update()
-
-    def rescaling(self):
-        """#### Rescales the times of occurences for events.  
-        
-        Rescales the times according to each quasi-equilibrated  
-        events *alpha*.  
-        
-        """
-        for ev in self.equilEV:
-            # Raise the barrier
-            i_up = [i for i in range(len(self.evs)) if self.evs[i] == ev]
-            for i in i_up:
-                site = self.siteslist[i]  # The site to do event.
-                othersite = self.other_sitelist[i]
-                poss = self.events[self.evs[i]].possible(self.system,
-                                                         site, othersite)
-                if poss:
-                    self.rs[i] = self.events[self.evs[i]]. \
-                        get_rate(self.system, site, othersite)
-                    try:
-                        u0 = -np.log(self.us[i]) / self.rs[i]
-                        if self.t < self.tgen[i] + u0:
-                            self.frm_times[i] = self.tgen[i] + u0
-                        else:
-                            self.us[i] = uniform(0, 1)
-                            self.tgen[i] = self.t
-                            self.frm_times[i] = self.t - \
-                                                np.log(self.us[i]) / self.rs[i]
-                    except:
-                        self.frm_times[i] = self.tinfinity
-
-    def leave_superbasin(self):
-        """#### Leaves the superbasin.  
-        
-        Resets all rate-scalings and statistics 
-        connected to the superbasin.
-        
-        """
-
-        for e in self.equilEV:
-            self.events[e].alpha = 1.
-        self.rescaling()
-
-        self.Suffex = []
-        self.r_S = np.zeros(len(self.events))
-        self.dt_S = []
-        self.nem = np.zeros(len(self.events), dtype=int)
-        self.isup = 0
-
-    def scaling_ks(self, noneqevents, dtS):
-        """#### Rate-constant based superbasin escape time.   
-        
-        Calculates superbasin escape time  
-        according to the maximal rate-constant of  
-        events escaping the superbasin.   
-        (Can be good for stability of time-step)  
-        
-        """
-        return max([self.ksavg[neqev] for neqev in noneqevents])
-
-    def scaling_rs(self, noneqevents, dtS):
-        """#### Rate based superbasin escape time. 
-        
-        Calculates superbasin escape time  
-        according to non-equilibrated event rates escaping  
-        the superbasin.  
-        
-        c.f. The generalized temporal acceleration scheme  
-        (DOI: 10.1021/acs.jctc.6b00859)  
-        
-        """
-        r_S = 0.
-        for neqev in noneqevents:
-            r_S += self.r_S[neqev] / dtS
-
-        return r_S
-
-    def superbasin(self, evtype, dt):
-        """#### Scales rates or leaves the current superbasin.
-
-        Keeps track and performs barrier adjustments,
-        of the generalized temporal acceleration scheme
-        (DOI: 10.1021/acs.jctc.6b00859)
-
-        """
-        # Update the rates in the current superbasin
-        if dt < 0:
-            raise Warning("Time-step is < 0. Are the events and neighborlists correct?. Exiting!!")
-        farg = int(self.frm_arg)
-        self.pm = (self.pm + 1) % self.ne
-        self.nem[evtype] += 1.
-        self.Nm[evtype][self.pm] = 1.
-
-        self.r_S += [(self.rs * dt)[self.wheres[i][0]].sum() for i in range(len(self.events))]
-        self.dt_S.append(dt)
-
-        # See if event is quasi-equilibrated
-        if evtype in self.reverses:
-            rev = abs(self.Nm[evtype].sum() - \
-                      self.Nm[self.reverses[evtype]].sum())
-
-            Nexm = self.Nm[evtype].sum() + \
-                   self.Nm[self.reverses[evtype]].sum()
-
-            if evtype not in self.equilEV:
-                if Nexm >= self.ne / 2. and rev < self.delta * self.ne:
-                    self.equilEV.append(evtype)
-                    if evtype != self.reverses[evtype]:
-                        self.equilEV.append(self.reverses[evtype])
-
-                else:
-                    self.leave_superbasin()
-
-            if evtype in self.equilEV and self.nem[evtype] + \
-                    self.nem[self.reverses[evtype]] >= self.ne \
-                    and evtype in self.equilEV \
-                    and evtype not in self.Suffex:
-
-                self.Suffex.append(evtype)
-
-                if evtype != self.reverses[evtype]:
-                    self.Suffex.append(self.reverses[evtype])
-
-        else:  # Not reversible
-            self.leave_superbasin()
-
-        if self.isup > self.Ns:  # If observation period is over, scale events.
-            dtS = sum(self.dt_S)
-            E = [i for i in range(len(self.events)) if i not in self.Suffex]
-            r_S = self.scaling_func(E, dtS)
-
-            for ev in [e for e in self.equilEV if e in self.Suffex]:
-                rmev = self.r_S[ev] / dtS
-                rmrev = self.r_S[self.reverses[ev]] / dtS
-
-                alpham = min(self.Nf * r_S / (rmev + rmrev), 1)
-                self.events[ev].alpha *= alpham
-
-            self.rescaling()
-
-            self.isup = 0
-
-        self.isup += 1
 
     def save_txt(self):
         """#### Saves txt files containing the simulation data.
