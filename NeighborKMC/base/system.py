@@ -67,3 +67,33 @@ class SystemBase:
         """
         covs = [self.sites[n].covered for n in self.neighbors[i_site]]
         return covs
+
+    def find_nn_recurse(self, sim, update_sites, recursion=0):
+        """#### Deep serach of first nearest neighbors.
+
+        Calculates the first nearest neighbors to *update\_sites*.
+
+        For example, when passing *update\_sites*gh = [0,1,2]
+        the method returns [0,1,2,NN0 of 0, NN1 of 0, NN0 of 1 ...]
+
+        The method is calling itself recursively until the lattice
+        is updated, c.f. the locality of nearest neighbor interactions.
+
+        **Parameters**
+        *update_sites* ([int]): the site indices to return neighborlist of.
+
+        *recursion* (int, optional): the recursive level of
+        which function was called.
+
+        """
+        out = [n for n in update_sites]
+
+        for s in update_sites:
+            out.extend(self.neighbors[s])
+
+        out = list(set(out))
+
+        if recursion < sim.nninter - 1:
+            out = self.find_nn_recurse(sim, out, recursion + 1)
+
+        return out

@@ -183,36 +183,6 @@ class NeighborKMCBase:
         self.ksavg = [np.mean([self.ks[i] for i in self.wheres[j][0]]) for j in range(len(self.events))]
         self.frm_arg = self.frm_times.argmin()
 
-    def find_nn_recurse(self, update_sites, recursion=0):
-        """#### Deep serach of first nearest neighbors.  
-        
-        Calculates the first nearest neighbors to *update\_sites*.  
-        
-        For example, when passing *update\_sites*gh = [0,1,2]  
-        the method returns [0,1,2,NN0 of 0, NN1 of 0, NN0 of 1 ...]  
-                           
-        The method is calling itself recursively until the lattice  
-        is updated, c.f. the locality of nearest neighbor interactions. 
-        
-        **Parameters**  
-        *update_sites* ([int]): the site indices to return neighborlist of. 
-        
-        *recursion* (int, optional): the recursive level of 
-        which function was called. 
-                          
-        """
-        out = [n for n in update_sites]
-
-        for s in update_sites:
-            out.extend(self.system.neighbors[s])
-
-        out = list(set(out))
-
-        if recursion < self.nninter - 1:
-            out = self.find_nn_recurse(out, recursion + 1)
-
-        return out
-
     def frm_update(self):
         """#### Updates the FRM related lists.  
             
@@ -227,7 +197,7 @@ class NeighborKMCBase:
 
         """
         # Find site indices to update:
-        search = self.find_nn_recurse([self.lastsel,
+        search = self.system.find_nn_recurse(self, [self.lastsel,
                                        self.lastother])
 
         # Save reference to function calls
@@ -241,7 +211,7 @@ class NeighborKMCBase:
                 for k, other in enumerate(self.system.neighbors[i]):
                     poslist = self.rindex[i][j][k]
                     poss_now = possible_func[j](self.system, i, other)
-                    if poss_now and self.possible_evs[poslist] == False:
+                    if poss_now and self.possible_evs[poslist] is False:
 
                         rcur = get_r_func[j](self.system, i, other)
                         self.rs[poslist] = rcur
@@ -250,7 +220,6 @@ class NeighborKMCBase:
                         self.tgen[poslist] = self.t
                         self.us[poslist] = u
                         self.possible_evs[poslist] = True
-
 
                     elif not poss_now:
                         self.rs[poslist] = 0.
@@ -298,8 +267,7 @@ class NeighborKMCBase:
                 [self.evs[self.frm_arg]] += 1
 
             # Update superbasin
-            superbasin(self,evtype, dt)
-
+            superbasin(self, evtype, dt)
 
         else:
             # New first reaction must be determined

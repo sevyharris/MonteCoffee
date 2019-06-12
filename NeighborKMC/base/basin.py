@@ -140,7 +140,7 @@ def superbasin(sim, evtype, dt):
     if sim.isup > sim.Ns:  # If observation period is over, scale events.
         dtS = sum(sim.dt_S)
         E = [i for i in range(len(sim.events)) if i not in sim.Suffex]
-        r_S = sim.scaling_func(E, dtS)
+        r_S = sim.scaling_func(sim, E, dtS)
 
         for ev in [e for e in sim.equilEV if e in sim.Suffex]:
             rmev = sim.r_S[ev] / dtS
