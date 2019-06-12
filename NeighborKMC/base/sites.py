@@ -2,6 +2,7 @@
 
 """
 
+
 class SiteBase:
     """#### Class that templates site objects.  
             
@@ -23,7 +24,7 @@ class SiteBase:
     to define for later visualization purposes.
 
     *lattice_pos* ([int]): the lattice position of the site. 
-    Can be used for sytems that obey periodic boundary 
+    Can be used for systems that obey periodic boundary
     conditions, and to determine neighbor-lists. 
 
 
@@ -35,11 +36,9 @@ class SiteBase:
 
     """
 
-    def __init__(self, stype = 0,covered=0, ind=[], lattice_pos=None):
-        
+    def __init__(self, stype=0, covered=0, ind=[], lattice_pos=None):
         self.stype = stype
-        self.covered = covered 
+        self.covered = covered
         self.ind = ind
         self.lattice_pos = lattice_pos
-        
-        self.neighbors = [] # Instantiate with empty neighbor-list
+        self.neighbors = []  # Instantiate with empty neighbor-list

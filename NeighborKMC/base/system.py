@@ -1,7 +1,7 @@
 """### Defines the SystemBase class.
 
 """
-import numpy as np
+
 
 class SystemBase:
     """#### Defines a system class to perform kMC.  
@@ -27,17 +27,13 @@ class SystemBase:
     The module [user_sites](../user_sites.html)
 
     """
-    
 
     def __init__(self, sites, atoms=None):
         self.sites = sites
         self.neighbors = [s.neighbors for s in sites]
         self.verify_nlist()
-        self.atoms= atoms
-        
-        
-    # verify_nlist()
-    # -------------
+        self.atoms = atoms
+
     def verify_nlist(self):
         """#### Tests the neighborlist for inconsistency.
         
@@ -52,14 +48,10 @@ class SystemBase:
         for i, s in enumerate(self.neighbors):
             for nn in s:
                 if i not in self.neighbors[nn]:
-                    raise Warning("Site "+str(i)+" is a neighbor to site "+
-                                  str(nn)+" but not vice-versa")    
-                
+                    raise Warning("Site " + str(i) + " is a neighbor to site " +
+                                  str(nn) + " but not vice-versa")
 
-
-    # get_ncovs()
-    # -------------
-    def get_ncovs(self,i_site):
+    def get_ncovs(self, i_site):
         """#### Gets the coverage on nearest neighbor sites.  
             
         Retrieves and returns the occupations of the nearest neighbor
@@ -75,7 +67,3 @@ class SystemBase:
         """
         covs = [self.sites[n].covered for n in self.neighbors[i_site]]
         return covs
-
-
-
-

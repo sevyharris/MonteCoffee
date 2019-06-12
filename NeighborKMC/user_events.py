@@ -12,18 +12,16 @@ for each derived class.
 
 import numpy as np
 from base.events import EventBase
-from user_entropy import get_entropy_CO, get_entropy_O2,\
-                         get_entropy_ads, get_Zvib
+from user_entropy import get_entropy_CO, get_entropy_O2, \
+    get_entropy_ads, get_Zvib
 
-from user_constants import mCO, mO2, Asite,modes_COads,\
-                           modes_Oads,kB,eV2J,s0CO,s0O,h
+from user_constants import mCO, mO2, Asite, modes_COads, \
+    modes_Oads, kB, eV2J, s0CO, s0O, h
 
-from user_energy import EadsCO, EadsO, get_Ea,\
-                        get_repulsion,EdiffCO,EdiffO
+from user_energy import EadsCO, EadsO, get_Ea, \
+    get_repulsion, EdiffCO, EdiffO
 
 
-# COAdsEvent
-# -------------
 class COAdsEvent(EventBase):
     """#### CO adsorption event class.  
     
@@ -37,30 +35,27 @@ class COAdsEvent(EventBase):
 
     """
 
-    def __init__(self,params):
-        EventBase.__init__(self,params)
-           
-    def possible(self,system,site,other_site):
-        
+    def __init__(self, params):
+        EventBase.__init__(self, params)
+
+    def possible(self, system, site, other_site):
+
         if system.sites[site].covered == 0:
             return True
         else:
             return False
 
-    def get_rate(self,system,i_site,other_site):
-        R = (s0CO*self.params['pCO']*Asite/
-            np.sqrt(2.*np.pi*mCO*kB*eV2J*self.params['T']) )
+    def get_rate(self, system, i_site, other_site):
+        R = (s0CO * self.params['pCO'] * Asite /
+             np.sqrt(2. * np.pi * mCO * kB * eV2J * self.params['T']))
 
-        return self.alpha*R # alpha important for temporal acceleration.
+        return self.alpha * R  # alpha important for temporal acceleration.
 
-
-    def do_event(self,system,site,other_site):
+    def do_event(self, system, site, other_site):
         # Cover it with CO, which is species number 1.
-        system.sites[site].covered = 1 
+        system.sites[site].covered = 1
 
 
-# CODesEvent
-# -------------
 class CODesEvent(EventBase):
     """#### CO desorption event class.  
     
@@ -75,44 +70,35 @@ class CODesEvent(EventBase):
 
     """
 
+    def __init__(self, params):
+        SCOads = get_entropy_ads(params["T"], modes_COads)
+        SCOgas = get_entropy_CO(params["T"], params["pCO"])
+        self.dS = SCOads - SCOgas
+        EventBase.__init__(self, params)
 
-    def __init__(self,params):
-        SCOads = get_entropy_ads(params["T"],modes_COads)
-        SCOgas = get_entropy_CO(params["T"],params["pCO"])
-        self.dS = SCOads-SCOgas
-        EventBase.__init__(self,params)
-        
-           
-    def possible(self,system,site,other_site):
+    def possible(self, system, site, other_site):
         # If site is covered with CO (species no. 1).
-        if system.sites[site].covered == 1: 
+        if system.sites[site].covered == 1:
             return True
         else:
             return False
 
-    def get_rate(self,system,i_site,other_site):
+    def get_rate(self, system, i_site, other_site):
         stype = system.sites[i_site].stype
         Ncovs = system.get_ncovs(i_site)
-        ECO = max(EadsCO[stype]-get_repulsion(1,Ncovs,stype),0)
-        K = np.exp((ECO+self.params['T']*self.dS)/
-                   (kB*self.params['T']))
+        ECO = max(EadsCO[stype] - get_repulsion(1, Ncovs, stype), 0)
+        K = np.exp((ECO + self.params['T'] * self.dS) /
+                   (kB * self.params['T']))
 
-        
-        
-        RF = (self.params['pCO']*s0CO*Asite/
-             np.sqrt(2.*np.pi*mCO*kB*eV2J*self.params['T']) ) 
+        RF = (self.params['pCO'] * s0CO * Asite /
+              np.sqrt(2. * np.pi * mCO * kB * eV2J * self.params['T']))
 
-        return self.alpha*RF/K
+        return self.alpha * RF / K
 
-
-    def do_event(self,system,site,other_site):
-        system.sites[site].covered = 0 
+    def do_event(self, system, site, other_site):
+        system.sites[site].covered = 0
 
 
-
-
-# OAdsEvent
-# -------------
 class OAdsEvent(EventBase):
     """#### Oxygen adsorption event class.  
     
@@ -126,36 +112,32 @@ class OAdsEvent(EventBase):
     
     """
 
-    def __init__(self,params):
-        S2Oads = 2.*get_entropy_ads(params["T"],modes_Oads)
-        SO2gas = get_entropy_O2(params["T"],params["pO2"])
-        self.dS = S2Oads-SO2gas
-        EventBase.__init__(self,params)
+    def __init__(self, params):
+        S2Oads = 2. * get_entropy_ads(params["T"], modes_Oads)
+        SO2gas = get_entropy_O2(params["T"], params["pO2"])
+        self.dS = S2Oads - SO2gas
+        EventBase.__init__(self, params)
 
-           
-    def possible(self,system,site,other_site):
-        
-        if system.sites[site].covered == 0 and\
-           system.sites[other_site].covered == 0:
+    def possible(self, system, site, other_site):
+
+        if system.sites[site].covered == 0 and \
+                system.sites[other_site].covered == 0:
             return True
         else:
             return False
 
-    def get_rate(self,system,i_site,other_site):
-        R = (s0O*self.params['pO2']*Asite/
-            np.sqrt(2.*np.pi*mO2*kB*eV2J*self.params['T']) )
+    def get_rate(self, system, i_site, other_site):
+        R = (s0O * self.params['pO2'] * Asite /
+             np.sqrt(2. * np.pi * mO2 * kB * eV2J * self.params['T']))
 
-        return self.alpha*R
+        return self.alpha * R
 
-
-    def do_event(self,system,site,other_site):
+    def do_event(self, system, site, other_site):
         # Cover it with O, which is species number 2.
         system.sites[site].covered = 2
         system.sites[other_site].covered = 2
 
 
-# ODesEvent
-# -------------
 class ODesEvent(EventBase):
     """#### Oxygen adsorption event class.  
     
@@ -172,47 +154,41 @@ class ODesEvent(EventBase):
     
     """
 
-    def __init__(self,params):
-        S2Oads = 2.*get_entropy_ads(params["T"],modes_Oads)
-        SO2gas = get_entropy_O2(params["T"],params["pO2"])
-        self.dS = S2Oads-SO2gas
-        EventBase.__init__(self,params)
+    def __init__(self, params):
+        S2Oads = 2. * get_entropy_ads(params["T"], modes_Oads)
+        SO2gas = get_entropy_O2(params["T"], params["pO2"])
+        self.dS = S2Oads - SO2gas
+        EventBase.__init__(self, params)
 
+    def possible(self, system, site, other_site):
 
-           
-    def possible(self,system,site,other_site):
-        
-        if system.sites[site].covered == 2 and\
-           system.sites[other_site].covered == 2:
+        if system.sites[site].covered == 2 and \
+                system.sites[other_site].covered == 2:
             return True
         else:
             return False
 
-    def get_rate(self,system,i_site,other_site):
+    def get_rate(self, system, i_site, other_site):
         stype = system.sites[i_site].stype
         stype_other = system.sites[other_site].stype
         Ncovs = system.get_ncovs(i_site)
         Ncovsother = system.get_ncovs(other_site)
-        E2O = max(2.*EadsO[stype]-get_repulsion(1,Ncovs,stype)\
-              -get_repulsion(1,Ncovsother,stype_other),0.)
+        E2O = max(2. * EadsO[stype] - get_repulsion(1, Ncovs, stype) \
+                  - get_repulsion(1, Ncovsother, stype_other), 0.)
 
-        Rf = (s0O*self.params['pO2']*Asite/
-            np.sqrt(2.*np.pi*mO2*kB*eV2J*self.params['T']) )
+        Rf = (s0O * self.params['pO2'] * Asite /
+              np.sqrt(2. * np.pi * mO2 * kB * eV2J * self.params['T']))
 
-        K = np.exp((E2O+self.params['T']*self.dS)/
-                   (kB*self.params['T']))
+        K = np.exp((E2O + self.params['T'] * self.dS) /
+                   (kB * self.params['T']))
 
+        return self.alpha * Rf / K
 
-        return self.alpha*Rf/K
-
-
-    def do_event(self,system,site,other_site):
+    def do_event(self, system, site, other_site):
         system.sites[site].covered = 0
-        system.sites[other_site].covered = 0 
+        system.sites[other_site].covered = 0
 
 
-# CODiffEvent
-# -------------
 class CODiffEvent(EventBase):
     """#### CO diffusion event class.  
     
@@ -228,48 +204,44 @@ class CODiffEvent(EventBase):
 
     """
 
-    def __init__(self,params): 
-        self.dS = get_entropy_ads(params["T"],modes_COads[1:])-\
-                  get_entropy_ads(params["T"],modes_COads) 
-        EventBase.__init__(self,params)
+    def __init__(self, params):
+        self.dS = get_entropy_ads(params["T"], modes_COads[1:]) - \
+                  get_entropy_ads(params["T"], modes_COads)
+        EventBase.__init__(self, params)
         self.diffev = True
-        
-           
-    def possible(self,system,site,other_site):
+
+    def possible(self, system, site, other_site):
         # If site is covered with CO and other site free
         if (system.sites[site].covered == 1 and
-           system.sites[other_site].covered == 0): 
+                system.sites[other_site].covered == 0):
             return True
         else:
             return False
 
-    def get_rate(self,system,i_site,other_site):
+    def get_rate(self, system, i_site, other_site):
         stype = system.sites[i_site].stype
         stype_other = system.sites[other_site].stype
 
-        Ncovs = [system.sites[n].covered for n in\
-                system.neighbors[i_site] ]
-        Nothercovs = [system.sites[n].covered for\
-                     n in system.neighbors[other_site] ]
+        Ncovs = [system.sites[n].covered for n in \
+                 system.neighbors[i_site]]
+        Nothercovs = [system.sites[n].covered for \
+                      n in system.neighbors[other_site]]
 
-        E = max(0.,EadsCO[stype] - get_repulsion(1,Ncovs,stype))
-        Eother  =  max(0,EadsCO[stype_other] - get_repulsion\
-                    (1, Nothercovs,stype_other))
-        
-        dE = max(E-Eother,0.)
-        Eact = dE+EdiffCO
+        E = max(0., EadsCO[stype] - get_repulsion(1, Ncovs, stype))
+        Eother = max(0, EadsCO[stype_other] - get_repulsion \
+            (1, Nothercovs, stype_other))
 
-        return self.alpha*np.exp(self.dS/kB)*np.exp(-Eact/
-               (kB*self.params['T']))*kB*self.params['T']/(h)
+        dE = max(E - Eother, 0.)
+        Eact = dE + EdiffCO
+
+        return self.alpha * np.exp(self.dS / kB) * np.exp(-Eact /
+                                                          (kB * self.params['T'])) * kB * self.params['T'] / (h)
+
+    def do_event(self, system, site, other_site):
+        system.sites[site].covered = 0  # Remove the CO from the site
+        system.sites[other_site].covered = 1  # Add the CO to the other site
 
 
-    def do_event(self,system,site,other_site):
-        system.sites[site].covered = 0 # Remove the CO from the site
-        system.sites[other_site].covered = 1 # Add the CO to the other site
-
-
-# ODiffEvent
-# -------------
 class ODiffEvent(EventBase):
     """#### O diffusion event class.  
     
@@ -285,49 +257,44 @@ class ODiffEvent(EventBase):
 
     """
 
-    def __init__(self,params):
-        SOads = get_entropy_ads(params["T"],modes_Oads)
-        self.dS = SOads*(1./2.9-1.) 
-        EventBase.__init__(self,params)
+    def __init__(self, params):
+        SOads = get_entropy_ads(params["T"], modes_Oads)
+        self.dS = SOads * (1. / 2.9 - 1.)
+        EventBase.__init__(self, params)
         self.diffev = True
-        
-           
-    def possible(self,system,site,other_site):
+
+    def possible(self, system, site, other_site):
         # If site is covered with CO and other site free
         if (system.sites[site].covered == 2 and
-           system.sites[other_site].covered == 0): 
+                system.sites[other_site].covered == 0):
             return True
         else:
             return False
 
-    def get_rate(self,system,i_site,other_site):
+    def get_rate(self, system, i_site, other_site):
         stype = system.sites[i_site].stype
         stype_other = system.sites[other_site].stype
 
-        Ncovs = [system.sites[n].covered for n in\
-                system.neighbors[i_site] ]
-        Nothercovs = [system.sites[n].covered for n in\
-                      system.neighbors[other_site] ]
+        Ncovs = [system.sites[n].covered for n in \
+                 system.neighbors[i_site]]
+        Nothercovs = [system.sites[n].covered for n in \
+                      system.neighbors[other_site]]
 
-        E = EadsO[stype] - get_repulsion(2,Ncovs,stype) 
-        Eother  =  EadsO[stype_other] - get_repulsion\
-                    (2, Nothercovs,stype_other)
+        E = EadsO[stype] - get_repulsion(2, Ncovs, stype)
+        Eother = EadsO[stype_other] - get_repulsion \
+            (2, Nothercovs, stype_other)
 
-        dE = max(0.,E-Eother)
-        Eact = dE+EdiffO
+        dE = max(0., E - Eother)
+        Eact = dE + EdiffO
 
-        return self.alpha*np.exp(self.dS/kB)*np.exp(-Eact/
-               (kB*self.params['T']))*kB*self.params['T']/(h)
+        return self.alpha * np.exp(self.dS / kB) * np.exp(-Eact /
+                                                          (kB * self.params['T'])) * kB * self.params['T'] / h
 
-
-    def do_event(self,system,site,other_site):
+    def do_event(self, system, site, other_site):
         system.sites[site].covered = 0
-        system.sites[other_site].covered = 2 
+        system.sites[other_site].covered = 2
 
 
-
-# COOxEvent
-# -------------
 class COOxEvent(EventBase):
     """#### CO oxidation event class.  
     
@@ -340,41 +307,37 @@ class COOxEvent(EventBase):
     Performing the event removes a CO+O from the site.
     """
 
-    def __init__(self,params):
-        self.Zratio = (get_Zvib(params["T"],modes_COads)*\
-                      get_Zvib(params["T"],modes_Oads))**0.66
-        EventBase.__init__(self,params)
-        
-           
-    def possible(self,system,site,other_site):
+    def __init__(self, params):
+        self.Zratio = (get_Zvib(params["T"], modes_COads) *
+                       get_Zvib(params["T"], modes_Oads)) ** 0.66
+        EventBase.__init__(self, params)
+
+    def possible(self, system, site, other_site):
         # If site is covered with CO and other site free
         if (system.sites[site].covered == 1 and
-           system.sites[other_site].covered == 2): 
+                system.sites[other_site].covered == 2):
             return True
         else:
             return False
 
-    def get_rate(self,system,i_site,other_site):
+    def get_rate(self, system, i_site, other_site):
         # Find the adsorption energy
         stype = system.sites[i_site].stype
         stype_other = system.sites[other_site].stype
-        ECO =  EadsCO[stype]
+        ECO = EadsCO[stype]
         EO = EadsO[stype_other]
         # Find the Nearest neighbor repulsion
-        Ncovs = [system.sites[n].covered for n in\
-                system.neighbors[i_site] ]
-        Nothercovs = [system.sites[n].covered for n\
-                     in system.neighbors[other_site] ]
-        ECO -= get_repulsion(1,Ncovs,stype)
-        EO  -= get_repulsion(2, Nothercovs,stype_other)
-        Ea = max(0.,get_Ea(ECO,EO))
+        Ncovs = [system.sites[n].covered for n in
+                 system.neighbors[i_site]]
+        Nothercovs = [system.sites[n].covered for n
+                      in system.neighbors[other_site]]
+        ECO -= get_repulsion(1, Ncovs, stype)
+        EO -= get_repulsion(2, Nothercovs, stype_other)
+        Ea = max(0., get_Ea(ECO, EO))
 
-        return self.alpha*self.Zratio*np.exp(-Ea/
-               (kB*self.params['T']))*kB*self.params['T']/(h)
+        return self.alpha * self.Zratio * np.exp(-Ea /
+                                                 (kB * self.params['T'])) * kB * self.params['T'] / h
 
-
-    def do_event(self,system,site,other_site):
-        system.sites[site].covered = 0 
-        system.sites[other_site].covered = 0 
-        
-        
+    def do_event(self, system, site, other_site):
+        system.sites[site].covered = 0
+        system.sites[other_site].covered = 0

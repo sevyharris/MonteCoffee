@@ -16,18 +16,16 @@ import numpy as np
 # Constants
 # -------------
 # *Diffusion barriers*  
- 
+
 EdiffCO = 0.046
 EdiffO = 0.5
 
 # *Adsorption energies as functions of CN*  
 
-EadsCO = [1.36+0.25*(9-CN) for CN in [6,7,8,9]]
-EadsO = [0.97+0.2*(9-CN) for CN in [6,7,8,9]]
+EadsCO = [1.36 + 0.25 * (9 - CN) for CN in [6, 7, 8, 9]]
+EadsO = [0.97 + 0.2 * (9 - CN) for CN in [6, 7, 8, 9]]
 
 
-# get_Ea()
-# -------------
 def get_Ea(ECO, EO):
     """#### Computes the reaction energy barrier for CO oxidation.
     
@@ -43,16 +41,14 @@ def get_Ea(ECO, EO):
                   CO*+O*->CO2(g) in eV.  
 
     """
-    dEO = EO-EadsO[-1] # Oxygen energy relative to uncovered Pt(111)
-    dECO = ECO-EadsCO[-1] # CO energy relative to uncovered Pt(111)
-    dETS = 0.824*(dEO+dECO) # How much larger is the energy of CO and O wrt Pt(111)
-    Ea = 1.08 + dETS - dECO - dEO # Translate the barriers relative to Pt(111)
+    dEO = EO - EadsO[-1]  # Oxygen energy relative to uncovered Pt(111)
+    dECO = ECO - EadsCO[-1]  # CO energy relative to uncovered Pt(111)
+    dETS = 0.824 * (dEO + dECO)  # How much larger is the energy of CO and O wrt Pt(111)
+    Ea = 1.08 + dETS - dECO - dEO  # Translate the barriers relative to Pt(111)
     return Ea
 
 
-# get_repulsion()
-# -------------
-def get_repulsion(cov_self, cov_NN,stype):
+def get_repulsion(cov_self, cov_NN, stype):
     """#### Computes the adsorbate-adsorbate repulsions.
     
     Calculates the energy perturbation to the adsorption energy  
@@ -69,22 +65,19 @@ def get_repulsion(cov_self, cov_NN,stype):
     *repulsion* (float): adsorbate-adsorbate repulsion in eV.
     """
 
-    stype_factor = 0.5 if stype in [0,1] else 1.0
+    stype_factor = 0.5 if stype in [0, 1] else 1.0
     repulsion = 0.
-    ECOCO = 0.19 #0.38 # How CO affects CO
-    EOO =   0.32  # How O affects O - double since it is called from get barrier of O2
+    ECOCO = 0.19  # 0.38 # How CO affects CO
+    EOO = 0.32  # How O affects O - double since it is called from get barrier of O2
 
-    ECOO = 0.3 # How CO affects O  
-    EOCO =  0.3  # How O affects CO
-    
+    ECOO = 0.3  # How CO affects O
+    EOCO = 0.3  # How O affects CO
 
-    HInttwo = [[0.,0.,0.], [0.,ECOCO,EOCO],[0.,ECOO,EOO]] # Two body interaction Hamiltonian 3x3 beacuse 0 = empty.
+    HInttwo = [[0., 0., 0.], [0., ECOCO, EOCO],
+               [0., ECOO, EOO]]  # Two body interaction Hamiltonian 3x3 beacuse 0 = empty.
 
-
-    for j in cov_NN: # For each covered Neighbor, give a repulsion:
+    for j in cov_NN:  # For each covered Neighbor, give a repulsion:
         repulsion += HInttwo[cov_self][j]
     repulsion *= stype_factor
 
     return repulsion
-
-

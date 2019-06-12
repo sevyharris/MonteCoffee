@@ -7,6 +7,7 @@ class in base.site.SiteBase.
 
 from base.sites import SiteBase
 
+
 class Site(SiteBase):
     """Constructor for site objects.
            
@@ -36,6 +37,6 @@ class Site(SiteBase):
 
     """
 
-    def __init__(self, stype = 0,covered=0, ind=[],lattice_pos=None):
-        SiteBase.__init__(self,stype=stype,covered=covered,ind=ind,
+    def __init__(self, stype=0, covered=0, ind=[], lattice_pos=None):
+        SiteBase.__init__(self, stype=stype, covered=covered, ind=ind,
                           lattice_pos=lattice_pos)

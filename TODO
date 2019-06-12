@@ -21,3 +21,5 @@ TODOLIST:
 
 - Refactor code such that base/kmc.py do not contain so many functions. cover_system(), load_events(), get_coverages(),
   and find_nn_recursive() may belong to events, system, and sites better.
+  Make a separate superbasin module to store everything connected to the superbasin. Pass the neighborkMC instance to
+  these methods.

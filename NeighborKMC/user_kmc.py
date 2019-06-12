@@ -12,12 +12,13 @@ from user_sites import Site
 from user_events import *
 import pyclbr
 
+
 class NeighborKMC(NeighborKMCBase):
     """#### Class that controls the kMC simulation.  
             
     Calls constructor of NeighborKMCBase objects, and  
     loads in the user-specified event-list in *load_events()*.   
-    The variable *self.evs_exec* is initalized as a list to 
+    The variable *self.evs_exec* is initialized as a list to
     count the number of times each event-type is executed.  
     
     **Parameters**          
@@ -42,19 +43,16 @@ class NeighborKMC(NeighborKMCBase):
     The module [base.kmc](base/kmc.html)
 
     """
-   
-    def __init__(self, system, tend, parameters={}, events = [], rev_events={}):
-        
+
+    def __init__(self, system, tend, parameters={}, events=[], rev_events={}):
+        self.events = None
+        self.reverses = None
         self.load_events(parameters, events, rev_events)
         self.evs_exec = np.zeros(len(self.events))
-        
-        NeighborKMCBase.__init__(self, system=system, 
+
+        NeighborKMCBase.__init__(self, system=system,
                                  tend=tend, parameters=parameters)
 
-
-        
-    # load_events()
-    # -------------
     def load_events(self, parameters, events, rev_events):
         """#### Loads the events list.
                
@@ -81,20 +79,16 @@ class NeighborKMC(NeighborKMCBase):
         """
         self.events = [ev(parameters) for ev in events]
         self.reverses = dict(rev_events)
-        
+
         # Make it two-sided:
         for k in rev_events:
             val = self.reverses[k]
             self.reverses[val] = k
-            
-        # Make sure each event only has one reverse
-        assert(sorted(self.reverses.keys()) == list( set( self.reverses.keys() )  ))
-        assert(sorted(self.reverses.values()) == list( set( self.reverses.values() ) ))
-        
 
- 
-    # run\_kmc()
-    # -------------
+        # Make sure each event only has one reverse
+        assert (sorted(self.reverses.keys()) == list(set(self.reverses.keys())))
+        assert (sorted(self.reverses.values()) == list(set(self.reverses.values())))
+
     def run_kmc(self):
         """#### Runs a kmc simulation.
                
@@ -108,7 +102,7 @@ class NeighborKMC(NeighborKMCBase):
         log.   
 
         **Returns**  
-        0 if simulation is finshed successfully.  
+        0 if simulation is finished successfully.
 
         """
         if self.verbose:
@@ -116,25 +110,24 @@ class NeighborKMC(NeighborKMCBase):
 
         logparams = {}
         logparams.update(self.parameters)
-        logparams.update({"tend": self.tend,"Nsites": self.Nsites})
+        logparams.update({"tend": self.tend, "Nsites": self.Nsites})
         log = Log(logparams)
-        
+
         # Save txt files with site information:
-        with open("siteids.txt","wb") as f2:
-             np.savetxt(f2,[m.ind for m in self.system.sites])
-             
-        with open("stypes.txt","wb") as f2:
-             np.savetxt(f2,[m.stype for m in self.system.sites])
-        
-        
+        with open("siteids.txt", "wb") as f2:
+            np.savetxt(f2, [m.ind for m in self.system.sites])
+
+        with open("stypes.txt", "wb") as f2:
+            np.savetxt(f2, [m.stype for m in self.system.sites])
+
         # Initialize time and step counters
         tlast = float(self.t)
         times = []
         stepN_CNT = 0
-        stepNMC = 0 
+        stepNMC = 0
         stepSaveN = 0
         # Initialize coverage list
-        covs = [] 
+        covs = []
         if self.verbose:
             print('\nRunning simulation.')
 
@@ -143,32 +136,30 @@ class NeighborKMC(NeighborKMCBase):
             self.frm_step()
 
             # Log every self.LogSteps step.
-            if stepN_CNT>=self.LogSteps:
+            if stepN_CNT >= self.LogSteps:
                 if self.verbose:
                     print("Time : ", self.t, "\t Covs :", self.get_coverages())
-                    
-                log.dump_point(stepNMC,self.t,self.evs_exec)
+
+                log.dump_point(stepNMC, self.t, self.evs_exec)
 
                 self.times.append(self.t)
                 self.MCstep.append(stepNMC)
 
                 covs_cur = [s.covered for s in self.system.sites]
                 self.covered.append(covs_cur)
-                tlast=float(self.t)
+                tlast = float(self.t)
                 stepN_CNT = 0
-    
-            stepSaveN+=1
 
-            #Save every self.SaveSteps steps.
+            stepSaveN += 1
+
+            # Save every self.SaveSteps steps.
             if stepSaveN == self.SaveSteps:
                 self.save_txt()
                 stepSaveN = 0.
-            
-            stepN_CNT+=1
-            stepNMC+=1
-    
+
+            stepN_CNT += 1
+            stepNMC += 1
+
         self.save_txt()
-    
 
         return 0
-    

@@ -31,15 +31,13 @@ class EventBase:
     An EventBase instance.  
 
     """
-    
-    def __init__(self,params={}):
+
+    def __init__(self, params={}):
         self.params = params
         self.alpha = 1.
-        self.diffev = False # Is it a diffusion event.
+        self.diffev = False  # Is it a diffusion event.
 
-    # possible()
-    # -------------
-    def possible(self,system,i_site,i_other):
+    def possible(self, system, i_site, i_other):
         """#### Template method to determine if event is possible.  
             
         Method needs to be overridden in user_events.py.
@@ -64,9 +62,7 @@ class EventBase:
         raise NotImplementedError("""Called purely abstract 
                                    method possible() of Event""")
 
-    # get_rate()
-    # -------------
-    def get_rate(self,system,i_site,i_other):
+    def get_rate(self, system, i_site, i_other):
         """#### Template method to determine the rate constant.
             
         Method needs to be overridden in user_events.py.
@@ -89,9 +85,7 @@ class EventBase:
         raise NotImplementedError("""Called purely abstract 
                                   method get_rate() of Event""")
 
-    # do_event()
-    # -------------
-    def do_event(self,system, i_site ,i_other):
+    def do_event(self, system, i_site, i_other):
         """#### Template method to perform the event.
             
         Method needs to be overridden in user_events.py.  

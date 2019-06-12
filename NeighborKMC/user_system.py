@@ -13,6 +13,7 @@ The module [user_kmc](user_kmc.html)
 import numpy as np
 from base.system import SystemBase
 
+
 class System(SystemBase):
     """#### Class defines a collection of sites and connected atoms.
             
@@ -37,13 +38,10 @@ class System(SystemBase):
     
     """
 
-    def __init__(self,atoms=None,sites=[]):        
-        SystemBase.__init__(self,atoms=atoms,sites=sites)
+    def __init__(self, atoms=None, sites=[]):
+        SystemBase.__init__(self, atoms=atoms, sites=sites)
 
-
-    # cover_system()
-    # --------------------
-    def cover_system(self,species,coverage):
+    def cover_system(self, species, coverage):
         """#### Covers the system with a certain species.
             
         Randomly covers the system with a species *species*, at a 
@@ -55,9 +53,7 @@ class System(SystemBase):
         *coverage* (float): the fractional coverage to load lattice with.
 
         """
-        n_covered = int(np.round(coverage*len(self.system.sites)))
-        chosen_sites = np.random.choice(len(self.system.sites),n_covered)
+        n_covered = int(np.round(coverage * len(self.system.sites)))
+        chosen_sites = np.random.choice(len(self.system.sites), n_covered)
         for c in chosen_sites:
             self.system.sites[c].covered = species
-
-
