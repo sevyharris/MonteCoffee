@@ -136,3 +136,4 @@ plt.ylabel("Coverage", fontsize=20)
 plt.gca().tick_params(axis='both', labelsize=fs, length=14, width=3.5, which='major', pad=10)
 
 plt.show()
+#  TODO make plot optional
