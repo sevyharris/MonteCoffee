@@ -17,7 +17,7 @@ else:
 import numpy as np
 from random import uniform
 from ase.io import write
-
+from basin import test_superbasin_import
 
 class NeighborKMCBase:
     """#### Main class for performing MonteCoffe simulations.
@@ -386,16 +386,16 @@ class NeighborKMCBase:
         return r_S
 
     def superbasin(self, evtype, dt):
-        """#### Scales rates or leaves the current superbasin.   
-        
-        Keeps track and performs barrier adjustments,   
-        of the generalized temporal acceleration scheme  
-        (DOI: 10.1021/acs.jctc.6b00859)  
-        
+        """#### Scales rates or leaves the current superbasin.
+
+        Keeps track and performs barrier adjustments,
+        of the generalized temporal acceleration scheme
+        (DOI: 10.1021/acs.jctc.6b00859)
+
         """
         # Update the rates in the current superbasin
         if dt < 0:
-            raise Warning("Time-step is < 0. Are the events and neighborlists correct?. Exiting!")
+            raise Warning("Time-step is < 0. Are the events and neighborlists correct?. Exiting!!")
         farg = int(self.frm_arg)
         self.pm = (self.pm + 1) % self.ne
         self.nem[evtype] += 1.
