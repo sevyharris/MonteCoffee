@@ -13,12 +13,17 @@ from user_events import (COAdsEvent, CODesEvent,
 
 
 def run_test():
-    """
-    The script sets up a simulation of CO oxidation over Pt using
-    coordination numbers for the reaction energy landscape. First,
-    constants are defined and old output files cleared.
+    """Runs the test of CO oxidation over Pt.
+
+    Sets up a simulation of CO oxidation over Pt using
+    coordination numbers for the reaction energy landscape.
+
+    First, constants are defined and old output files cleared.
     Next, the sites, events, system and simulation objects
     are loaded, and the simulation is performed.
+
+    Last, the results are read in from the generated.txt files,
+    and plotted using matplotlib.
 
     """
     # Define constants.
