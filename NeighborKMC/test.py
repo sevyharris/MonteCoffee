@@ -19,6 +19,10 @@ from user_events import (COAdsEvent, CODesEvent,
 
 
 if __name__ == '__main__':
+    run_test()
+
+
+def run_test():
     # Define constants.
     # ------------------------------------------
     T = 800.  # Temperature
