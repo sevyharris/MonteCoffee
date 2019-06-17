@@ -1,10 +1,4 @@
 """Script that runs a full example of CO oxidation.
-
-The script sets up a simulation of CO oxidation over Pt using
-coordination numbers for the reaction energy landscape. First,    
-constants are defined and old output files cleared. 
-Next, the sites, events, system and simulation objects  
-are loaded, and the simulation is performed.
  
 """
 import numpy as np
@@ -18,11 +12,15 @@ from user_events import (COAdsEvent, CODesEvent,
                          COOxEvent)
 
 
-if __name__ == '__main__':
-    run_test()
-
-
 def run_test():
+    """
+    The script sets up a simulation of CO oxidation over Pt using
+    coordination numbers for the reaction energy landscape. First,
+    constants are defined and old output files cleared.
+    Next, the sites, events, system and simulation objects
+    are loaded, and the simulation is performed.
+
+    """
     # Define constants.
     # ------------------------------------------
     T = 800.  # Temperature
@@ -142,3 +140,8 @@ def run_test():
     plt.gca().tick_params(axis='both', labelsize=fs, length=14, width=3.5, which='major', pad=10)
 
     plt.show()
+
+if __name__ == '__main__':
+    run_test()
+
+
