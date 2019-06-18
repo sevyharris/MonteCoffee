@@ -68,6 +68,10 @@ class NeighborKMCBase:
         evnl = [0 for i in range(len(self.events))]
         self.stype_ev = {}
         self.stype_ev_other = {}
+
+        self.sid_ev = [np.zeros(len(self.events)) for i in range(len(self.system.sites))]
+        self.sid_ev_other = [np.zeros(len(self.events)) for i in range(len(self.system.sites))]
+
         self.Nstypes = list(set([s.stype for s in self.system.sites]))
         for i in self.Nstypes:
             self.stype_ev[i] = list(evnl)
@@ -251,20 +255,20 @@ class NeighborKMCBase:
             # Event is possible, change state
             self.events[self.evs[self.frm_arg]].do_event(self.system,
                                                          site, othersite)
-            # Update time
-
             evtype = self.evs[self.frm_arg]
 
-            self.t = self.frm_times[self.frm_arg]
+            self.t = self.frm_times[self.frm_arg]  # Update time
 
-            # Find new enabled processes.
             self.evs_exec[self.evs[self.frm_arg]] += 1
 
-            self.stype_ev[self.system.sites[site].stype] \
+            self.stype_ev[self.system.sites[site].stype]\
                 [self.evs[self.frm_arg]] += 1
 
-            self.stype_ev_other[self.system.sites[othersite].stype] \
+            self.stype_ev_other[self.system.sites[othersite].stype]\
                 [self.evs[self.frm_arg]] += 1
+
+            self.sid_ev[self.system.sites[site].stype][self.evs[self.frm_arg]] += 1
+            self.sid_ev_other[self.system.sites[othersite].stype][self.evs[self.frm_arg]] += 1
 
             # Update superbasin
             superbasin(self, evtype, dt)
@@ -303,11 +307,11 @@ class NeighborKMCBase:
         with open("evs_exec.txt", "wb") as f2:
             np.savetxt(f2, self.evs_exec)
 
-        with open("stype_ev.txt", "ab") as f2:
-            np.savetxt(f2, list(self.stype_ev.values()))
+        with open("sid_ev.txt", "wb") as f2:
+            np.savetxt(f2, self.sid_ev)
 
-        with open("stype_ev_other.txt", "ab") as f2:
-            np.savetxt(f2, list(self.stype_ev_other.values()))
+        with open("sid_ev_other.txt", "wb") as f2:
+            np.savetxt(f2, self.sid_ev_other)
 
         with open("time.txt", "ab") as f2:
             np.savetxt(f2, self.times)

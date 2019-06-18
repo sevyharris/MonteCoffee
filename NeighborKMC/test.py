@@ -39,8 +39,8 @@ def run_test():
     # ------------------------------------------
     np.savetxt("time.txt", [])
     np.savetxt("coverages.txt", [])
-    np.savetxt("stype_ev.txt", [])
-    np.savetxt("stype_ev_other.txt", [])
+    np.savetxt("sid_ev.txt", [])
+    np.savetxt("sid_ev_other.txt", [])
 
     # Define the sites from ase.Atoms.
     # ------------------------------------------
@@ -72,8 +72,6 @@ def run_test():
 
     # Set the neighbor list for each site using distances.
     # ------------------------------------------
-    positions = atoms.positions
-
     for i, s in enumerate(sites):
         # Position of site
         pcur = atoms[s.ind[0]].position

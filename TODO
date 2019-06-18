@@ -7,9 +7,6 @@ TODOLIST:
 
 - API documentation as part of the code.
 
-- Log the sid_ev list and sid_ev_other and write them to disk instead of writing stype_ev and stype_ev_other.
-  This should be done because stype_ev(_other) can be reconstructed from sid_ev.
-
 - Add a script that reconstructs stype_ev.txt from sid_ev.txt
 
 - Add a script that plots the coverages as in test.py
@@ -19,7 +16,3 @@ TODOLIST:
 - Make a run script generator code that lets you y/n to generate user_events.py, user_energy.py and test.py like files.
   This should contain fairly simple events ads/des/diffusion and standard TST(energy,entropy) functions.
 
-- Refactor code such that base/kmc.py do not contain so many functions. cover_system(), load_events(), get_coverages(),
-  and find_nn_recursive() may belong to events, system, and sites better.
-  Make a separate superbasin module to store everything connected to the superbasin. Pass the neighborkMC instance to
-  these methods.
