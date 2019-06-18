@@ -307,10 +307,10 @@ class NeighborKMCBase:
         with open("evs_exec.txt", "wb") as f2:
             np.savetxt(f2, self.evs_exec)
 
-        with open("sid_ev.txt", "wb") as f2:
+        with open("sid_ev.txt", "ab") as f2:
             np.savetxt(f2, self.sid_ev)
 
-        with open("sid_ev_other.txt", "wb") as f2:
+        with open("sid_ev_other.txt", "ab") as f2:
             np.savetxt(f2, self.sid_ev_other)
 
         with open("time.txt", "ab") as f2:
