@@ -38,3 +38,12 @@ s0CO = 0.9  # Sticking coefficient of CO
 s0O = 0.1  # Sticking coefficient of O2
 
 Asite = (10E-10) ** 2.  # area of a site in m^2
+
+
+def main():
+    """Main method of user_constants.py.
+
+    Main is defined to make API documentation build.
+
+    """
+    return 1
