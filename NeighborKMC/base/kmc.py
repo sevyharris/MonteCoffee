@@ -55,7 +55,7 @@ class NeighborKMCBase:
         self.load_options()
 
         if self.verbose:
-            print('-' * 50, '\n', 'MonteCoffee Simulation Running', '\n', '-' * 50, '\n')
+            print('-' * 50, '\n', 'MonteCoffee Simulation Initalized', '\n', '-' * 50, '\n')
             print('kMC simulation loading ...')
 
         # Variables connected to after analysis.
