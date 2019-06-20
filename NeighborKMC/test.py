@@ -75,14 +75,11 @@ def run_test():
     p = System(atoms=atoms, sites=sites)
 
     # Set the global neighborlist based on distances:
-    p.set_neighbors(atoms, Ncutoff)
-
+    p.set_neighbors(Ncutoff)
 
     events = [COAdsEvent, CODesEvent, OAdsEvent,
               ODesEvent, CODiffEvent,
               ODiffEvent, COOxEvent]
-
-
 
     # Specify what events are each others' reverse.
     reverse_events = {0: 1, 2: 3, 4: 4, 5: 5}

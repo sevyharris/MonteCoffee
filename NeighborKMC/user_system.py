@@ -42,7 +42,7 @@ class System(SystemBase):
     def __init__(self, atoms=None, sites=[]):
         SystemBase.__init__(self, atoms=atoms, sites=sites)
 
-    def set_neighbors(self, atoms, Ncutoff):
+    def set_neighbors(self, Ncutoff):
         """Returns a global neighborlist for the sites.
 
         :param sites:
@@ -53,11 +53,11 @@ class System(SystemBase):
         # ------------------------------------------
         for i, s in enumerate(self.sites):
             # Position of site
-            pcur = atoms[s.ind[0]].position
+            pcur = self.atoms[s.ind[0]].position
 
             for j, sother in enumerate(self.sites):
                 # Position of potential neighbor site:
-                pother = atoms[sother.ind[0]].position
+                pother = self.atoms[sother.ind[0]].position
 
                 # Length of distance vector:
                 dpabs = np.sqrt((pother[0] - pcur[0]) ** 2. +
@@ -75,7 +75,7 @@ class System(SystemBase):
         certain fractional coverage *coverage*.
     
         **Parameters**  
-        *species* (int): the species as defined by hte user (e.g. empty=0,CO=1).
+        *species* (int): the species as defined by the user (e.g. empty=0,CO=1).
 
         *coverage* (float): the fractional coverage to load lattice with.
 
