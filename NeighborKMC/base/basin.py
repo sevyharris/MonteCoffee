@@ -67,7 +67,11 @@ def scaling_ks(sim, noneqevents, dtS):
     (Can be good for stability of time-step)
 
     """
-    return max([sim.ksavg[neqev] for neqev in noneqevents])
+    if len(noneqevents)>0:
+        r_S = max([sim.ksavg[neqev] for neqev in noneqevents])
+    else:  # If all events are equilibrated, scale based on all rate consts.
+        r_S = max(sim.ksavg)
+    return r_S
 
 
 def scaling_rs(sim, noneqevents, dtS):
@@ -81,9 +85,10 @@ def scaling_rs(sim, noneqevents, dtS):
     (DOI: 10.1021/acs.jctc.6b00859)
 
     """
-    r_S = 0.
-    for neqev in noneqevents:
-        r_S += sim.r_S[neqev] / dtS
+    if len(noneqevents) > 0:
+        r_S = sum([sim.r_S[neqev] for neqev in noneqevents]) / dtS
+    else:
+        r_S = max(sim.r_S)
 
     return r_S
 

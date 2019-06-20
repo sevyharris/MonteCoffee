@@ -37,7 +37,7 @@ class EventBase:
         self.alpha = 1.
         self.diffev = False  # Is it a diffusion event.
 
-    def possible(self, system, i_site, i_other):
+    def possible(self, system, site, other_site):
         """#### Template method to determine if event is possible.  
             
         Method needs to be overridden in user_events.py.
@@ -62,7 +62,7 @@ class EventBase:
         raise NotImplementedError("""Called purely abstract 
                                    method possible() of Event""")
 
-    def get_rate(self, system, i_site, i_other):
+    def get_rate(self, system, site, other_site):
         """#### Template method to determine the rate constant.
             
         Method needs to be overridden in user_events.py.
@@ -85,7 +85,7 @@ class EventBase:
         raise NotImplementedError("""Called purely abstract 
                                   method get_rate() of Event""")
 
-    def do_event(self, system, i_site, i_other):
+    def do_event(self, system, site, other_site):
         """#### Template method to perform the event.
             
         Method needs to be overridden in user_events.py.  

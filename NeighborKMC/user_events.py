@@ -45,7 +45,7 @@ class COAdsEvent(EventBase):
         else:
             return False
 
-    def get_rate(self, system, i_site, other_site):
+    def get_rate(self, system, site, other_site):
         R = (s0CO * self.params['pCO'] * Asite /
              np.sqrt(2. * np.pi * mCO * kB * eV2J * self.params['T']))
 
@@ -83,9 +83,9 @@ class CODesEvent(EventBase):
         else:
             return False
 
-    def get_rate(self, system, i_site, other_site):
-        stype = system.sites[i_site].stype
-        Ncovs = system.get_ncovs(i_site)
+    def get_rate(self, system, site, other_site):
+        stype = system.sites[site].stype
+        Ncovs = system.get_ncovs(site)
         ECO = max(EadsCO[stype] - get_repulsion(1, Ncovs, stype), 0)
         K = np.exp((ECO + self.params['T'] * self.dS) /
                    (kB * self.params['T']))
@@ -126,7 +126,7 @@ class OAdsEvent(EventBase):
         else:
             return False
 
-    def get_rate(self, system, i_site, other_site):
+    def get_rate(self, system, site, other_site):
         R = (s0O * self.params['pO2'] * Asite /
              np.sqrt(2. * np.pi * mO2 * kB * eV2J * self.params['T']))
 
@@ -168,10 +168,10 @@ class ODesEvent(EventBase):
         else:
             return False
 
-    def get_rate(self, system, i_site, other_site):
-        stype = system.sites[i_site].stype
+    def get_rate(self, system, site, other_site):
+        stype = system.sites[site].stype
         stype_other = system.sites[other_site].stype
-        Ncovs = system.get_ncovs(i_site)
+        Ncovs = system.get_ncovs(site)
         Ncovsother = system.get_ncovs(other_site)
         E2O = max(2. * EadsO[stype] - get_repulsion(1, Ncovs, stype) \
                   - get_repulsion(1, Ncovsother, stype_other), 0.)
@@ -218,12 +218,12 @@ class CODiffEvent(EventBase):
         else:
             return False
 
-    def get_rate(self, system, i_site, other_site):
-        stype = system.sites[i_site].stype
+    def get_rate(self, system, site, other_site):
+        stype = system.sites[site].stype
         stype_other = system.sites[other_site].stype
 
         Ncovs = [system.sites[n].covered for n in \
-                 system.neighbors[i_site]]
+                 system.neighbors[site]]
         Nothercovs = [system.sites[n].covered for \
                       n in system.neighbors[other_site]]
 
@@ -271,12 +271,12 @@ class ODiffEvent(EventBase):
         else:
             return False
 
-    def get_rate(self, system, i_site, other_site):
-        stype = system.sites[i_site].stype
+    def get_rate(self, system, site, other_site):
+        stype = system.sites[site].stype
         stype_other = system.sites[other_site].stype
 
         Ncovs = [system.sites[n].covered for n in \
-                 system.neighbors[i_site]]
+                 system.neighbors[site]]
         Nothercovs = [system.sites[n].covered for n in \
                       system.neighbors[other_site]]
 
@@ -320,15 +320,15 @@ class COOxEvent(EventBase):
         else:
             return False
 
-    def get_rate(self, system, i_site, other_site):
+    def get_rate(self, system, site, other_site):
         # Find the adsorption energy
-        stype = system.sites[i_site].stype
+        stype = system.sites[site].stype
         stype_other = system.sites[other_site].stype
         ECO = EadsCO[stype]
         EO = EadsO[stype_other]
         # Find the Nearest neighbor repulsion
         Ncovs = [system.sites[n].covered for n in
-                 system.neighbors[i_site]]
+                 system.neighbors[site]]
         Nothercovs = [system.sites[n].covered for n
                       in system.neighbors[other_site]]
         ECO -= get_repulsion(1, Ncovs, stype)
