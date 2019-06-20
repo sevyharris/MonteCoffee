@@ -3,7 +3,7 @@
 """
 import numpy as np
 from ase.cluster import Octahedron
-from user_sites import Site, set_neighbors
+from user_sites import Site
 from user_system import System
 from user_kmc import NeighborKMC
 from user_events import (COAdsEvent, CODesEvent,
@@ -70,12 +70,12 @@ def run_test():
         sites.append(Site(stype=stypes[CNS[indic]],
                           covered=0, ind=[indic]))
 
-    # Set the global neighborlist based on distances:
-    set_neighbors(sites, atoms, Ncutoff)
-
     # Instantiate a system, events, and simulation.
     # ---------------------------------------------
     p = System(atoms=atoms, sites=sites)
+
+    # Set the global neighborlist based on distances:
+    p.set_neighbors(atoms, Ncutoff)
 
 
     events = [COAdsEvent, CODesEvent, OAdsEvent,

@@ -14,6 +14,7 @@ import numpy as np
 from base.system import SystemBase
 
 
+
 class System(SystemBase):
     """#### Class defines a collection of sites and connected atoms.
             
@@ -40,6 +41,32 @@ class System(SystemBase):
 
     def __init__(self, atoms=None, sites=[]):
         SystemBase.__init__(self, atoms=atoms, sites=sites)
+
+    def set_neighbors(self, atoms, Ncutoff):
+        """Returns a global neighborlist for the sites.
+
+        :param sites:
+        :param ncutoff:
+        :return:
+        """
+        # Set the neighbor list for each site using distances.
+        # ------------------------------------------
+        for i, s in enumerate(self.sites):
+            # Position of site
+            pcur = atoms[s.ind[0]].position
+
+            for j, sother in enumerate(self.sites):
+                # Position of potential neighbor site:
+                pother = atoms[sother.ind[0]].position
+
+                # Length of distance vector:
+                dpabs = np.sqrt((pother[0] - pcur[0]) ** 2. +
+                                (pother[1] - pcur[1]) ** 2. +
+                                (pother[2] - pcur[2]) ** 2.)
+
+                # If the site is a neighbor:
+                if dpabs < Ncutoff and j != i:
+                    s.neighbors.append(j)
 
     def cover_system(self, species, coverage):
         """#### Covers the system with a certain species.
