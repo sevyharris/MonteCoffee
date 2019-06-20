@@ -319,6 +319,8 @@ class NeighborKMCBase:
         # Clear up lists that grow with time:
         self.times = []
         self.covered = []
+        self.sid_ev = [np.zeros(len(self.events)) for i in range(len(self.system.sites))]
+        self.sid_ev_other = [np.zeros(len(self.events)) for i in range(len(self.system.sites))]
 
     def get_coverages(self):
         """#### Gets the coverages at the present moment.  

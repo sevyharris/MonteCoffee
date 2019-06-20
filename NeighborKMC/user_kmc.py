@@ -160,6 +160,7 @@ class NeighborKMC(NeighborKMCBase):
             stepN_CNT += 1
             stepNMC += 1
 
+        log.dump_point(stepNMC, self.t, self.evs_exec)
         self.save_txt()
 
         return 0
