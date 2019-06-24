@@ -16,8 +16,8 @@ def rescaling(sim):
 
     Parameters
     ----------
-    sim: NeighborKMC.user_kmc.NeighborKMC object
-        main simulator object to perform rescale events for.
+    sim: NeighborKMC object
+        main simulator object to perform rescaling of events for.
 
     """
     for ev in sim.equilEV:
@@ -45,10 +45,15 @@ def rescaling(sim):
 
 
 def leave_superbasin(sim):
-    """#### Leaves the superbasin.
+    """Leaves the superbasin.
 
     Resets all rate-scalings and statistics
     connected to the superbasin.
+
+    Parameters
+    ----------
+    sim: NeighborKMC object
+        main simulator object to perform rescaling of events for.
 
     """
 
@@ -64,12 +69,28 @@ def leave_superbasin(sim):
 
 
 def scaling_ks(sim, noneqevents, dtS):
-    """#### Rate-constant based superbasin escape time.
+    """Computes rate-constant based superbasin escape rate.
 
-    Calculates superbasin escape time
-    according to the maximal rate-constant of
-    events escaping the superbasin.
-    (Can be good for stability of time-step)
+    Calculates superbasin escape rate according to the maximal rate-constant of
+    events escaping the superbasin. This can be good for stability of the time-step.
+
+    Parameters
+    ----------
+    sim: NeighborKMC object
+        main simulator object to perform rescaling of events for.
+
+    noneqevents: array-like
+        The indices of events that are not in equilibrium, according to the loading
+        order passed to *sim*.
+
+    dtS: float
+        The time spent in current superbasin (not used, but here for technical reasons as
+        scaling_rs() needs this argument.)
+
+    Returns
+    --------
+    float
+        The estimated superbasin escape-rate.
 
     """
     if len(noneqevents)>0:
@@ -80,7 +101,7 @@ def scaling_ks(sim, noneqevents, dtS):
 
 
 def scaling_rs(sim, noneqevents, dtS):
-    """#### Rate based superbasin escape time.
+    """Rate based superbasin escape time.
 
     Calculates superbasin escape time
     according to non-equilibrated event rates escaping
@@ -88,6 +109,24 @@ def scaling_rs(sim, noneqevents, dtS):
 
     c.f. The generalized temporal acceleration scheme
     (DOI: 10.1021/acs.jctc.6b00859)
+
+    Parameters
+    ----------
+    sim: NeighborKMC object
+        main simulator object to perform rescaling of events for.
+
+    noneqevents: array-like
+        The indices of events that are not in equilibrium, according to the loading
+        order passed to *sim*.
+
+    dtS: float
+        The time spent in current superbasin (not used, but here for technical reasons as
+        scaling_rs() needs this argument.)
+
+    Returns
+    --------
+    float
+        The estimated superbasin escape-rate.
 
     """
     if len(noneqevents) > 0:
