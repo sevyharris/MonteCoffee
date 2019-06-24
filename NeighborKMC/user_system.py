@@ -11,6 +11,7 @@ The module [user_kmc](user_kmc.html)
 """
 
 import numpy as np
+from ase import Atoms
 from base.system import SystemBase
 
 
@@ -42,7 +43,7 @@ class System(SystemBase):
     def __init__(self, atoms=None, sites=[]):
         SystemBase.__init__(self, atoms=atoms, sites=sites)
 
-    def set_neighbors(self, Ncutoff):
+    def set_neighbors(self, Ncutoff, pbc=False):
         """Returns a global neighborlist for the sites.
 
         :param sites:
@@ -60,12 +61,10 @@ class System(SystemBase):
                 pother = self.atoms[sother.ind[0]].position
 
                 # Length of distance vector:
-                dpabs = np.sqrt((pother[0] - pcur[0]) ** 2. +
-                                (pother[1] - pcur[1]) ** 2. +
-                                (pother[2] - pcur[2]) ** 2.)
+                dcur = self.atoms.get_distance(s.ind[0], sother.ind[0], mic=pbc)
 
                 # If the site is a neighbor:
-                if dpabs < Ncutoff and j != i:
+                if dcur < Ncutoff and j != i:
                     s.neighbors.append(j)
 
     def cover_system(self, species, coverage):

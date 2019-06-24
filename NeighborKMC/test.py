@@ -31,7 +31,7 @@ def run_test():
     T = 800.  # Temperature
     pCO = 2E3  # CO pressure
     pO2 = 1E3  # O2 pressure
-    tend = 1E-6  # End time of simulation (s)
+    tend = 1E-5  # End time of simulation (s)
     a = 4.00  # Lattice Parameter (not related to DFT!)
     Ncutoff = a / np.sqrt(2.) + 0.05  # Nearest neighbor cutoff
 
