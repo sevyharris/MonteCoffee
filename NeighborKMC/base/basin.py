@@ -9,10 +9,15 @@ import numpy as np
 
 
 def rescaling(sim):
-    """#### Rescales the times of occurrences for events.
+    """Rescales the times of occurrences for events.
 
     Rescales the times according to each quasi-equilibrated
     events *alpha*.
+
+    Parameters
+    ----------
+    sim: NeighborKMC.user_kmc.NeighborKMC object
+        main simulator object to perform rescale events for.
 
     """
     for ev in sim.equilEV:
