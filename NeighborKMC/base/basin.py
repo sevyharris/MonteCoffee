@@ -138,12 +138,31 @@ def scaling_rs(sim, noneqevents, dtS):
 
 
 def superbasin(sim, evtype, dt):
-    """#### Scales rates or leaves the current superbasin.
+    """Scales rates or leaves the current superbasin.
+
+    Based on the current Monte Carlo step, the method determines
+    if the superbasin is left or the fast quasi-equilibrated events
+    should be slowed down.
 
     Keeps track and performs barrier adjustments,
     of the generalized temporal acceleration scheme
     (DOI: 10.1021/acs.jctc.6b00859)
 
+    Parameters
+    ----------
+    sim: NeighborKMC object
+        main simulator object to perform rescaling of events for.
+
+    evtype: int
+        The index of the event-type of the currently attempted Monte Carlo step.
+
+    dt: float
+        The time-step increment of a result of the currently attempted Monte Carlo step.
+
+    Raises
+    --------
+    Warning
+        If the time-step dt is negative.
     """
     # Update the rates in the current superbasin
     if dt < 0:
