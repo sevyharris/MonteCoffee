@@ -168,7 +168,6 @@ def superbasin(sim, evtype, dt):
     # Update the rates in the current superbasin
     if dt < 0:
         raise Warning("Time-step is < 0. Are the events and neighborlists correct?. Exiting!!")
-    farg = int(sim.frm_arg)
     sim.pm = (sim.pm + 1) % sim.ne
     sim.nem[evtype] += 1.
     sim.Nm[evtype][sim.pm] = 1.
