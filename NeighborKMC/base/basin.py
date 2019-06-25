@@ -107,7 +107,7 @@ def scaling_rs(sim, noneqevents, dtS):
     according to non-equilibrated event rates escaping
     the superbasin.
 
-    c.f. The generalized temporal acceleration scheme
+    c.f. the generalized temporal acceleration scheme
     (DOI: 10.1021/acs.jctc.6b00859)
 
     Parameters

@@ -8,20 +8,28 @@ class Log:
     """Handles logging of kMC simulations.
             
     Initializes a filename based on the CPU date and time.  
-    All passed *parameters* will be written to the log.  
-        
-    Logging a string
-    --------------------
-    Simply instantiate a Log as
-
-    >>> log = Log(parameters = _params)
-    >>> log.write_line("This is a line!")
+    All passed *parameters* will be written to the log.
 
     Parameters
     ----------
     parameters: Dict
-        parameters to dump at the beginning of a log.
-        For example 'dict = {'T':300,'pCO':1E2}'
+        parameters to dump at the beginning of a log. For example
+
+        >>> dict = {'T':300, 'pCO':1E2}
+
+    Examples
+    ---------
+    Simply instantiate a Log as follows:
+
+    >>> log = Log(parameters = _params)
+
+    Write a string to the log:
+
+    >>> log.write_line("This is a line!")
+
+    Dump a simulation point to the log:
+
+    >>> log.dump_point(step=100, sim_time=1E-9, ev_called=[10,90,0,0,0])
 
     """
 
