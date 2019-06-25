@@ -1,7 +1,6 @@
-"""#### Initializes the MonteCoffe modules.
+"""Initializes the MonteCoffee modules.
 
-The script imports all modules from MonteCoffee.  
-A version variable is set simultaneously.
+The script imports necessary modules from MonteCoffee.
 
 """
 import base
