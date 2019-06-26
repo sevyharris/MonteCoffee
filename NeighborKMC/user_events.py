@@ -1,12 +1,11 @@
-"""### Contains all user-defined event types.
+"""Contains all user-defined event types.
 
 All user-defined events are defined here, which
 must be derived from the parent class EventBase.  
 
-**See also**  
-The module [base.events](base/events.html)  
-to understand the methods implemented here
-for each derived class.
+See also
+---------
+Module: base.events for documentation about the methods possible(), get_rate(), and do_event().
 
 """
 
@@ -23,9 +22,9 @@ from user_energy import EadsCO, EadsO, get_Ea, \
 
 
 class COAdsEvent(EventBase):
-    """#### CO adsorption event class.  
+    """CO adsorption event class.
     
-    The event is CO(g) + \* -> CO\*.  
+    The event is CO(g) + * -> CO*.
     
     The event is possible if the site is empty.  
     
@@ -57,9 +56,9 @@ class COAdsEvent(EventBase):
 
 
 class CODesEvent(EventBase):
-    """#### CO desorption event class.  
+    """CO desorption event class.
     
-    The event is CO\* -> CO(g) + \*.  
+    The event is CO* -> CO(g) + *.
     
     The event is possible if the site is CO-covered.  
       
@@ -100,9 +99,9 @@ class CODesEvent(EventBase):
 
 
 class OAdsEvent(EventBase):
-    """#### Oxygen adsorption event class.  
+    """Oxygen adsorption event class.
     
-    The event is O2(g) + 2\* -> 2O\*.  
+    The event is O2(g) + 2* -> 2O*.
     
     The event is possible if two neighbor sites are empty.  
     
@@ -139,19 +138,19 @@ class OAdsEvent(EventBase):
 
 
 class ODesEvent(EventBase):
-    """#### Oxygen adsorption event class.  
+    """Oxygen adsorption event class.
     
-    The event is O2(g) + 2\* -> 2O\*.  
+    The event is 2O* -> O2(g) + 2*.
     
     The event is possible if two neighbor 
-    sites are empty.  
+    sites are covered with species 2 (O).
     
     The rate comes from the forward rate and the
     equilibrium constant.   
     
-    Performing the event removes O from the empty 
-    neighbor sites.
-    
+    Performing the event empties the two sites by setting
+    covered to 0.
+
     """
 
     def __init__(self, params):
@@ -190,9 +189,9 @@ class ODesEvent(EventBase):
 
 
 class CODiffEvent(EventBase):
-    """#### CO diffusion event class.  
+    """CO diffusion event class.
     
-    The event is CO\* + \* -> \* + CO\*.  
+    The event is CO* + * -> * + CO*.
     
     The event is possible if the site is CO-covered,
     and the neighbor site is empty.  
@@ -243,9 +242,9 @@ class CODiffEvent(EventBase):
 
 
 class ODiffEvent(EventBase):
-    """#### O diffusion event class.  
+    """O diffusion event class.
     
-    The event is O\* + \* -> \* + O\*.  
+    The event is O* + * -> * + O*.
     
     The event is possible if the site is O-covered,
     and the neighbor site is empty.  
@@ -296,15 +295,16 @@ class ODiffEvent(EventBase):
 
 
 class COOxEvent(EventBase):
-    """#### CO oxidation event class.  
+    """CO oxidation event class.
     
-    The event is CO\* + O\* -> CO2(g)+2\*.
+    The event is CO* + O* -> CO2(g)+2*.
     
     The event is possible if the site is 
     CO-covered and the neighbor is O-covered.
     
     The rate comes from transition state theory.
-    Performing the event removes a CO+O from the site.
+    Performing the event removes a CO+O from the sites.
+
     """
 
     def __init__(self, params):

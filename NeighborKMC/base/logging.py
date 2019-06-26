@@ -12,24 +12,25 @@ class Log:
 
     Parameters
     ----------
-    parameters: Dict
+    parameters: dict
         parameters to dump at the beginning of a log. For example
 
         >>> dict = {'T':300, 'pCO':1E2}
 
     Examples
     ---------
-    Simply instantiate a Log as follows:
+    Simply instantiate a Log and write a line as
 
     >>> log = Log(parameters = _params)
-
-    Write a string to the log:
-
     >>> log.write_line("This is a line!")
 
     Dump a simulation point to the log:
 
     >>> log.dump_point(step=100, sim_time=1E-9, ev_called=[10,90,0,0,0])
+
+    See Also
+    ---------
+    Module: NeighborKMC.base.kmc
 
     """
 
@@ -82,10 +83,8 @@ class Log:
         ----------
         step: int
             The Monte Carlo step number.
-
         sim_time: float
             The simulation time in seconds.
-
         ev_called: list(int)
             The number of times each event is called during simulation.
             For example [N_CO_ads,N_CO_des,...].

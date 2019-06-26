@@ -1,4 +1,4 @@
-"""### Defines the NeighborKMCBase class.  
+"""Defines the NeighborKMCBase class.
 
 The methods are used to perform kMC 
 simulations with the first reaction method.
@@ -20,7 +20,7 @@ from ase.io import write
 from base.basin import superbasin, leave_superbasin, rescaling, scaling_rs, scaling_ks
 
 class NeighborKMCBase:
-    """#### Main class for performing MonteCoffe simulations.
+    """Main class for performing MonteCoffe simulations.
           
     Assigns a system to the simulation, stores parameters, 
     and reads in software configuration from the separate  
@@ -111,7 +111,7 @@ class NeighborKMCBase:
         self.frm_init()
 
     def load_options(self):
-        """#### Loads all options set in kMC_options.cfg.   
+        """Loads all options set in kMC_options.cfg.
         
         Instantiates a configuration parser, and loads in all
         options from *kMC_options.cfg*.
@@ -134,7 +134,7 @@ class NeighborKMCBase:
         self.usekavg = config.getboolean('Options', 'usekavg')  # Use rate-constants for scaling, not rates
 
     def frm_init(self):
-        """#### Prepare to perform FRM simulation.
+        """Prepare to perform FRM simulation.
             
         Initializes empty rate and event lists to 
         bookkeep the FRM algorithm. The initial times  
@@ -188,7 +188,7 @@ class NeighborKMCBase:
         self.frm_arg = self.frm_times.argmin()
 
     def frm_update(self):
-        """#### Updates the FRM related lists.  
+        """Updates the FRM related lists.
             
         Method updates the event list locally  
         about the site where the last event happened  
@@ -236,7 +236,7 @@ class NeighborKMCBase:
         self.frm_arg = self.frm_times.argmin()
 
     def frm_step(self):
-        """#### Takes a Monte Carlo Step.  
+        """Takes a Monte Carlo Step.
         
         Takes a monte carlo step by performing the next  
         possible event, which has index *self.frm_arg* in the   
@@ -282,7 +282,7 @@ class NeighborKMCBase:
         self.frm_update()
 
     def save_txt(self):
-        """#### Saves txt files containing the simulation data.
+        """Saves txt files containing the simulation data.
         
         Saves the number of events executed on  
         the different types of sites, the time vs mcstep,  
@@ -323,7 +323,7 @@ class NeighborKMCBase:
         self.sid_ev_other = [np.zeros(len(self.events)) for i in range(len(self.system.sites))]
 
     def get_coverages(self):
-        """#### Gets the coverages at the present moment.  
+        """Gets the coverages at the present moment.
 
         **Returns**  
         ret ([[float]]): a list of coverages for each species  
@@ -342,7 +342,7 @@ class NeighborKMCBase:
         return ret
 
     def write_atoms(self, filename):
-        """#### Writes tagged ase.Atoms to file.  
+        """Writes tagged ase.Atoms to file.
         
         Writes self.atom_cfgs to file with path *filename*.
         
@@ -353,7 +353,7 @@ class NeighborKMCBase:
         write(filename, images=self.atom_cfgs)
 
     def load_events(self):
-        """#### Loads events (abstract method).
+        """Loads events (abstract method).
         
         **See Also**  
         The module [user_kmc](../user_kmc.html)
@@ -363,7 +363,7 @@ class NeighborKMCBase:
                                  method in derived NeighborKMC class''')
 
     def run_kmc(self):
-        """#### Runs the kMC simulation (abstract method)
+        """Runs the kMC simulation (abstract method)
         
         **Raises**  
         NotImplementedError if called.

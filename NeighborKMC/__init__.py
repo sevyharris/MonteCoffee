@@ -1,6 +1,8 @@
-"""Initializes the MonteCoffee modules.
+"""The MonteCoffee modules.
 
-The script imports necessary modules from MonteCoffee.
+The modules in subpackage base are meant to run behind
+the scenes and defines base-template classes for the derived
+events in the main modules, denoted by user_*.py.
 
 """
 import base

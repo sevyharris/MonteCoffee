@@ -1,8 +1,9 @@
-"""### Contains physical and user-defined constants. 
+"""Contains physical and user-defined global constants.
 
 These constants should be imported into  
 other modules, e.g. user_energy.py and  
-user_events.py
+user_events.py to calculate rate-constant,
+energy and entropy.
 
 """
 import numpy as np

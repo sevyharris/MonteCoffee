@@ -13,21 +13,9 @@ in order to be considered:
     - Python code should follow PEP8 standards.
 
     - API documentation is generated using 'pycco'. 
-      Thus all modules, methods,
-      classes require a docstring.
+      Thus all modules, methods, classes require a docstring.
 
-    - Docstrings must follow Google docstring format.
-
-    - Markdown language may be used for code comments and
-      docstrings, provided that it renders beautifully with 'pycco'.
+    - Docstrings must follow the numpy docstring format.
       
-    -  The API documentation is built from the root directory
-       by "pycco -i -d docs/api -p NeighborKMC/*.py NeighborKMC/base/*.py"
-
-    -  Tutorials, references(encyclopedia), and how-to-guides are built from 
-       .py files in ./docs/source/.
-       To write a tutorial or how-to, markdown language docstrings are used 
-       together with python code that illustrates the example.
-
-      
+    -  The documentation is built according to documentation/HOWTO_BUILD_DOCUMENTATION.txt
 

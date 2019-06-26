@@ -1,2 +1,2 @@
-"""Empty init file for Python2 and Python3 compatibility.
+"""Base classes used to template and run behind the scenes.
 """

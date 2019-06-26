@@ -1,30 +1,33 @@
-"""### Defines the SystemBase class.
+"""Defines the SystemBase class.
+
+The module defines a class used to template the System class
+defined in user_system.
+
+See Also
+---------
+Module: sites
+Module: user_sites
 
 """
 
 
 class SystemBase:
-    """#### Defines a system class to perform kMC.  
+    """Defines a system class to perform kMC.
             
-    Method assigns an ASE.Atoms object *atoms*
-    to the object and assigns a list of sites *sites*.  
+    Method assigns an ASE.Atoms object (atoms)
+    to the object and assigns a list of sites (sites).
     
-    A neighbor list *neighbors* is initialized  
-    from *sites*, which is checked for inconsistencies  
-    by *verify_nlist()*.
+    A neighbor list (neighbors) is initialized
+    from the sites, which is checked for inconsistencies
+    by the method verify_nlist().
     
-    **Parameters**  
-    *atoms* (ase.atoms, optional): can be passed to connect an ASE atoms  
-    object to the system.
-    
-    *sites* ([Site]): the list of sites that constitute the system.
+    Attributes
+    -----------
+    atoms: ase.atoms
+        Can be passed to connect an ASE atoms  object to the system.
+    sites: Site
+        The list of sites that constitute the system.
 
-    **Returns**  
-    A SystemBase instance.
-    
-    **See Also**  
-    The module [sites](sites.html)  
-    The module [user_sites](../user_sites.html)
 
     """
 
@@ -35,14 +38,16 @@ class SystemBase:
         self.atoms = atoms
 
     def verify_nlist(self):
-        """#### Tests the neighborlist for inconsistency.
+        """Tests the neighborlist for inconsistency.
         
         The method checks if neighborlists are assymetric:  
-        If A is a neigbor to B, then is B must  
+        If A is a neighbor to B, then B must
         also be present in the neighborlist of A.  
         
-        **Raises**  
-        Warning if the neighborlist is assymetric.
+        Raises
+        ---------
+        Warning:
+            If the neighborlist is assymetric.
         
         """
         for i, s in enumerate(self.neighbors):
@@ -52,38 +57,54 @@ class SystemBase:
                                   str(nn) + " but not vice-versa")
 
     def get_ncovs(self, i_site):
-        """#### Gets the coverage on nearest neighbor sites.  
+        """Gets the coverage on nearest neighbor sites.
             
         Retrieves and returns the occupations of the nearest neighbor
-        sites to the site with index *i_site* in *self.sites*.
+        sites to the site with index `i_site` in `self.sites`.
 
-        **Parameters**  
-        *i_site* (int): index of the site relative to *self.sites*.  
+        Parameters
+        -----------
+        i_site: int
+            Index of the site in `self.sites`.
 
-        **Returns**  
-        *covs* ([int]): list of species occupying the nearest neighbor sites.
-
+        Returns
+        -----------
+        covs: list(int)
+            List of species occupying the nearest neighbor sites.
             
         """
         covs = [self.sites[n].covered for n in self.neighbors[i_site]]
         return covs
 
     def find_nn_recurse(self, sim, update_sites, recursion=0):
-        """#### Deep serach of first nearest neighbors.
+        """Deep search of first nearest neighbors.
 
-        Calculates the first nearest neighbors to *update\_sites*.
+        Calculates the first nearest neighbors for a list of site_indices (update_sites).
 
-        For example, when passing *update\_sites*gh = [0,1,2]
-        the method returns [0,1,2,NN0 of 0, NN1 of 0, NN0 of 1 ...]
+        For example, when passing update_sites = [0,1,2],
+        the method returns [0,1,2,N neighbor 0 of site 0, Neighbor 1 of site 0, ...,
+        Neighbor 0 of site 1, ...].
 
         The method is calling itself recursively until the lattice
         is updated, c.f. the locality of nearest neighbor interactions.
 
-        **Parameters**
-        *update_sites* ([int]): the site indices to return neighborlist of.
+        Parameters
+        ------------
+        update_sites: list(int)
+            The site indices to return neighborlist of.
+        recursion: int
+            The recursive level of which function was called, because the method
+            calls itself, for example in base.kmc.frm_update().
 
-        *recursion* (int, optional): the recursive level of
-        which function was called.
+        Returns
+        --------
+        out: list(int)
+            An update to the list update_sites where the neighbors to update_sites
+            are added.
+
+        See Also
+        ---------
+        kmc.NeighborKMC.frm_update()
 
         """
         out = [n for n in update_sites]

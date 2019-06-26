@@ -95,7 +95,7 @@ def run_test():
                       rev_events=reverse_events)
 
     # Run the simulation.
-    result = sim.run_kmc()
+    sim.run_kmc()
     print("Simulation end time reached ! ! !")
 
     # Plot the coverages:

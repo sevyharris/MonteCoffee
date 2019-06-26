@@ -16,7 +16,7 @@ def rescaling(sim):
 
     Parameters
     ----------
-    sim: NeighborKMC object
+    sim: NeighborKMC
         main simulator object to perform rescaling of events for.
 
     """
@@ -52,7 +52,7 @@ def leave_superbasin(sim):
 
     Parameters
     ----------
-    sim: NeighborKMC object
+    sim: NeighborKMC
         main simulator object to perform rescaling of events for.
 
     """
@@ -76,7 +76,7 @@ def scaling_ks(sim, noneqevents, dtS):
 
     Parameters
     ----------
-    sim: NeighborKMC object
+    sim: NeighborKMC
         main simulator object to perform rescaling of events for.
 
     noneqevents: array-like
@@ -108,14 +108,14 @@ def scaling_rs(sim, noneqevents, dtS):
     the superbasin.
 
     c.f. the generalized temporal acceleration scheme
-    (DOI: 10.1021/acs.jctc.6b00859)
+    of Dybeck et al.
 
     Parameters
     ----------
-    sim: NeighborKMC object
+    sim: NeighborKMC
         main simulator object to perform rescaling of events for.
 
-    noneqevents: array-like
+    noneqevents: list(int)
         The indices of events that are not in equilibrium, according to the loading
         order passed to *sim*.
 
@@ -145,25 +145,24 @@ def superbasin(sim, evtype, dt):
     should be slowed down.
 
     Keeps track and performs barrier adjustments,
-    of the generalized temporal acceleration scheme
-    (DOI: 10.1021/acs.jctc.6b00859)
+    of the generalized temporal acceleration scheme of Dybeck et al.
 
     Parameters
     ----------
-    sim: NeighborKMC object
+    sim: NeighborKMC
         main simulator object to perform rescaling of events for.
 
     evtype: int
         The index of the event-type of the currently attempted Monte Carlo step.
 
     dt: float
-        The time-step increment of a result of the currently attempted Monte Carlo step.
+        The time-step of the currently attempted Monte Carlo step.
 
 
     Raises
     --------
     Warning
-        If the time-step dt is negative.
+        If the time-step is negative.
     """
     # Update the rates in the current superbasin
     if dt < 0:

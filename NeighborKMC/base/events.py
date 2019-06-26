@@ -1,34 +1,41 @@
-"""### Defines the EventBase class.
+"""Defines the EventBase class.
 
-The EventBase class is defined as a 
-template-class to derive events from
-in user_events.py
+The EventBase class is defined here as a
+template-class to derive events that can be stored
+in user_events.py.
 
-**See Also**  
-The module [system](system.html)  
-The module [user_system](../user_system.html)  
-The module [sites](sites.html)  
-The module [user_sites](../user_sites.html)  
-The module [events](../events.html)   
-The module [user_events](../user_events.html)  
+The class defines methods that will throw an error if
+implemented wrongly, or are not implemented,
+in the derived classes.
+
+See Also
+-----------
+Module: user_events
 
 """
 
 
 class EventBase:
-    """#### Template class for events.
+    """Template class for events.
             
     Stores a list of parameters
-    related to reaction events: *params*.  
+    related to reaction events.
+
     The class is only used as a parent, and is in this
     sense purely abstract.
-    
-    **Parameters**  
-    *params* (dict): parameter dictionary.  
-    Example: params = {'T': 300, pCO: '1E2'}  
 
-    **Returns**  
-    An EventBase instance.  
+    Attributes
+    -----------
+
+    params: dict
+        Parameter dict dumped at the beginning of the log.
+    alpha: int
+        The slowing down factor that is adsjusted when the reaction is accelerated.
+        This factor is set to 1 upon instantiation and varies periodically during simulation.
+        (See Module: NeighborKMC.base.basin)
+    diffev: bool
+        Is the event a diffusion event. This can be used to make special rules for diffusion events.
+
 
     """
 
@@ -38,24 +45,29 @@ class EventBase:
         self.diffev = False  # Is it a diffusion event.
 
     def possible(self, system, site, other_site):
-        """#### Template method to determine if event is possible.  
+        """Template method to determine if event is possible.
             
         Method needs to be overridden in user_events.py.
         Should return True if an event is possible on
-        site number *i_site* and possible a neighbor
-        site *i_other*, given the current site occupations.
+        site number i_site and possible a neighbor
+        site i_other, given the current site occupations.
             
-        **Parameters**  
-        *system* (System):  the system, which the simulation is performed on. 
-         
-        *i_site* (int):  index of site in the *system*.sites list.  
-        
-        *i_other* (int): index of other/neighbor site in the *system*.sites list.  
+        Parameters
+        -----------
+        system: System
+            The system, which the simulation is performed on.
 
-        **Returns**  
-        True if event is possible on site-pair *i_site* and *i_other*.  
+        i_site: int
+            Index of site in the system.sites list.
         
-        False if event is impossible on site-pair *i_site* and *i_other*. 
+        i_other: int
+            Index of other/neighbor site in the system.sites list.
+
+        Returns
+        --------
+        True if event is possible on site-pair i_site and i_other.
+        
+        False if event is impossible on site-pair i_site and i_other.
 
         """
 
@@ -63,22 +75,27 @@ class EventBase:
                                    method possible() of Event""")
 
     def get_rate(self, system, site, other_site):
-        """#### Template method to determine the rate constant.
+        """Template method to determine the rate constant.
             
         Method needs to be overridden in user_events.py.
         Should return the reaction rate on site number
-        *i_site*, and *i_other* for multi-site reactions.  
+        i_site, and i_other for multi-site reactions.
             
-        **Parameters**  
-        *system* (System):  the system, which the simulation is performed on. 
-         
-        *i_site* (int):  index of site in the *system*.sites list.  
+        Parameters
+        -----------
+        system: System
+            The system, which the simulation is performed on.
+
+        i_site: int
+            Index of site in the system.sites list.
+
+        i_other: int
+            Index of other/neighbor site in the system.sites list.
         
-        *i_other* (int): index of other/neighbor site in the *system*.sites list.  
-        
-        **Returns**  
+        Returns
+        --------
         Rate constant of event, given the current occupation patterns around the  
-        site-pair *i_site* and *i_other*.
+        site-pair i_site and i_other.
 
         """
 
@@ -86,19 +103,23 @@ class EventBase:
                                   method get_rate() of Event""")
 
     def do_event(self, system, site, other_site):
-        """#### Template method to perform the event.
+        """Template method to perform the event.
             
         Method needs to be overridden in user_events.py.  
         Should change system site coverages by changing  
-        *system.sites[i_site].covered* and
-        *system.sites[other_site].covered*.  
+        system.sites[i_site].covered and
+        system.sites[other_site].covered.
             
-        **Parameters**  
-        *system* (System):  the system, which the simulation is performed on. 
-         
-        *i_site* (int):  index of site in the *system*.sites list.  
-        
-        *i_other* (int): index of other/neighbor site in the *system*.sites list.  
+        Parameters
+        -----------
+        system: System
+            The system, which the simulation is performed on.
+
+        i_site: int
+            Index of site in the system.sites list.
+
+        i_other: int
+            Index of other/neighbor site in the system.sites list.
         
         """
 

@@ -1,6 +1,8 @@
 
 """Script that runs a minimal working example.
 
+The example simply involves and Adsorption and Desorption reaction
+with a constant rate-constant.
 """
 
 import numpy as np
@@ -55,7 +57,6 @@ class Desorption(EventBase):
         system.sites[other_site].covered = 0
 
 
-
 def run_mve():
     """Runs minimal working example of A adsorption on a nanoparticle.
 
@@ -100,10 +101,8 @@ def run_mve():
                       rev_events=reverse_events)
 
     # Run the simulation.
-    result = sim.run_kmc()
+    sim.run_kmc()
     print("Simulation end time reached ! ! !")
-
-
 
 
 if __name__ == '__main__':
