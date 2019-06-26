@@ -20,42 +20,201 @@ from ase.io import write
 from base.basin import superbasin, leave_superbasin, rescaling, scaling_rs, scaling_ks
 
 class NeighborKMCBase:
-    """Main class for performing MonteCoffe simulations.
+    """Main class for performing MonteCoffee simulations.
           
     Assigns a system to the simulation, stores parameters, 
     and reads in software configuration from the separate  
     file kMC_options.cfg.  
-    Then it sets the time equal to zero prepares to perform
-    FRM simulations.   
-    
-    **Parameters**  
-    *system* (System): the system instance to perform the simulation on.  
+    Then it sets the time equal to zero and prepares to perform
+    frm kinetic Monte Carlo simulations.
 
-    *tend* (float): simulation end-time.  
+    Parameters
+    ------------
+    system: System
+        The system instance to perform the simulation on.
 
-    *parameters* (dict): parameters used, which are dumped to the log file.  
-           Example: parameters = {'pCO':1E2,'T':700,'Note':'Test simulation'}  
+    tend: float
+        Simulation end-time, given in seconds.
 
-    **Returns**  
-    A NeighborKMCBase instance.  
-    
-    **See Also**  
-    The module [user_kmc](../user_kmc.html) 
+    parameters: dict
+        parameters used to calculate rate-constants and to dump to log files.
+        Example: parameters = {'pCO':1E2,'T':700,'Note':'Test simulation'}
+
+
+    Attributes
+    -----------
+    t: float
+        Current simulation time in seconds.
+
+    Nsites: int
+        The number of sites in self.system
+
+    times: list(float)
+        List of times for each logged monte carlo steps in self.MCstep
+
+    MCstep: list(int)
+        List of Monte Carlo step numbers logged.
+
+    covered: list(list(int))
+        A list of site-occupations, of each site for each logged step.
+        To find the site-occupation at step no self.MCstep[i] and site j, call
+        covered[i][j].
+
+    stype_ev: dict(list(int))
+        How many events are fired of each type (values) for each site type (keys).
+
+    stype_ev_other: dict(list(int))
+        How many events are fired for neighbor sites of each type (values) for each site type (keys).
+
+    sid_ev: dict(list(int))
+        How many events are fired of each type for each site-index. To find the number event j fired
+        on site number i, call sid_ev[i][j].
+
+    sid_ev_other: dict(list(int))
+        How many events are fired of each type for each other-site-index. To find the number event j fired
+        on site number i, call sid_ev[i][j].
+
+    Nstypes: int
+        The number of distinct site-types.
+
+    equilEV: list(int)
+        A list of the event-indices that are quasi-equilibrated.
+
+    scaling_func: function
+        Reference to a function to compute the superbasin-escape rate.
+
+    tgen: list(float)
+        A list of when each specific event was generated.
+        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
+
+    us: list(float)
+        A list of random deviates used when each specific event was generated.
+        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
+
+    ks: list(float)
+        A list of rate-constants obtained when each specific event was generated.
+        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
+
+    r_S: numpy.ndarray(float)
+        The cumulative rates in the current superbasin.
+
+    dt_S: list(float)
+        The time-steps taken in the current superbasin.
+
+    nem: numpy.ndarray(int)
+        The number of times an event was performed the last self.ne steps
+
+    Nm: list(numpy.ndarray(int))
+
+    delta: float
+        Reversibility tolerance to determine if reactions have become quasi-equilibrated.
+
+    Nf: int
+        The average number of steps a quasi-equilibrated event should be observed in each superbasin.
+        When self.usekavg == True, this simply means that a low Nf is more aggressive scaling.
+
+    Ns: int
+        The frequency of barrier scaling.
+
+    ne: int
+        The minimum number of times to see a quasi-equilibrated event in each superbasin.
+
+    usekavg: bool
+        Use average rate-constants to scale the rate-constants as opposed
+        to rates.
+
+    Suffex: list(int)
+        List of sufficiently executed events.
+
+    isup: int
+        How many steps were taken in the current superbasin.
+
+    pm: int
+        Step floor divisor to determine if the superbasin algorithm
+        should be run.
+
+    SaveSteps: int
+        The number of Monte Carlo steps between saving the .txt files.
+
+    LogSteps: int
+        The number of Monte Carlo steps between logging steps.
+
+    tinfinity: float
+        What time to put impossible events to.
+
+    nninter: int
+        The extent of the adsorbate-adsorbate interactions, given as the number
+        of nearest-neighbor interactions.
+
+    Nspecies: int
+        How many different types of species are in the simulation. Used to
+        print and log.
+
+    verbose: bool
+        If True, the code prints verbose information.
+
+    save_coverages: bool
+        If True, coverages are saved to coverages.txt. This can result in
+        large files.
+
+    siteslist: list(int)
+        The list of sites for each specific event.
+        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
+
+    other_sitelist: list(int)
+        The list of neighbor sites for each specific event.
+        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
+
+    lastsel: int
+        The int of the last selected site.
+
+    lastother: int
+        The int of the last selected neighbor site.
+
+    rindex: list(list(list(int)))):
+        The index of the specific events in lists like self.frm_times. For example to find the indices
+        of site no i and event no j and neighbor number k to site i, call
+        rindex[i][j][k].
+
+    possible_evs: list(int):
+        List of events that are possible, used for superbasin algorithms.
+        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
+
+    evs: numpy.ndarray(int):
+        The event numbers for each specific event.
+        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
+
+    rs: numpy.ndarray(float)
+        Rate constants of specific events.
+        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
+
+    wheres: list(list(int)):
+        List of all the positions of the event-types in the lists with length
+        len(self.events)*len(self.sites)*len(self.sites). To find all site-indices where event i
+        happens, call wheres[i].
+
+    ksavg: list(float):
+        The average rate-constant for each event type.
+
+    See Also
+    ---------
+    Module: user_kmc
 
     """
 
     def __init__(self, system, tend, parameters={}):
 
         self.system = system
-        self.t = 0.
         self.tend = tend
         self.parameters = parameters
+
+        self.t = 0.
 
         # Load software configuration
         self.load_options()
 
         if self.verbose:
-            print('-' * 50, '\n', 'MonteCoffee Simulation Initalized', '\n', '-' * 50, '\n')
+            print('-' * 50, '\n', 'MonteCoffee Simulation Initialized', '\n', '-' * 50, '\n')
             print('kMC simulation loading ...')
 
         # Variables connected to after analysis.
@@ -92,7 +251,7 @@ class NeighborKMCBase:
         self.nem = np.zeros(len(self.events), dtype=int)  # number of event-fires in current basin.
         self.Nm = [np.zeros(self.ne, dtype=int) \
                    for i in range(len(self.events))]
-        self.Suffex = []  # suffiently executed quasi-equilibrated events
+        self.Suffex = []  # sufficiently executed quasi-equilibrated events
 
         # Variables for time and step-keeping
         self.isup = 0  # Superbasin step counter
@@ -115,6 +274,7 @@ class NeighborKMCBase:
         
         Instantiates a configuration parser, and loads in all
         options from *kMC_options.cfg*.
+
         """
         config = configparser.RawConfigParser()
         config.read('kMC_options.cfg')
@@ -137,8 +297,8 @@ class NeighborKMCBase:
         """Prepare to perform FRM simulation.
             
         Initializes empty rate and event lists to 
-        bookkeep the FRM algorithm. The initial times  
-        of occurence for each event is also calculated  
+        bookkeep the FRM algorithm. The initial times
+        of occurrence for each event is also calculated
         and stored.  
 
         """
@@ -191,13 +351,12 @@ class NeighborKMCBase:
         """Updates the FRM related lists.
             
         Method updates the event list locally  
-        about the site where the last event happened  
-        by determining if new events have become  
-        possible due to performing the last event.  
+        around the site where the last event happened. This is done
+        by determining if new events have become possible as a result of
+        performing the last event.
 
-        This is done by keeping track of Nearest  
-        neighbors and next nearest neighbors in  
-        *NNlast*, *NNNlast*, *NNother*, and *NNNother*.
+        Events that are no longer possible because of executring the previous
+        event are flagged as impossibe and their time is set to infinity.
 
         """
         # Find site indices to update:
@@ -238,9 +397,14 @@ class NeighborKMCBase:
     def frm_step(self):
         """Takes a Monte Carlo Step.
         
-        Takes a monte carlo step by performing the next  
+        Takes a monte carlo step by performing the chronologically next
         possible event, which has index *self.frm_arg* in the   
-        event list.
+        list self.frm_times.
+
+        Raises
+        -------
+        Warning:
+            If an impossible event is attempted. Usually due to an infinite time-step.
 
         """
         # Choose the first reaction if possible
@@ -289,7 +453,7 @@ class NeighborKMCBase:
         the site-types, and optionally the coverages if  
         *self.covered* is True.  
 
-        Lastly growing lists are cleaned from memory.  
+        Growing lists are cleaned from memory.
 
         """
 
@@ -323,40 +487,50 @@ class NeighborKMCBase:
         self.sid_ev_other = [np.zeros(len(self.events)) for i in range(len(self.system.sites))]
 
     def get_coverages(self):
-        """Gets the coverages at the present moment.
+        """Gets the site-occupations at the present moment.
 
-        **Returns**  
-        ret ([[float]]): a list of coverages for each species  
+        Returns
+        ----------
+        cov list(list(float)): a list of site-occupations for each species
         and all sites. Thus to find the coverage of species  
-        *i* on site number *j* one calls *ret[i][j]*.  
+        i on site number j one calls ret[i][j].
 
         """
-        ret = []
+        cov = []
         for species in range(self.Nspecies + 1):
             cspec = [self.system.sites[i].covered for i \
                      in range(self.Nsites) if \
                      self.system.sites[i].covered == species]
 
-            ret.append(float(len(cspec)) / float(self.Nsites))
+            cov.append(float(len(cspec)) / float(self.Nsites))
 
-        return ret
+        return cov
 
     def write_atoms(self, filename):
         """Writes tagged ase.Atoms to file.
         
-        Writes self.atom_cfgs to file with path *filename*.
-        
-        **Parameters**  
-        *filename* (string): path to file.
+        Writes self.atom_cfgs to file with path filename.
+        The variable self.atom_cfgs can be tagged with coverages or
+        augmented with molecules near the sites to
+        visualize the reaction trajectory. This is currently not implemented.
+
+        Parameters
+        ------------
+        filename: str
+            Path to file.
 
         """
         write(filename, images=self.atom_cfgs)
 
     def load_events(self):
         """Loads events (abstract method).
-        
-        **See Also**  
-        The module [user_kmc](../user_kmc.html)
+
+        This method must be overridden by the child class in user_kmc.NeighborKMC.
+
+        Raises
+        ---------
+        NotImplementedError:
+            If called.
           
         """
         raise NotImplementedError('''User needs to define load_events
@@ -364,12 +538,13 @@ class NeighborKMCBase:
 
     def run_kmc(self):
         """Runs the kMC simulation (abstract method)
-        
-        **Raises**  
-        NotImplementedError if called.
-        
-        **See Also**  
-        The module [user_kmc](../user_kmc.html)
+
+        This method must be overridden by the child class in user_kmc.NeighborKMC.
+
+        Raises
+        ---------
+        NotImplementedError:
+            If called.
 
         """
         raise NotImplementedError('''User needs to define run_kmc method 
