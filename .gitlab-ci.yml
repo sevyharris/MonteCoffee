@@ -16,12 +16,3 @@ test_doc:
   script:
     - cd ./documentation/
     - sh build_doc.sh
-
-deploy_doc:
-  stage: deploy
-  dependencies:
-    - test_mc
-    - test_doc
-  script:
-    - cd ./documentation/
-    - sh build_doc.sh

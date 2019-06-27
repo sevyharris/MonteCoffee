@@ -5,6 +5,10 @@ other modules, e.g. user_energy.py and
 user_events.py to calculate rate-constant,
 energy and entropy.
 
+Note
+-------
+Constants module has a main() method for building documentation.
+
 """
 import numpy as np
 
