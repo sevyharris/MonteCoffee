@@ -28,8 +28,8 @@ class NeighborKMCBase:
     Then it sets the time equal to zero and prepares to perform
     frm kinetic Monte Carlo simulations.
 
-    Parameters
-    ------------
+    Attributes
+    -----------
     system: System
         The system instance to perform the simulation on.
 
@@ -40,20 +40,84 @@ class NeighborKMCBase:
         parameters used to calculate rate-constants and to dump to log files.
         Example: parameters = {'pCO':1E2,'T':700,'Note':'Test simulation'}
 
-
-    Attributes
-    -----------
     t: float
         Current simulation time in seconds.
 
-    Nsites: int
-        The number of sites in self.system
+    *Attributes used to keep track of events (where and when they happen)*
+
+    siteslist: list(int)
+        The list of sites for each specific event.
+        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
+
+    other_sitelist: list(int)
+        The list of neighbor sites for each specific event.
+        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
+
+    lastsel: int
+        The int of the last selected site.
+
+    lastother: int
+        The int of the last selected neighbor site.
+
+    rindex: list(list(list(int)))):
+        The index of the specific events in lists like self.frm_times. For example to find the indices
+        of site no i and event no j and neighbor number k to site i, call
+        rindex[i][j][k].
+
+    possible_evs: list(int):
+        List of events that are possible, used for superbasin algorithms.
+        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
+
+    evs: numpy.ndarray(int):
+        The event numbers for each specific event.
+        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
+
+    rs: numpy.ndarray(float)
+        Rate constants of specific events.
+        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
+
+    wheres: list(list(int)):
+        List of all the positions of the event-types in the lists with length
+        len(self.events)*len(self.sites)*len(self.sites). To find all site-indices where event i
+        happens, call wheres[i].
+
+    *Statistics counting attributes used to log and write output*
+
+    SaveSteps: int
+        The number of Monte Carlo steps between saving the .txt files.
+
+    LogSteps: int
+        The number of Monte Carlo steps between logging steps.
+
+    tinfinity: float
+        What time to put impossible events to.
+
+    nninter: int
+        The extent of the adsorbate-adsorbate interactions, given as the number
+        of nearest-neighbor interactions.
+
+    Nspecies: int
+        How many different types of species are in the simulation. Used to
+        print and log.
+
+    verbose: bool
+        If True, the code prints verbose information.
+
+    save_coverages: bool
+        If True, coverages are saved to coverages.txt. This can result in
+        large files.
 
     times: list(float)
         List of times for each logged monte carlo steps in self.MCstep
 
     MCstep: list(int)
         List of Monte Carlo step numbers logged.
+
+    Nsites: int
+        The number of sites in self.system
+
+    Nstypes: int
+        The number of distinct site-types.
 
     covered: list(list(int))
         A list of site-occupations, of each site for each logged step.
@@ -74,8 +138,7 @@ class NeighborKMCBase:
         How many events are fired of each type for each other-site-index. To find the number event j fired
         on site number i, call sid_ev[i][j].
 
-    Nstypes: int
-        The number of distinct site-types.
+    *Superbasin attributes related to temporal acceleration*
 
     equilEV: list(int)
         A list of the event-indices that are quasi-equilibrated.
@@ -123,6 +186,9 @@ class NeighborKMCBase:
         Use average rate-constants to scale the rate-constants as opposed
         to rates.
 
+    ksavg: list(float):
+        The average rate-constant for each event type.
+
     Suffex: list(int)
         List of sufficiently executed events.
 
@@ -133,72 +199,11 @@ class NeighborKMCBase:
         Step floor divisor to determine if the superbasin algorithm
         should be run.
 
-    SaveSteps: int
-        The number of Monte Carlo steps between saving the .txt files.
-
-    LogSteps: int
-        The number of Monte Carlo steps between logging steps.
-
-    tinfinity: float
-        What time to put impossible events to.
-
-    nninter: int
-        The extent of the adsorbate-adsorbate interactions, given as the number
-        of nearest-neighbor interactions.
-
-    Nspecies: int
-        How many different types of species are in the simulation. Used to
-        print and log.
-
-    verbose: bool
-        If True, the code prints verbose information.
-
-    save_coverages: bool
-        If True, coverages are saved to coverages.txt. This can result in
-        large files.
-
-    siteslist: list(int)
-        The list of sites for each specific event.
-        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
-
-    other_sitelist: list(int)
-        The list of neighbor sites for each specific event.
-        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
-
-    lastsel: int
-        The int of the last selected site.
-
-    lastother: int
-        The int of the last selected neighbor site.
-
-    rindex: list(list(list(int)))):
-        The index of the specific events in lists like self.frm_times. For example to find the indices
-        of site no i and event no j and neighbor number k to site i, call
-        rindex[i][j][k].
-
-    possible_evs: list(int):
-        List of events that are possible, used for superbasin algorithms.
-        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
-
-    evs: numpy.ndarray(int):
-        The event numbers for each specific event.
-        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
-
-    rs: numpy.ndarray(float)
-        Rate constants of specific events.
-        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
-
-    wheres: list(list(int)):
-        List of all the positions of the event-types in the lists with length
-        len(self.events)*len(self.sites)*len(self.sites). To find all site-indices where event i
-        happens, call wheres[i].
-
-    ksavg: list(float):
-        The average rate-constant for each event type.
 
     See Also
     ---------
     Module: user_kmc
+    Module: base.basin
 
     """
 

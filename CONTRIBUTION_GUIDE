@@ -17,5 +17,5 @@ in order to be considered:
 
     - Docstrings must follow the numpy docstring format.
       
-    -  The documentation is built according to documentation/HOWTO_BUILD_DOCUMENTATION.txt
+    - The documentation is built according to documentation/HOWTO_BUILD_DOCUMENTATION.txt
 
