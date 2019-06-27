@@ -23,4 +23,5 @@ deploy_doc:
     - test_mc
     - test_doc
   script:
+    - cd ./documentation/
     - sh build_doc.sh
