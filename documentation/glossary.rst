@@ -15,3 +15,7 @@ kinetic Monte Carlo Simulations:
     - **Turnover frequency**: the number of products formed per site and second.
     
     - **Coordination number**: the number of nearest neighbor sites to an atom. A bulk face centered cubic atom has a coordination number of 12, whereas a (111) atom has 9.
+
+    - **Superbasin**: a set of states connected by fast reversible events.
+
+    - **Coverage**: a fraction of the system-sites that are occupied by either any species or a specific species.
