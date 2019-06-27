@@ -172,4 +172,6 @@ texinfo_documents = [
 ]
 
 
-
+# -- Hack for running readthedocs.org apidoc
+import os
+os.system("sphinx-apidoc -f -o ./api ../NeighborKMC")
