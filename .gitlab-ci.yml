@@ -6,7 +6,8 @@ before_script:
 
 test:
   script:
-  - python3 test.py
+    - cd ./NeighborKMC/
+    - python3 test.py
 
 
 build_doc:

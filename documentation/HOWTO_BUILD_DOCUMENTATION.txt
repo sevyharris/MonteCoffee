@@ -1,0 +1,19 @@
+Dependencies:
+	sphinx
+	rtd_theme (pip install sphinx_rtd_theme)
+
+
+- (Perhaps) Configure path in ./conf.py
+	by changing the two lines:
+	sys.path.insert(0, os.path.abspath('../'))
+	sys.path.insert(0, os.path.abspath('../NeighborKMC')) 
+
+- Generate sphinx apidoc with:
+
+	sphinx-apidoc -o ./api ../NeighborKMC
+
+- Make html from the makefile:
+	make html
+
+- View result:
+	firefox _build/html/index.html
