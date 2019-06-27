@@ -59,7 +59,7 @@ During the simulation the following .txt files are updated with a frequency spec
     >>> evs_exec = np.loadtxt("evs_exec.txt")
     >>> N1 = evs_exec[0]
     
-    - **sid_ev.txt**: Contains the number events that happened at each site. The array is saved and reset periodically, and therefore the first dimension reflects the number of times the array was written. The array is structured as :code:`sid_ev[saved_step][site_number][event_number]`. The array is saved by appending to the .txt file and therefore it is read in by calling numpys reshape:
+    - **sid_ev.txt**: Contains the number events that happened at each site. The array is saved and reset periodically, and therefore the first dimension reflects the number of times the array was written. The array is structured as :code:`sid_ev[saved_step][site_number][event_number]`. The array is saved by appending to the .txt file and therefore it is read in by calling numpy's reshape:
     
     >>> import numpy as np
     >>> stypes = np.loadtxt("stypes.txt")

@@ -9,7 +9,7 @@ Assume that the event list is instantiated as
 >>> from user_events import A, B, X, Z
 >>> events = [A, B, X, Z]
 
-Where X is the forward reaction of a step that generates the product molecuke, and Z is the reverse reaction that consumes one product molecule.
+Where X is the forward reaction of a step that generates the product molecule, and Z is the reverse reaction that consumes one product molecule.
 To calculate the system's overall TOF, we load in the time, and events that were executed (see :ref:`output <output>`)
 
 .. code-block:: python
@@ -41,10 +41,10 @@ We may want a TOF for each type of site and to discard the first half of the sim
             Nst = float(len(sids_st)) #  number of sites with the current stype == st.
             tofs_st[n] += sum([time_chunk[i][2] - time_chunk[i][3] for i in sids_st]) / (dt*Nst) # TOF of the stype       
        
-Here, the last half of the simulation is used, and for all unique types of sites the inidces are noted.
+Here, the last half of the simulation is used, and for all unique types of sites the indices are noted.
 Then the number of sites with the current stype is noted, and finally the TOF is calculated.
        
-**Statistical averaging** should be done to address the covergence of the TOF.
+**Statistical averaging** should be done to address the convergence of the TOF.
 
 
 

@@ -5,7 +5,7 @@ CO oxidation on a Pt nanoparticle
 *************************************
 
 To begin running :program:`MonteCoffee` simulations, there are only a few required steps.
-The entire procedure is shown in `test.py <api/NeighborKMC.html#module-NeighborKMC.test>`_ with references to the other modules mentioned herein.
+The entire procedure is shown in `test.py <../api/NeighborKMC.html#module-NeighborKMC.test>`_ with references to the other modules mentioned herein.
 
 The following guide shows how to perform CO oxidation simulations on a Pt truncated octahedron with an energy landscape based on conventional coordination numbers.
 By going through this, all information that is relevant to performing simulations on more complex reaction networks should be revealed.
@@ -14,7 +14,7 @@ In this guide, species 0 is free sites, 1 is CO and 2 refers to O.
 
 Define constants
 ----------------------
-First any global constants can be defined in `user_constants.py <_modules/NeighborKMC/user_constants.html>`_. 
+First any global constants can be defined in `user_constants.py <../_modules/NeighborKMC/user_constants.html>`_.
 Next parameters are set and stored in a dictionary as:
 
 >>> T = 800.  # Temperature
@@ -95,11 +95,11 @@ Now the :class:`NeighborKMC.user_system.System` object can be defined from the c
 
 Define reaction energies and entropies
 --------------------------------------------
-In this step, the reaction energies, or methods to calculate these, are defined in `user_energy.py <api/NeighborKMC.html#module-NeighborKMC.user_energy>`_.
+In this step, the reaction energies, or methods to calculate these, are defined in `user_energy.py <../api/NeighborKMC.html#module-NeighborKMC.user_energy>`_.
 **In principle, one may skip this section** and simply define reaction energy barriers directly in :ref:`define events <defeventsquick>`, however, we believe this
 step is good for keeping an overview of the coding of the energy landscape.
 
-In this example from  `user_energy.py <api/NeighborKMC.html#module-NeighborKMC.user_energy>`_, the adsorption energies of CO and O are stored as lists (functions of coordination number), the reaction energy barrier as a function `get_Ea(ECO, EO)`, and diffusion barriers as constants:
+In this example from  `user_energy.py <../api/NeighborKMC.html#module-NeighborKMC.user_energy>`_, the adsorption energies of CO and O are stored as lists (functions of coordination number), the reaction energy barrier as a function `get_Ea(ECO, EO)`, and diffusion barriers as constants:
 
 >>> EadsCO = [1.36 + 0.25 * (9 - CN) for CN in [6, 7, 8, 9]]
 >>> EadsO = [0.97 + 0.2 * (9 - CN) for CN in [6, 7, 8, 9]]
@@ -114,7 +114,7 @@ In this example from  `user_energy.py <api/NeighborKMC.html#module-NeighborKMC.u
 >>>    Ea = 1.08 + dETS - dECO - dEO  # Translate the barriers relative to Pt(111)
 >>>    return Ea
 
-Repulsive adsorbate-adsorbate interactions are also defined as a method in  `user_energy.py <api/NeighborKMC.html#module-NeighborKMC.user_energy>`_:
+Repulsive adsorbate-adsorbate interactions are also defined as a method in  `user_energy.py <../api/NeighborKMC.html#module-NeighborKMC.user_energy>`_:
 
 >>> def get_repulsion(cov_self, cov_NN, stype):
 >>>     repulsion = 0.
@@ -129,15 +129,15 @@ Repulsive adsorbate-adsorbate interactions are also defined as a method in  `use
 >>>
 >>>     return repulsion
 
-Now entropies are stored in `user_entropy.py <api/NeighborKMC.html#module-NeighborKMC.user_entropy>`_, where the entropy is defined for gas-phase CO and oxygen, as well as a method to calculate harmonic adsorbate entropy. For brevity, please see the module `user_entropy.py <api/NeighborKMC.html#module-NeighborKMC.user_entropy>`_ for definition of the entropy functions.
+Now entropies are stored in `user_entropy.py <../api/NeighborKMC.html#module-NeighborKMC.user_entropy>`_, where the entropy is defined for gas-phase CO and oxygen, as well as a method to calculate harmonic adsorbate entropy. For brevity, please see the module `user_entropy.py <api/NeighborKMC.html#module-NeighborKMC.user_entropy>`_ for definition of the entropy functions.
 
 .. _defeventsquick:
 
 Define events
 --------------
-Here event-types are defined, which are stored in `user_events.py <api/NeighborKMC.html#module-NeighborKMC.user_events>`_.
+Here event-types are defined, which are stored in `user_events.py <../api/NeighborKMC.html#module-NeighborKMC.user_events>`_.
 For each possible type of event, a class is derived from :class:`NeighborKMC.base.events.EventBase`, which requires defining 3 different methods.
-Take the example of an event where CO+O forms CO2. This event is defined in `user_events.py <api/NeighborKMC.html#module-NeighborKMC.user_events>`_ as follows.
+Take the example of an event where CO+O forms CO2. This event is defined in `user_events.py <../api/NeighborKMC.html#module-NeighborKMC.user_events>`_ as follows.
 
 First we import the necessary functions, classes, and constants:
 
@@ -187,7 +187,7 @@ Now we also need to define a function :code:`get_rate(self, system, i_site, othe
 >>>        return self.alpha * self.Zratio * np.exp(-Ea /
 >>>                                                 (kB * self.params['T'])) * kB * self.params['T'] / h
 
-Here, the site-types are used to get the adsorption enrgies, and the repulsions are added to the adsorption energies. Then a call is made to :code:`get_Ea(ECO, EO)` to obtain the reaciton energy barrier, and the rate is multiplied by the ratio of partition functions :code:`self.Zratio` to account for entropy losses. **It is important to multiply rate constants with** :code:`self.alpha` **if this event is supposed to be** :ref:`accelerated <accelerating>`. This is because :code:`self.alpha` is the slowing-down factor that is adjusted during simulation. 
+Here, the site-types are used to get the adsorption energies, and the repulsions are added to the adsorption energies. Then a call is made to :code:`get_Ea(ECO, EO)` to obtain the reaciton energy barrier, and the rate is multiplied by the ratio of partition functions :code:`self.Zratio` to account for entropy losses. **It is important to multiply rate constants with** :code:`self.alpha` **if this event is supposed to be** :ref:`accelerated <accelerating>`. This is because :code:`self.alpha` is the slowing-down factor that is adjusted during simulation.
 
 Finally each event requires a method :code:`do_event(self,system, site, other_site)` to perform modifications to the site-occupations when fired:
 
