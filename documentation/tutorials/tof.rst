@@ -6,8 +6,10 @@ Calculating a turnover frequency
 A Turnover Frequency (TOF) can simply be calculated from the number of times a product is formed per site and second.
 Assume that the event list is instantiated as
 
->>> from user_events import A, B, X, Z
->>> events = [A, B, X, Z]
+.. code-block:: python
+
+    from user_events import A, B, X, Z
+    events = [A, B, X, Z]
 
 Where X is the forward reaction of a step that generates the product molecule, and Z is the reverse reaction that consumes one product molecule.
 To calculate the system's overall TOF, we load in the time, and events that were executed (see :ref:`output <output>`)

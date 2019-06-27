@@ -1,6 +1,4 @@
-rm api/NeighborKMC.*
-rm api/modules.rst
-sphinx-apidoc -o ./api ../NeighborKMC
+sphinx-apidoc -f -o ./api ../NeighborKMC
 make clean
 make html
 make html
