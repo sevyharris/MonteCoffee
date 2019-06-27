@@ -4,7 +4,6 @@ MonteCoffee is an application for performing kinetic Monte Carlo
 are meant to be used as a programmable application. In this sense, the user
 modifies and develops on the code to customize as needed.
 
-
 # Description and how to cite?
 If you find MonteCoffee useful, please make a citation to:
 [M. Jørgensen and H. Grönbeck, *J. Chem. Phys.* **(2018)**, *149*, 114101](https://doi.org/10.1063/1.5046635)
@@ -30,3 +29,9 @@ The following papers have used MonteCoffee:
 The examples in *documentation.pdf* describe how to run a simulation.
 
 for a quick-start example of CO oxidation over a nanoparticle, you can run *python test.py* 
+
+# Documentation
+Is hosted on [montecoffee.readthedocs.io](https://montecoffee.readthedocs.io/)
+and is built automatically after each push.
+
+To generate documentation manually, you can look in documentation/HOWTO_BUILD_DOCUMENTATION.txt

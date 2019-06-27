@@ -17,3 +17,7 @@ Dependencies:
 
 - View result:
 	firefox _build/html/index.html
+
+
+- All in one go? Just run:
+	sh build_doc.sh
