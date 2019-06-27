@@ -23,4 +23,4 @@ deploy_doc:
     - test_mc
     - test_doc
   script:
-    -sh build_doc.sh
+    - sh build_doc.sh
