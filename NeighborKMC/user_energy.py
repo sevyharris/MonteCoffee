@@ -9,6 +9,11 @@
    Module: user_events
    Module: user_entropy
 
+   Note
+   ------
+   This module is optional to use and can be customized
+   to contain all reaction energies.
+
 """
 
 import numpy as np

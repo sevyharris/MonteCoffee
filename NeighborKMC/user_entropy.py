@@ -7,6 +7,11 @@ See Also
 ---------
 Module: user_events
 
+Note
+------
+This module is optional to use and can be customized
+to contain all reaction entropies.
+
 """
 
 import numpy as np

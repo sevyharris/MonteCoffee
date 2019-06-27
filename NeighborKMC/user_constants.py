@@ -7,6 +7,8 @@ energy and entropy.
 
 Note
 -------
+This module is optional to use and can be customized
+to contain all physical and global constants.
 Constants module has a main() method for building documentation.
 
 """

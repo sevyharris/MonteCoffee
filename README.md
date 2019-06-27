@@ -26,12 +26,12 @@ The following papers have used MonteCoffee:
 [M. Jørgensen and H. Grönbeck, *J. Am. Chem. Soc.* **(2019)**](https://doi.org/10.1021/jacs.9b02132)
 
 # Running a MonteCoffee simulation
-The examples in *documentation.pdf* describe how to run a simulation.
+The *quick_example.py* in the documentation describes a minimal working example on how to run a simulation.
 
 for a quick-start example of CO oxidation over a nanoparticle, you can run *python test.py* 
 
-# Documentation
+## Documentation
 Is hosted on [montecoffee.readthedocs.io](https://montecoffee.readthedocs.io/)
 and is built automatically after each push.
 
-To generate documentation manually, you can look in documentation/HOWTO_BUILD_DOCUMENTATION.txt
+To build documentation manually, see *documentation/HOWTO_BUILD_DOCUMENTATION.txt*
