@@ -4,13 +4,23 @@ before_script:
   - pip3 install -r requirements.txt
 
 
-test:
+test_mc:
+  stage: test
   script:
     - cd ./NeighborKMC/
     - python3 test.py
 
 
-build_doc:
+test_doc:
+  stage: test
   script:
     - cd ./documentation/
     - sh build_doc.sh
+
+deploy_doc:
+  stage: deploy
+  dependencies:
+    - test_mc
+    - test_doc
+  script:
+    -sh build_doc.sh
