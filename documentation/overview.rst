@@ -62,8 +62,9 @@ designed as a programmable application.
 Implicit assumptions
 ---------------------
 
-:program:`MonteCoffee` implictly assumes a few things without specifying what they mean:
+:program:`MonteCoffee` implicitly assumes a few things without specifying what they mean:
 
+    - The user masters the concept of `object-oriented programming in Python  <https://docs.python.org/3/tutorial/classes.html>`_.
 	- The chemical species are simply represented as integers. The user decides the meaning of each integer.
 	- Only sites that are in each others' neighbor-list are connected.
 	- The event numbering is decided by the order of which the user loads the events (see the example in `test.py <api/NeighborKMC.html#module-NeighborKMC.test>`_).

@@ -31,10 +31,10 @@ We may want a TOF for each type of site and to discard the first half of the sim
     Nevents = 4
     sid_ev = np.loadtxt("sid_ev.txt").reshape(-1, Nsites, Nevents)
     
-    Nhalf = len(sid_ev)/2
+    Nhalf = int(np.round(len(sid_ev)/2.,0))
     sid_ev = sid_ev[Nhalf:]
 
-    dt =  time[-1]-time[Nhalf]
+    dt =  time[-1]-time[int(np.round(len(time)/2.,0))]
     tofs_st = np.zeros(len(list(set(stypes))))
 
     for time_chunk in sid_ev:

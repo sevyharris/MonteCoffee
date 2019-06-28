@@ -73,8 +73,8 @@ Then a while loop copies all dirs called run_* back to the submission directory 
     os.chdir(rundir)
 
 
-    T= float(sys.argv[1]) # Temperature
-    pA = float(sys.argv[2]) #1E2 # C2H2 pressure
+    T= float(sys.argv[1])  # Temperature
+    pA = float(sys.argv[2])  # C2H2 pressure
 
     tend = 1.0  # End time of simulation (s)
     a0 = 4.00  # Lattice Parameter (not related to DFT!)
@@ -90,7 +90,7 @@ Then a while loop copies all dirs called run_* back to the submission directory 
     events = [A, B, Z]
     reverse_events = {0: 1}
     
-    p = System(atoms = atoms, sites = sites]
+    p = System(atoms=atoms, sites=sites)
     p.set_neighbors(Ncutoff)
 
     parameters = {"pA": pA,
@@ -99,11 +99,11 @@ Then a while loop copies all dirs called run_* back to the submission directory 
                   "reverse events": reverse_events}
 
 
-    sim = NeighborKMC(system = p, 
-                      tend = tend, 
+    sim = NeighborKMC(system=p,
+                      tend=tend,
                       parameters=parameters, 
-                      events = events,
-                      rev_events = reverse_events)
+                      events=events,
+                      rev_events=reverse_events)
                       
     result = sim.run_kmc()
 
