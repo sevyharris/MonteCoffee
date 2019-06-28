@@ -4,6 +4,8 @@
 Calculating a turnover frequency
 *************************************
 A Turnover Frequency (TOF) can simply be calculated from the number of times a product is formed per site and second.
+The script `analyze_tof.py` provides a complete example of how the TOF can be calculated.
+
 Assume that the event list is instantiated as
 
 .. code-block:: python

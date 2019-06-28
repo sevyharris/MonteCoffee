@@ -14,7 +14,7 @@ The script is run as
 
     - path_sidev is the path to sid_ev.txt
     - path_time is path to time.txt
-    - path stypes is the path to stypes.txt
+    - path_stypes is the path to stypes.txt
     - nevents is the number of different events included in the simulation
     - fracstart is the fraction of data points to include, e.g. 0.33333
     - tofevent is the event number from 0:nevents-1 that yields a tof.
@@ -52,7 +52,7 @@ def main(sys_argv):
     total_tof = sum_ntof/dt/float(nsites)
     print("Total TOF (1/site/s) :", total_tof)
 
-    # Analyze this separately for each stype.
+    # Analyze TOFS separately for each stype.
     # ---------------------------------------
     stypes_unique = list(set(stypes))
     TOF_st = []
