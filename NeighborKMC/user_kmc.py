@@ -72,14 +72,16 @@ class NeighborKMC(NeighborKMCBase):
     Example
     --------
     Assume that we have defined a System object (system), a list of event **classes** (events), and the
-    dict of reverse events (rev_events). Then a NeighborKMC object is instantiated and simulation is run as::
+    dict of reverse events (rev_events). Then a NeighborKMC object is instantiated and simulation is run as:
 
-    nkmc = NeighborKMC(system=system,
-                        tend=1.,
-                        parameters=params,
-                        events=events,
-                        rev_events=rev_events)
-    nkmc.run_kmc()
+    .. code-block:: python
+
+        nkmc = NeighborKMC(system=system,
+                           tend=1.,
+                           parameters=params,
+                           events=events,
+                           rev_events=rev_events)
+        nkmc.run_kmc()
 
     See Also
     ---------
