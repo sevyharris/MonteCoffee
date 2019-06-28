@@ -6,9 +6,9 @@ Quick start
 **********************************
 This tutorial is supposed to provide a minimal working example.
 For a full in-depth tutorial demonstrating CO oxidation over a Pt nanoparticle,
-see :ref:`The CO oxidation tutorial <coox>`. To keep the clarity high, all energy barriers are assumed constant,
+see :ref:`The CO oxidation tutorial <coox>`. To keep the clarity high, all free energy barriers are assumed constant,
 only two types of reaction events are implemented, and neighbors are based on distances in an :class:`ASE.Atoms` object.
-Moreover, everything is done in one python script.
+Moreover, for simplicity everything is done in one python script.
 
 **Step 1. Implement the two event-types**
 

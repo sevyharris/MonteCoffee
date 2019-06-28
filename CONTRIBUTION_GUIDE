@@ -12,7 +12,7 @@ in order to be considered:
 ---------------------------------------------------
     - Python code should follow PEP8 standards.
 
-    - API documentation is generated using 'pycco'. 
+    - API documentation is generated automatically using sphinx-apidoc.
       Thus all modules, methods, classes require a docstring.
 
     - Docstrings must follow the numpy docstring format.

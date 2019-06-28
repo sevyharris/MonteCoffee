@@ -8,7 +8,7 @@ Installation
 Download
 --------------
 
-To download :program:`MonteCoffee` , simply clone the git as::
+To download :program:`MonteCoffee` , simply clone the git::
 
 	git clone https://gitlab.com/ChemPhysChalmers/MonteCoffee.git
 

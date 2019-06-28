@@ -67,5 +67,6 @@ Implicit assumptions
 	- The chemical species are simply represented as integers. The user decides the meaning of each integer.
 	- Only sites that are in each others' neighbor-list are connected.
 	- The event numbering is decided by the order of which the user loads the events (see the example in `test.py <api/NeighborKMC.html#module-NeighborKMC.test>`_).
+    - The model implemented by the user is thermodynamically consistent, and detailed balance is obeyed by the events.
 
 These assumptions are made to give freedom in customizing simulations.

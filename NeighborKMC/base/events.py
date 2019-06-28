@@ -65,9 +65,9 @@ class EventBase:
 
         Returns
         --------
-        True if event is possible on site-pair i_site and i_other.
-        
-        False if event is impossible on site-pair i_site and i_other.
+        possible: bool
+            True if event is possible on site-pair i_site and i_other.
+            False if event is impossible on site-pair i_site and i_other.
 
         """
 
@@ -94,8 +94,9 @@ class EventBase:
         
         Returns
         --------
-        Rate constant of event, given the current occupation patterns around the  
-        site-pair i_site and i_other.
+        Rate constant of event: float
+            The rate-constant given the current occupation patterns around the
+            site-pair i_site and i_other.
 
         """
 

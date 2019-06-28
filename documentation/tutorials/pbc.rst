@@ -5,7 +5,7 @@ Periodic boundary conditions
 *************************************
 
 Periodic boundary conditions are implemented in :program:`MonteCoffee` in the method `System.set_neighbors() <../api/NeighborKMC.html#NeighborKMC.user_system.System.set_neighbors>`_ if one passes :code:`pbc=True` to the method. The method adds sites to each others neighborlist that
-differ in position by a lattice vector plus a nearest neighbor distance: :math:`d_{ij} < a_{\ell} + d_{N-N}`.
+differ in position by a lattice vector plus a nearest neighbor distance: :math:`d_{ij} < |\vec{a}_{\ell}| + d_{N-N}`.
 
 For example, if a Pt(111) surface is instantiated, we can use the `get_distances() <https://wiki.fysik.dtu.dk/ase/_modules/ase/atoms.html#Atoms.get_distances>`_ method from ASE using the `minimum image convention`:
 
