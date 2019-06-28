@@ -45,7 +45,6 @@ def main(sys_argv):
     # Analyze coverages separately for each stype.
     # --------------------------------------------
     stypes_unique = list(set(stypes))
-    cov_st = []
     print("Unique site-types :", stypes_unique)
     print("Calculating coverages for each site-type")
 
