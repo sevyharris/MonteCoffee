@@ -1,5 +1,5 @@
 
-"""Script that runs a minimal working example.
+"""A minimal working example of performing kMC.
 
 The example simply involves and Adsorption and Desorption reaction
 with a constant rate-constant.
