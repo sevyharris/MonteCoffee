@@ -6,9 +6,9 @@ modifies and develops on the code to customize as needed.
 
 # Description and how to cite?
 If you find MonteCoffee useful, please make a citation to:
+
 [M. Jørgensen and H. Grönbeck, *J. Chem. Phys.* **(2018)**, *149*, 114101](https://doi.org/10.1063/1.5046635)
 
-Therein, a description and overview of the code is presented.
 
 # Scientific articles using MonteCoffee
 The following papers have used MonteCoffee:
@@ -37,5 +37,11 @@ and is built automatically after each push.
 To build documentation manually, see *documentation/HOWTO_BUILD_DOCUMENTATION.txt*
 
 ## Developers
-Mikkel Jørgensen, Chalmers (mikkeljoerg@gmail.com)
-Noemi Bosio (bosio@chalmers.se)
+
+- Mikkel Jørgensen, Chalmers university of technology, Sweden.
+
+- Noemi Bosio, Chalmers university of technology, Sweden.
+
+## Troubles / Ideas / Questions?
+
+Please post an issue to the git, and we will try to get back ASAP.
