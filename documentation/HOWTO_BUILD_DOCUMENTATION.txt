@@ -3,6 +3,15 @@ Dependencies:
 	rtd_theme (pip install sphinx_rtd_theme)
 
 
+- All in one go? Just run:
+	sh build_doc.sh
+
+- View result:
+	firefox _build/html/index.html
+
+Manually:
+----------
+
 - (Perhaps) Configure path in ./conf.py
 	by changing the two lines:
 	sys.path.insert(0, os.path.abspath('../'))
@@ -15,9 +24,7 @@ Dependencies:
 - Make html from the makefile:
 	make html
 
-- View result:
-	firefox _build/html/index.html
 
 
-- All in one go? Just run:
-	sh build_doc.sh
+
+

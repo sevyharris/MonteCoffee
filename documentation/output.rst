@@ -10,7 +10,7 @@ Simulation log file
 ----------------------
 :program:`MonteCoffee` generates a .txt log file with the naming convention kMClog_#date_#time_.txt. This is handled by the  module `base.Logging <api/NeighborKMC.base.html#module-NeighborKMC.base.logging>`_.
 
-The first output contains all the dictionary of parameters, passed as the input `parameters` when instantiating a :class:`NeighborKMC` object. This section may look as:
+The first output contains all the dictionary of parameters, passed as the input :code:`parameters` when instantiating a :class:`NeighborKMC` object. This section may look as:
 
 .. code-block:: python
 
@@ -49,21 +49,21 @@ If desired, this method can be altered to output other information during runtim
 
 The code ouputs the following .txt files once prior to simulation:
 
-    - **siteids.txt**: The index of each site, passed as the parameter `ind` when instantiating a :class:`NeighborKMC.user_sites.Site` object. This is useful for connecting the simulation with an :class:`Ase.Atoms` object.
+    - **siteids.txt**: The index of each site, passed as the parameter :code:`ind` when instantiating a :class:`NeighborKMC.user_sites.Site` object. This is useful for storing an :class:`Ase.Atoms` object.
     
-    - **stypes.txt**: The site types for each site, passed as the parameter `stype` when instantiating a :class:`NeighborKMC.user_sites.Site` object.
+    - **stypes.txt**: The site types for each site, passed as the parameter :code:`stype` when instantiating a :class:`NeighborKMC.user_sites.Site` object.
     
 During the simulation the following .txt files are updated with a frequency specified in :ref:`Options <options_sec>`:
 
     - **mcstep.txt**: The Monte Carlo step corresponding to each line in the other .txt files. This is directly dependent on the updating frequency.
-    - **time.txt**: The simulation time in s.
+    - **time.txt**: The simulation time in seconds for every logged monte carlo step.
     - **coverages.txt**: The coverages at each time-step for each lattice-site. The coverages are structured as :code:`coverages[mcstep][site_number]`.
-    - **evs_exec.txt**: The total number of event-type executions. For example, to find the total number of executions of event number 1:
+    - **evs_exec.txt**: The total number of event-type executions. For example, to find the total number of executions of event number 0:
     
     >>> evs_exec = np.loadtxt("evs_exec.txt")
     >>> N1 = evs_exec[0]
     
-    - **sid_ev.txt**: Contains the number events that happened at each site. The array is saved and reset periodically, and therefore the first dimension reflects the number of times the array was written. The array is structured as :code:`sid_ev[saved_step][site_number][event_number]`. The array is saved by appending to the .txt file and therefore it is read in by calling numpy's reshape:
+    - **sid_ev.txt**: Contains the number events that happened at each site. The array is saved and reset periodically, and therefore the first dimension reflects the number of times the array was written. The array is saved by appending to the .txt file and therefore it is read in by calling numpy's reshape:
 
     .. code-block:: python
 
@@ -72,7 +72,8 @@ During the simulation the following .txt files are updated with a frequency spec
         Nsites = stypes.shape[0]
         sid_ev = np.loadtxt("sid_ev.txt").reshape(-1, Nsites, Nevents)
 
-    Where Nevents refers to the number of event types included in the simulation. To find the total number of times event no 0 has been fired for each save [or call to `save_txt() <api/NeighborKMC.base.html#NeighborKMC.base.kmc.NeighborKMCBase.save_txt>`_], a sum is made which corresponds to the output of `evs_exec.txt`:
+    Where Nevents refers to the number of event types included in the simulation. The array is then structured as :code:`sid_ev[saved_step][site_number][event_number]`.
+    To find the total number of times event no 0 has been fired for each save [or call to `save_txt() <api/NeighborKMC.base.html#NeighborKMC.base.kmc.NeighborKMCBase.save_txt>`_], a sum is made which corresponds to the output of `evs_exec.txt`:
     
     >>> N0_total = [sum(s[:,0])  for s in sid_ev]
 

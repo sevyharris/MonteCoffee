@@ -196,8 +196,7 @@ class NeighborKMCBase:
         How many steps were taken in the current superbasin.
 
     pm: int
-        Step floor divisor to determine if the superbasin algorithm
-        should be run.
+        Step floor divisor to determine position in self.nem.
 
 
     See Also

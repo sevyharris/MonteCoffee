@@ -17,5 +17,6 @@ in order to be considered:
 
     - Docstrings must follow the numpy docstring format.
       
-    - The documentation is built according to documentation/HOWTO_BUILD_DOCUMENTATION.txt
+    - The documentation is built automatically upon a git push, however custom building can be
+      performed as described in documentation/HOWTO_BUILD_DOCUMENTATION.txt
 

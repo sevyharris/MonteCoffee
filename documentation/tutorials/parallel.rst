@@ -3,10 +3,10 @@
 
 Parallel simulations
 *************************************
-kMC simulations are stochasitc in nature. This makes it reasonable to perform multiple identically prepared simulations,
-and compute statistical averages post-simulation. In the following, we assume that `ASE <https://wiki.fysik.dtu.dk/ase/>`_ and `MPI4PY <https://pypi.org/project/mpi4py/>`_ are installed.
+kMC simulations are stochastic in nature, making it reasonable to perform multiple identically prepared simulations
+to assess the convergence. In the following, we assume that `ASE <https://wiki.fysik.dtu.dk/ase/>`_ and `MPI4PY <https://pypi.org/project/mpi4py/>`_ are installed.
 
-To submit a simulation, defined in a file `kmc_master_parallel.py` in an environment that implements `SLURM <https://slurm.schedmd.com/>`_, one can submit a bash script as
+To submit a simulation, defined in a file `kmc_master_parallel.py`, in an environment that implements `SLURM <https://slurm.schedmd.com/>`_, one can submit a bash script as
 
 .. code-block:: bash
 

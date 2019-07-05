@@ -4,22 +4,24 @@
 
 Quick start
 **********************************
-This tutorial is supposed to provide a minimal working example.
+This tutorial provides a minimal working example of how to run :program:`MonteCoffee`.
 For a full in-depth tutorial demonstrating CO oxidation over a Pt nanoparticle,
-see :ref:`The CO oxidation tutorial <coox>`. To keep the clarity high, all free energy barriers are assumed constant,
-only two types of reaction events are implemented, and neighbors are based on distances in an :class:`ASE.Atoms` object.
-Moreover, for simplicity everything is done in one python script.
+see :ref:`The CO oxidation tutorial <coox>`. For clarity, all free energy barriers are assumed constant in this tutorial. Also,
+only two different events are implemented, and neighbors are calculated from inter-atomic distances in an :class:`ASE.Atoms` object.
+For simplicity, this guide shows how to setup a simulation in a single python script.
 
 **Step 1. Implement the two event-types**
 
 In this step we import the template class :class:`NeighborKMC.base.events.EventBase`, and derive two classes from this to
 enable two different types of reactions. All defined events must implement three methods: 
 
-    - `possible(self, system, site, other_site) <api/NeighborKMC.base.html#NeighborKMC.base.events.EventBase.possible>`_
-    - `get_rate(self, system, site, other_site) <api/NeighborKMC.base.html#NeighborKMC.base.events.EventBase.get_rate>`_
-    - `do_event(self, system, site, other_site) <api/NeighborKMC.base.html#NeighborKMC.base.events.EventBase.do_event>`_
+    - `possible(self, system, site, other_site) <api/NeighborKMC.base.html#NeighborKMC.base.events.EventBase.possible>`_: returns True if an event is possible.
+    - `get_rate(self, system, site, other_site) <api/NeighborKMC.base.html#NeighborKMC.base.events.EventBase.get_rate>`_: returns the rate constant of the event.
+    - `do_event(self, system, site, other_site) <api/NeighborKMC.base.html#NeighborKMC.base.events.EventBase.do_event>`_: executes the event by modifying site-occupations.
 
-The first event class is an adsorption, that is possible if the pair of neighbor sites are empty, has a rate linearly dependent on the pressure, and 
+
+The first event class is an adsorption, that is possible if the pair of neighbor sites are empty.
+The adsorption class has a rate-constant that is linearly dependent on the pressure, and
 if executed, it covers the sites with species 1:
 
 .. code-block:: python
@@ -48,7 +50,7 @@ if executed, it covers the sites with species 1:
             system.sites[other_site].covered = 1
 
 
-Now we define the reverse desorption event with a constant rate:
+Now we define the reverse desorption-event with a constant rate:
 
 .. code-block:: python
 
@@ -82,11 +84,12 @@ Now we will store **references** to the classes in a list, and make a `dict` tha
     reverse_events = {0: 1}
 
 Specifying which events are reverses help accelerating kMC simulations, as described in the tutorial on :ref:`Accelerating kMC <accelerating>`.
+For irreversible events, simply leave the event-number out of the `dict`.
 
 **Step 2. Define sites**
 
-In this step, the sites are defined from an :class:`ASE.Atoms` object. Here we create one site for each atom in
-a 10x10 fcc(111) surface, all with the same site-type :code:`stype`:
+In this step, the sites are defined from an :class:`ASE.Atoms` object. We create one site for each atom in
+a 10x10 fcc(111) surface, all with the same site-type :code:`stype=0` and without any covering species :code:`covered=0`:
 
 .. code-block:: python
 
@@ -104,7 +107,7 @@ Now we have a list of empty sites, which are used to instantiate a system.
 
 **Step 3. Instantiate system and neighborlists**
 
-Here, the system is created and the sites are connected by calcualting a neighborlist. In this example,
+Here, the system is created and the sites are connected by calculating a neighborlist. In this example,
 the `set_neighbors() <api/NeighborKMC.html#NeighborKMC.user_system.System.set_neighbors>`_ method is used, which assigns sites that are separated by no more than one nearest neighbor distance:
 
 .. code-block:: python

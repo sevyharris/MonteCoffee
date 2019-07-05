@@ -5,9 +5,9 @@ Adsorbate-adsorbate interactions
 *************************************
 
 Adsorbate-adsorbate interactions are implemented by checking site-occupations dynamically in the
-`get_rate() <api/NeighborKMC.base.html#NeighborKMC.base.events.EventBase.get_rate>`_ methods of the events.
-Here, we define a method get_repulsion() in user_energy.py to return the repulsion between species 1 and 2,
-represented as a matrix:
+`get_rate() <../api/NeighborKMC.base.html#NeighborKMC.base.events.EventBase.get_rate>`_ methods of the events.
+As an example, here we define a method get_repulsion() in user_energy.py to return the repulsion between species 1 and 2,
+represented as a list of lists:
 
 .. code-block:: python
 
@@ -30,7 +30,9 @@ represented as a matrix:
     
         return repulsion
 
-Here, if the stype is 0 or 1, the repulsions are halved. Now, in the `get_rate() <api/NeighborKMC.base.html#NeighborKMC.base.events.EventBase.get_rate>`_ methods, the repulsions are called as
+Here, if the stype is 0 or 1, the repulsions are halved in strength.
+Now the repulsions can be called in the `get_rate() <../api/NeighborKMC.base.html#NeighborKMC.base.events.EventBase.get_rate>`_ methods
+of the events as
 
 .. code-block:: python
 
@@ -63,5 +65,4 @@ Here, if the stype is 0 or 1, the repulsions are halved. Now, in the `get_rate()
                         (kB * self.params['T'])) * kB * self.params['T'] / h
 
 If next nearest neighbor interactions are to be implemented, this example should be extended to access the neighbors of the neighbors.
-
-**Set the nninteractions in** :ref:`kMC_options.cfg <options_sec>`  **to update correctly after each event execution.**
+**If this is done, remember to change nninteractions in** :ref:`kMC_options.cfg <options_sec>`  **to update newly enabled events properly after each event execution.**

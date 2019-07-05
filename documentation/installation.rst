@@ -20,9 +20,9 @@ Setup
 ------
 
 :program:`MonteCoffee` is presently installed, simply by copying all
-contents of `NeighborKMC/` to an appropriate directory.
+contents of `NeighborKMC/` to a run-directory.
 
-To verify that the code functions on your current workstation, you
+To verify that the code runs successfully on your current workstation, you
 can run::
 
 	python3 test.py

@@ -5,17 +5,15 @@ CO oxidation on a Pt nanoparticle
 *************************************
 
 To begin running :program:`MonteCoffee` simulations, there are only a few required steps.
-The entire procedure is shown in `test.py <../api/NeighborKMC.html#module-NeighborKMC.test>`_ with references to the other modules mentioned herein.
+The entire tutorial is shown in `test.py <../api/NeighborKMC.html#module-NeighborKMC.test>`_ and the references to the other modules mentioned herein.
 
-The following guide shows how to perform CO oxidation simulations on a Pt truncated octahedron with an energy landscape based on conventional coordination numbers.
-By going through this, all information that is relevant to performing simulations on more complex reaction networks should be revealed.
-
-In this guide, species 0 is free sites, 1 is CO and 2 refers to O.
+Here, CO oxidation is simulated a Pt truncated octahedron with an energy landscape based on conventional coordination numbers.
+In this guide, species 0 denotes empty sites, 1 is CO and 2 refers to O.
 
 Define constants
 ----------------------
-First any global constants can be defined in `user_constants.py <../_modules/NeighborKMC/user_constants.html>`_.
-Next parameters are set and stored in a dictionary as:
+Any global constants can be defined in `user_constants.py <../_modules/NeighborKMC/user_constants.html>`_.
+Next, parameters must be set and stored in a dictionary as:
 
 .. code-block:: python
 
@@ -32,8 +30,8 @@ Next parameters are set and stored in a dictionary as:
 
 Define sites and system
 ----------------------------
-In this step, the sites are defined. For example, one site can be defined for each surface atom using an :class:`Ase.Atoms` object:
-First, we start with an empty list of sites and a nanoparticle in `ASE`:
+One site is defined for each surface atom using an :class:`Ase.Atoms` object.
+We start with an empty list of sites and a nanoparticle in `ASE`:
 
 .. code-block:: python
 
@@ -43,7 +41,7 @@ First, we start with an empty list of sites and a nanoparticle in `ASE`:
      sites = []
      particle = Octahedron("Pt", length=12, cutoff=3, latticeconstant=a)
 
-Now we define one site for each surface atom in particle by first finding the coordination number:
+Now we define one site for each surface atom in particle finding the coordination numbers:
 
 .. code-block:: python
 
@@ -58,7 +56,7 @@ Now we define one site for each surface atom in particle by first finding the co
      # Define surface atoms as non-bulk.
      surface_atom_ids = [i for i in range(len(CNS)) if CNS[i] < 12]
 
-In this example, let each coordination number corresponds to a unique site-type (`stype`):
+In this example, let each coordination number corresponds to a unique site-type :code:`stype`:
 
 .. code-block:: python
 
@@ -66,7 +64,7 @@ In this example, let each coordination number corresponds to a unique site-type 
      for i, k in enumerate(sorted(list(set(CNS)))):
          stypes[k] = i
 
-Now we can create a site, free of adsorbates, for each surface atom with a site-type that corresponds to the coordination number:
+Now we can create a site, free of adsorbates, for each surface atom with a :code:`stype` that corresponds to the coordination number:
 
 .. code-block:: python
 
@@ -110,8 +108,8 @@ Now the :class:`NeighborKMC.user_system.System` object can be defined from the c
 Define reaction energies and entropies
 --------------------------------------------
 In this step, the reaction energies, or methods to calculate these, are defined in `user_energy.py <../api/NeighborKMC.html#module-NeighborKMC.user_energy>`_.
-**In principle, one may skip this section** and simply define reaction energy barriers directly in :ref:`define events <defeventsquick>`, however, we believe this
-step is good for keeping an overview of the coding of the energy landscape.
+**In principle, one may skip this section** and simply define reaction energy barriers directly (see :ref:`define events <defeventsquick>`). However, we believe this
+step is useful for keeping an overview of the coding of the energy landscape.
 
 In this example from  `user_energy.py <../api/NeighborKMC.html#module-NeighborKMC.user_energy>`_, the adsorption energies of CO and O are stored as lists (functions of coordination number), the reaction energy barrier as a function `get_Ea(ECO, EO)`, and diffusion barriers as constants:
 
@@ -147,15 +145,16 @@ Repulsive adsorbate-adsorbate interactions are also defined as a method in  `use
 
          return repulsion
 
-Now entropies are stored in `user_entropy.py <../api/NeighborKMC.html#module-NeighborKMC.user_entropy>`_, where the entropy is defined for gas-phase CO and oxygen, as well as a method to calculate harmonic adsorbate entropy. For brevity, please see the module `user_entropy.py <api/NeighborKMC.html#module-NeighborKMC.user_entropy>`_ for definition of the entropy functions.
+Entropies are stored in `user_entropy.py <../api/NeighborKMC.html#module-NeighborKMC.user_entropy>`_, where the entropy is defined for gas-phase CO and oxygen,
+as well as a method to calculate harmonic adsorbate entropy. For definitions of the functions, we refer to `user_entropy.py <../api/NeighborKMC.html#module-NeighborKMC.user_entropy>`_.
 
 .. _defeventsquick:
 
 Define events
 --------------
 Here event-types are defined, which are stored in `user_events.py <../api/NeighborKMC.html#module-NeighborKMC.user_events>`_.
-For each possible type of event, a class is derived from :class:`NeighborKMC.base.events.EventBase`, which requires defining 3 different methods.
-Take the example of an event where CO+O forms CO2. This event is defined in `user_events.py <../api/NeighborKMC.html#module-NeighborKMC.user_events>`_ as follows.
+For each possible type of event, a class is derived from :class:`NeighborKMC.base.events.EventBase`.
+Take the example of an event where CO+O forms :math:`\mathrm{CO_2}`. This event is defined in `user_events.py <../api/NeighborKMC.html#module-NeighborKMC.user_events>`_ as follows.
 
 First we import the necessary functions, classes, and constants:
 
@@ -176,9 +175,9 @@ Now we derive a class to contain the event:
                            get_Zvib(params["T"], modes_Oads)) ** 0.66
              EventBase.__init__(self, params)
 
-The constructor :code:`__init__(self,params)` is there to attach constants to the object, and :code:`self.Zratio` is the ratio
-between the partition functions in the initial state and transition state, used to calculate the rate. Now we need to write a function
-that returns True if the event is possible on the current site:
+The constructor :code:`__init__(self,params)` is attaches relevant parameters to the object, and :code:`self.Zratio` is the ratio
+between the partition functions in the initial state and transition state, used to calculate the rate constant in transition state theory. We need a function `possible(self,system, site, other_site)`
+that returns True if the event is possible on the current site-pair:
 
 .. code-block:: python
 
@@ -190,7 +189,7 @@ that returns True if the event is possible on the current site:
              else:
                  return False
 
-Here we say that we need the site to be covered by 1 (CO) and the neighbor site by 2 (O) for the event to be possible.
+Thus, for the event to be possible, the site needs to be covered by 1 (CO) and the neighbor site by 2 (O).
 Now we also need to define a function :code:`get_rate(self, system, i_site, other_site)` that returns the rate constant:
 
 .. code-block:: python
@@ -213,7 +212,10 @@ Now we also need to define a function :code:`get_rate(self, system, i_site, othe
             return self.alpha * self.Zratio * np.exp(-Ea /
                                                      (kB * self.params['T'])) * kB * self.params['T'] / h
 
-Here, the site-types are used to get the adsorption energies, and the repulsions are added to the adsorption energies. Then a call is made to :code:`get_Ea(ECO, EO)` to obtain the reaciton energy barrier, and the rate is multiplied by the ratio of partition functions :code:`self.Zratio` to account for entropy losses. **It is important to multiply rate constants with** :code:`self.alpha` **if this event is supposed to be** :ref:`accelerated <accelerating>`. This is because :code:`self.alpha` is the slowing-down factor that is adjusted during simulation.
+The site-types are used to obtain the adsorption energies, and the repulsions are added to the adsorption energies.
+A call is made to :code:`get_Ea(ECO, EO)` to obtain the reaction energy barrier.
+**It is important to multiply rate constants with** :code:`self.alpha` **if this event is supposed to be** :ref:`accelerated <accelerating>`.
+This is because :code:`self.alpha` is the slowing-down factor that is adjusted dynamically for each event during simulation.
 
 Finally each event requires a method :code:`do_event(self,system, site, other_site)` to perform modifications to the site-occupations when fired:
 
@@ -233,7 +235,7 @@ In this case, the two sites containing CO and O are simply emptied. Now, assume 
     - (5) :class:`NeighborKMC.user_events.ODiffEvent` for O diffusion.
     - (6) :class:`NeighborKMC.user_events.COOxEvent` for CO+O -> CO2.
 
-To accelerate the simulation we need to specify which events are each others inverse and store the event-class references in a list:
+To accelerate the simulation we need to specify which events are each others reverse and store the event-class references in a list:
 
 .. code-block:: python
 
@@ -284,8 +286,10 @@ If we need to analyze it for each site-type, the site-types need to be read. For
 .. code-block:: python
 
      stypes = np.loadtxt("stypes.txt")
-     Ncnr = float(len([s for s in stypes if s == 0])) # Number of corner sites
-     cov_CO_corners = [sum([1 for val in covs[i] if val == 1]) / Ncnr for i in range(len(covs))]
+     icnr = [i for i in range(len(stypes)) if stypes[i]==0]
+     Ncnr = float(len(icnr)) # Number of corner sites
+     cov_CO_corners = [sum([1 for j,val in enumerate(covs[i]) if val == 1 and j in icnr]) / Ncnr
+                       for i in range(len(covs))]
 
 Typically, a turnover frequency is also relevant to calculate:
 
@@ -293,12 +297,11 @@ Typically, a turnover frequency is also relevant to calculate:
 
      Nevents = 7 # How many types of events are there.
      sid_ev = np.loadtxt("sid_ev.txt").reshape(-1,stypes.shape[0],Nevents)
-     sid_ev_other = np.loadtxt("sid_ev.txt").reshape(-1,stypes.shape[0],Nevents)
-     TOF = sum([sid_ev[-1][-1]+sid_ev_other[-1][-1]) / (Nsites*time[-1]) # How many CO+O->CO2 has fired per time and site.
+     TOF = sum(sid_ev[-1][-1]) / (Nsites*time[-1]) # How many CO+O->CO2 has fired per time and site.
 
 Often it can be useful to discard points out of steady-state by selecting only part of :code:`sid_ev`.
-To draw statistically sound conclusions, it is recommended that multiple identically prepared simulations are performed.
-See the tutorial on :ref:`Parallel simulations <parallel>`.
+To draw statistically sound conclusions, it is recommended that multiple identically prepared simulations are performed
+(see  tutorials :ref:`Parallel simulations <parallel>` and :ref:`calculating turnover frequencies <tof>`).
 
 
 
