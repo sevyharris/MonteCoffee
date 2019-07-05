@@ -35,3 +35,7 @@ Is hosted on [montecoffee.readthedocs.io](https://montecoffee.readthedocs.io/)
 and is built automatically after each push.
 
 To build documentation manually, see *documentation/HOWTO_BUILD_DOCUMENTATION.txt*
+
+## Developers
+Mikkel Jørgensen, Chalmers (mikkeljoerg@gmail.com)
+Noemi Bosio (bosio@chalmers.se)
