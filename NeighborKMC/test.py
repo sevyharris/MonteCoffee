@@ -28,12 +28,12 @@ def run_test():
     """
     # Define constants.
     # ------------------------------------------
-    T = 800.  # Temperature
-    pCO = 2E3  # CO pressure
-    pO2 = 1E3  # O2 pressure
+    T = 800.  # Temperature (K)
+    pCO = 2E3  # CO pressure (Pa)
+    pO2 = 1E3  # O2 pressure (Pa)
     tend = 1E-6  # End time of simulation (s)
-    a = 4.00  # Lattice Parameter (not related to DFT!)
-    Ncutoff = a / np.sqrt(2.) + 0.05  # Nearest neighbor cutoff
+    a = 4.00  # Lattice Parameter (Angstrom)
+    Ncutoff = a / np.sqrt(2.) + 0.05  # Nearest neighbor cutoff (Angstrom)
 
     # Clear up old output files.
     # ------------------------------------------

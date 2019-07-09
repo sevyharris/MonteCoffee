@@ -64,9 +64,9 @@ def run_mve():
     # Define constants.
     # ------------------------------------------
     tend = 1.0  # End time of simulation (s)
-    a0 = 4.00  # Lattice Parameter (not related to DFT!)
-    Ncutoff = a0 / np.sqrt(2.) + 0.05  # Nearest neighbor cutoff
-    pA = 100.
+    a0 = 4.00  # Lattice Parameter (Angstrom)
+    Ncutoff = a0 / np.sqrt(2.) + 0.05  # Nearest neighbor cutoff (Angstrom)
+    pA = 100. (Pa)
 
     # Load events:
     events = [Adsorption, Desorption]
