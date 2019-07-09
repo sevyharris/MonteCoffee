@@ -21,8 +21,6 @@ To submit a simulation, defined in a file `kmc_master_parallel.py`, in an enviro
     #SBATCH -J project_dir/submit_dir
     #SBATCH --mail-user=USER@UNI.se
     #SBATCH --mail-type=END
- 
-    export NCORES=$(($SLURM_JOB_NUM_NODES*16))
 
     cp *.py $TMPDIR
     cp kMC_options.cfg $TMPDIR
@@ -39,7 +37,7 @@ To submit a simulation, defined in a file `kmc_master_parallel.py`, in an enviro
     LOOPPID=$! # Save the PID of the subshell running the loop
 
 
-    mpirun -np 10 python kmc_master_parallel.py 273. 1E2 1E3 1E3 18 18
+    mpirun -np 10 python kmc_master_parallel.py 273. 1E2
 
     # Copy the files back after run:
 
@@ -108,8 +106,7 @@ Then a while loop copies all dirs called run_* back to the submission directory 
     result = sim.run_kmc()
 
 
-For further explanation, please see the `ASE documentation on parallel calculations <https://wiki.fysik.dtu.dk/ase/ase/parallel.html>`_.
-
-
+For further explanation about using MPI4PY within ASE, please see the `ASE documentation on parallel calculations <https://wiki.fysik.dtu.dk/ase/ase/parallel.html>`_.
+It can be useful to assign a large :code:`tend` and let the script runtime determine the end of simulation.
 
 

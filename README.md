@@ -44,4 +44,4 @@ To build documentation manually, see *documentation/HOWTO_BUILD_DOCUMENTATION.tx
 
 ## Troubles / Ideas / Questions?
 
-Please post an issue to the git, and we will try to get back ASAP.
+Please post an issue to the git, and we will try to reply ASAP.
