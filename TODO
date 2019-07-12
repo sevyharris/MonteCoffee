@@ -1,18 +1,4 @@
 TODOLIST:
 --------------------
 
-- Make tutorials at the GIT to do both a lattice and nlist based example.
-
-- Make a quick start appear at the GIT front page, together with a "what is kMC. 
-
-- API documentation as part of the code.
-
-- Add a script that reconstructs stype_ev.txt from sid_ev.txt
-
-- Add a script that plots the coverages as in test.py
-
 - Make all code follow the documentation conventions.
-
-- Make a run script generator code that lets you y/n to generate user_events.py, user_energy.py and test.py like files.
-  This should contain fairly simple events ads/des/diffusion and standard TST(energy,entropy) functions.
-
