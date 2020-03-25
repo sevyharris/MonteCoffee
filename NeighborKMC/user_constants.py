@@ -37,7 +37,7 @@ modes_Oads = 1E-3 * np.array([47.3, 47.6, 55.1])
 modes_O2gas = 1E-3 * np.array([191.2])
 
 # **Misc**
-sigmaCO = 2.  # Symmetry factor of CO.
+sigmaCO = 1.  # Symmetry factor of CO.
 sigmaO2 = 2.  # Symmetry factor of O2.
 ICO = 1.50752694e-46  # CO moment of inertia
 IO2 = 2.06218774e-46  # O2 moment of inertia
