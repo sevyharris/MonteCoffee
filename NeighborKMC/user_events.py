@@ -172,8 +172,8 @@ class ODesEvent(EventBase):
         stype_other = system.sites[other_site].stype
         Ncovs = system.get_ncovs(site)
         Ncovsother = system.get_ncovs(other_site)
-        E2O = max(2. * EadsO[stype] - get_repulsion(1, Ncovs, stype) \
-                  - get_repulsion(1, Ncovsother, stype_other), 0.)
+        E2O = max(2. * EadsO[stype] - get_repulsion(2, Ncovs, stype) \
+                  - get_repulsion(2, Ncovsother, stype_other), 0.)
 
         Rf = (s0O * self.params['pO2'] * Asite /
               np.sqrt(2. * np.pi * mO2 * kB * eV2J * self.params['T']))

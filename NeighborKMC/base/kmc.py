@@ -435,8 +435,8 @@ class NeighborKMCBase:
             self.stype_ev_other[self.system.sites[othersite].stype]\
                 [self.evs[self.frm_arg]] += 1
 
-            self.sid_ev[self.system.sites[site].stype][self.evs[self.frm_arg]] += 1
-            self.sid_ev_other[self.system.sites[othersite].stype][self.evs[self.frm_arg]] += 1
+            self.sid_ev[site][self.evs[self.frm_arg]] += 1
+            self.sid_ev_other[othersite][self.evs[self.frm_arg]] += 1
 
             # Update superbasin
             superbasin(self, evtype, dt)

@@ -204,21 +204,3 @@ class NeighborKMC(NeighborKMCBase):
 
         log.dump_point(stepNMC, self.t, self.evs_exec)
         self.save_txt()
-
-    def save_txt(self):
-        """Saves txt files containing the simulation data.
-
-        Calls the behind-the-scenes save_txt() method of the base class.
-        The user should add any optional writes in this method, which
-        is called every self.SaveSteps steps.
-
-        Example
-        --------
-        Add the following line to the end of the method:
-
-        >>> np.savetxt("user_stype_ev.txt", self.stype_ev[0])
-
-        """
-
-        NeighborKMCBase.save_txt(self)
-

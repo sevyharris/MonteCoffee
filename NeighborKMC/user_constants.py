@@ -27,7 +27,7 @@ R = kB * Na * e  # Gas Constant in J/(mol K)
 
 # **Molecular masses**
 mCO = 28.01E-3 / Na  # mass of CO in kg
-mO2 = 15.999E-3 / Na  # mass of O2 in kg
+mO2 = 2 * 15.999E-3 / Na  # mass of O2 in kg
 
 # **Vibrational energies**
 modes_COgas = 1E-3 * np.array([263.4])
