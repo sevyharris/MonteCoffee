@@ -126,3 +126,19 @@ class EventBase:
 
         raise NotImplementedError("""Called purely abstract 
                                   method do_event() of Event""")
+
+    def get_involve_other():
+        """Template method to decide if neighboring atoms are effected by event.
+       
+        Method needs to be overridden in user_events.py. 
+        Should return True if event effects neighboring atoms and False if not (e.g. single atom adsorption).
+        """
+
+        raise NotImplementedError("""Called purely abstract 
+                                  method get_involve_other() of Event""")
+
+
+
+
+
+

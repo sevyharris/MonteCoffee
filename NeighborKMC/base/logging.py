@@ -2,7 +2,8 @@
 
 """
 import time
-
+import numpy as np
+from ase.io import write
 
 class Log:
     """Handles logging of kMC simulations.
@@ -94,5 +95,65 @@ class Log:
             time_str = time.strftime('%H:%M:%S')
             f.write('{:<10s} {:^20s} {:^30s} {:<10s}'.format(str(step),
                     time_str,str(sim_time),str(["%.0f"%item for item in ev_called])+'\n'))
+
+    def save_txt(self):
+        """Saves txt files containing the simulation data.
+
+        Saves the number of events executed on
+        the different types of sites, the time vs mcstep,
+        the site-types, and optionally the coverages if
+        *self.covered* is True.
+
+        Growing lists are cleaned from memory.
+
+        """
+
+        if self.verbose:
+            print('Saving .txt files ...')
+
+        # Save global neighborlist to one file
+        if self.save_coverages:
+            with open("coverages.txt", "ab") as f2:
+                np.savetxt(f2, self.covered)
+
+        with open("mcstep.txt", "wb") as f2:
+            np.savetxt(f2, self.MCstep)
+
+        with open("evs_exec.txt", "wb") as f2:
+            np.savetxt(f2, self.evs_exec)
+
+        with open("sid_ev.txt", "ab") as f2:
+            np.savetxt(f2, self.sid_ev)
+
+        with open("sid_ev_other.txt", "ab") as f2:
+            np.savetxt(f2, self.sid_ev_other)
+
+        with open("time.txt", "ab") as f2:
+            np.savetxt(f2, self.times)
+
+        if self.write_atoms:
+            self.save_atoms("atoms_"+str(self.MCstep)+".traj")
+
+        # Clear up lists that grow with time:
+        self.times = []
+        self.covered = []
+        self.sid_ev = [np.zeros(len(self.events)) for i in range(len(self.system.sites))]
+        self.sid_ev_other = [np.zeros(len(self.events)) for i in range(len(self.system.sites))]
+
+    def save_atoms(self, filename):
+        """Writes tagged ase.Atoms to file.
+
+        Writes self.atom_cfgs to file with path filename.
+        The variable self.atom_cfgs can be tagged with coverages or
+        augmented with molecules near the sites to
+        visualize the reaction trajectory. This is currently not implemented.
+
+        Parameters
+        ------------
+        filename: str
+            Path to file.
+
+        """
+        write(filename, self.atoms)
 
 

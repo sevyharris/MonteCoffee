@@ -4,7 +4,6 @@ The methods are used to perform kMC
 simulations with the first reaction method.
 
 """
-
 from __future__ import print_function
 from six.moves import configparser
 import six
@@ -17,8 +16,6 @@ else:
 import numpy as np
 import random
 random.seed()
-from random import uniform
-from ase.io import write
 #from base.basin import superbasin, leave_superbasin, rescaling, scaling_rs, scaling_ks
 
 class NeighborKMCBase:
@@ -82,6 +79,11 @@ class NeighborKMCBase:
         List of all the positions of the event-types in the lists with length
         len(self.events)*len(self.sites)*len(self.sites). To find all site-indices where event i
         happens, call wheres[i].
+  
+    involve_other: bool:
+        -False if the event happens only on one specific site
+        -True if the event modifies two or more sites         
+
 
     *Statistics counting attributes used to log and write output*
 
@@ -108,6 +110,9 @@ class NeighborKMCBase:
     save_coverages: bool
         If True, coverages are saved to coverages.txt. This can result in
         large files.
+
+    write_atoms: bool
+        If True, the surface atoms are written with the step number in the filename. It has to be adjusted for adsorption species individually. 
 
     times: list(float)
         List of times for each logged monte carlo steps in self.MCstep
@@ -139,6 +144,9 @@ class NeighborKMCBase:
     sid_ev_other: dict(list(int))
         How many events are fired of each type for each other-site-index. To find the number event j fired
         on site number i, call sid_ev[i][j].
+
+    used_ijk: list(tuples(site,event,othersite))
+        List of tuples representing the unique neighbor-event pairs avoiding double counting. 
 
     *Superbasin attributes related to temporal acceleration*
 
@@ -214,7 +222,7 @@ class NeighborKMCBase:
         self.tend = tend
         self.parameters = parameters
 
-        self.t = 0.
+        self.t = 0.  #Initialize the time
 
         # Load software configuration
         self.load_options()
@@ -224,7 +232,6 @@ class NeighborKMCBase:
             print('kMC simulation loading ...')
 
         # Variables connected to after analysis.
-        self.Nsites = len(self.system.sites)  # Number of sites
         self.times = []  # Times of simulation point
         self.MCstep = []  # Number of MCSteps
         self.covered = []  # Site-occupations
@@ -241,29 +248,8 @@ class NeighborKMCBase:
         for i in self.Nstypes:
             self.stype_ev[i] = list(evnl)
             self.stype_ev_other[i] = list(evnl)
-
-        self.used_ijk = [] # MIKKEL ADD for avoid double counting events of site 1+2 vs site 2+1.
-
-        # Variables connected to temporal acceleration
-#        self.equilEV = [e for e in range(len(self.events)) if self.events[e].diffev]  # Track equilibrated events.
-
-        # Choose a method of scaling rates c.f. kMC_options.cfg
-#        self.scaling_func = scaling_ks if self.usekavg else scaling_rs
-
-        # Lists for rescaling barriers and superbasin tracking
-#        self.tgen = []  # time event was generated.
-#        self.us = []  # random deviates used
-#        self.ks = []  # rate-constants used
-#        self.r_S = np.zeros(len(self.events))  # Rates in current superbasin
-#        self.dt_S = []  # dt used to compute rs in current superbasin
-#        self.nem = np.zeros(len(self.events), dtype=int)  # number of event-fires in current basin.
-#        self.Nm = [np.zeros(self.ne, dtype=int) \
-#                   for i in range(len(self.events))]
-#        self.Suffex = []  # sufficiently executed quasi-equilibrated events
-
-        # Variables for time and step-keeping
-#        self.isup = 0  # Superbasin step counter
-#        self.pm = 0  # variable for checking every N steps.
+        
+        self.used_ijk = [] # Avoid double counting events of site 1+2 vs site 2+1.
 
         # FRM method variables
         # --------------------------------------------------     
@@ -294,6 +280,7 @@ class NeighborKMCBase:
                                      'nninteractions')  # Range of ads-ads interactions (affects local update).
         self.Nspecies = config.getint('Parameters', 'Nspecies')  # Number of different species in simulation.
         self.verbose = config.getboolean('Options', 'Verbose')  # Print verbose information?
+        self.write_atoms = config.getboolean('Options', 'Write_atoms')  # Print verbose information?
         self.save_coverages = config.getboolean('Options', 'SaveCovs')  # Save coverages?
         self.delta = config.getfloat('Options', 'Delta')  # reversibility tolerance
         self.Nf = config.getfloat('Options', 'Nf')  # Avg event observance in superbasins
@@ -315,53 +302,48 @@ class NeighborKMCBase:
         self.evs = []
         self.other_sitelist = []
         self.lastsel = 0
-        self.lastother = self.system.neighbors[0][0]
+        self.lastother = None 
         self.rindex = [[[] for b in range(len(self.events))] for \
                        a in range(len(self.system.sites))]
-
-        self.possible_evs = []  # used for superbasin.
-        ks = []
+        self.correct_index = []
+        self.possible_evs = [] 
+ 
         for i, s in enumerate(self.system.sites):
             NNcur = self.system.neighbors[i]
             for j, e in enumerate(self.events):
                 for k, other_site in enumerate(NNcur):
-                    used_ijk = True if (i,j,k) in self.used_ijk or (k,j,i) in self.used_ijk else False # MIKKEL ADD
-                    if e.possible(self.system, i, other_site) and not used_ijk: # MIKKEL ADD
+                    used_ijk = True if (i,j,other_site) in self.used_ijk or (other_site,j,i) in self.used_ijk else False # Check if the pair is already in list 
+                    if e.possible(self.system, i, other_site) and not used_ijk: 
                         rcur = e.get_rate(self.system, i, other_site)
-                        u = uniform(0., 1.)
-#                        self.frm_times.append(self.t - np.log(u) / rcur)
                         self.frm_times.append(self.t - np.log(random.uniform(0,1)) / rcur)
-#                        self.tgen.append(self.t)
-#                        self.us.append(u)
                         self.possible_evs.append(True)
 		    
-                    else:
+                    elif not used_ijk: # Add only disabled events to the list for unique pairs
                         rcur = 0.
                         self.frm_times.append(self.tinfinity)
-#                        self.tgen.append(self.t)
-#                        self.us.append(uniform(0., 1.))
                         self.possible_evs.append(False)
 
-                    if (i,j,k) not in self.used_ijk and (k,j,i) not in self.used_ijk: # MIKKEL ADD
-                        self.used_ijk.append((i,j,k)) # MIKKEL ADD
-                   
+                    if (i,j,other_site) not in self.used_ijk and (other_site,j,i) not in self.used_ijk: # Create unique pair-event tuple list  
+                        self.used_ijk.append((i,j,other_site)) 
+                        self.correct_index.append((i,j,k)) # extra only for the initialization  
+                        self.rindex[i][j].append(len(self.rs))
+                        self.evs.append(j)
+                        self.rs.append(rcur)
+                        self.siteslist.append(i)
+                        self.other_sitelist.append(other_site)
 
-                    ks.append(e.get_rate(self.system, i, other_site))
-                    self.rindex[i][j].append(len(self.rs))
-                    self.evs.append(j)
-                    self.rs.append(rcur)
-                    self.siteslist.append(i)
-                    self.other_sitelist.append(other_site)
+                    else: # Important to book-keep the rindex list and crossref to unique pair-event pairs
+                        ind_search = [si for si, tupl in enumerate(self.used_ijk) if (tupl == (i,j,other_site) or tupl == (other_site,j,i))][0]
+                        use_tuble = self.correct_index[ind_search]
+                        self.rindex[i][j].append(self.rindex[use_tuble[0]][use_tuble[1]][use_tuble[2]])
+                    
+                    if not e.get_involve_other(): #Ensure that events which doesn't involve neighbors do not produce aditional times
+                        break            
 
         self.frm_times = np.array(self.frm_times)
         self.evs = np.array(self.evs)
         self.rs = np.array(self.rs)
-        self.wheres = [np.where(self.evs == i) for i in range(len(self.events))]
-        self.ks = np.array(ks)
-        self.ksavg = [np.mean([self.ks[i] for i in self.wheres[j][0]]) for j in range(len(self.events))]
-        #self.frm_arg = self.frm_times.argmin()
-        self.frm_arg = sorted(range(len(self.frm_times)), key=self.frm_times.__getitem__)[0]
- 
+        self.frm_arg = self.frm_times.argmin()
 
     def frm_update(self):
         """Updates the FRM related lists.
@@ -379,8 +361,7 @@ class NeighborKMCBase:
         search = self.system.find_nn_recurse(self, [self.lastsel,
                                        self.lastother])
 
-        # Save reference to function calls
-        # to reduce overhead
+        # Save reference to function calls to reduce overhead
         get_r_func = [e.get_rate for e in self.events]
         possible_func = [e.possible for e in self.events]
 
@@ -388,24 +369,33 @@ class NeighborKMCBase:
             # Determine if any events have become possible.
             for j, e in enumerate(self.events):
                 for k, other in enumerate(self.system.neighbors[i]):
-                    used_ijk = True if (i,j,k) in self.used_ijk else False # MIKKEL ADD
-                    poslist = self.rindex[i][j][k]
-                    poss_now = possible_func[j](self.system, i, other)
-                    if poss_now and used_ijk and self.possible_evs[poslist]==False: # MIKKEL ADD
-                        rcur = get_r_func[j](self.system, i, other)
-                        self.rs[poslist] = rcur
-                        u = uniform(0., 1.)
-                        self.frm_times[poslist] = self.t - np.log(random.uniform(0,1)) / rcur
-                        self.possible_evs[poslist] = True # MIKKEL ADD
-			
-                    elif self.possible_evs[poslist]: # if possible before, but not now MIKKEL ADD
-                        self.rs[poslist] = 0.
-                        self.frm_times[poslist] = self.tinfinity
-                        self.possible_evs[poslist] =False # MIkkel ADD
-
-        # New first reaction ?
-        #self.frm_arg = self.frm_times.argmin()
-        self.frm_arg = sorted(range(len(self.frm_times)), key=self.frm_times.__getitem__)[0]
+                    used_ijk = True if (i,j,other) in self.used_ijk else False 
+                    if used_ijk:
+                        poslist = self.rindex[i][j][k]
+                        poss_now = possible_func[j](self.system, i, other)
+                        if poss_now and not self.possible_evs[poslist]: 
+                            rcur = get_r_func[j](self.system, i, other)
+                            self.rs[poslist] = rcur
+                            self.frm_times[poslist] = self.t - np.log(random.uniform(0,1)) / rcur
+                            self.possible_evs[poslist] = True
+    			
+                        elif not poss_now and self.possible_evs[poslist]: # if not possible now, but was possible before 
+                            self.rs[poslist] = 0.
+                            self.frm_times[poslist] = self.tinfinity
+                            self.possible_evs[poslist] =False
+ 
+                        elif poss_now and self.possible_evs[poslist] and i == self.lastsel and other == self.lastother: 
+                            rcur = get_r_func[j](self.system, i, other)
+                            self.rs[poslist] = rcur
+                            self.frm_times[poslist] = self.t - np.log(random.uniform(0,1)) / rcur
+                            self.possible_evs[poslist] = True
+    			
+    
+                        if not e.get_involve_other(): #Ensure one time if neighbours are not effected by event
+                            break           
+ 
+        # Update the first reaction part
+        self.frm_arg = self.frm_times.argmin()
 
     def frm_step(self):
         """Takes a Monte Carlo Step.
@@ -425,7 +415,7 @@ class NeighborKMCBase:
         othersite = self.other_sitelist[self.frm_arg]
         self.lastsel = int(site)
         self.lastother = int(othersite)
-        dt = float(self.frm_times[self.frm_arg] - self.t)
+         
         if self.events[self.evs[self.frm_arg]].possible(self.system,
                                                         site, othersite):
             # Event is possible, change state
@@ -446,93 +436,12 @@ class NeighborKMCBase:
             self.sid_ev[site][self.evs[self.frm_arg]] += 1
             self.sid_ev_other[othersite][self.evs[self.frm_arg]] += 1
 
-            # Update superbasin
-#            superbasin(self, evtype, dt)
-
         else:
             # New first reaction must be determined
             raise Warning("Impossible event were next in que and was attempted")
 
-        # Save where the event happened:
-
         self.frm_update()
 
-    def save_txt(self):
-        """Saves txt files containing the simulation data.
-        
-        Saves the number of events executed on  
-        the different types of sites, the time vs mcstep,  
-        the site-types, and optionally the coverages if  
-        *self.covered* is True.  
-
-        Growing lists are cleaned from memory.
-
-        """
-
-        if self.verbose:
-            print('Saving .txt files ...')
-
-        # Save global neighborlist to one file
-        if self.save_coverages:
-            with open("coverages.txt", "ab") as f2:
-                np.savetxt(f2, self.covered)
-
-        with open("mcstep.txt", "wb") as f2:
-            np.savetxt(f2, self.MCstep)
-
-        with open("evs_exec.txt", "wb") as f2:
-            np.savetxt(f2, self.evs_exec)
-
-        with open("sid_ev.txt", "ab") as f2:
-            np.savetxt(f2, self.sid_ev)
-
-        with open("sid_ev_other.txt", "ab") as f2:
-            np.savetxt(f2, self.sid_ev_other)
-
-        with open("time.txt", "ab") as f2:
-            np.savetxt(f2, self.times)
-
-        # Clear up lists that grow with time:
-        self.times = []
-        self.covered = []
-        self.sid_ev = [np.zeros(len(self.events)) for i in range(len(self.system.sites))]
-        self.sid_ev_other = [np.zeros(len(self.events)) for i in range(len(self.system.sites))]
-
-    def get_coverages(self):
-        """Gets the site-occupations at the present moment.
-
-        Returns
-        ----------
-        cov list(list(float)): a list of site-occupations for each species
-        and all sites. Thus to find the coverage of species  
-        i on site number j one calls ret[i][j].
-
-        """
-        cov = []
-        for species in range(self.Nspecies + 1):
-            cspec = [self.system.sites[i].covered for i \
-                     in range(self.Nsites) if \
-                     self.system.sites[i].covered == species]
-
-            cov.append(float(len(cspec)) / float(self.Nsites))
-
-        return cov
-
-    def write_atoms(self, filename):
-        """Writes tagged ase.Atoms to file.
-        
-        Writes self.atom_cfgs to file with path filename.
-        The variable self.atom_cfgs can be tagged with coverages or
-        augmented with molecules near the sites to
-        visualize the reaction trajectory. This is currently not implemented.
-
-        Parameters
-        ------------
-        filename: str
-            Path to file.
-
-        """
-        write(filename, images=self.atom_cfgs)
 
     def load_events(self):
         """Loads events (abstract method).

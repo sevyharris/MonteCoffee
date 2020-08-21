@@ -33,6 +33,7 @@ class SystemBase:
 
     def __init__(self, sites, atoms=None):
         self.sites = sites
+        self.Nsites = len(self.sites)
         self.neighbors = [s.neighbors for s in sites]
         self.verify_nlist()
         self.atoms = atoms
@@ -75,6 +76,27 @@ class SystemBase:
         """
         covs = [self.sites[n].covered for n in self.neighbors[i_site]]
         return covs
+
+    def get_coverages(self, N_species):
+        """Gets the site-occupations at the present moment.
+
+        Returns
+        ----------
+        cov list(list(float)): a list of site-occupations for each species
+        and all sites. Thus to find the coverage of species
+        i on site number j one calls ret[i][j].
+
+        """
+        cov = []
+        for species in range(N_species + 1):
+            cspec = [self.sites[i].covered for i \
+                     in range(self.Nsites) if \
+                     self.sites[i].covered == species]
+
+            cov.append(float(len(cspec)) / float(self.Nsites))
+
+        return cov
+
 
     def find_nn_recurse(self, sim, update_sites, recursion=0):
         """Deep search of first nearest neighbors.
