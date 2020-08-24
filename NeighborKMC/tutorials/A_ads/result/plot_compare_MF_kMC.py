@@ -6,12 +6,22 @@ import sys
 import matplotlib.pyplot as plt
 
 # initialize random number generator
-#random.seed()
+random.seed()
+
+def readFile(filename, r=1):
+  List=[[] for ii in range(r)]
+  f = open(filename)
+  for line in f:
+    line = line.rstrip()
+    parts = line.split()
+    for i in range(r):
+      List[i].append(float(parts[i]))
+  return List
 
 def do_simple_frm():
 
     # set parameters
-    tmax = 5.0 # maximal simulation time
+    tmax = 10.0 # maximal simulation time
     n = 1000     # number of sites
     ra = 1.0    # rate of adsorption
     rd = 1.0    # rate of desorption
@@ -63,7 +73,7 @@ def do_simple_frm():
 def do_mean_field():
     ra = 1.0
     rd = 1.0
-    t_list = np.arange(0,5,0.01)
+    t_list = np.arange(0,10,0.01)
     theta_init = 0.
     theta_list = []
     current_theta = theta_init
@@ -72,10 +82,25 @@ def do_mean_field():
    
     return t_list, theta_list
 
-#frm_t, frm_theta = do_simple_frm()
-#mf_t, mf_theta = do_mean_field()
+frm_t, frm_theta = do_simple_frm()
+mf_t, mf_theta = do_mean_field()
+time_kmc_5x5 = readFile('time_5x5.txt', r=1) 
+cov_kmc_5x5_data = np.loadtxt('cov_5x5.txt')
+cov_kmc_5x5 = [sum(cov_kmc_5x5_data[a])/25.0 for a in range(len(time_kmc_5x5[0]))]
+time_kmc_10x10 = readFile('time_10x10.txt', r=1) 
+cov_kmc_10x10_data = np.loadtxt('cov_10x10.txt') 
+cov_kmc_10x10 = [sum(cov_kmc_10x10_data[a])/100.0 for a in range(len(time_kmc_10x10[0]))]
+time_kmc_100x10 = readFile('time_100x10.txt', r=1) 
+cov_kmc_100x10_data = np.loadtxt('cov_100x10.txt') 
+cov_kmc_100x10 = [sum(cov_kmc_100x10_data[a])/1000.0 for a in range(len(time_kmc_100x10[0]))]
 #
-#plt.plot(frm_t, frm_theta,'r-')
-#plt.plot(mf_t, mf_theta,'k-')
-#plt.savefig('test_mf.pdf')
+plt.plot(frm_t, frm_theta, '-', label='Simple FRM, N=1000')
+plt.plot(time_kmc_5x5[0], cov_kmc_5x5, '-', label='NN-kMC 5x5')
+plt.plot(time_kmc_10x10[0], cov_kmc_10x10,label='NN-kMC 10x10')
+plt.plot(time_kmc_100x10[0], cov_kmc_100x10,label='NN-kMC 100x10')
+plt.plot(mf_t, mf_theta, '-', color = 'k', label='Mean field')
+plt.legend()
+plt.xlabel('Time [s]')
+plt.ylabel('Coverage')
+plt.savefig('compare_MF_kMC.pdf')
 # 

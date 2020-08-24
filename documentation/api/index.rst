@@ -7,8 +7,7 @@ User interface (API)
    :maxdepth: 2
    :caption: Contents:
    
-   modules
-
+   NeighborKMC
 
 
 The user interface is essential to :program:`MonteCoffee` as the

@@ -3,10 +3,10 @@
 The System is supposed to be a singleton that
 is passed to a singleton NeighborKMC object.
 
-See Also  
----------
-Module: base.system
-Module: user_sites
+.. seealso::
+
+   Module :py:mod:`NeighborKMC.base.system`
+   Module :py:mod:`NeighborKMC.tutorials.A_ads.user_sites`
 
 """
 
@@ -31,9 +31,9 @@ class System(SystemBase):
     sites: list(Site)
         The sites that constitute the system.
 
-    See Also
-    ---------
-    Module: base.system
+    .. seealso::
+
+       Module :py:mod:`NeighborKMC.base.system`
 
     """
 
@@ -93,7 +93,7 @@ class System(SystemBase):
         Parameters
         ----------
         species: int
-            The species as defined by the user (e.g. empty=0,CO=1).
+            The species as defined by the user (e.g. empty=0,A=1).
         coverage: float
             The fractional coverage to load lattice with.
 

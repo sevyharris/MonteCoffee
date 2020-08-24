@@ -3,9 +3,7 @@
 The module defines the main simulation class (NeighborKMC), which is used
 to run the simulation. The main engine is found in base.kmc.
 
-See Also
---------
-Module: base.kmc
+.. seealso:: Module :py:mod:`NeighborKMC.base.kmc`
 
 """
 
@@ -14,7 +12,6 @@ import numpy as np
 import ase.io
 from base.kmc import NeighborKMCBase
 from base.logging import Log
-from user_constants import *
 from user_sites import Site
 from user_events import *
 import pyclbr
@@ -37,7 +34,6 @@ class NeighborKMC(NeighborKMCBase):
         Simulation end-time.
     parameters: dict
         Parameters used, which are dumped to the log file.
-        Example: parameters = {'pCO':1E2,'T':700,'Note':'Test simulation'}
     events: list(classobj)
         A list pointing to the event classes that defines the events.
         The order of list is kept consistently throughout the simulation.
@@ -83,10 +79,10 @@ class NeighborKMC(NeighborKMCBase):
                            rev_events=rev_events)
         nkmc.run_kmc()
 
-    See Also
-    ---------
-    Module: base.kmc
-    Module: base.basin
+    .. seealso:: 
+
+       Module :py:mod:`NeighborKMC.base.kmc`
+       Module :py:mod:`NeighborKMC.base.basin`
 
     """
 

@@ -28,14 +28,6 @@ NeighborKMC.base.kmc module
    :undoc-members:
    :show-inheritance:
 
-NeighborKMC.base.kmc\_former module
------------------------------------
-
-.. automodule:: NeighborKMC.base.kmc_former
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 NeighborKMC.base.logging module
 -------------------------------
 

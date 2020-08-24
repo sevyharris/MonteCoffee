@@ -153,8 +153,9 @@ Define and run simulation
 Now the simulation object :class:`NeighborKMC.user_kmc.NeighborKMC` can be defined and the simulation performed:
 
 .. code-block:: python
+
    parameters = { "Name": "A ads/des Simulation",
-                  G"reverses ": reverse_events}
+                  "reverses ": reverse_events}
 
      # Instantiate simulator object.
      sim = NeighborKMC(system=p, tend=tend,
@@ -184,13 +185,16 @@ The results are analyzed by reading in the :ref:`code output <output>`. Here, we
 This can be plotted as done in the following example with :code:`matplotlib`
 
 .. code-block:: python
+
      import matplotlib.pyplot as plt
      plt.plot(time, cov_A, '-k')
      plt.xlabel("Time [s]")
      plt.ylabel("Coverage")
      plt.savefig('coverage_spec_A.pdf')
 
-To compaire the effect of the used simulation surface on the result and also compaire to the result of the mean-field model in the following a plot is shown with surface sizes of (5x5), (10x10) and (100x100) corresponding to 25, 100 and 10000 surface sites respectively. 
+To compare the effect of the used simulation surface on the result and also compare to the result of the mean-field model in the following a plot is shown with surface sizes of (5x5), (10x10) and (100x10) corresponding to 25, 100 and 1000 surface sites respectively. Also shown is the result of a very simple first-reaction kinetic MonteCarlo code with 1000 sites. 
+
+.. image:: ../images/compare_MF_kMC.pdf 
 
 If an increase in the number of sites is not possible, it is recommanded that multiple identically prepared simulations are performed.
 (see  tutorials :ref:`Parallel simulations <parallel>` and :ref:`calculating turnover frequencies <tof>`).
