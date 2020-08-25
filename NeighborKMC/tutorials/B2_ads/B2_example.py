@@ -1,12 +1,22 @@
-"""Script that runs the tutorial for A adsorption and desorption.
+"""Script that runs the tutorial of B2 adsorption and desorption on a surface 
  
 """
 import numpy as np
 from ase.build import fcc100
-from .user_sites import Site
-from .user_system import System
-from .user_kmc import NeighborKMC
-from .user_events import (AAdsEvent, ADesEvent)
+from user_sites import Site
+from user_system import System
+from user_kmc import NeighborKMC
+from user_events import (B2AdsEvent, B2DesEvent)
+
+#def readFile(filename, r=1):
+#  List=[[] for tt in range(r)]
+#  f = open(filename)
+#  for line in f:
+#    line = line.rstrip()
+#    parts = line.split()
+#    for i in range(r):
+#      List[i].append(float(parts[i]))
+#  return List
 
 def run_test():
     """Runs the test of A adsorption and desorption over a surface.
@@ -21,7 +31,7 @@ def run_test():
     """
     # Define constants.
     # ------------------------------------------
-    tend = 10.  # End time of simulation (s)
+    tend = 5.  # End time of simulation (s)
     a = 4.00  # Lattice Parameter (not related to DFT!)
     Ncutoff = a / np.sqrt(2.) + 0.05  # Nearest neighbor cutoff
     # Clear up old output files.
@@ -35,7 +45,7 @@ def run_test():
     # ------------------------------------------
     atoms = fcc100("Pt", a = a, size = (100,10,1) )
     sites = []
-
+    atoms.write('surf.traj')
     # Create a site for each surface-atom:
     for i in range(len(atoms)):
         sites.append(Site(stype=0,
@@ -46,15 +56,15 @@ def run_test():
     p = System(atoms=atoms, sites=sites)
 
     # Set the global neighborlist based on distances:
-    p.set_neighbors(Ncutoff)
-
-    events = [AAdsEvent, ADesEvent]
+    p.set_neighbors(Ncutoff,pbc = True)
+    
+    events = [B2AdsEvent, B2DesEvent]
 
     # Specify what events are each others' reverse.
     reverse_events = {0: 1}
 
 #    parameters = {"pCO": pCO, "pO2": pO2, "T": T,
-    parameters = { "Name": "A ads/des Simulation",
+    parameters = { "Name": "B2 ads/des Simulation",
                   "reverses ": reverse_events}
 
     # Instantiate simulator object.
@@ -69,32 +79,34 @@ def run_test():
 
     # Plot the coverages:
     # ------------------------------------------
-#    import matplotlib.pyplot as plt
-#    import matplotlib as mpl
-##
-#    fs = 20
-#    mpl.rcParams['axes.linewidth'] = 3.5
-#    mpl.rcParams['mathtext.default'] = 'rm'
-#    mpl.rcParams['mathtext.rm'] = 'Arial'
-#    mpl.rcParams['font.family'] = 'Arial'
-#    mpl.rc("font", size=fs)
-##
-#    time = np.loadtxt("time.txt")
-#    covs = np.loadtxt("coverages.txt")
-##
-#    cov_A = [sum([1 for val in covs[i] if val == 1]) / float(len(covs[0])) for i in range(len(covs))]
+    import matplotlib.pyplot as plt
+    import matplotlib as mpl
 #
-#    plt.plot(time, cov_A, 'k-', lw=2, label="NKMC")
+    fs = 20
+    mpl.rcParams['axes.linewidth'] = 3.5
+    mpl.rcParams['mathtext.default'] = 'rm'
+    mpl.rcParams['mathtext.rm'] = 'Arial'
+    mpl.rcParams['font.family'] = 'Arial'
+    mpl.rc("font", size=fs)
+#
+    time = np.loadtxt("time.txt")
+    covs = np.loadtxt("coverages.txt")
+#
+    cov_B2 = [sum([1 for val in covs[i] if val == 1]) / float(len(covs[0])) for i in range(len(covs))]
 
-#    plt.legend(loc=0, frameon=False, fontsize="small")
+    plt.plot(time, cov_B2, 'k-', lw=2, label="N-KMC 100x10")
+
+    data_MF = readFile('ads_b2_mf.dat', r=2)
+    plt.plot(data_MF[0],data_MF[1],'g-',lw=2)
+
+    plt.legend(loc=0, frameon=False, fontsize="small")
+
+    plt.xlabel("Time (s)", fontsize=20)
+    plt.ylabel("Coverage", fontsize=20)
+    plt.gca().tick_params(axis='both', labelsize=fs, length=14, width=3.5, which='major', pad=10)
 #
-#    plt.xlabel("time (s)", fontsize=20)
-#    plt.ylabel("Coverage", fontsize=20)
-#    plt.gca().tick_params(axis='both', labelsize=fs, length=14, width=3.5, which='major', pad=10)
-##
-#    plt.savefig('cov_out.pdf',bbox_inches='tight')
+    plt.savefig('Compare_MF_KMC.pdf',bbox_inches='tight')
 
 if __name__ == '__main__':
     run_test()
-
 

@@ -5,7 +5,7 @@ Adsorption of atomic species A on surface
 ******************************************
 
 In this first tutorial the first steps to run and set-up a :program:`MonteCoffee` simulation are shown, which require only a view steps. 
-.. The entire tutorial is shown in `test.py <../api/NeighborKMC.html#module-NeighborKMC.test>`_ and the references to the other modules mentioned herein.
+The entire files needed for this tutorial are shown in `test.py <../api/NeighborKMC.tutorials.A_ads.html#module-NeighborKMC.tutrials.A_ads.test>`_ and the references to the other modules mentioned herein.
 
 In this guide the simple adsorption/desorption of an atomic species on a plain surface is demonstrated and the results compaired to the solution of a mean-field model. The reaction to simulate is:
 
@@ -28,14 +28,15 @@ First, various  parameters must be set and which can be stort in a parameter-dic
 .. code-block:: python
 
      tend = 10.  # End time of simulation (s)
-     latt_param = 4.00  # Lattice Parameter (not related to DFT!)
+     latt_param = 4.00  # Lattice Parameter (not related directly to DFT (but could be) )
      Ncutoff = a / np.sqrt(2.) + 0.05  # Nearest neighbor cutoff
 
 
 Define sites and system
 ----------------------------
 One site is defined for each surface atom using an :class:`Ase.Atoms` object.
-We start with an empty list of sites and a fcc(100) surface in `ASE`:
+We start with an empty list of sites and a fcc(100) surface in :program:`ASE`. That a Pt surface is chosen as example as no special meaning and for this example any 
+kind of atom could be chosen:
 
 .. code-block:: python
 
@@ -45,7 +46,7 @@ We start with an empty list of sites and a fcc(100) surface in `ASE`:
      surface = fcc100("Pt", a=latt_param, size=(10,10,1))
      sites = []
 
-Now we can create a site, free of adsorbates, for each surface atom with a :code:`stype` . Here all surface atoms are of the same kind.:
+Now we can create a site, free of adsorbates, for each surface atom with a :code:`stype` . In case of the (100) surface, all surface atoms are of the same type:
 
 .. code-block:: python
 
@@ -82,7 +83,7 @@ Now the :class:`NeighborKMC.user_system.System` object can be defined from the c
 
 Define events
 --------------
-Here event-types are defined, which are stored in `user_events.py <../api/NeighborKMC.html#module-NeighborKMC.user_events>`_.
+Various event-types are defined, which are stored in `user_events.py <../api/NeighborKMC.tutorials.A_ads.html#module-NeighborKMC.tutorials.A_ads.user_events>`_.
 For each possible type of event, a class is derived from :class:`NeighborKMC.base.events.EventBase`. In this case, we need to define two different events, the adsorption of species A, and correspondingly the desorption. 
 
 First we import the necessary functions, classes, and constants:
@@ -99,7 +100,7 @@ Now we derive a class to contain the event:
          def __init__(self, params):
              EventBase.__init__(self, params)
 
-The constructor :code:`__init__(self,params)` is attaches relevant parameters to the object. 
+The constructor :code:`__init__(self,params)` attaches relevant parameters to the object. 
 We need a function `possible(self,system, site, other_site)` that returns True if the event is possible on the current site-pair. For single atom adsorption it does not matter if the other_site is covered or not. Thus we are only interested in the site itself.
 
 .. code-block:: python
@@ -120,8 +121,7 @@ Now we also need to define a function :code:`get_rate(self, system, i_site, othe
             R = 1.
             return R
 
-
-Finally each event requires a method :code:`do_event(self,system, site, other_site)` to perform modifications to the site-occupations when fired:
+Each event requires a method :code:`do_event(self,system, site, other_site)` to perform modifications to the site-occupations when fired:
 
 .. code-block:: python
 
@@ -130,14 +130,14 @@ Finally each event requires a method :code:`do_event(self,system, site, other_si
 
 In this case, up on adsorption the site is covered with the species A, represented by the number 1 within the code. 
 
-To take care of the correct time evolution of the :program:`MonteCoffee` we introduce an aditional block with returns if either neighboring sites are involved or not. Here no neighbouring sites are involved, thus we :code:`return False`. 
+To take care of the correct time evolution of the :program:`MonteCoffee` we introduce an aditional block wich returns if either neighboring sites are involved or not. Here no neighbouring sites are involved, thus we :code:`return False`. 
 
 .. code-block:: python 
 
         def get_involve_other(self):
             return False 
 
-To know which events are each others reverse we store:
+To know which events are reverse to each other we store:
 
 .. code-block:: python
 
@@ -164,11 +164,6 @@ Now the simulation object :class:`NeighborKMC.user_kmc.NeighborKMC` can be defin
                        rev_events=reverse_events)
      result = sim.run_kmc()
      print("Simulation end time reached ! ! !")
-
-
-
-
-.. _analyzecoox:
 
 Analyze results
 ----------------------------
@@ -197,7 +192,7 @@ To compare the effect of the used simulation surface on the result and also comp
 .. image:: ../images/compare_MF_kMC.pdf 
 
 If an increase in the number of sites is not possible, it is recommanded that multiple identically prepared simulations are performed.
-(see  tutorials :ref:`Parallel simulations <parallel>` and :ref:`calculating turnover frequencies <tof>`).
+(see example on :ref:`Parallel simulations <parallel>` and :ref:`calculating turnover frequencies <tof>`).
 
 
 

@@ -4,7 +4,6 @@ The module defines the main simulation class (NeighborKMC), which is used
 to run the simulation. The main engine is found in base.kmc.
 
 .. seealso:: Module :py:mod:`NeighborKMC.base.kmc`
-
 """
 
 from __future__ import print_function
@@ -79,7 +78,7 @@ class NeighborKMC(NeighborKMCBase):
                            rev_events=rev_events)
         nkmc.run_kmc()
 
-    .. seealso:: 
+    .. seealso::
 
        Module :py:mod:`NeighborKMC.base.kmc`
        Module :py:mod:`NeighborKMC.base.basin`

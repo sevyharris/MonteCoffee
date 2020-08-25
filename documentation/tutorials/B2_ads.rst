@@ -1,14 +1,13 @@
-.. _coox:
-.. index:: CO oxidation
+.. _b2ads:
+.. index:: B2 Adsorption 
 
-B2 Adsorption
-*****************
+Dissociative Adsorption
+************************
 
+This tutorials moves on from the very basic single atom adsorption to the dissociative adsorption of a diatomic molecule of type B_2.  
 To begin running :program:`MonteCoffee` simulations, there are only a few required steps.
 The entire tutorial is shown in `test.py <../api/NeighborKMC.html#module-NeighborKMC.test>`_ and the references to the other modules mentioned herein.
 
-Here, CO oxidation is simulated a Pt truncated octahedron with an energy landscape based on conventional coordination numbers.
-In this guide, species 0 denotes empty sites, 1 is CO and 2 refers to O.
 
 Define constants
 ----------------------

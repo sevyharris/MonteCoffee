@@ -1,8 +1,8 @@
 NeighborKMC.base package
 ========================
 
-Submodules
-----------
+The listed modules are the main part of the NeighborKMC package and should be only touched if one knows what one is doing. All adaptations to specific systems are
+done in the user files and the main controll file.
 
 NeighborKMC.base.basin module
 -----------------------------

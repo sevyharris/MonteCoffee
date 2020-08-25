@@ -175,8 +175,9 @@ texinfo_documents = [
 # -- Hack for running readthedocs.org apidoc
 import os
 import sys
-sys.path.append('../NeighborKMC/tutorials/A_ads')
-sys.path.append('../NeighborKMC/examples/NP_coordination_number')
-sys.path.append('../NeighborKMC/examples/NP_dband_transfer')
-sys.path.append('../NeighborKMC/examples/NP_general_coordination_number')
+sys.path.append('../NeighborKMC/tutorials/A_ads/')
+sys.path.append('../NeighborKMC/tutorials/B2_ads/')
+sys.path.append('../NeighborKMC/examples/NP_coordination_number/')
+sys.path.append('../NeighborKMC/examples/NP_dband_transfer/')
+sys.path.append('../NeighborKMC/examples/NP_general_coordination_number/')
 os.system("sphinx-apidoc -f -o ./api ../NeighborKMC" )

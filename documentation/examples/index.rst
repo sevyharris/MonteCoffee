@@ -1,14 +1,20 @@
-.. _tutorials:
+.. _examples:
 
-Tutorials
+Examples
 ********************
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   A_ads
-   B2_ads   
+   coox
+   tof
+   pbc
+   adsads
+   sites
+   acceleration
+   parallel
+
 
 
 The user interface is essential to :program:`MonteCoffee` as the
