@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Special site-rules &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Accelerating kMC" href="acceleration.html" />
+    <link rel="prev" title="Adsorbate-adsorbate interactions" href="adsads.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="../_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Code overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on a Pt nanoparticle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tof.html">Calculating a turnover frequency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pbc.html">Periodic boundary conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adsads.html">Adsorbate-adsorbate interactions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Special site-rules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#custom-site-attributes">Custom site-attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-stype-for-everything">Using stype for everything</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="acceleration.html">Accelerating kMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel.html">Parallel simulations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">User interface (API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Examples</a> &raquo;</li>
+        
+      <li>Special site-rules</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/examples/sites.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="acceleration.html" class="btn btn-neutral float-right" title="Accelerating kMC" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="adsads.html" class="btn btn-neutral float-left" title="Adsorbate-adsorbate interactions" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="sites-special"></span><div class="section" id="special-site-rules">
+<span id="index-0"></span><h1>Special site-rules<a class="headerlink" href="#special-site-rules" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="custom-site-attributes">
+<h2>Custom site-attributes<a class="headerlink" href="#custom-site-attributes" title="Permalink to this headline">¶</a></h2>
+<p>Sites in <strong class="program">MonteCoffee</strong>, per default only contain a variable that determine their type named <code class="code docutils literal notranslate"><span class="pre">stype</span></code>.
+Stype is used to analyze the rates and coverages over different sites in a system. However, to calculate reaction energies,
+it can be nice to attach a coordination number to the class as well. This can simply be done by adding a parameter <code class="code docutils literal notranslate"><span class="pre">coordination_number</span></code> to the
+constructor in <a class="reference external" href="../api/NeighborKMC.html#module-NeighborKMC.user_sites">user_sites.py</a> as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Site</span><span class="p">(</span><span class="n">SiteBase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">covered</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ind</span><span class="o">=</span><span class="p">[],</span> <span class="n">lattice_pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coordination_number</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">SiteBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="n">stype</span><span class="p">,</span> <span class="n">covered</span><span class="o">=</span><span class="n">covered</span><span class="p">,</span> <span class="n">ind</span><span class="o">=</span><span class="n">ind</span><span class="p">,</span>
+                          <span class="n">lattice_pos</span><span class="o">=</span><span class="n">lattice_pos</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cn</span> <span class="o">=</span> <span class="n">coordination_number</span>
+</pre></div>
+</div>
+<p>Then the <cite>get_rate()</cite> methods of <a class="reference external" href="../api/NeighborKMC.html#module-NeighborKMC.user_events">user_events.py</a> can access
+the coordination number as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
+<span class="o">...</span>
+<span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">*</span><span class="mf">1000.</span><span class="o">*</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">cn</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-stype-for-everything">
+<h2>Using stype for everything<a class="headerlink" href="#using-stype-for-everything" title="Permalink to this headline">¶</a></h2>
+<p><code class="code docutils literal notranslate"><span class="pre">stype</span></code> that belongs to a <code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_sites.Site</span></code> object
+is useful to define special rules for performing events. For a binary alloy system with 10 different generalized
+coordination numbers we have 20 differet types of sites, thus <code class="code docutils literal notranslate"><span class="pre">stype</span></code> can take on the values from 0 to 19.</p>
+<p>To use <code class="code docutils literal notranslate"><span class="pre">stype</span></code>, let us assume that we have defined</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">user_sites</span> <span class="kn">import</span> <span class="n">Site</span>
+<span class="kn">from</span> <span class="nn">user_system</span>
+<span class="n">s1</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">stype</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">s2</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">stype</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>One example of a special rule is to make events that are only possible if <code class="code docutils literal notranslate"><span class="pre">stype</span> <span class="pre">==</span> <span class="pre">1</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
+<span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>Another special rule is to return a different rate-constant based on <code class="code docutils literal notranslate"><span class="pre">stype</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
+<span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">*</span><span class="n">stype</span><span class="o">+</span><span class="mf">0.1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">*</span><span class="n">R</span>
+</pre></div>
+</div>
+<p>This can be useful when having multiple different sites on a nanoparticle.
+If we want to calculate the rate-constant based on transition state theory,  a different reaction energy barrier
+can be defined for each site’s and neighbor-site’s type as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">user_constants</span> <span class="kn">import</span> <span class="n">kB</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
+<span class="o">...</span>
+    <span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+        <span class="n">stype</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span>
+        <span class="n">stype_other</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span>
+        <span class="n">stype_avg</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">stype</span><span class="o">+</span><span class="n">stype_other</span><span class="p">)</span>
+        <span class="n">Ea</span> <span class="o">=</span> <span class="mf">1.08</span> <span class="o">+</span> <span class="p">(</span><span class="mi">4</span><span class="o">-</span><span class="n">stype_avg</span><span class="p">)</span><span class="o">*</span><span class="mf">0.1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">*</span><span class="mf">1E12</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">Ea</span><span class="o">/</span><span class="p">(</span><span class="n">kB</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Here, a transition state like rate constant is returned, with a pre-exponential factor of
+<span class="math notranslate nohighlight">\(\dfrac{k_\mathrm{B}T}{h}\dfrac{Z^{ts}}{Z^{ini}} \approx 10^{12}\,\mathrm{s}^{-1}\)</span> and the energy barrier is
+based on the average site-type number of the two sites.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="acceleration.html" class="btn btn-neutral float-right" title="Accelerating kMC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="adsads.html" class="btn btn-neutral float-left" title="Adsorbate-adsorbate interactions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Mikkel Jørgensen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

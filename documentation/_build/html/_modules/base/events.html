@@ -1,0 +1,356 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>base.events &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="../../_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Code overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">User interface (API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>base.events</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for base.events</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Defines the EventBase class.</span>
+
+<span class="sd">The EventBase class is defined here as a</span>
+<span class="sd">template-class to derive events that can be stored</span>
+<span class="sd">in user_events.py.</span>
+
+<span class="sd">The class defines methods that will throw an error if</span>
+<span class="sd">implemented wrongly, or are not implemented,</span>
+<span class="sd">in the derived classes.</span>
+
+<span class="sd">See Also</span>
+<span class="sd">-----------</span>
+<span class="sd">Module: user_events</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="EventBase"><a class="viewcode-back" href="../../api/base.html#base.events.EventBase">[docs]</a><span class="k">class</span> <span class="nc">EventBase</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Template class for events.</span>
+<span class="sd">            </span>
+<span class="sd">    Stores a list of parameters</span>
+<span class="sd">    related to reaction events.</span>
+
+<span class="sd">    The class is only used as a parent, and is in this</span>
+<span class="sd">    sense purely abstract.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    -----------</span>
+
+<span class="sd">    params: dict</span>
+<span class="sd">        Parameter dict dumped at the beginning of the log.</span>
+<span class="sd">    alpha: int</span>
+<span class="sd">        The slowing down factor that is adsjusted when the reaction is accelerated.</span>
+<span class="sd">        This factor is set to 1 upon instantiation and varies periodically during simulation.</span>
+<span class="sd">        (See Module: NeighborKMC.base.basin)</span>
+<span class="sd">    diffev: bool</span>
+<span class="sd">        Is the event a diffusion event. This can be used to make special rules for diffusion events.</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffev</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Is it a diffusion event.</span>
+
+<div class="viewcode-block" id="EventBase.possible"><a class="viewcode-back" href="../../api/base.html#base.events.EventBase.possible">[docs]</a>    <span class="k">def</span> <span class="nf">possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Template method to determine if event is possible.</span>
+<span class="sd">            </span>
+<span class="sd">        Method needs to be overridden in user_events.py.</span>
+<span class="sd">        Should return True if an event is possible on</span>
+<span class="sd">        site number i_site and possible a neighbor</span>
+<span class="sd">        site i_other, given the current site occupations.</span>
+<span class="sd">            </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        system: System</span>
+<span class="sd">            The system, which the simulation is performed on.</span>
+
+<span class="sd">        i_site: int</span>
+<span class="sd">            Index of site in the system.sites list.</span>
+<span class="sd">        </span>
+<span class="sd">        i_other: int</span>
+<span class="sd">            Index of other/neighbor site in the system.sites list.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        possible: bool</span>
+<span class="sd">            True if event is possible on site-pair i_site and i_other.</span>
+<span class="sd">            False if event is impossible on site-pair i_site and i_other.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;Called purely abstract </span>
+<span class="s2">                                   method possible() of Event&quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EventBase.get_rate"><a class="viewcode-back" href="../../api/base.html#base.events.EventBase.get_rate">[docs]</a>    <span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Template method to determine the rate constant.</span>
+<span class="sd">            </span>
+<span class="sd">        Method needs to be overridden in user_events.py.</span>
+<span class="sd">        Should return the reaction rate on site number</span>
+<span class="sd">        i_site, and i_other for multi-site reactions.</span>
+<span class="sd">            </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        system: System</span>
+<span class="sd">            The system, which the simulation is performed on.</span>
+
+<span class="sd">        i_site: int</span>
+<span class="sd">            Index of site in the system.sites list.</span>
+
+<span class="sd">        i_other: int</span>
+<span class="sd">            Index of other/neighbor site in the system.sites list.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        Rate constant of event: float</span>
+<span class="sd">            The rate-constant given the current occupation patterns around the</span>
+<span class="sd">            site-pair i_site and i_other.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;Called purely abstract </span>
+<span class="s2">                                  method get_rate() of Event&quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EventBase.do_event"><a class="viewcode-back" href="../../api/base.html#base.events.EventBase.do_event">[docs]</a>    <span class="k">def</span> <span class="nf">do_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Template method to perform the event.</span>
+<span class="sd">            </span>
+<span class="sd">        Method needs to be overridden in user_events.py.  </span>
+<span class="sd">        Should change system site coverages by changing  </span>
+<span class="sd">        system.sites[i_site].covered and</span>
+<span class="sd">        system.sites[other_site].covered.</span>
+<span class="sd">            </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        system: System</span>
+<span class="sd">            The system, which the simulation is performed on.</span>
+
+<span class="sd">        i_site: int</span>
+<span class="sd">            Index of site in the system.sites list.</span>
+
+<span class="sd">        i_other: int</span>
+<span class="sd">            Index of other/neighbor site in the system.sites list.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;Called purely abstract </span>
+<span class="s2">                                  method do_event() of Event&quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EventBase.get_involve_other"><a class="viewcode-back" href="../../api/base.html#base.events.EventBase.get_involve_other">[docs]</a>    <span class="k">def</span> <span class="nf">get_involve_other</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;Template method to decide if neighboring atoms are effected by event.</span>
+<span class="sd">       </span>
+<span class="sd">        Method needs to be overridden in user_events.py. </span>
+<span class="sd">        Should return True if event effects neighboring atoms and False if not (e.g. single atom adsorption).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;Called purely abstract </span>
+<span class="s2">                                  method get_involve_other() of Event&quot;&quot;&quot;</span><span class="p">)</span></div></div>
+
+
+
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Mikkel Jørgensen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

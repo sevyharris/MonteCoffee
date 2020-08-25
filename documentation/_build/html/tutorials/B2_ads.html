@@ -1,0 +1,518 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Dissociative Adsorption &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Examples" href="../examples/index.html" />
+    <link rel="prev" title="Adsorption of atomic species A on surface" href="A_ads.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="../_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Code overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="A_ads.html">Adsorption of atomic species A on surface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Dissociative Adsorption</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#define-constants">Define constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#define-sites-and-system">Define sites and system</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#define-reaction-energies-and-entropies">Define reaction energies and entropies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#define-events">Define events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#define-and-run-simulation">Define and run simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analyze-results">Analyze results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">User interface (API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Tutorials</a> &raquo;</li>
+        
+      <li>Dissociative Adsorption</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tutorials/B2_ads.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="../examples/index.html" class="btn btn-neutral float-right" title="Examples" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="A_ads.html" class="btn btn-neutral float-left" title="Adsorption of atomic species A on surface" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="b2ads"></span><div class="section" id="dissociative-adsorption">
+<span id="index-0"></span><h1>Dissociative Adsorption<a class="headerlink" href="#dissociative-adsorption" title="Permalink to this headline">¶</a></h1>
+<p>This tutorials moves on from the very basic single atom adsorption to the dissociative adsorption of a diatomic molecule of type B_2.
+To begin running <strong class="program">MonteCoffee</strong> simulations, there are only a few required steps.
+The entire tutorial is shown in <a class="reference external" href="../api/NeighborKMC.html#module-NeighborKMC.test">test.py</a> and the references to the other modules mentioned herein.</p>
+<div class="section" id="define-constants">
+<h2>Define constants<a class="headerlink" href="#define-constants" title="Permalink to this headline">¶</a></h2>
+<p>Any global constants can be defined in <a class="reference external" href="../_modules/NeighborKMC/user_constants.html">user_constants.py</a>.
+Next, parameters must be set and stored in a dictionary as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">T</span> <span class="o">=</span> <span class="mf">800.</span>  <span class="c1"># Temperature</span>
+<span class="n">pCO</span> <span class="o">=</span> <span class="mf">2E3</span>  <span class="c1"># CO pressure</span>
+<span class="n">pO2</span> <span class="o">=</span> <span class="mf">1E3</span>  <span class="c1"># O2 pressure</span>
+<span class="n">tend</span> <span class="o">=</span> <span class="mf">1E-3</span>  <span class="c1"># End time of simulation (s)</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;pCO&quot;</span><span class="p">:</span> <span class="n">pCO</span><span class="p">,</span> <span class="s2">&quot;pO2&quot;</span><span class="p">:</span> <span class="n">pO2</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span>
+              <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;COOx Simulation&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;reverses &quot;</span><span class="p">:</span> <span class="n">reverse_events</span><span class="p">}</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mf">4.00</span>  <span class="c1"># Lattice Parameter (not related to DFT!)</span>
+<span class="n">Ncutoff</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.05</span>  <span class="c1"># Nearest neighbor cutoff</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="define-sites-and-system">
+<h2>Define sites and system<a class="headerlink" href="#define-sites-and-system" title="Permalink to this headline">¶</a></h2>
+<p>One site is defined for each surface atom using an <code class="xref py py-class docutils literal notranslate"><span class="pre">Ase.Atoms</span></code> object.
+We start with an empty list of sites and a nanoparticle in <cite>ASE</cite>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.cluster</span> <span class="kn">import</span> <span class="n">Octahedron</span>
+<span class="kn">from</span> <span class="nn">user_sites</span> <span class="kn">import</span> <span class="n">Site</span>
+
+<span class="n">sites</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">particle</span> <span class="o">=</span> <span class="n">Octahedron</span><span class="p">(</span><span class="s2">&quot;Pt&quot;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">latticeconstant</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we define one site for each surface atom in particle finding the coordination numbers:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># First find CN of each atom:</span>
+<span class="n">CNS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">at</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">atoms</span><span class="p">):</span>
+    <span class="n">pcur</span> <span class="o">=</span> <span class="n">at</span><span class="o">.</span><span class="n">position</span>
+    <span class="n">dp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">([(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pcur</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mf">2.</span> <span class="o">+</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pcur</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mf">2.</span> <span class="o">+</span>
+                  <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">pcur</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">**</span> <span class="mf">2.</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">])</span>
+    <span class="n">CNS</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">val</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">dp</span> <span class="k">if</span> <span class="mf">0.</span> <span class="o">&lt;</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="n">a</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">])</span>
+
+<span class="c1"># Define surface atoms as non-bulk.</span>
+<span class="n">surface_atom_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">CNS</span><span class="p">))</span> <span class="k">if</span> <span class="n">CNS</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>In this example, let each coordination number corresponds to a unique site-type <code class="code docutils literal notranslate"><span class="pre">stype</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stypes</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># site-types: (111),(100),edge,corner.</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">CNS</span><span class="p">)))):</span>
+    <span class="n">stypes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+</pre></div>
+</div>
+<p>Now we can create a site, free of adsorbates, for each surface atom with a <code class="code docutils literal notranslate"><span class="pre">stype</span></code> that corresponds to the coordination number:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a site for each surface-atom:</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">indic</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">surface_atom_ids</span><span class="p">):</span>
+    <span class="n">sites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Site</span><span class="p">(</span><span class="n">stype</span><span class="o">=</span><span class="n">stypes</span><span class="p">[</span><span class="n">CNS</span><span class="p">[</span><span class="n">indic</span><span class="p">]],</span>
+                      <span class="n">covered</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ind</span><span class="o">=</span><span class="p">[</span><span class="n">indic</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Here, the block <code class="code docutils literal notranslate"><span class="pre">ind=[indic]</span></code> stores the index of the atom in the <code class="xref py py-class docutils literal notranslate"><span class="pre">ASE.Atoms</span></code> object on the <code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_sites.Site</span></code> object.</p>
+<p>Finally, we need to define neighborlists. It is simplest to define this according to the nearest neighbor distances:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set the neighbor list for each site using distances.</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sites</span><span class="p">):</span>
+    <span class="n">pcur</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">position</span> <span class="c1"># position of site</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">sother</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sites</span><span class="p">):</span>
+        <span class="n">pother</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">sother</span><span class="o">.</span><span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">position</span> <span class="c1"># position of potential neighbor site:</span>
+        <span class="c1"># Length of distance vector:</span>
+        <span class="n">dpabs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">pother</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pcur</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mf">2.</span> <span class="o">+</span>
+                        <span class="p">(</span><span class="n">pother</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pcur</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mf">2.</span> <span class="o">+</span>
+                        <span class="p">(</span><span class="n">pother</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">pcur</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">**</span> <span class="mf">2.</span><span class="p">)</span>
+
+        <span class="c1"># If the site is a neighbor:</span>
+        <span class="k">if</span> <span class="n">dpabs</span> <span class="o">&lt;</span> <span class="n">Ncutoff</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">:</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now the <code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_system.System</span></code> object can be defined from the collection of sites:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">user_system</span> <span class="kn">import</span> <span class="n">System</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="c1"># store ASE.Atoms as well</span>
+           <span class="n">sites</span><span class="o">=</span><span class="n">sites</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="define-reaction-energies-and-entropies">
+<h2>Define reaction energies and entropies<a class="headerlink" href="#define-reaction-energies-and-entropies" title="Permalink to this headline">¶</a></h2>
+<p>In this step, the reaction energies, or methods to calculate these, are defined in <a class="reference external" href="../api/NeighborKMC.html#module-NeighborKMC.user_energy">user_energy.py</a>.
+<strong>In principle, one may skip this section</strong> and simply define reaction energy barriers directly (see <a class="reference internal" href="#defeventsquick"><span class="std std-ref">define events</span></a>). However, we believe this
+step is useful for keeping an overview of the coding of the energy landscape.</p>
+<p>In this example from  <a class="reference external" href="../api/NeighborKMC.html#module-NeighborKMC.user_energy">user_energy.py</a>, the adsorption energies of CO and O are stored as lists (functions of coordination number), the reaction energy barrier as a function <cite>get_Ea(ECO, EO)</cite>, and diffusion barriers as constants:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">EadsCO</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.36</span> <span class="o">+</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="mi">9</span> <span class="o">-</span> <span class="n">CN</span><span class="p">)</span> <span class="k">for</span> <span class="n">CN</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]]</span>
+<span class="n">EadsO</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.97</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">9</span> <span class="o">-</span> <span class="n">CN</span><span class="p">)</span> <span class="k">for</span> <span class="n">CN</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]]</span>
+
+<span class="n">EdiffCO</span> <span class="o">=</span> <span class="mf">0.046</span> <span class="c1"># CO diffusion barrier</span>
+<span class="n">EdiffO</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="c1"># O diffusion barrier</span>
+
+<span class="k">def</span> <span class="nf">get_Ea</span><span class="p">(</span><span class="n">ECO</span><span class="p">,</span> <span class="n">EO</span><span class="p">):</span>
+   <span class="n">dEO</span> <span class="o">=</span> <span class="n">EO</span> <span class="o">-</span> <span class="n">EadsO</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Oxygen energy relative to uncovered Pt(111)</span>
+   <span class="n">dECO</span> <span class="o">=</span> <span class="n">ECO</span> <span class="o">-</span> <span class="n">EadsCO</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># CO energy relative to uncovered Pt(111)</span>
+   <span class="n">dETS</span> <span class="o">=</span> <span class="mf">0.824</span> <span class="o">*</span> <span class="p">(</span><span class="n">dEO</span> <span class="o">+</span> <span class="n">dECO</span><span class="p">)</span>  <span class="c1"># How much larger is the energy of CO and O wrt Pt(111)</span>
+   <span class="n">Ea</span> <span class="o">=</span> <span class="mf">1.08</span> <span class="o">+</span> <span class="n">dETS</span> <span class="o">-</span> <span class="n">dECO</span> <span class="o">-</span> <span class="n">dEO</span>  <span class="c1"># Translate the barriers relative to Pt(111)</span>
+   <span class="k">return</span> <span class="n">Ea</span>
+</pre></div>
+</div>
+<p>Repulsive adsorbate-adsorbate interactions are also defined as a method in  <a class="reference external" href="../api/NeighborKMC.html#module-NeighborKMC.user_energy">user_energy.py</a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_repulsion</span><span class="p">(</span><span class="n">cov_self</span><span class="p">,</span> <span class="n">cov_NN</span><span class="p">,</span> <span class="n">stype</span><span class="p">):</span>
+    <span class="n">repulsion</span> <span class="o">=</span> <span class="mf">0.</span>
+    <span class="n">ECOCO</span> <span class="o">=</span> <span class="mf">0.19</span>  <span class="c1"># 0.38 # How CO affects CO</span>
+    <span class="n">EOO</span> <span class="o">=</span> <span class="mf">0.32</span>  <span class="c1"># How O affects O - double since it is called from get barrier of O2</span>
+    <span class="n">ECOO</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c1"># How CO affects O</span>
+    <span class="n">EOCO</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c1"># How O affects CO</span>
+    <span class="n">HInttwo</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">ECOCO</span><span class="p">,</span> <span class="n">EOCO</span><span class="p">],</span>
+              <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">ECOO</span><span class="p">,</span> <span class="n">EOO</span><span class="p">]]</span>  <span class="c1"># Two body interaction Hamiltonian 3x3 beacuse 0 = empty.</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">cov_NN</span><span class="p">:</span>  <span class="c1"># For each covered Neighbor, give a repulsion:</span>
+        <span class="n">repulsion</span> <span class="o">+=</span> <span class="n">HInttwo</span><span class="p">[</span><span class="n">cov_self</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">repulsion</span>
+</pre></div>
+</div>
+<p>Entropies are stored in <a class="reference external" href="../api/NeighborKMC.html#module-NeighborKMC.user_entropy">user_entropy.py</a>, where the entropy is defined for gas-phase CO and oxygen,
+as well as a method to calculate harmonic adsorbate entropy. For definitions of the functions, we refer to <a class="reference external" href="../api/NeighborKMC.html#module-NeighborKMC.user_entropy">user_entropy.py</a>.</p>
+</div>
+<div class="section" id="define-events">
+<span id="defeventsquick"></span><h2>Define events<a class="headerlink" href="#define-events" title="Permalink to this headline">¶</a></h2>
+<p>Here event-types are defined, which are stored in <a class="reference external" href="../api/NeighborKMC.html#module-NeighborKMC.user_events">user_events.py</a>.
+For each possible type of event, a class is derived from <a class="reference internal" href="../api/NeighborKMC.base.html#NeighborKMC.base.events.EventBase" title="NeighborKMC.base.events.EventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.base.events.EventBase</span></code></a>.
+Take the example of an event where CO+O forms <span class="math notranslate nohighlight">\(\mathrm{CO_2}\)</span>. This event is defined in <a class="reference external" href="../api/NeighborKMC.html#module-NeighborKMC.user_events">user_events.py</a> as follows.</p>
+<p>First we import the necessary functions, classes, and constants:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">base.events</span> <span class="kn">import</span> <span class="n">EventBase</span>
+<span class="kn">from</span> <span class="nn">user_entropy</span> <span class="kn">import</span> <span class="n">get_entropy_CO</span><span class="p">,</span> <span class="n">get_entropy_O2</span><span class="p">,</span> <span class="n">get_entropy_ads</span><span class="p">,</span> <span class="n">get_Zvib</span>
+<span class="kn">from</span> <span class="nn">user_constants</span> <span class="kn">import</span> <span class="n">mCO</span><span class="p">,</span> <span class="n">mO2</span><span class="p">,</span> <span class="n">Asite</span><span class="p">,</span> <span class="n">modes_COads</span><span class="p">,</span> <span class="n">modes_Oads</span><span class="p">,</span> <span class="n">kB</span><span class="p">,</span> <span class="n">eV2J</span><span class="p">,</span> <span class="n">s0CO</span><span class="p">,</span> <span class="n">s0O</span><span class="p">,</span> <span class="n">h</span>
+<span class="kn">from</span> <span class="nn">user_energy</span> <span class="kn">import</span> <span class="n">EadsCO</span><span class="p">,</span> <span class="n">EadsO</span><span class="p">,</span> <span class="n">get_Ea</span><span class="p">,</span> <span class="n">get_repulsion</span><span class="p">,</span> <span class="n">EdiffCO</span><span class="p">,</span> <span class="n">EdiffO</span>
+</pre></div>
+</div>
+<p>Now we derive a class to contain the event:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">COOxEvent</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Zratio</span> <span class="o">=</span> <span class="p">(</span><span class="n">get_Zvib</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">],</span> <span class="n">modes_COads</span><span class="p">)</span> <span class="o">*</span>
+                      <span class="n">get_Zvib</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">],</span> <span class="n">modes_Oads</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.66</span>
+        <span class="n">EventBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The constructor <code class="code docutils literal notranslate"><span class="pre">__init__(self,params)</span></code> is attaches relevant parameters to the object, and <code class="code docutils literal notranslate"><span class="pre">self.Zratio</span></code> is the ratio
+between the partition functions in the initial state and transition state, used to calculate the rate constant in transition state theory. We need a function <cite>possible(self,system, site, other_site)</cite>
+that returns True if the event is possible on the current site-pair:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+    <span class="c1"># If site is covered with CO and other site free</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span>
+           <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>Thus, for the event to be possible, the site needs to be covered by 1 (CO) and the neighbor site by 2 (O).
+Now we also need to define a function <code class="code docutils literal notranslate"><span class="pre">get_rate(self,</span> <span class="pre">system,</span> <span class="pre">i_site,</span> <span class="pre">other_site)</span></code> that returns the rate constant:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">i_site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+    <span class="c1"># Find the adsorption energy for the site-type</span>
+    <span class="n">stype</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">i_site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span>
+    <span class="n">stype_other</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span>
+    <span class="n">ECO</span> <span class="o">=</span> <span class="n">EadsCO</span><span class="p">[</span><span class="n">stype</span><span class="p">]</span>
+    <span class="n">EO</span> <span class="o">=</span> <span class="n">EadsO</span><span class="p">[</span><span class="n">stype_other</span><span class="p">]</span>
+    <span class="c1"># Find the Nearest neighbor repulsion</span>
+    <span class="n">Ncovs</span> <span class="o">=</span> <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span>
+             <span class="n">system</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">i_site</span><span class="p">]]</span>
+    <span class="n">Nothercovs</span> <span class="o">=</span> <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="k">for</span> <span class="n">n</span>
+                  <span class="ow">in</span> <span class="n">system</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">other_site</span><span class="p">]]</span>
+    <span class="n">ECO</span> <span class="o">-=</span> <span class="n">get_repulsion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ncovs</span><span class="p">,</span> <span class="n">stype</span><span class="p">)</span>
+    <span class="n">EO</span> <span class="o">-=</span> <span class="n">get_repulsion</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">Nothercovs</span><span class="p">,</span> <span class="n">stype_other</span><span class="p">)</span>
+    <span class="n">Ea</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">get_Ea</span><span class="p">(</span><span class="n">ECO</span><span class="p">,</span> <span class="n">EO</span><span class="p">))</span> <span class="c1"># No negative energy barriers</span>
+
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Zratio</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">Ea</span> <span class="o">/</span>
+                                             <span class="p">(</span><span class="n">kB</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]))</span> <span class="o">*</span> <span class="n">kB</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">h</span>
+</pre></div>
+</div>
+<p>The site-types are used to obtain the adsorption energies, and the repulsions are added to the adsorption energies.
+A call is made to <code class="code docutils literal notranslate"><span class="pre">get_Ea(ECO,</span> <span class="pre">EO)</span></code> to obtain the reaction energy barrier.
+<strong>It is important to multiply rate constants with</strong> <code class="code docutils literal notranslate"><span class="pre">self.alpha</span></code> <strong>if this event is supposed to be</strong> <a class="reference internal" href="../examples/acceleration.html#accelerating"><span class="std std-ref">accelerated</span></a>.
+This is because <code class="code docutils literal notranslate"><span class="pre">self.alpha</span></code> is the slowing-down factor that is adjusted dynamically for each event during simulation.</p>
+<p>Finally each event requires a method <code class="code docutils literal notranslate"><span class="pre">do_event(self,system,</span> <span class="pre">site,</span> <span class="pre">other_site)</span></code> to perform modifications to the site-occupations when fired:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>In this case, the two sites containing CO and O are simply emptied. Now, assume we have defined an event for each type of reaction desired:</p>
+<blockquote>
+<div><ul class="simple">
+<li><ol class="arabic simple" start="0">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_events.COAdsEvent</span></code> for CO adsorption.</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_events.CODesEvent</span></code> for CO desorption.</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="2">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_events.OAdsEvent</span></code> for O2 dissociative adsorption.</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="3">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_events.ODesEvent</span></code> for O2 desorption.</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="4">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_events.CODiffEvent</span></code> for CO diffusion.</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="5">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_events.ODiffEvent</span></code> for O diffusion.</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="6">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_events.COOxEvent</span></code> for CO+O -&gt; CO2.</p></li>
+</ol>
+</li>
+</ul>
+</div></blockquote>
+<p>To accelerate the simulation we need to specify which events are each others reverse and store the event-class references in a list:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">reverse_events</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+<span class="n">events</span> <span class="o">=</span> <span class="p">[</span><span class="n">COAdsEvent</span><span class="p">,</span> <span class="n">CODesEvent</span><span class="p">,</span> <span class="n">OAdsEvent</span><span class="p">,</span>
+          <span class="n">ODesEvent</span><span class="p">,</span> <span class="n">CODiffEvent</span><span class="p">,</span>
+          <span class="n">ODiffEvent</span><span class="p">,</span> <span class="n">COOxEvent</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Here event 0 has a reverse event 1, 2 has 3, 4 and 5 are their own inverses because they are diffusion, and 6 is left out because it is assumed irreversible.
+The numbering of events is determined by the order in the list <code class="code docutils literal notranslate"><span class="pre">events</span></code> defined here.</p>
+</div>
+<div class="section" id="define-and-run-simulation">
+<h2>Define and run simulation<a class="headerlink" href="#define-and-run-simulation" title="Permalink to this headline">¶</a></h2>
+<p>Now the simulation object <code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_kmc.NeighborKMC</span></code> can be defined and the simulation performed:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Instantiate simulator object.</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">NeighborKMC</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">tend</span><span class="o">=</span><span class="n">tend</span><span class="p">,</span>
+                  <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
+                  <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">,</span>
+                  <span class="n">rev_events</span><span class="o">=</span><span class="n">reverse_events</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">run_kmc</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Simulation end time reached ! ! !&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="analyze-results">
+<span id="analyzecoox"></span><h2>Analyze results<a class="headerlink" href="#analyze-results" title="Permalink to this headline">¶</a></h2>
+<p>The results are analyzed by reading in the <a class="reference internal" href="../output.html#output"><span class="std std-ref">code output</span></a>. For example, if we need to calculate the CO and O coverage as a function of time for the entire system:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;time.txt&quot;</span><span class="p">)</span>
+<span class="n">covs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;coverages.txt&quot;</span><span class="p">)</span>
+<span class="n">Nsites</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">covs</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">cov_CO</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">([</span><span class="mi">1</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">covs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">Nsites</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">covs</span><span class="p">))]</span>
+<span class="n">cov_O</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">([</span><span class="mi">1</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">covs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="n">Nsites</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">covs</span><span class="p">))]</span>
+<span class="n">cov_free</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">([</span><span class="mi">1</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">covs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">Nsites</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">covs</span><span class="p">))]</span>
+</pre></div>
+</div>
+<p>If we need to analyze it for each site-type, the site-types need to be read. For corners, this may look like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stypes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;stypes.txt&quot;</span><span class="p">)</span>
+<span class="n">icnr</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stypes</span><span class="p">))</span> <span class="k">if</span> <span class="n">stypes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Ncnr</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">icnr</span><span class="p">))</span> <span class="c1"># Number of corner sites</span>
+<span class="n">cov_CO_corners</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">([</span><span class="mi">1</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">covs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">icnr</span><span class="p">])</span> <span class="o">/</span> <span class="n">Ncnr</span>
+                  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">covs</span><span class="p">))]</span>
+</pre></div>
+</div>
+<p>Typically, a turnover frequency is also relevant to calculate:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Nevents</span> <span class="o">=</span> <span class="mi">7</span> <span class="c1"># How many types of events are there.</span>
+<span class="n">sid_ev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;sid_ev.txt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">stypes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">Nevents</span><span class="p">)</span>
+<span class="n">TOF</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sid_ev</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">Nsites</span><span class="o">*</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># How many CO+O-&gt;CO2 has fired per time and site.</span>
+</pre></div>
+</div>
+<p>Often it can be useful to discard points out of steady-state by selecting only part of <code class="code docutils literal notranslate"><span class="pre">sid_ev</span></code>.
+To draw statistically sound conclusions, it is recommended that multiple identically prepared simulations are performed
+(see  tutorials <a class="reference internal" href="../examples/parallel.html#parallel"><span class="std std-ref">Parallel simulations</span></a> and <a class="reference internal" href="../examples/tof.html#tof"><span class="std std-ref">calculating turnover frequencies</span></a>).</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../examples/index.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="A_ads.html" class="btn btn-neutral float-left" title="Adsorption of atomic species A on surface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Mikkel Jørgensen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

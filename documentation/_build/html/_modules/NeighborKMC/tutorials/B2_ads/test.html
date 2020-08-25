@@ -1,0 +1,327 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>NeighborKMC.tutorials.B2_ads.test &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="../../../../_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Code overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quick.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">User interface (API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>NeighborKMC.tutorials.B2_ads.test</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for NeighborKMC.tutorials.B2_ads.test</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Script that runs the tutorial of B2 adsorption and desorption on a surface </span>
+<span class="sd"> </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ase.build</span> <span class="kn">import</span> <span class="n">fcc100</span>
+<span class="kn">from</span> <span class="nn">.user_sites</span> <span class="kn">import</span> <span class="n">Site</span>
+<span class="kn">from</span> <span class="nn">.user_system</span> <span class="kn">import</span> <span class="n">System</span>
+<span class="kn">from</span> <span class="nn">.user_kmc</span> <span class="kn">import</span> <span class="n">NeighborKMC</span>
+<span class="kn">from</span> <span class="nn">.user_events</span> <span class="kn">import</span> <span class="p">(</span><span class="n">B2AdsEvent</span><span class="p">,</span> <span class="n">B2DesEvent</span><span class="p">)</span>
+
+<div class="viewcode-block" id="readFile"><a class="viewcode-back" href="../../../../api/NeighborKMC.tutorials.B2_ads.html#NeighborKMC.tutorials.B2_ads.test.readFile">[docs]</a><span class="k">def</span> <span class="nf">readFile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;Reads in a text file and gives back a list which has the structure of columns, rows</span>
+
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">List</span><span class="o">=</span><span class="p">[[]</span> <span class="k">for</span> <span class="n">tt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">)]</span>
+  <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+      <span class="n">List</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+  <span class="k">return</span> <span class="n">List</span></div>
+
+<div class="viewcode-block" id="run_test"><a class="viewcode-back" href="../../../../api/NeighborKMC.tutorials.B2_ads.html#NeighborKMC.tutorials.B2_ads.test.run_test">[docs]</a><span class="k">def</span> <span class="nf">run_test</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Runs the simulation of the dissociativ B2 adsorption and desorption over a surface.</span>
+
+<span class="sd">    First, constants are defined and old output files cleared.</span>
+<span class="sd">    Next, the sites, events, system and simulation objects</span>
+<span class="sd">    are loaded, and the simulation is performed.</span>
+
+<span class="sd">    Last, the results are read in from the generated.txt files and compared with a file containing the results from the mean-field model,</span>
+<span class="sd">    and plotted using matplotlib.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Define constants.</span>
+    <span class="c1"># ------------------------------------------</span>
+    <span class="n">tend</span> <span class="o">=</span> <span class="mf">5.</span>  <span class="c1"># End time of simulation (s)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mf">4.00</span>  <span class="c1"># Lattice Parameter (not related to DFT!)</span>
+    <span class="n">Ncutoff</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.05</span>  <span class="c1"># Nearest neighbor cutoff</span>
+    <span class="c1"># Clear up old output files.</span>
+    <span class="c1"># ------------------------------------------</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;time.txt&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;coverages.txt&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;sid_ev.txt&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;sid_ev_other.txt&quot;</span><span class="p">,</span> <span class="p">[])</span>
+
+    <span class="c1"># Define the sites from ase.Atoms.</span>
+    <span class="c1"># ------------------------------------------</span>
+    <span class="n">atoms</span> <span class="o">=</span> <span class="n">fcc100</span><span class="p">(</span><span class="s2">&quot;Pt&quot;</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">sites</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">atoms</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;surf.traj&#39;</span><span class="p">)</span>
+    <span class="c1"># Create a site for each surface-atom:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)):</span>
+        <span class="n">sites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Site</span><span class="p">(</span><span class="n">stype</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                          <span class="n">covered</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ind</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+    <span class="c1"># Instantiate a system, events, and simulation.</span>
+    <span class="c1"># ---------------------------------------------</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">sites</span><span class="o">=</span><span class="n">sites</span><span class="p">)</span>
+
+    <span class="c1"># Set the global neighborlist based on distances:</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">set_neighbors</span><span class="p">(</span><span class="n">Ncutoff</span><span class="p">,</span><span class="n">pbc</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">events</span> <span class="o">=</span> <span class="p">[</span><span class="n">B2AdsEvent</span><span class="p">,</span> <span class="n">B2DesEvent</span><span class="p">]</span>
+
+    <span class="c1"># Specify what events are each others&#39; reverse.</span>
+    <span class="n">reverse_events</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+
+<span class="c1">#    parameters = {&quot;pCO&quot;: pCO, &quot;pO2&quot;: pO2, &quot;T&quot;: T,</span>
+    <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;B2 ads/des Simulation&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;reverses &quot;</span><span class="p">:</span> <span class="n">reverse_events</span><span class="p">}</span>
+
+    <span class="c1"># Instantiate simulator object.</span>
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">NeighborKMC</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">tend</span><span class="o">=</span><span class="n">tend</span><span class="p">,</span>
+                      <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
+                      <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">,</span>
+                      <span class="n">rev_events</span><span class="o">=</span><span class="n">reverse_events</span><span class="p">)</span>
+
+    <span class="c1"># Run the simulation.</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">run_kmc</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Simulation end time reached ! ! !&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Plot the coverages:</span>
+    <span class="c1"># ------------------------------------------</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+    <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="c1">#</span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">3.5</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;mathtext.default&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;rm&#39;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;mathtext.rm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Arial&#39;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Arial&#39;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;font&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">fs</span><span class="p">)</span>
+<span class="c1">#</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;time.txt&quot;</span><span class="p">)</span>
+    <span class="n">covs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;coverages.txt&quot;</span><span class="p">)</span>
+<span class="c1">#</span>
+    <span class="n">cov_B2</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">([</span><span class="mi">1</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">covs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">covs</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">covs</span><span class="p">))]</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">cov_B2</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;N-KMC 100x10&quot;</span><span class="p">)</span>
+
+    <span class="n">data_MF</span> <span class="o">=</span> <span class="n">readFile</span><span class="p">(</span><span class="s1">&#39;ads_b2_mf.dat&#39;</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_MF</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">data_MF</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;g-&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Coverage&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="c1">#</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;Compare_MF_KMC.pdf&#39;</span><span class="p">,</span><span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">run_test</span><span class="p">()</span>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Mikkel Jørgensen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

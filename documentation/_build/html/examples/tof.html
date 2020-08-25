@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Calculating a turnover frequency &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Periodic boundary conditions" href="pbc.html" />
+    <link rel="prev" title="CO oxidation on a Pt nanoparticle" href="coox.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="../_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Code overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on a Pt nanoparticle</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Calculating a turnover frequency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pbc.html">Periodic boundary conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adsads.html">Adsorbate-adsorbate interactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sites.html">Special site-rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="acceleration.html">Accelerating kMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel.html">Parallel simulations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">User interface (API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Examples</a> &raquo;</li>
+        
+      <li>Calculating a turnover frequency</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/examples/tof.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="pbc.html" class="btn btn-neutral float-right" title="Periodic boundary conditions" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="coox.html" class="btn btn-neutral float-left" title="CO oxidation on a Pt nanoparticle" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="tof"></span><div class="section" id="calculating-a-turnover-frequency">
+<span id="index-0"></span><h1>Calculating a turnover frequency<a class="headerlink" href="#calculating-a-turnover-frequency" title="Permalink to this headline">¶</a></h1>
+<p>A Turnover Frequency (TOF) can simply be calculated from the number of times a product is formed per site and second.
+The same procedure can be followed for the individual elementary step rates.
+The script <cite>analyze_tof.py</cite> provides a complete example of how the TOF can be calculated.</p>
+<p>Assume that the event list is instantiated as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">user_events</span> <span class="kn">import</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Z</span>
+<span class="n">events</span> <span class="o">=</span> <span class="p">[</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Z</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Where X is the forward reaction of a step that generates the product molecule, and Z is the reverse reaction that consumes one product molecule.
+To calculate the system’s overall TOF, we load in the time, and events that were executed (see <a class="reference internal" href="../output.html#output"><span class="std std-ref">output</span></a>)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">evs_exec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;evs_exec.txt&quot;</span><span class="p">)</span>
+<span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;time.txt&quot;</span><span class="p">)</span>
+<span class="n">stypes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;stypes.txt&quot;</span><span class="p">)</span> <span class="c1"># for number of sites here</span>
+<span class="n">Nsites</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">stypes</span><span class="p">)</span>
+
+<span class="n">TOF_global</span> <span class="o">=</span> <span class="p">(</span><span class="n">evs_exec</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">evs_exec</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">Nsites</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We may want a TOF for each type of site and to discard the first half of the simulation, which may be out of steady-state:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Nevents</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">sid_ev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;sid_ev.txt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nsites</span><span class="p">,</span> <span class="n">Nevents</span><span class="p">)</span>
+
+<span class="n">Nhalf</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sid_ev</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">sid_ev</span> <span class="o">=</span> <span class="n">sid_ev</span><span class="p">[</span><span class="n">Nhalf</span><span class="p">:]</span>
+
+<span class="n">dt</span> <span class="o">=</span>  <span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">time</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="mi">0</span><span class="p">))]</span>
+<span class="n">tofs_st</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">stypes</span><span class="p">))))</span>
+
+<span class="k">for</span> <span class="n">time_chunk</span> <span class="ow">in</span> <span class="n">sid_ev</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">st</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">stypes</span><span class="p">))):</span>
+        <span class="n">sids_st</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">stypes</span><span class="p">)</span> <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">st</span><span class="p">]</span> <span class="c1">#  site-indices of stype==st.</span>
+        <span class="n">Nst</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sids_st</span><span class="p">))</span> <span class="c1">#  number of sites with the current stype == st.</span>
+        <span class="n">tofs_st</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">time_chunk</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">time_chunk</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+                          <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sids_st</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">dt</span><span class="o">*</span><span class="n">Nst</span><span class="p">)</span> <span class="c1"># TOF of the stype</span>
+</pre></div>
+</div>
+<p>Here, the last half of the simulation is used, and for all unique types of sites the indices are noted.
+Then the number of sites with the current stype is noted, and finally the TOF is calculated.</p>
+<p><strong>Statistical averaging</strong> should be done to address the convergence of the TOF. This can be done by <a class="reference internal" href="parallel.html#parallel"><span class="std std-ref">running multiple
+identical simulations in parallel</span></a>.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pbc.html" class="btn btn-neutral float-right" title="Periodic boundary conditions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="coox.html" class="btn btn-neutral float-left" title="CO oxidation on a Pt nanoparticle" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Mikkel Jørgensen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

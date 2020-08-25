@@ -1,0 +1,580 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Dissociative Adsorption of type B2 &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="NeighborKMC.examples" href="NeighborKMC.examples.html" />
+    <link rel="prev" title="Atomic adsorption and desorption" href="NeighborKMC.tutorials.A_ads.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="../_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Code overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User interface (API)</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="NeighborKMC.html">NeighborKMC package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="NeighborKMC.base.html">NeighborKMC.base package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="NeighborKMC.tutorials.html">NeighborKMC.tutorials</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="NeighborKMC.tutorials.A_ads.html">Atomic adsorption and desorption</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Dissociative Adsorption of type B<sub>2</sub></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="NeighborKMC.examples.html">NeighborKMC.examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">User interface (API)</a> &raquo;</li>
+        
+          <li><a href="NeighborKMC.html">NeighborKMC package</a> &raquo;</li>
+        
+          <li><a href="NeighborKMC.tutorials.html">NeighborKMC.tutorials</a> &raquo;</li>
+        
+      <li>Dissociative Adsorption of type B<sub>2</sub></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/NeighborKMC.tutorials.B2_ads.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="NeighborKMC.examples.html" class="btn btn-neutral float-right" title="NeighborKMC.examples" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="NeighborKMC.tutorials.A_ads.html" class="btn btn-neutral float-left" title="Atomic adsorption and desorption" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dissociative-adsorption-of-type-b2">
+<h1>Dissociative Adsorption of type B<sub>2</sub><a class="headerlink" href="#dissociative-adsorption-of-type-b2" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-NeighborKMC.tutorials.B2_ads.test">
+<span id="neighborkmc-tutorials-b2-ads-test-py"></span><h2>NeighborKMC.tutorials.B2_ads.test.py<a class="headerlink" href="#module-NeighborKMC.tutorials.B2_ads.test" title="Permalink to this headline">¶</a></h2>
+<p>Script that runs the tutorial of B2 adsorption and desorption on a surface</p>
+<dl class="py function">
+<dt id="NeighborKMC.tutorials.B2_ads.test.readFile">
+<code class="sig-prename descclassname">NeighborKMC.tutorials.B2_ads.test.</code><code class="sig-name descname">readFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">r</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/B2_ads/test.html#readFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.test.readFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads in a text file and gives back a list which has the structure of columns, rows</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="NeighborKMC.tutorials.B2_ads.test.run_test">
+<code class="sig-prename descclassname">NeighborKMC.tutorials.B2_ads.test.</code><code class="sig-name descname">run_test</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/B2_ads/test.html#run_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.test.run_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the simulation of the dissociativ B2 adsorption and desorption over a surface.</p>
+<p>First, constants are defined and old output files cleared.
+Next, the sites, events, system and simulation objects
+are loaded, and the simulation is performed.</p>
+<p>Last, the results are read in from the generated.txt files and compared with a file containing the results from the mean-field model,
+and plotted using matplotlib.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-NeighborKMC.tutorials.B2_ads.user_sites">
+<span id="neighborkmc-tutorials-b2-ads-user-sites-py"></span><h2>NeighborKMC.tutorials.B2_ads.user_sites.py<a class="headerlink" href="#module-NeighborKMC.tutorials.B2_ads.user_sites" title="Permalink to this headline">¶</a></h2>
+<p>Defines the Site Class derived from base.site.SiteBase.</p>
+<p>The site class is defined here as an interface to the base
+class in base.site.SiteBase, where the user can add custom tags.
+Custom tags can be used to evaluate the rate-constants in user_events.py</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Module <a class="reference internal" href="#module-NeighborKMC.tutorials.B2_ads.user_events" title="NeighborKMC.tutorials.B2_ads.user_events"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NeighborKMC.tutorials.B2_ads.user_events</span></code></a></p>
+</div>
+<dl class="py class">
+<dt id="NeighborKMC.tutorials.B2_ads.user_sites.Site">
+<em class="property">class </em><code class="sig-prename descclassname">NeighborKMC.tutorials.B2_ads.user_sites.</code><code class="sig-name descname">Site</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stype</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">covered</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">ind</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">lattice_pos</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/B2_ads/user_sites.html#Site"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.user_sites.Site" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="base.html#base.sites.SiteBase" title="base.sites.SiteBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">base.sites.SiteBase</span></code></a></p>
+<p>A site object.</p>
+<p>Method calls the base class constructor first.
+Then the user can attach custom variables to site
+objects, such as coordination numbers, positions, etc.</p>
+<dl class="py attribute">
+<dt id="NeighborKMC.tutorials.B2_ads.user_sites.Site.stype">
+<code class="sig-name descname">stype</code><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.user_sites.Site.stype" title="Permalink to this definition">¶</a></dt>
+<dd><p>The site type, user must decide what that implies.
+Here: 0 refers to an ontop adsorption</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="NeighborKMC.tutorials.B2_ads.user_sites.Site.covered">
+<code class="sig-name descname">covered</code><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.user_sites.Site.covered" title="Permalink to this definition">¶</a></dt>
+<dd><p>The species that covers the site, user must decide what the integer implies.
+Here: 0 = empty-site, 1 = B covered</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="NeighborKMC.tutorials.B2_ads.user_sites.Site.ind">
+<code class="sig-name descname">ind</code><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.user_sites.Site.ind" title="Permalink to this definition">¶</a></dt>
+<dd><p>The atomic-indices c.f. an ASE.Atoms object that constitute
+the site. This is can be used later for visualization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list(int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname">.. seealso:: Module :py:mod:`NeighborKMC.base.sites`</code></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-NeighborKMC.tutorials.B2_ads.user_events">
+<span id="neighborkmc-tutorials-b2-ads-user-events-py"></span><h2>NeighborKMC.tutorials.B2_ads.user_events.py<a class="headerlink" href="#module-NeighborKMC.tutorials.B2_ads.user_events" title="Permalink to this headline">¶</a></h2>
+<p>Contains all user-defined event types.</p>
+<p>All user-defined events are defined here, which
+must be derived from the parent class EventBase.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>Module <a class="reference internal" href="NeighborKMC.base.html#module-NeighborKMC.base.events" title="NeighborKMC.base.events"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NeighborKMC.base.events</span></code></a></dt><dd><p>for documentation about the methods possible(), get_rate(), do_event() and get_invovle_other().</p>
+</dd>
+</dl>
+</div>
+<dl class="py class">
+<dt id="NeighborKMC.tutorials.B2_ads.user_events.B2AdsEvent">
+<em class="property">class </em><code class="sig-prename descclassname">NeighborKMC.tutorials.B2_ads.user_events.</code><code class="sig-name descname">B2AdsEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/B2_ads/user_events.html#B2AdsEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.user_events.B2AdsEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>B2 adsorption event class.
+The event is 2B(g) + 2* -&gt; 2B*.
+The event is possible if two neighbouring sites are empty.
+The rate is set constant for comparison with mean-field model.
+Performing the event adds two B to two sites.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="NeighborKMC.tutorials.B2_ads.user_events.B2DesEvent">
+<em class="property">class </em><code class="sig-prename descclassname">NeighborKMC.tutorials.B2_ads.user_events.</code><code class="sig-name descname">B2DesEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/B2_ads/user_events.html#B2DesEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.user_events.B2DesEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>A desorption event class.
+The event is 2B* -&gt; B2(g) + 2*.
+The event is possible if two neighbouring sites are B-covered.
+The rate is set constant to match the mean-field model.
+Performing the event removes two B from two sites.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-NeighborKMC.tutorials.B2_ads.user_kmc">
+<span id="neighborkmc-tutorials-b2-ads-user-kmc-py"></span><h2>NeighborKMC.tutorials.B2_ads.user_kmc.py<a class="headerlink" href="#module-NeighborKMC.tutorials.B2_ads.user_kmc" title="Permalink to this headline">¶</a></h2>
+<p>Defines the NeighborKMC class used to run a MonteCoffee simulation.</p>
+<p>The module defines the main simulation class (NeighborKMC), which is used
+to run the simulation. The main engine is found in base.kmc.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Module <a class="reference internal" href="NeighborKMC.base.html#module-NeighborKMC.base.kmc" title="NeighborKMC.base.kmc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NeighborKMC.base.kmc</span></code></a></p>
+</div>
+<dl class="py class">
+<dt id="NeighborKMC.tutorials.B2_ads.user_kmc.NeighborKMC">
+<em class="property">class </em><code class="sig-prename descclassname">NeighborKMC.tutorials.B2_ads.user_kmc.</code><code class="sig-name descname">NeighborKMC</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">system</span></em>, <em class="sig-param"><span class="n">tend</span></em>, <em class="sig-param"><span class="n">parameters</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">events</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">rev_events</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/B2_ads/user_kmc.html#NeighborKMC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.user_kmc.NeighborKMC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="base.html#base.kmc.NeighborKMCBase" title="base.kmc.NeighborKMCBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">base.kmc.NeighborKMCBase</span></code></a></p>
+<p>Controls the kMC simulation.</p>
+<p>Calls constructor of NeighborKMCBase objects, and
+loads in the user-specified event-list in load_events().</p>
+<p>The variable self.evs_exec is initialized as a list to
+count the number of times each event-type is executed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>system</strong> (<a class="reference internal" href="NeighborKMC.examples.GCN.html#NeighborKMC.examples.NP_general_coordination_number.user_system.System" title="NeighborKMC.examples.NP_general_coordination_number.user_system.System"><em>System</em></a>) – The system instance to perform the simulation on.</p></li>
+<li><p><strong>tend</strong> (<em>float</em>) – Simulation end-time.</p></li>
+<li><p><strong>parameters</strong> (<em>dict</em>) – Parameters used, which are dumped to the log file.</p></li>
+<li><p><strong>events</strong> (<em>list</em><em>(</em><em>classobj</em><em>)</em>) – <p>A list pointing to the event classes that defines the events.
+The order of list is kept consistently throughout the simulation.
+For example, given the event classes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">AdsEvent</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">DesEvent</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>One should define events as a list of class names as</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">events</span> <span class="o">=</span> <span class="p">[</span><span class="n">AdsEvent</span><span class="p">,</span> <span class="n">DesEvent</span><span class="p">]</span>
+</pre></div>
+</div>
+</p></li>
+<li><p><strong>rev_events</strong> (<em>dict</em>) – <p>Specifying which events are reverse to each other, following the order <cite>self.events</cite>.
+This dict is used for temporal acceleration.
+For example, if we have an adsorption and desorption event that are each others reverse, a
+third non-reversible event, and a diffusion event that is its own reverse:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">events</span> <span class="o">=</span> <span class="p">[</span><span class="n">AdsEvent</span><span class="p">,</span> <span class="n">DesEvent</span><span class="p">,</span> <span class="n">ThirdEvent</span><span class="p">,</span> <span class="n">DiffusionEvent</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Then rev_events is defined as</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rev_events</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">:</span><span class="mi">3</span><span class="p">}</span><span class="o">.</span>
+</pre></div>
+</div>
+</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Assume that we have defined a System object (system), a list of event <strong>classes</strong> (events), and the
+dict of reverse events (rev_events). Then a NeighborKMC object is instantiated and simulation is run as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nkmc</span> <span class="o">=</span> <span class="n">NeighborKMC</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">system</span><span class="p">,</span>
+                   <span class="n">tend</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                   <span class="n">parameters</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+                   <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">,</span>
+                   <span class="n">rev_events</span><span class="o">=</span><span class="n">rev_events</span><span class="p">)</span>
+<span class="n">nkmc</span><span class="o">.</span><span class="n">run_kmc</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Module <a class="reference internal" href="NeighborKMC.base.html#module-NeighborKMC.base.kmc" title="NeighborKMC.base.kmc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NeighborKMC.base.kmc</span></code></a>
+Module <a class="reference internal" href="NeighborKMC.base.html#module-NeighborKMC.base.basin" title="NeighborKMC.base.basin"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NeighborKMC.base.basin</span></code></a></p>
+</div>
+<dl class="py method">
+<dt id="NeighborKMC.tutorials.B2_ads.user_kmc.NeighborKMC.load_reverses">
+<code class="sig-name descname">load_reverses</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rev_events</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/B2_ads/user_kmc.html#NeighborKMC.load_reverses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.user_kmc.NeighborKMC.load_reverses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepares the reverse_event dict.</p>
+<p>Method makes the dict self.reverses two sided, and performs
+a check that each event only has one reverse in the end.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rev_events</strong> (<em>dict</em>) – Specifying which events are reverse to each other, as described in
+the constructor of NeighborKMC.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Warning:</strong> – If an reversible event has more than one reverse.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="NeighborKMC.tutorials.B2_ads.user_kmc.NeighborKMC.run_kmc">
+<code class="sig-name descname">run_kmc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/B2_ads/user_kmc.html#NeighborKMC.run_kmc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.user_kmc.NeighborKMC.run_kmc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs a kmc simulation.</p>
+<p>Method starts the simulation by initializing the log,
+initializes lists to keep track of time and step
+numbers.</p>
+<p>It saves information about the site-indices in <cite>siteids.txt</cite>,
+and the site-types in <cite>stypes.txt</cite>.</p>
+<p>While the simulation runs (self.t &lt; self.tend),
+Monte Carlo steps are performed by calling self.frm_step().</p>
+<p>Every self.LogSteps, a line is added to the simulation
+log.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="NeighborKMC.tutorials.B2_ads.user_kmc.NeighborKMC.save_txt">
+<code class="sig-name descname">save_txt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/B2_ads/user_kmc.html#NeighborKMC.save_txt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.user_kmc.NeighborKMC.save_txt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves txt files containing the simulation data.</p>
+<p>Calls the behind-the-scenes save_txt() method of the base class.
+The user should add any optional writes in this method, which
+is called every self.SaveSteps steps.</p>
+<p class="rubric">Example</p>
+<p>Add the following line to the end of the method:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;user_stype_ev.txt&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stype_ev</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-NeighborKMC.tutorials.B2_ads.user_system">
+<span id="neighborkmc-tutorials-b2-ads-user-system-py"></span><h2>NeighborKMC.tutorials.B2_ads.user_system.py<a class="headerlink" href="#module-NeighborKMC.tutorials.B2_ads.user_system" title="Permalink to this headline">¶</a></h2>
+<p>Defines the System Class, derived from base.system module.</p>
+<p>The System is supposed to be a singleton that
+is passed to a singleton NeighborKMC object.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Module <a class="reference internal" href="NeighborKMC.base.html#module-NeighborKMC.base.system" title="NeighborKMC.base.system"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NeighborKMC.base.system</span></code></a>
+Module <a class="reference internal" href="#module-NeighborKMC.tutorials.B2_ads.user_sites" title="NeighborKMC.tutorials.B2_ads.user_sites"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NeighborKMC.tutorials.B2_ads.user_sites</span></code></a></p>
+</div>
+<dl class="py class">
+<dt id="NeighborKMC.tutorials.B2_ads.user_system.System">
+<em class="property">class </em><code class="sig-prename descclassname">NeighborKMC.tutorials.B2_ads.user_system.</code><code class="sig-name descname">System</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">atoms</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sites</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/B2_ads/user_system.html#System"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.user_system.System" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="base.html#base.system.SystemBase" title="base.system.SystemBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">base.system.SystemBase</span></code></a></p>
+<p>Class defines a collection of sites and connected atoms.</p>
+<p>Calls the base class system.py constructor,
+sets the global neighborlist from the individual site’s
+neighborlist.</p>
+<dl class="py attribute">
+<dt id="NeighborKMC.tutorials.B2_ads.user_system.System.atoms">
+<code class="sig-name descname">atoms</code><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.user_system.System.atoms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can (optionally) be passed to connect an ASE.Atoms
+object to the system. This can be useful for visualization
+of the simulation, for example by setting the ase.Atoms tag
+according to coverages.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ase.Atoms</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="NeighborKMC.tutorials.B2_ads.user_system.System.sites">
+<code class="sig-name descname">sites</code><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.user_system.System.sites" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sites that constitute the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list(<a class="reference internal" href="NeighborKMC.examples.GCN.html#NeighborKMC.examples.NP_general_coordination_number.user_sites.Site" title="NeighborKMC.examples.NP_general_coordination_number.user_sites.Site">Site</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Module <a class="reference internal" href="NeighborKMC.base.html#module-NeighborKMC.base.system" title="NeighborKMC.base.system"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NeighborKMC.base.system</span></code></a></p>
+</div>
+<dl class="py method">
+<dt id="NeighborKMC.tutorials.B2_ads.user_system.System.cover_system">
+<code class="sig-name descname">cover_system</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">species</span></em>, <em class="sig-param"><span class="n">coverage</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/B2_ads/user_system.html#System.cover_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.user_system.System.cover_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Covers the system with a certain species.</p>
+<p>Randomly covers the system with a species, at a
+certain fractional coverage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>species</strong> (<em>int</em>) – The species as defined by the user (e.g. empty=0,B=1).</p></li>
+<li><p><strong>coverage</strong> (<em>float</em>) – The fractional coverage to load lattice with.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="NeighborKMC.tutorials.B2_ads.user_system.System.set_neighbors">
+<code class="sig-name descname">set_neighbors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Ncutoff</span></em>, <em class="sig-param"><span class="n">pbc</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/B2_ads/user_system.html#System.set_neighbors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.user_system.System.set_neighbors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets neighborlists of self.sites by distances.</p>
+<p>Loops through the sites and using self.atoms, the
+method adds neighbors to the sites that are within a
+neighbor-distance (Ncutoff).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Ncutoff</strong> (<em>float</em>) – The cutoff distance for nearest-neighbors in angstroms</p></li>
+<li><p><strong>pbc</strong> (<em>bool</em>) – If the neighborlist should be computed with periodic boundary
+conditions. To make a direction aperiodic, introduce a vacuum larger
+than Ncutoff in this direction in self.atoms.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Warning:</strong> – If self.atoms is not set, because then distances cannot
+    be used to determine neighbors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="NeighborKMC.examples.html" class="btn btn-neutral float-right" title="NeighborKMC.examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="NeighborKMC.tutorials.A_ads.html" class="btn btn-neutral float-left" title="Atomic adsorption and desorption" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Mikkel Jørgensen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

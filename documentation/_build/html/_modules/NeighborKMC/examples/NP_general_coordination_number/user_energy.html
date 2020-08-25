@@ -1,0 +1,308 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>NeighborKMC.examples.NP_general_coordination_number.user_energy &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="../../../../_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Code overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quick.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">User interface (API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>NeighborKMC.examples.NP_general_coordination_number.user_energy</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for NeighborKMC.examples.NP_general_coordination_number.user_energy</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Defines constants and methods related to the reaction energy landscapes.</span>
+<span class="sd">   </span>
+<span class="sd">   This module is not mandatory to use, but is suitable to </span>
+<span class="sd">   used to keep track of reaction energies that are used</span>
+<span class="sd">   in user_events.py</span>
+<span class="sd">   </span>
+<span class="sd">   See Also</span>
+<span class="sd">   ---------</span>
+<span class="sd">   Module: user_events</span>
+<span class="sd">   Module: user_entropy</span>
+
+<span class="sd">   Note</span>
+<span class="sd">   ------</span>
+<span class="sd">   This module is optional to use and can be customized</span>
+<span class="sd">   to contain all reaction energies.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="c1"># Diffusion barriers</span>
+<span class="n">EdiffCO</span> <span class="o">=</span> <span class="mf">0.046</span>
+<span class="n">EdiffO</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+<span class="c1"># Adsorption energies as functions of CN</span>
+<span class="n">EadsCO</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.36</span> <span class="o">+</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="mi">9</span> <span class="o">-</span> <span class="n">CN</span><span class="p">)</span> <span class="k">for</span> <span class="n">CN</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]]</span>
+<span class="n">EadsO</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.97</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">9</span> <span class="o">-</span> <span class="n">CN</span><span class="p">)</span> <span class="k">for</span> <span class="n">CN</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]]</span>
+
+
+<div class="viewcode-block" id="get_Ea"><a class="viewcode-back" href="../../../../api/NeighborKMC.examples.GCN.html#NeighborKMC.examples.NP_general_coordination_number.user_energy.get_Ea">[docs]</a><span class="k">def</span> <span class="nf">get_Ea</span><span class="p">(</span><span class="n">ECO</span><span class="p">,</span> <span class="n">EO</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes the reaction energy barrier for CO oxidation.</span>
+<span class="sd">    </span>
+<span class="sd">    Uses a BEP relation for CO oxidation, relative to Pt(111), </span>
+<span class="sd">    to calculate the reaction energy barrier.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ---------------</span>
+<span class="sd">    ECO: float</span>
+<span class="sd">        Adsorption energy of CO in eV.</span>
+<span class="sd">    EO: float</span>
+<span class="sd">        Adsorption energy of O in eV.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    Ea: float</span>
+<span class="sd">        Reaction energy barrier of CO*+O*-&gt;CO2(g) in eV.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dEO</span> <span class="o">=</span> <span class="n">EO</span> <span class="o">-</span> <span class="n">EadsO</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Oxygen energy relative to uncovered Pt(111)</span>
+    <span class="n">dECO</span> <span class="o">=</span> <span class="n">ECO</span> <span class="o">-</span> <span class="n">EadsCO</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># CO energy relative to uncovered Pt(111)</span>
+    <span class="n">dETS</span> <span class="o">=</span> <span class="mf">0.824</span> <span class="o">*</span> <span class="p">(</span><span class="n">dEO</span> <span class="o">+</span> <span class="n">dECO</span><span class="p">)</span>  <span class="c1"># How much larger is the energy of CO and O wrt Pt(111)</span>
+    <span class="n">Ea</span> <span class="o">=</span> <span class="mf">1.08</span> <span class="o">+</span> <span class="n">dETS</span> <span class="o">-</span> <span class="n">dECO</span> <span class="o">-</span> <span class="n">dEO</span>  <span class="c1"># Translate the barriers relative to Pt(111)</span>
+    <span class="k">return</span> <span class="n">Ea</span></div>
+
+
+<div class="viewcode-block" id="get_repulsion"><a class="viewcode-back" href="../../../../api/NeighborKMC.examples.GCN.html#NeighborKMC.examples.NP_general_coordination_number.user_energy.get_repulsion">[docs]</a><span class="k">def</span> <span class="nf">get_repulsion</span><span class="p">(</span><span class="n">cov_self</span><span class="p">,</span> <span class="n">cov_NN</span><span class="p">,</span> <span class="n">stype</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes the adsorbate-adsorbate repulsions.</span>
+<span class="sd">    </span>
+<span class="sd">    Calculates the energy perturbation to the adsorption energy  </span>
+<span class="sd">    of CO or O based on: the coverage of the site (cov_self)</span>
+<span class="sd">    that determines if it is calculated for CO or O, the</span>
+<span class="sd">    nearest neighbor coverages (cov_NN), and site-type (stype).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    cov_self: int</span>
+<span class="sd">        Species on site to calculate the repulsion for.</span>
+<span class="sd">    cov_NN: list(int):</span>
+<span class="sd">        Nearest neighbor occupations.</span>
+<span class="sd">    stype: int</span>
+<span class="sd">        The site-type index.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    repulsion: float</span>
+<span class="sd">        Adsorbate-adsorbate repulsion in eV.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">stype_factor</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="k">if</span> <span class="n">stype</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="mf">1.0</span>
+    <span class="n">repulsion</span> <span class="o">=</span> <span class="mf">0.</span>
+    <span class="n">ECOCO</span> <span class="o">=</span> <span class="mf">0.19</span>  <span class="c1"># 0.38 # How CO affects CO</span>
+    <span class="n">EOO</span> <span class="o">=</span> <span class="mf">0.32</span>  <span class="c1"># How O affects O - double since it is called from get barrier of O2</span>
+
+    <span class="n">ECOO</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c1"># How CO affects O</span>
+    <span class="n">EOCO</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c1"># How O affects CO</span>
+
+    <span class="n">HInttwo</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">ECOCO</span><span class="p">,</span> <span class="n">EOCO</span><span class="p">],</span>
+               <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">ECOO</span><span class="p">,</span> <span class="n">EOO</span><span class="p">]]</span>  <span class="c1"># Two body interaction Hamiltonian 3x3 beacuse 0 = empty.</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">cov_NN</span><span class="p">:</span>  <span class="c1"># For each covered Neighbor, give a repulsion:</span>
+        <span class="n">repulsion</span> <span class="o">+=</span> <span class="n">HInttwo</span><span class="p">[</span><span class="n">cov_self</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+    <span class="n">repulsion</span> <span class="o">*=</span> <span class="n">stype_factor</span>
+
+    <span class="k">return</span> <span class="n">repulsion</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Mikkel Jørgensen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

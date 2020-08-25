@@ -1,0 +1,371 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>NeighborKMC.base.logging &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="../../../_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Code overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">User interface (API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>NeighborKMC.base.logging</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for NeighborKMC.base.logging</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Defines the Log class to log results of a kMC run.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">write</span>
+
+<div class="viewcode-block" id="Log"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.logging.Log">[docs]</a><span class="k">class</span> <span class="nc">Log</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Handles logging of kMC simulations.</span>
+<span class="sd">            </span>
+<span class="sd">    Initializes a filename based on the CPU date and time.  </span>
+<span class="sd">    All passed *parameters* will be written to the log.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parameters: dict</span>
+<span class="sd">        parameters to dump at the beginning of a log. For example</span>
+
+<span class="sd">        &gt;&gt;&gt; dict = {&#39;T&#39;:300, &#39;pCO&#39;:1E2}</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ---------</span>
+<span class="sd">    Simply instantiate a Log and write a line as</span>
+
+<span class="sd">    &gt;&gt;&gt; log = Log(parameters = _params)</span>
+<span class="sd">    &gt;&gt;&gt; log.write_line(&quot;This is a line!&quot;)</span>
+
+<span class="sd">    Dump a simulation point to the log:</span>
+
+<span class="sd">    &gt;&gt;&gt; log.dump_point(step=100, sim_time=1E-9, ev_called=[10,90,0,0,0])</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    ---------</span>
+<span class="sd">    Module: NeighborKMC.base.kmc</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="s1">&#39;kMClog_&#39;</span><span class="o">+</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">_%H:%M&#39;</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.txt&#39;</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;  __  __             _        ____       __  __           </span>
+<span class="s1">|  \/  | ___  _ __ | |_ ___ / ___|___  / _|/ _| ___  ___ </span>
+<span class="s1">| |\/| |/ _ \| &#39;_ \| __/ _ \ |   / _ \| |_| |_ / _ \/ _ \</span>
+<span class="s1">| |  | | (_) | | | | ||  __/ |__| (_) |  _|  _|  __/  __/</span>
+<span class="s1">|_|  |_|\___/|_| |_|\__\___|\____\___/|_| |_|  \___|\___|</span>
+<span class="s1">                                                         </span>
+<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Mikkel Jorgensen</span><span class="se">\n</span><span class="s1">Chalmers University of Technology</span><span class="se">\n</span><span class="s1">Goteborg, Sweden</span><span class="se">\n</span><span class="s1">2015-2019&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">80</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Simulation parameters</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">),</span><span class="s1">&#39;&lt;10&#39;</span><span class="p">)</span><span class="o">+</span><span class="nb">format</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="s1">&#39;&lt;5&#39;</span><span class="p">)</span><span class="o">+</span>
+                        <span class="nb">str</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">p</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">80</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">*</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;kinetic Monte Carlo Log </span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;10s}</span><span class="s1"> </span><span class="si">{:^20s}</span><span class="s1"> </span><span class="si">{:^30s}</span><span class="s1"> </span><span class="si">{:&lt;10s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Step&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;time[hr:min:s]&#39;</span><span class="p">,</span><span class="s1">&#39;Sim time [s]&#39;</span><span class="p">,</span><span class="s1">&#39;Events called </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Log.write_line"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.logging.Log.write_line">[docs]</a>    <span class="k">def</span> <span class="nf">write_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Writes a line to the log.</span>
+<span class="sd">        </span>
+<span class="sd">        Appends a string to the end of the log</span>
+<span class="sd">        on its own line.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        string: str</span>
+<span class="sd">            string to write to log.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">string</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Log.dump_point"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.logging.Log.dump_point">[docs]</a>    <span class="k">def</span> <span class="nf">dump_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">sim_time</span><span class="p">,</span> <span class="n">ev_called</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Writes a simulation point to the log.</span>
+<span class="sd">           </span>
+<span class="sd">        Method writes the Monte Carlo step number *step*,  </span>
+<span class="sd">        the time in the MC simulation *sim_time*,  </span>
+<span class="sd">        and the number of event calls *ev_called*.</span>
+<span class="sd">       </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        step: int</span>
+<span class="sd">            The Monte Carlo step number.</span>
+<span class="sd">        sim_time: float</span>
+<span class="sd">            The simulation time in seconds.</span>
+<span class="sd">        ev_called: list(int)</span>
+<span class="sd">            The number of times each event is called during simulation.</span>
+<span class="sd">            For example [N_CO_ads,N_CO_des,...].</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">time_str</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;10s}</span><span class="s1"> </span><span class="si">{:^20s}</span><span class="s1"> </span><span class="si">{:^30s}</span><span class="s1"> </span><span class="si">{:&lt;10s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">step</span><span class="p">),</span>
+                    <span class="n">time_str</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">sim_time</span><span class="p">),</span><span class="nb">str</span><span class="p">([</span><span class="s2">&quot;</span><span class="si">%.0f</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ev_called</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Log.save_txt"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.logging.Log.save_txt">[docs]</a>    <span class="k">def</span> <span class="nf">save_txt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Saves txt files containing the simulation data.</span>
+
+<span class="sd">        Saves the number of events executed on</span>
+<span class="sd">        the different types of sites, the time vs mcstep,</span>
+<span class="sd">        the site-types, and optionally the coverages if</span>
+<span class="sd">        *self.covered* is True.</span>
+
+<span class="sd">        Growing lists are cleaned from memory.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Saving .txt files ...&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Save global neighborlist to one file</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_coverages</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;coverages.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;ab&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">covered</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;mcstep.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MCstep</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;evs_exec.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">evs_exec</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;sid_ev.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;ab&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sid_ev</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;sid_ev_other.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;ab&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sid_ev_other</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;time.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;ab&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_atoms</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save_atoms</span><span class="p">(</span><span class="s2">&quot;atoms_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MCstep</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;.traj&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Clear up lists that grow with time:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sid_ev</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">))]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sid_ev_other</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">))]</span></div>
+
+<div class="viewcode-block" id="Log.save_atoms"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.logging.Log.save_atoms">[docs]</a>    <span class="k">def</span> <span class="nf">save_atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Writes tagged ase.Atoms to file.</span>
+
+<span class="sd">        Writes self.atom_cfgs to file with path filename.</span>
+<span class="sd">        The variable self.atom_cfgs can be tagged with coverages or</span>
+<span class="sd">        augmented with molecules near the sites to</span>
+<span class="sd">        visualize the reaction trajectory. This is currently not implemented.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ------------</span>
+<span class="sd">        filename: str</span>
+<span class="sd">            Path to file.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">write</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span></div></div>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Mikkel Jørgensen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

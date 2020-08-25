@@ -1,0 +1,354 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>NeighborKMC.base.system &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="../../../_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Code overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">User interface (API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>NeighborKMC.base.system</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for NeighborKMC.base.system</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Defines the SystemBase class.</span>
+
+<span class="sd">The module defines a class used to template the System class</span>
+<span class="sd">defined in user_system.</span>
+
+<span class="sd">See Also</span>
+<span class="sd">---------</span>
+<span class="sd">Module: sites</span>
+<span class="sd">Module: user_sites</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="SystemBase"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.system.SystemBase">[docs]</a><span class="k">class</span> <span class="nc">SystemBase</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Defines a system class to perform kMC.</span>
+<span class="sd">            </span>
+<span class="sd">    Method assigns an ASE.Atoms object (atoms)</span>
+<span class="sd">    to the object and assigns a list of sites (sites).</span>
+<span class="sd">    </span>
+<span class="sd">    A neighbor list (neighbors) is initialized</span>
+<span class="sd">    from the sites, which is checked for inconsistencies</span>
+<span class="sd">    by the method verify_nlist().</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    -----------</span>
+<span class="sd">    atoms: ase.atoms</span>
+<span class="sd">        Can be passed to connect an ASE atoms  object to the system.</span>
+<span class="sd">    sites: Site</span>
+<span class="sd">        The list of sites that constitute the system.</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sites</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sites</span> <span class="o">=</span> <span class="n">sites</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nsites</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sites</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">neighbors</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sites</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verify_nlist</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span> <span class="o">=</span> <span class="n">atoms</span>
+
+<div class="viewcode-block" id="SystemBase.verify_nlist"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.system.SystemBase.verify_nlist">[docs]</a>    <span class="k">def</span> <span class="nf">verify_nlist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tests the neighborlist for inconsistency.</span>
+<span class="sd">        </span>
+<span class="sd">        The method checks if neighborlists are assymetric:  </span>
+<span class="sd">        If A is a neighbor to B, then B must</span>
+<span class="sd">        also be present in the neighborlist of A.  </span>
+<span class="sd">        </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ---------</span>
+<span class="sd">        Warning:</span>
+<span class="sd">            If the neighborlist is assymetric.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">nn</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span><span class="s2">&quot;Site &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; is a neighbor to site &quot;</span> <span class="o">+</span>
+                                  <span class="nb">str</span><span class="p">(</span><span class="n">nn</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; but not vice-versa&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SystemBase.get_ncovs"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.system.SystemBase.get_ncovs">[docs]</a>    <span class="k">def</span> <span class="nf">get_ncovs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i_site</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the coverage on nearest neighbor sites.</span>
+<span class="sd">            </span>
+<span class="sd">        Retrieves and returns the occupations of the nearest neighbor</span>
+<span class="sd">        sites to the site with index `i_site` in `self.sites`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        i_site: int</span>
+<span class="sd">            Index of the site in `self.sites`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -----------</span>
+<span class="sd">        covs: list(int)</span>
+<span class="sd">            List of species occupying the nearest neighbor sites.</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">covs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">i_site</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">covs</span></div>
+
+<div class="viewcode-block" id="SystemBase.get_coverages"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.system.SystemBase.get_coverages">[docs]</a>    <span class="k">def</span> <span class="nf">get_coverages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N_species</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the site-occupations at the present moment.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cov list(list(float)): a list of site-occupations for each species</span>
+<span class="sd">        and all sites. Thus to find the coverage of species</span>
+<span class="sd">        i on site number j one calls ret[i][j].</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cov</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_species</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">cspec</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="k">for</span> <span class="n">i</span> \
+                     <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nsites</span><span class="p">)</span> <span class="k">if</span> \
+                     <span class="bp">self</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="n">species</span><span class="p">]</span>
+
+            <span class="n">cov</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cspec</span><span class="p">))</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nsites</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">cov</span></div>
+
+
+<div class="viewcode-block" id="SystemBase.find_nn_recurse"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.system.SystemBase.find_nn_recurse">[docs]</a>    <span class="k">def</span> <span class="nf">find_nn_recurse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">update_sites</span><span class="p">,</span> <span class="n">recursion</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Deep search of first nearest neighbors.</span>
+
+<span class="sd">        Calculates the first nearest neighbors for a list of site_indices (update_sites).</span>
+
+<span class="sd">        For example, when passing update_sites = [0,1,2],</span>
+<span class="sd">        the method returns [0,1,2,N neighbor 0 of site 0, Neighbor 1 of site 0, ...,</span>
+<span class="sd">        Neighbor 0 of site 1, ...].</span>
+
+<span class="sd">        The method is calling itself recursively until the lattice</span>
+<span class="sd">        is updated, c.f. the locality of nearest neighbor interactions.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ------------</span>
+<span class="sd">        update_sites: list(int)</span>
+<span class="sd">            The site indices to return neighborlist of.</span>
+<span class="sd">        recursion: int</span>
+<span class="sd">            The recursive level of which function was called, because the method</span>
+<span class="sd">            calls itself, for example in base.kmc.frm_update().</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        out: list(int)</span>
+<span class="sd">            An update to the list update_sites where the neighbors to update_sites</span>
+<span class="sd">            are added.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        ---------</span>
+<span class="sd">        kmc.NeighborKMC.frm_update()</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">update_sites</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">update_sites</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">s</span><span class="p">])</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">recursion</span> <span class="o">&lt;</span> <span class="n">sim</span><span class="o">.</span><span class="n">nninter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_nn_recurse</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">recursion</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Mikkel Jørgensen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

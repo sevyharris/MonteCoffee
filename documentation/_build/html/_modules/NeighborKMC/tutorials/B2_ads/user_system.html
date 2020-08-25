@@ -1,0 +1,317 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>NeighborKMC.tutorials.B2_ads.user_system &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="../../../../_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Code overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quick.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">User interface (API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>NeighborKMC.tutorials.B2_ads.user_system</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for NeighborKMC.tutorials.B2_ads.user_system</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Defines the System Class, derived from base.system module.</span>
+
+<span class="sd">The System is supposed to be a singleton that</span>
+<span class="sd">is passed to a singleton NeighborKMC object.</span>
+
+<span class="sd">.. seealso::</span>
+
+<span class="sd">   Module :py:mod:`NeighborKMC.base.system`</span>
+<span class="sd">   Module :py:mod:`NeighborKMC.tutorials.B2_ads.user_sites`</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">base.system</span> <span class="kn">import</span> <span class="n">SystemBase</span>
+
+
+<div class="viewcode-block" id="System"><a class="viewcode-back" href="../../../../api/NeighborKMC.tutorials.B2_ads.html#NeighborKMC.tutorials.B2_ads.user_system.System">[docs]</a><span class="k">class</span> <span class="nc">System</span><span class="p">(</span><span class="n">SystemBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class defines a collection of sites and connected atoms.</span>
+<span class="sd">            </span>
+<span class="sd">    Calls the base class system.py constructor, </span>
+<span class="sd">    sets the global neighborlist from the individual site&#39;s</span>
+<span class="sd">    neighborlist.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    -----------</span>
+<span class="sd">    atoms: ase.Atoms</span>
+<span class="sd">        Can (optionally) be passed to connect an ASE.Atoms</span>
+<span class="sd">        object to the system. This can be useful for visualization</span>
+<span class="sd">        of the simulation, for example by setting the ase.Atoms tag</span>
+<span class="sd">        according to coverages.</span>
+<span class="sd">    sites: list(Site)</span>
+<span class="sd">        The sites that constitute the system.</span>
+
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">       Module :py:mod:`NeighborKMC.base.system`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sites</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="n">SystemBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">sites</span><span class="o">=</span><span class="n">sites</span><span class="p">)</span>
+
+<div class="viewcode-block" id="System.set_neighbors"><a class="viewcode-back" href="../../../../api/NeighborKMC.tutorials.B2_ads.html#NeighborKMC.tutorials.B2_ads.user_system.System.set_neighbors">[docs]</a>    <span class="k">def</span> <span class="nf">set_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Ncutoff</span><span class="p">,</span> <span class="n">pbc</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets neighborlists of self.sites by distances.</span>
+
+<span class="sd">        Loops through the sites and using self.atoms, the</span>
+<span class="sd">        method adds neighbors to the sites that are within a</span>
+<span class="sd">        neighbor-distance (Ncutoff).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        Ncutoff: float</span>
+<span class="sd">            The cutoff distance for nearest-neighbors in angstroms</span>
+<span class="sd">        pbc: bool</span>
+<span class="sd">            If the neighborlist should be computed with periodic boundary</span>
+<span class="sd">            conditions. To make a direction aperiodic, introduce a vacuum larger</span>
+<span class="sd">            than Ncutoff in this direction in self.atoms.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ---------</span>
+<span class="sd">        Warning:</span>
+<span class="sd">            If self.atoms is not set, because then distances cannot</span>
+<span class="sd">            be used to determine neighbors.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span><span class="s2">&quot;Tried to set neighbor-distances in user_system.set_neighbors() with self.atom = None&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Set the neighbor list for each site using distances.</span>
+        <span class="c1"># ------------------------------------------</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sites</span><span class="p">):</span>
+            <span class="c1"># Position of site</span>
+            <span class="n">pcur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">position</span>
+
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">sother</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sites</span><span class="p">):</span>
+                <span class="c1"># Length of distance vector:</span>
+                <span class="n">dcur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_distance</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sother</span><span class="o">.</span><span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mic</span><span class="o">=</span><span class="n">pbc</span><span class="p">)</span>
+
+                <span class="c1"># If the site is a neighbor:</span>
+                <span class="k">if</span> <span class="n">dcur</span> <span class="o">&lt;</span> <span class="n">Ncutoff</span><span class="o">+</span><span class="mf">0.00001</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">:</span>
+                    <span class="n">s</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">neighbors</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sites</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">verify_nlist</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="System.cover_system"><a class="viewcode-back" href="../../../../api/NeighborKMC.tutorials.B2_ads.html#NeighborKMC.tutorials.B2_ads.user_system.System.cover_system">[docs]</a>    <span class="k">def</span> <span class="nf">cover_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">coverage</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Covers the system with a certain species.</span>
+<span class="sd">            </span>
+<span class="sd">        Randomly covers the system with a species, at a</span>
+<span class="sd">        certain fractional coverage.</span>
+<span class="sd">    </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        species: int</span>
+<span class="sd">            The species as defined by the user (e.g. empty=0,B=1).</span>
+<span class="sd">        coverage: float</span>
+<span class="sd">            The fractional coverage to load lattice with.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n_covered</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">coverage</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">)))</span>
+        <span class="n">chosen_sites</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">),</span> <span class="n">n_covered</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chosen_sites</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="n">species</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Mikkel Jørgensen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

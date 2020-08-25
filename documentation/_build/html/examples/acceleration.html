@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Accelerating kMC &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Parallel simulations" href="parallel.html" />
+    <link rel="prev" title="Special site-rules" href="sites.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="../_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Code overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on a Pt nanoparticle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tof.html">Calculating a turnover frequency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pbc.html">Periodic boundary conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adsads.html">Adsorbate-adsorbate interactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sites.html">Special site-rules</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Accelerating kMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel.html">Parallel simulations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">User interface (API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Examples</a> &raquo;</li>
+        
+      <li>Accelerating kMC</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/examples/acceleration.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="parallel.html" class="btn btn-neutral float-right" title="Parallel simulations" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sites.html" class="btn btn-neutral float-left" title="Special site-rules" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="accelerating"></span><div class="section" id="accelerating-kmc">
+<span id="index-0"></span><h1>Accelerating kMC<a class="headerlink" href="#accelerating-kmc" title="Permalink to this headline">¶</a></h1>
+<p>The acceleration of kMC in <strong class="program">MonteCoffee</strong> is based on the <cite>Generalized temporal acceleration scheme</cite> of <a class="reference internal" href="../literature.html#literature"><span class="std std-ref">Dybeck et al</span></a>.
+The code determines which events are fast and likely quasi-equilibrated, and slows down these events periodically.
+This is done by comparing the rates or rate constants (see <a class="reference internal" href="../options.html#options-sec"><span class="std std-ref">options</span></a>) of frequently executed
+quasi-equilibrated events to the infrequently executed quasi-equilibrated events and non-equilibrated events. In that manner,
+the fastest events are slowed down until a non-equilibrated event proceeds and the rate-constants are unscaled again.</p>
+<p>After a scaling period of  <span class="math notranslate nohighlight">\(N_s\)</span> steps, the algorithm determines if any new reactions have become quasi-equilibrated
+by comparing the number of times the event has proceeded forward and backward the last <span class="math notranslate nohighlight">\(n_e\)</span> simulation steps.
+A reaction is deemed quasi-equilibrated if it has been fired at least <span class="math notranslate nohighlight">\(n_e\)</span> times, and for the last <span class="math notranslate nohighlight">\(n_e\)</span> steps:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\dfrac{|N_f - N_b|}{N_f + N_b} &lt; \delta
+\end{equation}</div><p>where <span class="math notranslate nohighlight">\(\delta \in [0,1]\)</span> is a tolerance for determining if the event is reversible. The quasi-equilibrated reactions are slowed down every <span class="math notranslate nohighlight">\(N_s\)</span> steps with the factor</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\alpha_m = N_f\dfrac{2r_S}{r_{m,f}+r_{m,b}}
+\end{equation}</div><p>where <span class="math notranslate nohighlight">\(N_f\)</span> is a factor to separate quasi-equilibrated an non-equilibrated events, <span class="math notranslate nohighlight">\(r_S\)</span> is the sum of
+rates of non-equilibrated or non-sufficiently-executed events, and <span class="math notranslate nohighlight">\(r_{m,f},r_{m,b}\)</span> are the forward and backward rates of the reaction in question.</p>
+<p>In <strong class="program">MonteCoffee</strong>, it is default to use the average <cite>rate-constants</cite> instead of rates as described above.
+This is chosen because rate-constants are more stable, and using rates can lead to unreasonable time-steps for multiple systems.
+Rate-constant based scaling is, however, conservative and can be switched off in <a class="reference internal" href="../options.html#options-sec"><span class="std std-ref">kMC_options.cfg</span></a>.</p>
+<p>To accelerate the MonteCoffee simulation, in principle just specify which events are each others reverse reactions.
+Assume that we have two event-classes named <cite>A</cite> and <cite>B</cite> that are reverse reactions to each other, and a irreversible event called <cite>Z</cite>.
+To accelerate the simulation, we instantiate the <code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_kmc.NeighborKMC</span></code> object as follows</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">user_kmc</span> <span class="kn">import</span> <span class="n">NeighborKMC</span>
+<span class="kn">from</span> <span class="nn">user_system</span> <span class="kn">import</span> <span class="n">System</span>
+<span class="kn">from</span> <span class="nn">user_events</span> <span class="kn">import</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">Z</span>
+<span class="n">events</span> <span class="o">=</span> <span class="p">[</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">Z</span><span class="p">]</span>
+<span class="n">reverse_events</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">NeighborKMC</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">system</span><span class="p">,</span>
+                  <span class="n">tend</span><span class="o">=</span><span class="mf">1E1</span><span class="p">,</span>
+                  <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
+                  <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">,</span>
+                  <span class="n">rev_events</span><span class="o">=</span><span class="n">reverse_events</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>N.B.</strong> one must ensure that the <cite>get_rate()</cite> method of all reversible events multiplies the return with <code class="code docutils literal notranslate"><span class="pre">self.alpha</span></code>, for example as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
+<span class="o">...</span>
+    <span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="mf">1000.</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;pA&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">R</span>  <span class="c1"># alpha needed for temporal acceleration.</span>
+</pre></div>
+</div>
+<p><strong>Tip 1</strong> to slow down identical reactions, say CO adsorption, on different types of sites separately, simply define two event-classes, for example <code class="code docutils literal notranslate"><span class="pre">COAdsCorner</span></code> and <code class="code docutils literal notranslate"><span class="pre">COAdsEdge</span></code>.</p>
+<p><strong>Tip 2</strong> diffusion events are often fast. They are, in principle, their own reverse and can be added as</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reverse_events</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">:</span><span class="mi">3</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Tip 3</strong> although the acceleration scheme is implemented in <strong class="program">MonteCoffee</strong>, it may be beneficial to add a
+constant offset to the diffusion barriers to slow them down further. This should, however, be done carefully.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="parallel.html" class="btn btn-neutral float-right" title="Parallel simulations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sites.html" class="btn btn-neutral float-left" title="Special site-rules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Mikkel Jørgensen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

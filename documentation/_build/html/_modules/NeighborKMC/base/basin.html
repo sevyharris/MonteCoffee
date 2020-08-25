@@ -1,0 +1,435 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>NeighborKMC.base.basin &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="../../../_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Code overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">User interface (API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>NeighborKMC.base.basin</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for NeighborKMC.base.basin</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Contains methods for performing temporal acceleration of kMC simulations.</span>
+
+<span class="sd">The methods here aid in performing the acceleration of the kMC simulations in MonteCoffee.</span>
+<span class="sd">This is mainly based on the work of Dybeck et al. (https://doi.org/10.1021/acs.jctc.6b00859)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="rescaling"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.basin.rescaling">[docs]</a><span class="k">def</span> <span class="nf">rescaling</span><span class="p">(</span><span class="n">sim</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Rescales the times of occurrences for events.</span>
+
+<span class="sd">    Rescales the times according to each quasi-equilibrated</span>
+<span class="sd">    events *alpha*.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sim: NeighborKMC</span>
+<span class="sd">        main simulator object to perform rescaling of events for.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">ev</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">equilEV</span><span class="p">:</span>
+        <span class="c1"># Raise the barrier</span>
+        <span class="n">i_up</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">evs</span><span class="p">))</span> <span class="k">if</span> <span class="n">sim</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">ev</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">i_up</span><span class="p">:</span>
+            <span class="n">site</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">siteslist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="c1"># The site to do event.</span>
+            <span class="n">othersite</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">other_sitelist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">poss</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="n">sim</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">possible</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">system</span><span class="p">,</span>
+                                                     <span class="n">site</span><span class="p">,</span> <span class="n">othersite</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">poss</span><span class="p">:</span>
+                <span class="n">sim</span><span class="o">.</span><span class="n">rs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="n">sim</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span> \
+                    <span class="n">get_rate</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">othersite</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">u0</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">us</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="n">sim</span><span class="o">.</span><span class="n">rs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">sim</span><span class="o">.</span><span class="n">t</span> <span class="o">&lt;</span> <span class="n">sim</span><span class="o">.</span><span class="n">tgen</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">u0</span><span class="p">:</span>
+                        <span class="n">sim</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">tgen</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">u0</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">sim</span><span class="o">.</span><span class="n">us</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="n">sim</span><span class="o">.</span><span class="n">tgen</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">t</span>
+                        <span class="n">sim</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">t</span> <span class="o">-</span> \
+                                            <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">us</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="n">sim</span><span class="o">.</span><span class="n">rs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">sim</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">tinfinity</span></div>
+
+
+<div class="viewcode-block" id="leave_superbasin"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.basin.leave_superbasin">[docs]</a><span class="k">def</span> <span class="nf">leave_superbasin</span><span class="p">(</span><span class="n">sim</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Leaves the superbasin.</span>
+
+<span class="sd">    Resets all rate-scalings and statistics</span>
+<span class="sd">    connected to the superbasin.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sim: NeighborKMC</span>
+<span class="sd">        main simulator object to perform rescaling of events for.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">equilEV</span><span class="p">:</span>
+        <span class="n">sim</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">rescaling</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+
+    <span class="n">sim</span><span class="o">.</span><span class="n">Suffex</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">r_S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">events</span><span class="p">))</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">dt_S</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">nem</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">events</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">isup</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="scaling_ks"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.basin.scaling_ks">[docs]</a><span class="k">def</span> <span class="nf">scaling_ks</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">noneqevents</span><span class="p">,</span> <span class="n">dtS</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes rate-constant based superbasin escape rate.</span>
+
+<span class="sd">    Calculates superbasin escape rate according to the maximal rate-constant of</span>
+<span class="sd">    events escaping the superbasin. This can be good for stability of the time-step.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sim: NeighborKMC</span>
+<span class="sd">        main simulator object to perform rescaling of events for.</span>
+
+<span class="sd">    noneqevents: array-like</span>
+<span class="sd">        The indices of events that are not in equilibrium, according to the loading</span>
+<span class="sd">        order passed to *sim*.</span>
+
+<span class="sd">    dtS: float</span>
+<span class="sd">        The time spent in current superbasin (not used, but here for technical reasons as</span>
+<span class="sd">        scaling_rs() needs this argument.)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    float</span>
+<span class="sd">        The estimated superbasin escape-rate.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">noneqevents</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">r_S</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">sim</span><span class="o">.</span><span class="n">ksavg</span><span class="p">[</span><span class="n">neqev</span><span class="p">]</span> <span class="k">for</span> <span class="n">neqev</span> <span class="ow">in</span> <span class="n">noneqevents</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># If all events are equilibrated, scale based on all rate consts.</span>
+        <span class="n">r_S</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">ksavg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">r_S</span></div>
+
+
+<div class="viewcode-block" id="scaling_rs"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.basin.scaling_rs">[docs]</a><span class="k">def</span> <span class="nf">scaling_rs</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">noneqevents</span><span class="p">,</span> <span class="n">dtS</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Rate based superbasin escape time.</span>
+
+<span class="sd">    Calculates superbasin escape time</span>
+<span class="sd">    according to non-equilibrated event rates escaping</span>
+<span class="sd">    the superbasin.</span>
+
+<span class="sd">    c.f. the generalized temporal acceleration scheme</span>
+<span class="sd">    of Dybeck et al.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sim: NeighborKMC</span>
+<span class="sd">        main simulator object to perform rescaling of events for.</span>
+
+<span class="sd">    noneqevents: list(int)</span>
+<span class="sd">        The indices of events that are not in equilibrium, according to the loading</span>
+<span class="sd">        order passed to *sim*.</span>
+
+<span class="sd">    dtS: float</span>
+<span class="sd">        The time spent in current superbasin (not used, but here for technical reasons as</span>
+<span class="sd">        scaling_rs() needs this argument.)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    float</span>
+<span class="sd">        The estimated superbasin escape-rate.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">noneqevents</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">r_S</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">sim</span><span class="o">.</span><span class="n">r_S</span><span class="p">[</span><span class="n">neqev</span><span class="p">]</span> <span class="k">for</span> <span class="n">neqev</span> <span class="ow">in</span> <span class="n">noneqevents</span><span class="p">])</span> <span class="o">/</span> <span class="n">dtS</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">r_S</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">r_S</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">r_S</span></div>
+
+
+<div class="viewcode-block" id="superbasin"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.basin.superbasin">[docs]</a><span class="k">def</span> <span class="nf">superbasin</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">evtype</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Scales rates or leaves the current superbasin.</span>
+
+<span class="sd">    Based on the current Monte Carlo step, the method determines</span>
+<span class="sd">    if the superbasin is left or the fast quasi-equilibrated events</span>
+<span class="sd">    should be slowed down.</span>
+
+<span class="sd">    Keeps track and performs barrier adjustments,</span>
+<span class="sd">    of the generalized temporal acceleration scheme of Dybeck et al.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sim: NeighborKMC</span>
+<span class="sd">        main simulator object to perform rescaling of events for.</span>
+
+<span class="sd">    evtype: int</span>
+<span class="sd">        The index of the event-type of the currently attempted Monte Carlo step.</span>
+
+<span class="sd">    dt: float</span>
+<span class="sd">        The time-step of the currently attempted Monte Carlo step.</span>
+
+
+<span class="sd">    Raises</span>
+<span class="sd">    --------</span>
+<span class="sd">    Warning</span>
+<span class="sd">        If the time-step is negative.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Update the rates in the current superbasin</span>
+    <span class="k">if</span> <span class="n">dt</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span><span class="s2">&quot;Time-step is &lt; 0. Are the events and neighborlists correct?. Exiting!!&quot;</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">pm</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">sim</span><span class="o">.</span><span class="n">ne</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">nem</span><span class="p">[</span><span class="n">evtype</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">Nm</span><span class="p">[</span><span class="n">evtype</span><span class="p">][</span><span class="n">sim</span><span class="o">.</span><span class="n">pm</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+
+    <span class="n">sim</span><span class="o">.</span><span class="n">r_S</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">sim</span><span class="o">.</span><span class="n">rs</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)[</span><span class="n">sim</span><span class="o">.</span><span class="n">wheres</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">events</span><span class="p">))]</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">dt_S</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+
+    <span class="c1"># See if event is quasi-equilibrated</span>
+    <span class="k">if</span> <span class="n">evtype</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">reverses</span><span class="p">:</span>
+        <span class="n">rev</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">Nm</span><span class="p">[</span><span class="n">evtype</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">-</span> \
+                  <span class="n">sim</span><span class="o">.</span><span class="n">Nm</span><span class="p">[</span><span class="n">sim</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">evtype</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+
+        <span class="n">Nexm</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">Nm</span><span class="p">[</span><span class="n">evtype</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> \
+               <span class="n">sim</span><span class="o">.</span><span class="n">Nm</span><span class="p">[</span><span class="n">sim</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">evtype</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">evtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">equilEV</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">Nexm</span> <span class="o">&gt;=</span> <span class="n">sim</span><span class="o">.</span><span class="n">ne</span> <span class="o">/</span> <span class="mf">2.</span> <span class="ow">and</span> <span class="n">rev</span> <span class="o">&lt;</span> <span class="n">sim</span><span class="o">.</span><span class="n">delta</span> <span class="o">*</span> <span class="n">sim</span><span class="o">.</span><span class="n">ne</span><span class="p">:</span>
+                <span class="n">sim</span><span class="o">.</span><span class="n">equilEV</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">evtype</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">evtype</span> <span class="o">!=</span> <span class="n">sim</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">evtype</span><span class="p">]:</span>
+                    <span class="n">sim</span><span class="o">.</span><span class="n">equilEV</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">evtype</span><span class="p">])</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">leave_superbasin</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">evtype</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">equilEV</span> <span class="ow">and</span> <span class="n">sim</span><span class="o">.</span><span class="n">nem</span><span class="p">[</span><span class="n">evtype</span><span class="p">]</span> <span class="o">+</span> \
+                <span class="n">sim</span><span class="o">.</span><span class="n">nem</span><span class="p">[</span><span class="n">sim</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">evtype</span><span class="p">]]</span> <span class="o">&gt;=</span> <span class="n">sim</span><span class="o">.</span><span class="n">ne</span> \
+                <span class="ow">and</span> <span class="n">evtype</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">equilEV</span> \
+                <span class="ow">and</span> <span class="n">evtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">Suffex</span><span class="p">:</span>
+
+            <span class="n">sim</span><span class="o">.</span><span class="n">Suffex</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">evtype</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">evtype</span> <span class="o">!=</span> <span class="n">sim</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">evtype</span><span class="p">]:</span>
+                <span class="n">sim</span><span class="o">.</span><span class="n">Suffex</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">evtype</span><span class="p">])</span>
+
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># Not reversible</span>
+        <span class="n">leave_superbasin</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">sim</span><span class="o">.</span><span class="n">isup</span> <span class="o">&gt;</span> <span class="n">sim</span><span class="o">.</span><span class="n">Ns</span><span class="p">:</span>  <span class="c1"># If observation period is over, scale events.</span>
+        <span class="n">dtS</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">dt_S</span><span class="p">)</span>
+        <span class="n">E</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">events</span><span class="p">))</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">Suffex</span><span class="p">]</span>
+        <span class="n">r_S</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">scaling_func</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">dtS</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ev</span> <span class="ow">in</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">equilEV</span> <span class="k">if</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">Suffex</span><span class="p">]:</span>
+            <span class="n">rmev</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">r_S</span><span class="p">[</span><span class="n">ev</span><span class="p">]</span> <span class="o">/</span> <span class="n">dtS</span>
+            <span class="n">rmrev</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">r_S</span><span class="p">[</span><span class="n">sim</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">ev</span><span class="p">]]</span> <span class="o">/</span> <span class="n">dtS</span>
+
+            <span class="n">alpham</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">Nf</span> <span class="o">*</span> <span class="n">r_S</span> <span class="o">/</span> <span class="p">(</span><span class="n">rmev</span> <span class="o">+</span> <span class="n">rmrev</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">sim</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="n">ev</span><span class="p">]</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*=</span> <span class="n">alpham</span>
+
+        <span class="n">rescaling</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+
+        <span class="n">sim</span><span class="o">.</span><span class="n">isup</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">sim</span><span class="o">.</span><span class="n">isup</span> <span class="o">+=</span> <span class="mi">1</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Mikkel Jørgensen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

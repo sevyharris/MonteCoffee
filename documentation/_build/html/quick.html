@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quick start &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Code output" href="output.html" />
+    <link rel="prev" title="Code overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Code overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">User interface (API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Quick start</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/quick.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="output.html" class="btn btn-neutral float-right" title="Code output" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="overview.html" class="btn btn-neutral float-left" title="Code overview" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="quick"></span><div class="section" id="quick-start">
+<span id="index-0"></span><h1>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial provides a minimal working example of how to run <strong class="program">MonteCoffee</strong>.
+For a full in-depth tutorial demonstrating CO oxidation over a Pt nanoparticle,
+see <a class="reference internal" href="examples/coox.html#coox"><span class="std std-ref">The CO oxidation tutorial</span></a>. For clarity, all free energy barriers are assumed constant in this tutorial. Also,
+only two different events are implemented, and neighbors are calculated from inter-atomic distances in an <code class="xref py py-class docutils literal notranslate"><span class="pre">ASE.Atoms</span></code> object.
+For simplicity, this guide shows how to setup a simulation in a single python script.</p>
+<p><strong>Step 1. Implement the two event-types</strong></p>
+<p>In this step we import the template class <a class="reference internal" href="api/NeighborKMC.base.html#NeighborKMC.base.events.EventBase" title="NeighborKMC.base.events.EventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.base.events.EventBase</span></code></a>, and derive two classes from this to
+enable two different types of reactions. All defined events must implement three methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="api/NeighborKMC.base.html#NeighborKMC.base.events.EventBase.possible">possible(self, system, site, other_site)</a>: returns True if an event is possible.</p></li>
+<li><p><a class="reference external" href="api/NeighborKMC.base.html#NeighborKMC.base.events.EventBase.get_rate">get_rate(self, system, site, other_site)</a>: returns the rate constant of the event.</p></li>
+<li><p><a class="reference external" href="api/NeighborKMC.base.html#NeighborKMC.base.events.EventBase.do_event">do_event(self, system, site, other_site)</a>: executes the event by modifying site-occupations.</p></li>
+</ul>
+</div></blockquote>
+<p>The first event class is an adsorption, that is possible if the pair of neighbor sites are empty.
+The adsorption class has a rate-constant that is linearly dependent on the pressure, and
+if executed, it covers the sites with species 1:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">base.events</span> <span class="kn">import</span> <span class="n">EventBase</span>
+
+<span class="k">class</span> <span class="nc">Adsorption</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="n">EventBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="mf">1000.</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;pA&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">R</span>  <span class="c1"># alpha important for temporal acceleration.</span>
+
+    <span class="k">def</span> <span class="nf">do_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+        <span class="c1"># Cover the two sites with species 1</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>Now we define the reverse desorption-event with a constant rate:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Desorption</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="n">EventBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="mf">101.</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">R</span>  <span class="c1"># alpha important for temporal acceleration.</span>
+
+    <span class="k">def</span> <span class="nf">do_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
+        <span class="c1"># empty the sites:</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Now we will store <strong>references</strong> to the classes in a list, and make a <cite>dict</cite> that shows that these two events are reverses:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">events</span> <span class="o">=</span> <span class="p">[</span><span class="n">Adsorption</span><span class="p">,</span> <span class="n">Desorption</span><span class="p">]</span>
+<span class="c1"># Specify what events are eac others&#39; reverse.</span>
+<span class="n">reverse_events</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Specifying which events are reverses help accelerating kMC simulations, as described in the tutorial on <a class="reference internal" href="examples/acceleration.html#accelerating"><span class="std std-ref">Accelerating kMC</span></a>.
+For irreversible events, simply leave the event-number out of the <cite>dict</cite>.</p>
+<p><strong>Step 2. Define sites</strong></p>
+<p>In this step, the sites are defined from an <code class="xref py py-class docutils literal notranslate"><span class="pre">ASE.Atoms</span></code> object. We create one site for each atom in
+a 10x10 fcc(111) surface, all with the same site-type <code class="code docutils literal notranslate"><span class="pre">stype=0</span></code> and without any covering species <code class="code docutils literal notranslate"><span class="pre">covered=0</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.build</span> <span class="kn">import</span> <span class="n">fcc111</span>
+<span class="kn">from</span> <span class="nn">user_sites</span> <span class="kn">import</span> <span class="n">Site</span>
+
+<span class="n">a0</span> <span class="o">=</span> <span class="mf">4.00</span>  <span class="c1"># Lattice Parameter (not related to DFT!)</span>
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">fcc111</span><span class="p">(</span><span class="s2">&quot;Pt&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">a</span><span class="o">=</span><span class="n">a0</span><span class="p">)</span>
+<span class="n">sites</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c1"># Define a site for each atom that is empty with no pre-defined neighbors:</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)):</span>
+    <span class="n">sites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Site</span><span class="p">(</span><span class="n">stype</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">covered</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ind</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Now we have a list of empty sites, which are used to instantiate a system.</p>
+<p><strong>Step 3. Instantiate system and neighborlists</strong></p>
+<p>Here, the system is created and the sites are connected by calculating a neighborlist. In this example,
+the <a class="reference external" href="api/NeighborKMC.html#NeighborKMC.user_system.System.set_neighbors">set_neighbors()</a> method is used, which assigns sites that are separated by no more than one nearest neighbor distance:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">user_system</span> <span class="kn">import</span> <span class="n">System</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">sites</span><span class="o">=</span><span class="n">sites</span><span class="p">)</span>
+<span class="n">Ncutoff</span> <span class="o">=</span> <span class="n">a0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.05</span>  <span class="c1"># Nearest neighbor cutoff</span>
+<span class="n">p</span><span class="o">.</span><span class="n">set_neighbors</span><span class="p">(</span><span class="n">Ncutoff</span><span class="p">,</span> <span class="n">pbc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="code docutils literal notranslate"><span class="pre">pbc=True</span></code> turns on <a class="reference internal" href="examples/pbc.html#pbc"><span class="std std-ref">periodic boundary conditions</span></a>.</p>
+<p><strong>Step 4. Instantiate a NeighborKMC object and run</strong></p>
+<p>Now we are ready to instantiate a <code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_kmc.NeighborKMC</span></code> object, which is connecting the ingredients created in the previous step.  But first we create a <cite>dict</cite> containing all the parameters passed onto the events to calculate rates:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">user_kmc</span> <span class="kn">import</span> <span class="n">NeighborKMC</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;pA&quot;</span><span class="p">:</span> <span class="mf">100.</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Quickstart simulation&quot;</span><span class="p">,</span> <span class="s2">&quot;reverses &quot;</span><span class="p">:</span> <span class="n">reverse_events</span><span class="p">}</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">NeighborKMC</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+                  <span class="n">tend</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="c1"># end after 1.0 s.</span>
+                  <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="c1"># parameters for event rate-constants.</span>
+                  <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">,</span> <span class="c1"># the list of events</span>
+                  <span class="n">rev_events</span><span class="o">=</span><span class="n">reverse_events</span><span class="p">)</span> <span class="c1"># the dict of reverse events</span>
+</pre></div>
+</div>
+<p>Now we can run the simulation by invoking</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span><span class="o">.</span><span class="n">run_kmc</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Then it is just to have a cup of coffee and wait.</p>
+<p><strong>Afterthoughts</strong></p>
+<p>While this example shows how simple it can be to run a simulation, in more complex examples it is useful to store the information separate files:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="api/NeighborKMC.html#module-NeighborKMC.user_events">user_events.py</a> can be used to store the event-types.</p></li>
+<li><p><a class="reference external" href="api/NeighborKMC.html#module-NeighborKMC.user_energy">user_energy.py</a> can be used to store functions for obtaining energies used to calculate event rate constants.</p></li>
+<li><p><a class="reference external" href="api/NeighborKMC.html#module-NeighborKMC.user_entropy">user_entropy.py</a> can be used to store entropy calculation functions.</p></li>
+<li><p><a class="reference external" href="api/NeighborKMC.html#module-NeighborKMC.user_constants">user_constants.py</a> can be used to store global and physical constants.</p></li>
+</ul>
+</div></blockquote>
+<p>A full example following these guidelines is shown in the tutorial <a class="reference internal" href="examples/coox.html#coox"><span class="std std-ref">CO oxidation on a Pt nanoparticle</span></a>.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="output.html" class="btn btn-neutral float-right" title="Code output" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="overview.html" class="btn btn-neutral float-left" title="Code overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Mikkel Jørgensen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
