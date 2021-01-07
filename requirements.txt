@@ -2,3 +2,4 @@ numpy
 sphinx
 sphinx_rtd_theme
 ase
+h5py

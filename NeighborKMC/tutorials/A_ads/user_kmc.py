@@ -3,7 +3,9 @@
 The module defines the main simulation class (NeighborKMC), which is used
 to run the simulation. The main engine is found in base.kmc.
 
-.. seealso:: Module :py:mod:`NeighborKMC.base.kmc`
+See Also
+--------
+Module: base.kmc
 
 """
 
@@ -12,10 +14,11 @@ import numpy as np
 import ase.io
 from base.kmc import NeighborKMCBase
 from base.logging import Log
-from .user_sites import Site
-from .user_events import *
+from user_constants import *
+from user_sites import Site
+from user_events import *
 import pyclbr
-
+import h5py
 
 class NeighborKMC(NeighborKMCBase):
     """Controls the kMC simulation.
@@ -34,6 +37,7 @@ class NeighborKMC(NeighborKMCBase):
         Simulation end-time.
     parameters: dict
         Parameters used, which are dumped to the log file.
+        Example: parameters = {'pCO':1E2,'T':700,'Note':'Test simulation'}
     events: list(classobj)
         A list pointing to the event classes that defines the events.
         The order of list is kept consistently throughout the simulation.
@@ -79,10 +83,10 @@ class NeighborKMC(NeighborKMCBase):
                            rev_events=rev_events)
         nkmc.run_kmc()
 
-    .. seealso:: 
-
-       Module :py:mod:`NeighborKMC.base.kmc`
-       Module :py:mod:`NeighborKMC.base.basin`
+    See Also
+    ---------
+    Module: base.kmc
+    Module: base.basin
 
     """
 
@@ -91,7 +95,7 @@ class NeighborKMC(NeighborKMCBase):
         self.reverses = None # Set later
         self.load_reverses(rev_events)
         self.evs_exec = np.zeros(len(self.events))
-
+        self.system_evolution = [[] for i in range(4)]
         NeighborKMCBase.__init__(self, system=system,
                                  tend=tend, parameters=parameters)
 
@@ -145,14 +149,16 @@ class NeighborKMC(NeighborKMCBase):
         """
         if self.verbose:
             print('Loading logging and counters...')
+
         logparams = {}
         logparams.update(self.parameters)
         logparams.update({"tend": self.tend,
                           "Nsites": self.system.Nsites,
                           "Number of events": len(self.events),
-                          "Number of site-types (stypes)": len(list(set([m.stype for m in self. system.sites])))
+                          "Number of site-types (stypes)": len(list(set([m.stype for m in self.system.sites])))
                           })
-        log = Log(logparams)
+        accelparams = {"on" : self.use_scaling_algorithm, "Ns" : self.Ns, "Nf": self.Nf, "ne" : self.ne}
+        log = Log(logparams,accelparams)
 
         # Save txt files with site information:
         with open("siteids.txt", "wb") as f2:
@@ -161,9 +167,16 @@ class NeighborKMC(NeighborKMCBase):
         with open("stypes.txt", "wb") as f2:
             np.savetxt(f2, [m.stype for m in self.system.sites])
 
+        if self.save_coverages:
+           f = h5py.File('detail_site_event_evol.hdf5','w')
+           d = f.create_dataset("time",(1,),maxshape=(None,), chunks = True, dtype='float')
+           d = f.create_dataset("site",(1,),maxshape=(None,), chunks = True, dtype='int')
+           d = f.create_dataset("othersite",(1,),maxshape=(None,), chunks = True, dtype='int')
+           d = f.create_dataset("event",(1,),maxshape=(None,), chunks = True, dtype='int')
+
         # Initialize time and step counters
         stepN_CNT = 0
-        stepNMC = 0
+        self.stepNMC = 0
         stepSaveN = 0
 
         if self.verbose:
@@ -178,10 +191,10 @@ class NeighborKMC(NeighborKMCBase):
                 if self.verbose:
                     print("Time : ", self.t, "\t Covs :", self.system.get_coverages(self.Nspecies))
 
-                log.dump_point(stepNMC, self.t, self.evs_exec)
+                log.dump_point(self.stepNMC, self.t, self.evs_exec)
 
                 self.times.append(self.t)
-                self.MCstep.append(stepNMC)
+#                self.MCstep.append(stepNMC)
 
                 covs_cur = [s.covered for s in self.system.sites]
                 self.covered.append(covs_cur)
@@ -195,9 +208,9 @@ class NeighborKMC(NeighborKMCBase):
                 stepSaveN = 0.
 
             stepN_CNT += 1
-            stepNMC += 1
+            self.stepNMC += 1
 
-        log.dump_point(stepNMC, self.t, self.evs_exec)
+        log.dump_point(self.stepNMC, self.t, self.evs_exec)
         self.save_txt()
 
     def save_txt(self):

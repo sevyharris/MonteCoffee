@@ -2,8 +2,11 @@
 
 """
 import time
+import copy
 import numpy as np
 from ase.io import write
+from ase import Atoms
+import h5py
 
 class Log:
     """Handles logging of kMC simulations.
@@ -35,7 +38,7 @@ class Log:
 
     """
 
-    def __init__(self, parameters):
+    def __init__(self, parameters, accelparams = {"on": False}):
         self.fn = 'kMClog_'+time.strftime('%Y-%m-%d_%H:%M')+'.txt'
 
         with open(self.fn, 'a') as f:
@@ -46,12 +49,23 @@ class Log:
 |_|  |_|\___/|_| |_|\__\___|\____\___/|_| |_|  \___|\___|
                                                          
 ''')
-            f.write('\nMikkel Jorgensen\nChalmers University of Technology\nGoteborg, Sweden\n2015-2019')
+            f.write('MonteCoffee is developed at Chalmers University of Technology with contributions from:\n')
+            f.write('\nMikkel Jorgensen (2015-2019)')
+            f.write('\nNoemi Bosio (since 2019)')
+            f.write('\nElisabeth M. Dietze (since 2020)')
             f.write('\n'+'-'*80+'\n')
             f.write('Simulation parameters\n')
             for p in parameters.keys():
                 f.write(format(str(p),'<10')+format(':','<5')+
                         str(parameters[p])+'\n')
+
+            if accelparams["on"]:
+                f.write('Time acceleration parameters\n')
+                f.write(format('Ns','<10')+format(':','<5')+str(accelparams["Ns"])+'\n')
+                f.write(format('Nf','<10')+format(':','<5')+str(accelparams["Nf"])+'\n')
+                f.write(format('ne','<10')+format(':','<5')+str(accelparams["ne"])+'\n')
+            else:
+                f.write('No time acceleration used.\n')
 
             f.write('\n'+'-'*80+'\n'*3)
             f.write('kinetic Monte Carlo Log \n\n')
@@ -96,7 +110,43 @@ class Log:
             f.write('{:<10s} {:^20s} {:^30s} {:<10s}'.format(str(step),
                     time_str,str(sim_time),str(["%.0f"%item for item in ev_called])+'\n'))
 
-    def save_txt(self):
+    def save_atoms(sim,filename):
+        """Writes tagged ase.Atoms to file.
+
+        Writes self.atom_cfgs to file with path filename.
+        The variable self.atom_cfgs can be tagged with coverages or
+        augmented with molecules near the sites to
+        visualize the reaction trajectory. This is currently not implemented.
+
+        Parameters
+        ------------
+        filename: str
+            Path to file.
+
+        """
+        atoms_write=copy.deepcopy(sim.system.surf_atoms)
+        acell = atoms_write.get_cell()
+        pos_ext = list(atoms_write.get_positions())
+        sym_ext = list(atoms_write.get_chemical_symbols())
+        pos_ind = list(sim.system.atoms.get_positions())
+        max_z = pos_ext[-1][2] 
+        for i in range(sim.system.Nsites):
+          #if self.system.sites[i].covered == 0:
+          #  pos.append(a_pos[self.system.sites[i].ind][0])
+          #  syms.append('Pt')
+          if sim.system.sites[i].covered == 1:
+            sym_ext.append('C')
+            pos_ext.append([pos_ind[sim.system.sites[i].ind][0],pos_ind[sim.system.sites[i].ind][1],max_z+1.5])
+          elif sim.system.sites[i].covered == 2:
+            sym_ext.append('O')
+            pos_ext.append([pos_ind[sim.system.sites[i].ind][0],pos_ind[sim.system.sites[i].ind][1],max_z+1.5])
+
+        a_other = Atoms(sym_ext)
+        a_other.set_positions(pos_ext)
+        a_other.set_cell(acell)
+        a_other.write(filename)
+
+    def save_txt(self, save_step = 1000.):
         """Saves txt files containing the simulation data.
 
         Saves the number of events executed on
@@ -116,44 +166,33 @@ class Log:
             with open("coverages.txt", "ab") as f2:
                 np.savetxt(f2, self.covered)
 
-        with open("mcstep.txt", "wb") as f2:
-            np.savetxt(f2, self.MCstep)
+            with h5py.File("detail_site_event_evol.hdf5", "a") as f2:
+                size_shape = int(len(self.system_evolution[0]))
+                size_resize = int(f2["time"].shape[0] + size_shape)
+                f2["time"].resize(size_resize,axis=0)
+                f2["time"][-size_shape:] = self.system_evolution[3]
+                f2["site"].resize(size_resize,axis=0)
+                f2["site"][-size_shape:] = self.system_evolution[0]
+                f2["othersite"].resize(size_resize,axis=0)
+                f2["othersite"][-size_shape:] = self.system_evolution[1]
+                f2["event"].resize(size_resize,axis=0)
+                f2["event"][-size_shape:] = self.system_evolution[2]
+
+
+        with open("mcstep.txt", "ba") as f2:
+            np.savetxt(f2, [self.stepNMC])
 
         with open("evs_exec.txt", "wb") as f2:
             np.savetxt(f2, self.evs_exec)
-
-        with open("sid_ev.txt", "ab") as f2:
-            np.savetxt(f2, self.sid_ev)
-
-        with open("sid_ev_other.txt", "ab") as f2:
-            np.savetxt(f2, self.sid_ev_other)
 
         with open("time.txt", "ab") as f2:
             np.savetxt(f2, self.times)
 
         if self.write_atoms:
-            self.save_atoms("atoms_"+str(self.MCstep)+".traj")
+            Log.save_atoms(self,"atoms_"+str(self.stepNMC)+".traj")
 
         # Clear up lists that grow with time:
         self.times = []
         self.covered = []
-        self.sid_ev = [np.zeros(len(self.events)) for i in range(len(self.system.sites))]
-        self.sid_ev_other = [np.zeros(len(self.events)) for i in range(len(self.system.sites))]
-
-    def save_atoms(self, filename):
-        """Writes tagged ase.Atoms to file.
-
-        Writes self.atom_cfgs to file with path filename.
-        The variable self.atom_cfgs can be tagged with coverages or
-        augmented with molecules near the sites to
-        visualize the reaction trajectory. This is currently not implemented.
-
-        Parameters
-        ------------
-        filename: str
-            Path to file.
-
-        """
-        write(filename, self.atoms)
-
+        self.system_evolution = [[] for i in range(4)]
 

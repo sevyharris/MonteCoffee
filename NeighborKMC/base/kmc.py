@@ -16,7 +16,8 @@ else:
 import numpy as np
 import random
 random.seed()
-#from base.basin import superbasin, leave_superbasin, rescaling, scaling_rs, scaling_ks
+from base.scaling import scaling, rescaling 
+from base.basin import rescaling, superbasin
 
 class NeighborKMCBase:
     """Main class for performing MonteCoffee simulations.
@@ -96,19 +97,18 @@ class NeighborKMCBase:
     tinfinity: float
         What time to put impossible events to.
 
-    nninter: int
-        The extent of the adsorbate-adsorbate interactions, given as the number
-        of nearest-neighbor interactions.
-
     Nspecies: int
         How many different types of species are in the simulation. Used to
         print and log.
+   
+    nninter: int
+        How deep is the nearest-neighbor interaction (depth of effect of event on neighbor properties)
 
     verbose: bool
         If True, the code prints verbose information.
 
     save_coverages: bool
-        If True, coverages are saved to coverages.txt. This can result in
+        If True, coverages are saved to coverages.txt and the site, othersite and event evolution in detail_site_event_evol.hdf5. This can result in
         large files.
 
     write_atoms: bool
@@ -131,19 +131,8 @@ class NeighborKMCBase:
         To find the site-occupation at step no self.MCstep[i] and site j, call
         covered[i][j].
 
-    stype_ev: dict(list(int))
-        How many events are fired of each type (values) for each site type (keys).
-
-    stype_ev_other: dict(list(int))
-        How many events are fired for neighbor sites of each type (values) for each site type (keys).
-
-    sid_ev: dict(list(int))
-        How many events are fired of each type for each site-index. To find the number event j fired
-        on site number i, call sid_ev[i][j].
-
-    sid_ev_other: dict(list(int))
-        How many events are fired of each type for each other-site-index. To find the number event j fired
-        on site number i, call sid_ev[i][j].
+    system_evolution: list(list())
+        List which contains a list of the fired event with at site, other site and time
 
     used_ijk: list(tuples(site,event,othersite))
         List of tuples representing the unique neighbor-event pairs avoiding double counting. 
@@ -153,8 +142,8 @@ class NeighborKMCBase:
     equilEV: list(int)
         A list of the event-indices that are quasi-equilibrated.
 
-    scaling_func: function
-        Reference to a function to compute the superbasin-escape rate.
+    Suffex: list(int)
+        A list of the event-indices that are quasi-equilibrated and sufficiently executed.
 
     tgen: list(float)
         A list of when each specific event was generated.
@@ -164,9 +153,8 @@ class NeighborKMCBase:
         A list of random deviates used when each specific event was generated.
         This list has the length: len(self.events)*len(self.sites)*len(self.sites).
 
-    ks: list(float)
-        A list of rate-constants obtained when each specific event was generated.
-        This list has the length: len(self.events)*len(self.sites)*len(self.sites).
+    rescale: bool
+        Defines if the rates have to be rescaled and frm timelist updated.
 
     r_S: numpy.ndarray(float)
         The cumulative rates in the current superbasin.
@@ -177,14 +165,14 @@ class NeighborKMCBase:
     nem: numpy.ndarray(int)
         The number of times an event was performed the last self.ne steps
 
-    Nm: list(numpy.ndarray(int))
+    use_scaling_algorithm: bool
+        Defines if the rate constants are scaled in any way or not
 
     delta: float
         Reversibility tolerance to determine if reactions have become quasi-equilibrated.
 
     Nf: int
         The average number of steps a quasi-equilibrated event should be observed in each superbasin.
-        When self.usekavg == True, this simply means that a low Nf is more aggressive scaling.
 
     Ns: int
         The frequency of barrier scaling.
@@ -192,27 +180,15 @@ class NeighborKMCBase:
     ne: int
         The minimum number of times to see a quasi-equilibrated event in each superbasin.
 
-    usekavg: bool
-        Use average rate-constants to scale the rate-constants as opposed
-        to rates.
-
-    ksavg: list(float):
-        The average rate-constant for each event type.
-
-    Suffex: list(int)
-        List of sufficiently executed events.
-
     isup: int
         How many steps were taken in the current superbasin.
 
-    pm: int
-        Step floor divisor to determine position in self.nem.
+.. seealso::
 
+   Module :py:mod:`NeighborKMC.base.basin`
+      for documentation about the superbasin.
 
-    See Also
-    ---------
-    Module: user_kmc
-    Module: base.basin
+   user_kmc - files in the tutorial/examples folder for aditional specifications.
 
     """
 
@@ -235,20 +211,38 @@ class NeighborKMCBase:
         self.times = []  # Times of simulation point
         self.MCstep = []  # Number of MCSteps
         self.covered = []  # Site-occupations
-
-        # Initialize event book keeping variables
-        evnl = [0 for i in range(len(self.events))]
-        self.stype_ev = {}
-        self.stype_ev_other = {}
-
-        self.sid_ev = [np.zeros(len(self.events)) for i in range(len(self.system.sites))]
-        self.sid_ev_other = [np.zeros(len(self.events)) for i in range(len(self.system.sites))]
+        self.evs_exec = np.zeros(len(self.events))
+        self.system_evolution = [[] for i in range(4)]
 
         self.Nstypes = list(set([s.stype for s in self.system.sites]))
-        for i in self.Nstypes:
-            self.stype_ev[i] = list(evnl)
-            self.stype_ev_other[i] = list(evnl)
-        
+
+        if self.use_scaling_algorithm in ['scale_rate','scale_rate_constant','scale_constant']:
+            # Variables connected to temporal acceleration
+            self.use_scaling = True
+            self.equilEV = [e for e in range(len(self.events)) if self.events[e].diffev]  # Track equilibrated events.
+    
+            # Lists for rescaling barriers and superbasin tracking
+            self.tgen = []  # time event was generated.
+            self.us = []  # random deviates used
+            self.r_S = np.zeros(len(self.events))  # Rate constant * time in current superbasin
+            self.k_S = np.zeros(len(self.events))  # Rate constant in current superbasin
+            self.nem = np.zeros(len(self.events), dtype=int)  # number of event-fires in current basin.
+            self.Suffex = []  # sufficiently executed quasi-equilibrated events
+            self.ev_to_scale = []
+    
+            # Variables for time and step-keeping
+            self.isup = 0  # Superbasin step counter
+            if self.Ns < 0 or self.Nf < 0 or self.ne < 0:
+                raise Warning("Impossible scaling parameters provided, please revise them")
+            if self.Nf == 0:
+                self.Nf = 1
+
+   
+        else: 
+            self.use_scaling = False
+
+        self.rescale = False   # Rescale simulation of the superbasin to get the time correctly only ones updated
+
         self.used_ijk = [] # Avoid double counting events of site 1+2 vs site 2+1.
 
         # FRM method variables
@@ -257,8 +251,10 @@ class NeighborKMCBase:
         self.frm_arg = None  # args that sort frm times
         if self.verbose:
             print('Initializing First Reaction method lists ...')
-            scalestr = "Scaling based on rate constants ..." if \
-                self.usekavg else "Scaling based on rates ..."
+            if not self.use_scaling_algorithm:
+                scalestr = "No scaling is used."
+            else:
+                scalestr = "Scaling based on the function: "+str(self.use_scaling_algorithm) 
             print(scalestr)
 
         self.frm_init()
@@ -272,21 +268,19 @@ class NeighborKMCBase:
         """
         config = configparser.RawConfigParser()
         config.read('kMC_options.cfg')
-
-        self.SaveSteps = config.getint('Parameters', 'SaveSteps')  # How often to save txt files
-        self.LogSteps = config.getint('Parameters', 'LogSteps')  # How often to log steps
-        self.tinfinity = config.getfloat('Parameters', 'tinfinity')  # What is considered infinite time
-        self.nninter = config.getint('Parameters',
-                                     'nninteractions')  # Range of ads-ads interactions (affects local update).
-        self.Nspecies = config.getint('Parameters', 'Nspecies')  # Number of different species in simulation.
-        self.verbose = config.getboolean('Options', 'Verbose')  # Print verbose information?
-        self.write_atoms = config.getboolean('Options', 'Write_atoms')  # Print verbose information?
-        self.save_coverages = config.getboolean('Options', 'SaveCovs')  # Save coverages?
-        self.delta = config.getfloat('Options', 'Delta')  # reversibility tolerance
-        self.Nf = config.getfloat('Options', 'Nf')  # Avg event observance in superbasins
-        self.Ns = config.getint('Options', 'Ns')  # update the barriers every Ns step.
-        self.ne = config.getint('Options', 'Ne')  # Nsteps for sufficient executed events.
-        self.usekavg = config.getboolean('Options', 'usekavg')  # Use rate-constants for scaling, not rates
+        self.SaveSteps = config.getint('Parameters', 'SaveSteps', fallback = 1000)  # How often to save txt files
+        self.LogSteps = config.getint('Parameters', 'LogSteps', fallback = 1)  # How often to log steps
+        self.tinfinity = config.getfloat('Parameters', 'tinfinity', fallback = 1e18)  # What is considered infinite time
+        self.Nspecies = config.getint('Parameters', 'Nspecies', fallback = 1)  # Number of different species in simulation.
+        self.nninter = config.getint('Parameters', 'nninteractions', fallback = 1)  # depth of NN interactions
+        self.verbose = config.getboolean('Options', 'Verbose', fallback = True)  # Print verbose information?
+        self.write_atoms = config.getboolean('Options', 'Write_atoms', fallback = False)  # Write out the atom object
+        self.save_coverages = config.getboolean('Options', 'SaveCovs', fallback = False)  # Save coverages?
+        self.use_scaling_algorithm = config.get('Options', 'Use_scaling_algorithm', fallback = 'None' )  # Shall any scaling be used? 
+        self.delta = config.getfloat('Options', 'Delta', fallback = 0.2)  # reversibility tolerance
+        self.Nf = config.getfloat('Options', 'Nf', fallback = 1)  # Avg event observance in superbasins
+        self.Ns = config.getint('Options', 'Ns', fallback = 100)  # update the barriers every Ns step.
+        self.ne = config.getint('Options', 'Ne', fallback = 100)  # Nsteps for sufficient executed events.
 
     def frm_init(self):
         """Prepare to perform FRM simulation.
@@ -315,13 +309,21 @@ class NeighborKMCBase:
                     used_ijk = True if (i,j,other_site) in self.used_ijk or (other_site,j,i) in self.used_ijk else False # Check if the pair is already in list 
                     if e.possible(self.system, i, other_site) and not used_ijk: 
                         rcur = e.get_rate(self.system, i, other_site)
-                        self.frm_times.append(self.t - np.log(random.uniform(0,1)) / rcur)
+                        u = random.uniform(0,1)
+                        self.frm_times.append(self.t - np.log(u) / rcur)
                         self.possible_evs.append(True)
+
+                        if self.use_scaling:
+                            self.tgen.append(self.t)
+                            self.us.append(u)
 		    
                     elif not used_ijk: # Add only disabled events to the list for unique pairs
                         rcur = 0.
                         self.frm_times.append(self.tinfinity)
                         self.possible_evs.append(False)
+                        if self.use_scaling:
+                            self.tgen.append(self.t)
+                            self.us.append(random.uniform(0,1))
 
                     if (i,j,other_site) not in self.used_ijk and (other_site,j,i) not in self.used_ijk: # Create unique pair-event tuple list  
                         self.used_ijk.append((i,j,other_site)) 
@@ -344,6 +346,8 @@ class NeighborKMCBase:
         self.evs = np.array(self.evs)
         self.rs = np.array(self.rs)
         self.frm_arg = self.frm_times.argmin()
+        if self.use_scaling:
+          self.wheres = [np.where(self.evs == i) for i in range(len(self.events))]
 
     def frm_update(self):
         """Updates the FRM related lists.
@@ -358,13 +362,12 @@ class NeighborKMCBase:
 
         """
         # Find site indices to update:
-        search = self.system.find_nn_recurse(self, [self.lastsel,
-                                       self.lastother])
+        search = self.system.find_nn_recurse(self, [self.lastsel,self.lastother])
+        self.executed_poslist = []
 
         # Save reference to function calls to reduce overhead
-        get_r_func = [e.get_rate for e in self.events]
-        possible_func = [e.possible for e in self.events]
-
+#        get_r_func = [e.get_rate for e in self.events]
+#        possible_func = [e.possible for e in self.events]
         for i in search:
             # Determine if any events have become possible.
             for j, e in enumerate(self.events):
@@ -372,28 +375,47 @@ class NeighborKMCBase:
                     used_ijk = True if (i,j,other) in self.used_ijk else False 
                     if used_ijk:
                         poslist = self.rindex[i][j][k]
-                        poss_now = possible_func[j](self.system, i, other)
-                        if poss_now and not self.possible_evs[poslist]: 
-                            rcur = get_r_func[j](self.system, i, other)
-                            self.rs[poslist] = rcur
-                            self.frm_times[poslist] = self.t - np.log(random.uniform(0,1)) / rcur
-                            self.possible_evs[poslist] = True
-    			
-                        elif not poss_now and self.possible_evs[poslist]: # if not possible now, but was possible before 
+                        poss_now = e.possible(self.system, i, other)
+
+                        if not poss_now and self.possible_evs[poslist]: # if not possible now, but was possible before 
                             self.rs[poslist] = 0.
                             self.frm_times[poslist] = self.tinfinity
                             self.possible_evs[poslist] =False
- 
-                        elif poss_now and self.possible_evs[poslist] and i == self.lastsel and other == self.lastother: 
-                            rcur = get_r_func[j](self.system, i, other)
+                            if self.use_scaling:
+                                self.tgen[poslist] = self.t            
+                                self.us[poslist] = random.uniform(0,1)
+                                self.executed_poslist.append(poslist)
+                       
+                        elif poss_now and not self.possible_evs[poslist]: # if possible now, but not possible before (newly enabled) 
+                            rcur = e.get_rate(self.system, i, other)
                             self.rs[poslist] = rcur
-                            self.frm_times[poslist] = self.t - np.log(random.uniform(0,1)) / rcur
+                            u = random.uniform(0,1)
+                            self.frm_times[poslist] = self.t - np.log(u) / rcur
                             self.possible_evs[poslist] = True
+                            if self.use_scaling:
+                                self.tgen[poslist] = self.t
+                                self.us[poslist] = u
+                                self.executed_poslist.append(poslist)
+
+                        elif poss_now: # for all the rest of the processes which are possible now and in list to update
+                            rcur = e.get_rate(self.system, i, other)
+                            #Update only the rate if it is not equal the rate before (takes care of long range repulsions) or back diffusion
+                            if not rcur == self.rs[poslist] or (self.possible_evs[poslist] and i == self.lastsel and other == self.lastother):
+                                self.rs[poslist] = rcur
+                                u = random.uniform(0,1)
+                                self.frm_times[poslist] = self.t - np.log(u) / rcur
+                                self.possible_evs[poslist] = True
+                                if self.use_scaling:
+                                    self.tgen[poslist] = self.t 
+                                    self.us[poslist] = u 
+                                    self.executed_poslist.append(poslist)
     			
-    
                         if not e.get_involve_other(): #Ensure one time if neighbours are not effected by event
                             break           
- 
+            
+        if self.rescale: 
+           rescaling(self)
+
         # Update the first reaction part
         self.frm_arg = self.frm_times.argmin()
 
@@ -415,29 +437,28 @@ class NeighborKMCBase:
         othersite = self.other_sitelist[self.frm_arg]
         self.lastsel = int(site)
         self.lastother = int(othersite)
-         
-        if self.events[self.evs[self.frm_arg]].possible(self.system,
-                                                        site, othersite):
-            # Event is possible, change state
-            self.events[self.evs[self.frm_arg]].do_event(self.system,
-                                                         site, othersite)
-            evtype = self.evs[self.frm_arg]
+        dt = float(self.frm_times[self.frm_arg] - self.t)
 
+        if self.events[self.evs[self.frm_arg]].possible(self.system, site, othersite):
+            # Event is possible, change state
+            self.events[self.evs[self.frm_arg]].do_event(self.system, site, othersite)
+            evtype = self.evs[self.frm_arg]
             self.t = self.frm_times[self.frm_arg]  # Update time
 
-            self.evs_exec[self.evs[self.frm_arg]] += 1
+            #Data logging
+            self.evs_exec[self.evs[self.frm_arg]] += 1 #Total executed events
+            self.system_evolution[0].append(int(self.system.sites[site].ind))
+            self.system_evolution[1].append(int(self.system.sites[othersite].ind))
+            self.system_evolution[2].append(int(evtype))
+            self.system_evolution[3].append(float(self.t))
 
-            self.stype_ev[self.system.sites[site].stype]\
-                [self.evs[self.frm_arg]] += 1
-
-            self.stype_ev_other[self.system.sites[othersite].stype]\
-                [self.evs[self.frm_arg]] += 1
-
-            self.sid_ev[site][self.evs[self.frm_arg]] += 1
-            self.sid_ev_other[othersite][self.evs[self.frm_arg]] += 1
+            # Update superbasin
+            if self.use_scaling:
+                self.rescale = superbasin(self,evtype,dt)
 
         else:
             # New first reaction must be determined
+            print ('Event', self.evs[self.frm_arg], self.frm_times[self.frm_arg])
             raise Warning("Impossible event were next in que and was attempted")
 
         self.frm_update()

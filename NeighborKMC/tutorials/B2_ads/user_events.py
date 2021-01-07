@@ -32,7 +32,7 @@ class B2AdsEvent(EventBase):
             return False
 
     def get_rate(self, system, site, other_site):
-        R = .5 
+        R = 1. 
         return  R  
 
     def do_event(self, system, site, other_site):
@@ -61,7 +61,7 @@ class B2DesEvent(EventBase):
             return False
 
     def get_rate(self, system, site, other_site):
-        R = .5 
+        R = 1. 
         return R
 
     def do_event(self, system, site, other_site):

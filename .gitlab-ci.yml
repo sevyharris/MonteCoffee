@@ -7,8 +7,8 @@ before_script:
 test_mc:
   stage: test
   script:
-    - cd ./NeighborKMC/
-    - python3 test.py
+    - cd ./NeighborKMC/tutorials/quick/
+    - python3 run_quick.py
 
 
 test_doc:
