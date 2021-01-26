@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
 
   
   
@@ -179,7 +181,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">()</span>
-<span class="c1">#from base.basin import superbasin, leave_superbasin, rescaling, scaling_rs, scaling_ks</span>
+<span class="kn">from</span> <span class="nn">base.basin</span> <span class="kn">import</span> <span class="n">rescaling</span><span class="p">,</span> <span class="n">superbasin</span>
 
 <div class="viewcode-block" id="NeighborKMCBase"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.kmc.NeighborKMCBase">[docs]</a><span class="k">class</span> <span class="nc">NeighborKMCBase</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Main class for performing MonteCoffee simulations.</span>
@@ -190,8 +192,8 @@
 <span class="sd">    Then it sets the time equal to zero and prepares to perform</span>
 <span class="sd">    frm kinetic Monte Carlo simulations.</span>
 
-<span class="sd">    Attributes</span>
-<span class="sd">    -----------</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">    </span>
 <span class="sd">    system: System</span>
 <span class="sd">        The system instance to perform the simulation on.</span>
 
@@ -259,19 +261,18 @@
 <span class="sd">    tinfinity: float</span>
 <span class="sd">        What time to put impossible events to.</span>
 
-<span class="sd">    nninter: int</span>
-<span class="sd">        The extent of the adsorbate-adsorbate interactions, given as the number</span>
-<span class="sd">        of nearest-neighbor interactions.</span>
-
 <span class="sd">    Nspecies: int</span>
 <span class="sd">        How many different types of species are in the simulation. Used to</span>
 <span class="sd">        print and log.</span>
+<span class="sd">   </span>
+<span class="sd">    nninter: int</span>
+<span class="sd">        How deep is the nearest-neighbor interaction (depth of effect of event on neighbor properties)</span>
 
 <span class="sd">    verbose: bool</span>
 <span class="sd">        If True, the code prints verbose information.</span>
 
 <span class="sd">    save_coverages: bool</span>
-<span class="sd">        If True, coverages are saved to coverages.txt. This can result in</span>
+<span class="sd">        If True, coverages are saved to coverages.txt and the site, othersite and event evolution in detail_site_event_evol.hdf5. This can result in</span>
 <span class="sd">        large files.</span>
 
 <span class="sd">    write_atoms: bool</span>
@@ -294,19 +295,8 @@
 <span class="sd">        To find the site-occupation at step no self.MCstep[i] and site j, call</span>
 <span class="sd">        covered[i][j].</span>
 
-<span class="sd">    stype_ev: dict(list(int))</span>
-<span class="sd">        How many events are fired of each type (values) for each site type (keys).</span>
-
-<span class="sd">    stype_ev_other: dict(list(int))</span>
-<span class="sd">        How many events are fired for neighbor sites of each type (values) for each site type (keys).</span>
-
-<span class="sd">    sid_ev: dict(list(int))</span>
-<span class="sd">        How many events are fired of each type for each site-index. To find the number event j fired</span>
-<span class="sd">        on site number i, call sid_ev[i][j].</span>
-
-<span class="sd">    sid_ev_other: dict(list(int))</span>
-<span class="sd">        How many events are fired of each type for each other-site-index. To find the number event j fired</span>
-<span class="sd">        on site number i, call sid_ev[i][j].</span>
+<span class="sd">    system_evolution: list(list())</span>
+<span class="sd">        List which contains a list of the fired event with at site, other site and time</span>
 
 <span class="sd">    used_ijk: list(tuples(site,event,othersite))</span>
 <span class="sd">        List of tuples representing the unique neighbor-event pairs avoiding double counting. </span>
@@ -316,8 +306,8 @@
 <span class="sd">    equilEV: list(int)</span>
 <span class="sd">        A list of the event-indices that are quasi-equilibrated.</span>
 
-<span class="sd">    scaling_func: function</span>
-<span class="sd">        Reference to a function to compute the superbasin-escape rate.</span>
+<span class="sd">    Suffex: list(int)</span>
+<span class="sd">        A list of the event-indices that are quasi-equilibrated and sufficiently executed.</span>
 
 <span class="sd">    tgen: list(float)</span>
 <span class="sd">        A list of when each specific event was generated.</span>
@@ -327,9 +317,8 @@
 <span class="sd">        A list of random deviates used when each specific event was generated.</span>
 <span class="sd">        This list has the length: len(self.events)*len(self.sites)*len(self.sites).</span>
 
-<span class="sd">    ks: list(float)</span>
-<span class="sd">        A list of rate-constants obtained when each specific event was generated.</span>
-<span class="sd">        This list has the length: len(self.events)*len(self.sites)*len(self.sites).</span>
+<span class="sd">    rescale: bool</span>
+<span class="sd">        Defines if the rates have to be rescaled and frm timelist updated.</span>
 
 <span class="sd">    r_S: numpy.ndarray(float)</span>
 <span class="sd">        The cumulative rates in the current superbasin.</span>
@@ -340,14 +329,14 @@
 <span class="sd">    nem: numpy.ndarray(int)</span>
 <span class="sd">        The number of times an event was performed the last self.ne steps</span>
 
-<span class="sd">    Nm: list(numpy.ndarray(int))</span>
+<span class="sd">    use_scaling_algorithm: bool</span>
+<span class="sd">        Defines if the rate constants are scaled in any way or not</span>
 
 <span class="sd">    delta: float</span>
 <span class="sd">        Reversibility tolerance to determine if reactions have become quasi-equilibrated.</span>
 
 <span class="sd">    Nf: int</span>
 <span class="sd">        The average number of steps a quasi-equilibrated event should be observed in each superbasin.</span>
-<span class="sd">        When self.usekavg == True, this simply means that a low Nf is more aggressive scaling.</span>
 
 <span class="sd">    Ns: int</span>
 <span class="sd">        The frequency of barrier scaling.</span>
@@ -355,27 +344,15 @@
 <span class="sd">    ne: int</span>
 <span class="sd">        The minimum number of times to see a quasi-equilibrated event in each superbasin.</span>
 
-<span class="sd">    usekavg: bool</span>
-<span class="sd">        Use average rate-constants to scale the rate-constants as opposed</span>
-<span class="sd">        to rates.</span>
-
-<span class="sd">    ksavg: list(float):</span>
-<span class="sd">        The average rate-constant for each event type.</span>
-
-<span class="sd">    Suffex: list(int)</span>
-<span class="sd">        List of sufficiently executed events.</span>
-
 <span class="sd">    isup: int</span>
 <span class="sd">        How many steps were taken in the current superbasin.</span>
 
-<span class="sd">    pm: int</span>
-<span class="sd">        Step floor divisor to determine position in self.nem.</span>
+<span class="sd">.. seealso::</span>
 
+<span class="sd">   Module :py:mod:`NeighborKMC.base.basin`</span>
+<span class="sd">      for documentation about the superbasin.</span>
 
-<span class="sd">    See Also</span>
-<span class="sd">    ---------</span>
-<span class="sd">    Module: user_kmc</span>
-<span class="sd">    Module: base.basin</span>
+<span class="sd">   user_kmc - files in the tutorial/examples folder for aditional specifications.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -398,20 +375,38 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Times of simulation point</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">MCstep</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Number of MCSteps</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Site-occupations</span>
-
-        <span class="c1"># Initialize event book keeping variables</span>
-        <span class="n">evnl</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stype_ev</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stype_ev_other</span> <span class="o">=</span> <span class="p">{}</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">sid_ev</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">))]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sid_ev_other</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">))]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evs_exec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">system_evolution</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">Nstypes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="n">s</span><span class="o">.</span><span class="n">stype</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">]))</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nstypes</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">stype_ev</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">evnl</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">stype_ev_other</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">evnl</span><span class="p">)</span>
-        
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_scaling_algorithm</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;scale_rate&#39;</span><span class="p">,</span><span class="s1">&#39;scale_rate_constant&#39;</span><span class="p">,</span><span class="s1">&#39;scale_constant&#39;</span><span class="p">]:</span>
+            <span class="c1"># Variables connected to temporal acceleration</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">use_scaling</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">equilEV</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">diffev</span><span class="p">]</span>  <span class="c1"># Track equilibrated events.</span>
+    
+            <span class="c1"># Lists for rescaling barriers and superbasin tracking</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tgen</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># time event was generated.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">us</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># random deviates used</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">r_S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))</span>  <span class="c1"># Rate constant * time in current superbasin</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">k_S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))</span>  <span class="c1"># Rate constant in current superbasin</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nem</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># number of event-fires in current basin.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Suffex</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># sufficiently executed quasi-equilibrated events</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ev_to_scale</span> <span class="o">=</span> <span class="p">[]</span>
+    
+            <span class="c1"># Variables for time and step-keeping</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">isup</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Superbasin step counter</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ns</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">ne</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span><span class="s2">&quot;Impossible scaling parameters provided, please revise them&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span> <span class="o">=</span> <span class="mi">1</span>
+
+   
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">use_scaling</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rescale</span> <span class="o">=</span> <span class="kc">False</span>   <span class="c1"># Rescale simulation of the superbasin to get the time correctly only ones updated</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">used_ijk</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># Avoid double counting events of site 1+2 vs site 2+1.</span>
 
         <span class="c1"># FRM method variables</span>
@@ -420,8 +415,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># args that sort frm times</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Initializing First Reaction method lists ...&#39;</span><span class="p">)</span>
-            <span class="n">scalestr</span> <span class="o">=</span> <span class="s2">&quot;Scaling based on rate constants ...&quot;</span> <span class="k">if</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">usekavg</span> <span class="k">else</span> <span class="s2">&quot;Scaling based on rates ...&quot;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_scaling_algorithm</span><span class="p">:</span>
+                <span class="n">scalestr</span> <span class="o">=</span> <span class="s2">&quot;No scaling is used.&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">scalestr</span> <span class="o">=</span> <span class="s2">&quot;Scaling based on the function: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">use_scaling_algorithm</span><span class="p">)</span> 
             <span class="nb">print</span><span class="p">(</span><span class="n">scalestr</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">frm_init</span><span class="p">()</span>
@@ -435,21 +432,19 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">RawConfigParser</span><span class="p">()</span>
         <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;kMC_options.cfg&#39;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">SaveSteps</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;SaveSteps&#39;</span><span class="p">)</span>  <span class="c1"># How often to save txt files</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">LogSteps</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;LogSteps&#39;</span><span class="p">)</span>  <span class="c1"># How often to log steps</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tinfinity</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="s1">&#39;Parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;tinfinity&#39;</span><span class="p">)</span>  <span class="c1"># What is considered infinite time</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nninter</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Parameters&#39;</span><span class="p">,</span>
-                                     <span class="s1">&#39;nninteractions&#39;</span><span class="p">)</span>  <span class="c1"># Range of ads-ads interactions (affects local update).</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Nspecies</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;Nspecies&#39;</span><span class="p">)</span>  <span class="c1"># Number of different species in simulation.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;Verbose&#39;</span><span class="p">)</span>  <span class="c1"># Print verbose information?</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_atoms</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;Write_atoms&#39;</span><span class="p">)</span>  <span class="c1"># Print verbose information?</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save_coverages</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;SaveCovs&#39;</span><span class="p">)</span>  <span class="c1"># Save coverages?</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;Delta&#39;</span><span class="p">)</span>  <span class="c1"># reversibility tolerance</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;Nf&#39;</span><span class="p">)</span>  <span class="c1"># Avg event observance in superbasins</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ns</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;Ns&#39;</span><span class="p">)</span>  <span class="c1"># update the barriers every Ns step.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ne</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;Ne&#39;</span><span class="p">)</span>  <span class="c1"># Nsteps for sufficient executed events.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">usekavg</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;usekavg&#39;</span><span class="p">)</span>  <span class="c1"># Use rate-constants for scaling, not rates</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SaveSteps</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;SaveSteps&#39;</span><span class="p">,</span> <span class="n">fallback</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span>  <span class="c1"># How often to save txt files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LogSteps</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;LogSteps&#39;</span><span class="p">,</span> <span class="n">fallback</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># How often to log steps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tinfinity</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="s1">&#39;Parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;tinfinity&#39;</span><span class="p">,</span> <span class="n">fallback</span> <span class="o">=</span> <span class="mf">1e18</span><span class="p">)</span>  <span class="c1"># What is considered infinite time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nspecies</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;Nspecies&#39;</span><span class="p">,</span> <span class="n">fallback</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Number of different species in simulation.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nninter</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;nninteractions&#39;</span><span class="p">,</span> <span class="n">fallback</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># depth of NN interactions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;Verbose&#39;</span><span class="p">,</span> <span class="n">fallback</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>  <span class="c1"># Print verbose information?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_atoms</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;Write_atoms&#39;</span><span class="p">,</span> <span class="n">fallback</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>  <span class="c1"># Write out the atom object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_coverages</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;SaveCovs&#39;</span><span class="p">,</span> <span class="n">fallback</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>  <span class="c1"># Save coverages?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_scaling_algorithm</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;Use_scaling_algorithm&#39;</span><span class="p">,</span> <span class="n">fallback</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span> <span class="p">)</span>  <span class="c1"># Shall any scaling be used? </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;Delta&#39;</span><span class="p">,</span> <span class="n">fallback</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">)</span>  <span class="c1"># reversibility tolerance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;Nf&#39;</span><span class="p">,</span> <span class="n">fallback</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Avg event observance in superbasins</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ns</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;Ns&#39;</span><span class="p">,</span> <span class="n">fallback</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># update the barriers every Ns step.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ne</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">,</span> <span class="s1">&#39;Ne&#39;</span><span class="p">,</span> <span class="n">fallback</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># Nsteps for sufficient executed events.</span></div>
 
 <div class="viewcode-block" id="NeighborKMCBase.frm_init"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.kmc.NeighborKMCBase.frm_init">[docs]</a>    <span class="k">def</span> <span class="nf">frm_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Prepare to perform FRM simulation.</span>
@@ -478,13 +473,21 @@
                     <span class="n">used_ijk</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">other_site</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">used_ijk</span> <span class="ow">or</span> <span class="p">(</span><span class="n">other_site</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">used_ijk</span> <span class="k">else</span> <span class="kc">False</span> <span class="c1"># Check if the pair is already in list </span>
                     <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">possible</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">other_site</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">used_ijk</span><span class="p">:</span> 
                         <span class="n">rcur</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">other_site</span><span class="p">)</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="n">rcur</span><span class="p">)</span>
+                        <span class="n">u</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">rcur</span><span class="p">)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_scaling</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">tgen</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">us</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
 		    
                     <span class="k">elif</span> <span class="ow">not</span> <span class="n">used_ijk</span><span class="p">:</span> <span class="c1"># Add only disabled events to the list for unique pairs</span>
                         <span class="n">rcur</span> <span class="o">=</span> <span class="mf">0.</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tinfinity</span><span class="p">)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_scaling</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">tgen</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">us</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
 
                     <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">other_site</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">used_ijk</span> <span class="ow">and</span> <span class="p">(</span><span class="n">other_site</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">used_ijk</span><span class="p">:</span> <span class="c1"># Create unique pair-event tuple list  </span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">used_ijk</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">other_site</span><span class="p">))</span> 
@@ -506,7 +509,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">evs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_scaling</span><span class="p">:</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">wheres</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))]</span></div>
 
 <div class="viewcode-block" id="NeighborKMCBase.frm_update"><a class="viewcode-back" href="../../../api/NeighborKMC.base.html#NeighborKMC.base.kmc.NeighborKMCBase.frm_update">[docs]</a>    <span class="k">def</span> <span class="nf">frm_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Updates the FRM related lists.</span>
@@ -521,13 +526,12 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Find site indices to update:</span>
-        <span class="n">search</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">find_nn_recurse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">lastsel</span><span class="p">,</span>
-                                       <span class="bp">self</span><span class="o">.</span><span class="n">lastother</span><span class="p">])</span>
+        <span class="n">search</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">find_nn_recurse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">lastsel</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">lastother</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">executed_poslist</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Save reference to function calls to reduce overhead</span>
-        <span class="n">get_r_func</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">get_rate</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">]</span>
-        <span class="n">possible_func</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">possible</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">]</span>
-
+<span class="c1">#        get_r_func = [e.get_rate for e in self.events]</span>
+<span class="c1">#        possible_func = [e.possible for e in self.events]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">search</span><span class="p">:</span>
             <span class="c1"># Determine if any events have become possible.</span>
             <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">):</span>
@@ -535,28 +539,47 @@
                     <span class="n">used_ijk</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">other</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">used_ijk</span> <span class="k">else</span> <span class="kc">False</span> 
                     <span class="k">if</span> <span class="n">used_ijk</span><span class="p">:</span>
                         <span class="n">poslist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rindex</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
-                        <span class="n">poss_now</span> <span class="o">=</span> <span class="n">possible_func</span><span class="p">[</span><span class="n">j</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
-                        <span class="k">if</span> <span class="n">poss_now</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]:</span> 
-                            <span class="n">rcur</span> <span class="o">=</span> <span class="n">get_r_func</span><span class="p">[</span><span class="n">j</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="n">rcur</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="n">rcur</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-    			
-                        <span class="k">elif</span> <span class="ow">not</span> <span class="n">poss_now</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]:</span> <span class="c1"># if not possible now, but was possible before </span>
+                        <span class="n">poss_now</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">possible</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">poss_now</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]:</span> <span class="c1"># if not possible now, but was possible before </span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tinfinity</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span><span class="kc">False</span>
- 
-                        <span class="k">elif</span> <span class="n">poss_now</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastsel</span> <span class="ow">and</span> <span class="n">other</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastother</span><span class="p">:</span> 
-                            <span class="n">rcur</span> <span class="o">=</span> <span class="n">get_r_func</span><span class="p">[</span><span class="n">j</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_scaling</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">tgen</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>            
+                                <span class="bp">self</span><span class="o">.</span><span class="n">us</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">executed_poslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poslist</span><span class="p">)</span>
+                       
+                        <span class="k">elif</span> <span class="n">poss_now</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]:</span> <span class="c1"># if possible now, but not possible before (newly enabled) </span>
+                            <span class="n">rcur</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="n">rcur</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="n">rcur</span>
+                            <span class="n">u</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">rcur</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_scaling</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">tgen</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">us</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">executed_poslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poslist</span><span class="p">)</span>
+
+                        <span class="k">elif</span> <span class="n">poss_now</span><span class="p">:</span> <span class="c1"># for all the rest of the processes which are possible now and in list to update</span>
+                            <span class="n">rcur</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+                            <span class="c1">#Update only the rate if it is not equal the rate before (takes care of long range repulsions) or back diffusion</span>
+                            <span class="k">if</span> <span class="ow">not</span> <span class="n">rcur</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastsel</span> <span class="ow">and</span> <span class="n">other</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastother</span><span class="p">):</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="n">rcur</span>
+                                <span class="n">u</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">rcur</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">possible_evs</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_scaling</span><span class="p">:</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">tgen</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> 
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">us</span><span class="p">[</span><span class="n">poslist</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span> 
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">executed_poslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poslist</span><span class="p">)</span>
     			
-    
                         <span class="k">if</span> <span class="ow">not</span> <span class="n">e</span><span class="o">.</span><span class="n">get_involve_other</span><span class="p">():</span> <span class="c1">#Ensure one time if neighbours are not effected by event</span>
                             <span class="k">break</span>           
- 
+            
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rescale</span><span class="p">:</span> 
+           <span class="n">rescaling</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
         <span class="c1"># Update the first reaction part</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span></div>
 
@@ -578,29 +601,28 @@
         <span class="n">othersite</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">other_sitelist</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lastsel</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">site</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lastother</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">othersite</span><span class="p">)</span>
-         
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]]</span><span class="o">.</span><span class="n">possible</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span>
-                                                        <span class="n">site</span><span class="p">,</span> <span class="n">othersite</span><span class="p">):</span>
-            <span class="c1"># Event is possible, change state</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]]</span><span class="o">.</span><span class="n">do_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span>
-                                                         <span class="n">site</span><span class="p">,</span> <span class="n">othersite</span><span class="p">)</span>
-            <span class="n">evtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]]</span><span class="o">.</span><span class="n">possible</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">othersite</span><span class="p">):</span>
+            <span class="c1"># Event is possible, change state</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]]</span><span class="o">.</span><span class="n">do_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">othersite</span><span class="p">)</span>
+            <span class="n">evtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]</span>  <span class="c1"># Update time</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">evs_exec</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="c1">#Data logging</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">evs_exec</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1">#Total executed events</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">system_evolution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">ind</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">system_evolution</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">othersite</span><span class="p">]</span><span class="o">.</span><span class="n">ind</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">system_evolution</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">evtype</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">system_evolution</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">))</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">stype_ev</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span><span class="p">]</span>\
-                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">stype_ev_other</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">othersite</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span><span class="p">]</span>\
-                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">sid_ev</span><span class="p">[</span><span class="n">site</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sid_ev_other</span><span class="p">[</span><span class="n">othersite</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="c1"># Update superbasin</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_scaling</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rescale</span> <span class="o">=</span> <span class="n">superbasin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">evtype</span><span class="p">,</span><span class="n">dt</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># New first reaction must be determined</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">evs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">frm_times</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frm_arg</span><span class="p">])</span>
             <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span><span class="s2">&quot;Impossible event were next in que and was attempted&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">frm_update</span><span class="p">()</span></div>
@@ -646,7 +668,7 @@
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2019, Mikkel Jørgensen
+        &copy; Copyright 2021, Division of Chemical Physics, Chalmers University of Technology
 
     </p>
   </div>

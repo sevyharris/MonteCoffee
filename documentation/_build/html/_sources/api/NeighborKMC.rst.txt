@@ -6,6 +6,6 @@ NeighborKMC package
 
    NeighborKMC.base
    NeighborKMC.tutorials
-   NeighborKMC.examples
+   NeighborKMC.examples.surface
 
 

@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
 
   
   
@@ -191,12 +193,10 @@
     <span class="c1"># ------------------------------------------</span>
     <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;time.txt&quot;</span><span class="p">,</span> <span class="p">[])</span>
     <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;coverages.txt&quot;</span><span class="p">,</span> <span class="p">[])</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;sid_ev.txt&quot;</span><span class="p">,</span> <span class="p">[])</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;sid_ev_other.txt&quot;</span><span class="p">,</span> <span class="p">[])</span>
 
     <span class="c1"># Define the sites from ase.Atoms.</span>
     <span class="c1"># ------------------------------------------</span>
-    <span class="n">atoms</span> <span class="o">=</span> <span class="n">fcc100</span><span class="p">(</span><span class="s2">&quot;Pt&quot;</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">atoms</span> <span class="o">=</span> <span class="n">fcc100</span><span class="p">(</span><span class="s2">&quot;Pt&quot;</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
     <span class="n">sites</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># Create a site for each surface-atom:</span>
@@ -213,54 +213,20 @@
 
     <span class="n">events</span> <span class="o">=</span> <span class="p">[</span><span class="n">AAdsEvent</span><span class="p">,</span> <span class="n">ADesEvent</span><span class="p">]</span>
 
-    <span class="c1"># Specify what events are each others&#39; reverse.</span>
-    <span class="n">reverse_events</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
-
 <span class="c1">#    parameters = {&quot;pCO&quot;: pCO, &quot;pO2&quot;: pO2, &quot;T&quot;: T,</span>
-    <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;A ads/des Simulation&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;reverses &quot;</span><span class="p">:</span> <span class="n">reverse_events</span><span class="p">}</span>
+    <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;A ads/des Simulation&quot;</span><span class="p">}</span>
 
     <span class="c1"># Instantiate simulator object.</span>
     <span class="n">sim</span> <span class="o">=</span> <span class="n">NeighborKMC</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">tend</span><span class="o">=</span><span class="n">tend</span><span class="p">,</span>
                       <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
-                      <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">,</span>
-                      <span class="n">rev_events</span><span class="o">=</span><span class="n">reverse_events</span><span class="p">)</span>
+                      <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">)</span>
 
     <span class="c1"># Run the simulation.</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">run_kmc</span><span class="p">()</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Simulation end time reached ! ! !&quot;</span><span class="p">)</span></div>
 
-    <span class="c1"># Plot the coverages:</span>
-    <span class="c1"># ------------------------------------------</span>
-<span class="c1">#    import matplotlib.pyplot as plt</span>
-<span class="c1">#    import matplotlib as mpl</span>
-<span class="c1">##</span>
-<span class="c1">#    fs = 20</span>
-<span class="c1">#    mpl.rcParams[&#39;axes.linewidth&#39;] = 3.5</span>
-<span class="c1">#    mpl.rcParams[&#39;mathtext.default&#39;] = &#39;rm&#39;</span>
-<span class="c1">#    mpl.rcParams[&#39;mathtext.rm&#39;] = &#39;Arial&#39;</span>
-<span class="c1">#    mpl.rcParams[&#39;font.family&#39;] = &#39;Arial&#39;</span>
-<span class="c1">#    mpl.rc(&quot;font&quot;, size=fs)</span>
-<span class="c1">##</span>
-<span class="c1">#    time = np.loadtxt(&quot;time.txt&quot;)</span>
-<span class="c1">#    covs = np.loadtxt(&quot;coverages.txt&quot;)</span>
-<span class="c1">##</span>
-<span class="c1">#    cov_A = [sum([1 for val in covs[i] if val == 1]) / float(len(covs[0])) for i in range(len(covs))]</span>
-<span class="c1">#</span>
-<span class="c1">#    plt.plot(time, cov_A, &#39;k-&#39;, lw=2, label=&quot;NKMC&quot;)</span>
-
-<span class="c1">#    plt.legend(loc=0, frameon=False, fontsize=&quot;small&quot;)</span>
-<span class="c1">#</span>
-<span class="c1">#    plt.xlabel(&quot;time (s)&quot;, fontsize=20)</span>
-<span class="c1">#    plt.ylabel(&quot;Coverage&quot;, fontsize=20)</span>
-<span class="c1">#    plt.gca().tick_params(axis=&#39;both&#39;, labelsize=fs, length=14, width=3.5, which=&#39;major&#39;, pad=10)</span>
-<span class="c1">##</span>
-<span class="c1">#    plt.savefig(&#39;cov_out.pdf&#39;,bbox_inches=&#39;tight&#39;)</span>
-
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">run_test</span><span class="p">()</span>
-
-
 </pre></div>
 
            </div>
@@ -274,7 +240,7 @@
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2019, Mikkel Jørgensen
+        &copy; Copyright 2021, Division of Chemical Physics, Chalmers University of Technology
 
     </p>
   </div>

@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
 
   
   
@@ -37,8 +39,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="CO oxidation on a Pt nanoparticle" href="coox.html" />
-    <link rel="prev" title="Dissociative Adsorption" href="../tutorials/B2_ads.html" /> 
+    <link rel="next" title="CO oxidation on Pt(111)" href="coox.html" />
+    <link rel="prev" title="Special site-rules" href="../tutorials/sites.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -94,13 +96,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on a Pt nanoparticle</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tof.html">Calculating a turnover frequency</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pbc.html">Periodic boundary conditions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adsads.html">Adsorbate-adsorbate interactions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sites.html">Special site-rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on Pt(111)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="acceleration.html">Accelerating kMC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="parallel.html">Parallel simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adsads.html">Adsorbate-adsorbate interactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tof.html">Calculating a turnover frequency</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../options.html">Options</a></li>
@@ -170,10 +169,10 @@
   
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
-        <a href="coox.html" class="btn btn-neutral float-right" title="CO oxidation on a Pt nanoparticle" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="coox.html" class="btn btn-neutral float-right" title="CO oxidation on Pt(111)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../tutorials/B2_ads.html" class="btn btn-neutral float-left" title="Dissociative Adsorption" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../tutorials/sites.html" class="btn btn-neutral float-left" title="Special site-rules" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -184,11 +183,12 @@
             
   <div class="section" id="examples">
 <span id="id1"></span><h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<p>We present in this section the CO oxidation over Pt(111) as example to demonstrate how the different parts of the code may work in practice together and how to approach a real system. In the first part the various files needed for the kinetic MonteCarlo simulation are defined. Afterwards we show how the time acceleration works and how to converge the different parameters. In the next step results obtained with the time acceleration are presented and the importance of adsorbate-adsorbate interactions pointed out.</p>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="coox.html">CO oxidation on a Pt nanoparticle</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="coox.html#define-constants">Define constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coox.html">CO oxidation on Pt(111)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="coox.html#define-constants-and-parameters">Define constants and parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coox.html#define-sites-and-system">Define sites and system</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coox.html#define-reaction-energies-and-entropies">Define reaction energies and entropies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coox.html#define-events">Define events</a></li>
@@ -196,16 +196,9 @@
 <li class="toctree-l2"><a class="reference internal" href="coox.html#analyze-results">Analyze results</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tof.html">Calculating a turnover frequency</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pbc.html">Periodic boundary conditions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="adsads.html">Adsorbate-adsorbate interactions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sites.html">Special site-rules</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sites.html#custom-site-attributes">Custom site-attributes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sites.html#using-stype-for-everything">Using stype for everything</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="acceleration.html">Accelerating kMC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parallel.html">Parallel simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adsads.html">Adsorbate-adsorbate interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tof.html">Calculating a turnover frequency</a></li>
 </ul>
 </div>
 <p>The user interface is essential to <strong class="program">MonteCoffee</strong> as the
@@ -221,10 +214,10 @@ code works as a programmable application.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="coox.html" class="btn btn-neutral float-right" title="CO oxidation on a Pt nanoparticle" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="coox.html" class="btn btn-neutral float-right" title="CO oxidation on Pt(111)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../tutorials/B2_ads.html" class="btn btn-neutral float-left" title="Dissociative Adsorption" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../tutorials/sites.html" class="btn btn-neutral float-left" title="Special site-rules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -234,7 +227,7 @@ code works as a programmable application.</p>
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2019, Mikkel Jørgensen
+        &copy; Copyright 2021, Division of Chemical Physics, Chalmers University of Technology
 
     </p>
   </div>

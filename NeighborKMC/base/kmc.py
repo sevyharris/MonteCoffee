@@ -16,7 +16,6 @@ else:
 import numpy as np
 import random
 random.seed()
-from base.scaling import scaling, rescaling 
 from base.basin import rescaling, superbasin
 
 class NeighborKMCBase:
@@ -28,8 +27,8 @@ class NeighborKMCBase:
     Then it sets the time equal to zero and prepares to perform
     frm kinetic Monte Carlo simulations.
 
-    Attributes
-    -----------
+    Attributes:
+    
     system: System
         The system instance to perform the simulation on.
 

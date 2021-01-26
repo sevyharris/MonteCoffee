@@ -22,7 +22,7 @@ represented as a list of lists:
         EOCO = 0.3  # How O affects CO (eV).
 
         HInttwo = [[0., 0., 0.], [0., ECOCO, EOCO],
-                   [0., ECOO, EOO]]  # Two body interaction Hamiltonian 3x3 beacuse 0 = empty.
+                   [0., ECOO, EOO]]  # Two body interaction Hamiltonian 3x3 because 0 = empty.
 
         for j in cov_NN:  # For each covered Neighbor, give a repulsion:
             repulsion += HInttwo[cov_self][j]

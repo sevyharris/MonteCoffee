@@ -3,3 +3,4 @@ TODOLIST:
 
 - Make all code follow the documentation conventions.
 - Implement EWMA protocoll
+- Parallize time update 

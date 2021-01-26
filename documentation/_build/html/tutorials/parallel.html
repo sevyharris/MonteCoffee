@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Parallel simulations &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Special site-rules" href="sites.html" />
+    <link rel="prev" title="Adsorption and reaction of species A and B2" href="A_B2_reac.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="../_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Code overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="A_ads.html">Adsorption of atomic species A on surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="B2_ads.html">Dissociative Adsorption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="A_B2_reac.html">Adsorption and reaction of species A and B2</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Parallel simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sites.html">Special site-rules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">User interface (API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Tutorials</a> &raquo;</li>
+        
+      <li>Parallel simulations</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tutorials/parallel.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="sites.html" class="btn btn-neutral float-right" title="Special site-rules" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="A_B2_reac.html" class="btn btn-neutral float-left" title="Adsorption and reaction of species A and B2" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="parallel"></span><div class="section" id="parallel-simulations">
+<span id="index-0"></span><h1>Parallel simulations<a class="headerlink" href="#parallel-simulations" title="Permalink to this headline">¶</a></h1>
+<p>Kinetic MonteCarlo simulations are stochastic in nature, making it reasonable to perform multiple identically prepared simulations
+to assess the convergence. In the following, we assume that <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/">ASE</a> and <a class="reference external" href="https://pypi.org/project/mpi4py/">MPI4PY</a> are installed.</p>
+<p>To submit a simulation, defined in a file <cite>kmc_master_parallel.py</cite>, in an environment that implements <a class="reference external" href="https://slurm.schedmd.com/">SLURM</a>, one can submit a bash script as</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1">#SBATCH -N 1</span>
+<span class="c1">#SBATCH -n 10</span>
+<span class="c1">#SBATCH -p PROJNAME</span>
+<span class="c1">#SBATCH -A ACCNO</span>
+<span class="c1">#SBATCH -o out.txt</span>
+<span class="c1">#SBATCH -e err.txt</span>
+<span class="c1">#SBATCH -t 96:15:00</span>
+<span class="c1">#SBATCH -J project_dir/submit_dir</span>
+<span class="c1">#SBATCH --mail-user=USER@UNI.se</span>
+<span class="c1">#SBATCH --mail-type=END</span>
+
+cp *.py <span class="nv">$TMPDIR</span>
+cp kMC_options.cfg <span class="nv">$TMPDIR</span>
+cp -r base <span class="nv">$TMPDIR</span>
+
+<span class="nb">cd</span> <span class="nv">$TMPDIR</span>
+
+<span class="k">while</span> sleep <span class="m">1800</span><span class="p">;</span> <span class="k">do</span>
+    <span class="c1"># This will be executed once per every 3600 seconds</span>
+    rsync -a <span class="nv">$TMPDIR</span>/* <span class="nv">$SLURM_SUBMIT_DIR</span>
+<span class="k">done</span> <span class="p">&amp;</span>     <span class="c1"># The &amp;-sign after the done-keyword places</span>
+           <span class="c1"># the while-loop in a sub-shell in the background</span>
+<span class="nv">LOOPPID</span><span class="o">=</span><span class="nv">$!</span> <span class="c1"># Save the PID of the subshell running the loop</span>
+
+mpirun -np <span class="m">10</span> python kmc_master_parallel.py
+
+<span class="c1"># Copy the files back after run:</span>
+rsync -a <span class="nv">$TMPDIR</span>/* <span class="nv">$SLURM_SUBMIT_DIR</span>
+<span class="nb">kill</span> <span class="nv">$LOOPPID</span>
+</pre></div>
+</div>
+<p>This script copies all python files in MonteCoffee to a compute node, and cds into the simulation directory ($TMPDIR) on the node.
+Then a while loop copies all dirs called run_* back to the submission directory every half hour. The script named <cite>kmc_master_parallel.py</cite> is then executed with mpirun. The script <cite>kmc_master_parallel.py</cite> can at first be very similar to the <a class="reference internal" href="../quick.html#quick"><span class="std std-ref">quick-start example</span></a>. For simplification the detailed definitions as in <a class="reference internal" href="../quick.html#quick"><span class="std std-ref">quick-start</span></a> are not given her, so that one can see the differences. Mainly they are in the first part of the code.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">ase.build</span> <span class="kn">import</span> <span class="n">fcc111</span>
+<span class="kn">from</span> <span class="nn">ase.parallel</span> <span class="kn">import</span> <span class="n">MPI4PY</span>
+<span class="kn">from</span> <span class="nn">base.sites</span> <span class="kn">import</span> <span class="n">SiteBase</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">base.system</span> <span class="kn">import</span> <span class="n">SystemBase</span>
+<span class="kn">from</span> <span class="nn">base.logging</span> <span class="kn">import</span> <span class="n">Log</span>
+<span class="kn">from</span> <span class="nn">base.kmc</span> <span class="kn">import</span> <span class="n">NeighborKMCBase</span>
+
+<span class="n">world</span> <span class="o">=</span> <span class="n">MPI4PY</span><span class="p">()</span>
+<span class="n">rank</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">rank</span> <span class="c1"># What number simulation copy am I?</span>
+<span class="n">size</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">size</span> <span class="c1"># How many total simulation copies?</span>
+<span class="n">rundir</span> <span class="o">=</span> <span class="s2">&quot;run_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">rank</span><span class="p">)</span>  <span class="c1"># Name of the dir I create</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">rundir</span><span class="p">)</span> <span class="c1"># Create dir</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;cp kMC_options.cfg &quot;</span><span class="o">+</span><span class="n">rundir</span><span class="p">)</span> <span class="c1"># copy kMC_options.cfg here</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">rundir</span><span class="p">)</span>
+
+<span class="n">a0</span> <span class="o">=</span> <span class="mf">4.00</span>  <span class="c1"># Lattice Parameter (not related to DFT!)</span>
+<span class="n">Ncutoff</span> <span class="o">=</span> <span class="n">a0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.05</span>  <span class="c1"># Nearest neighbor cutoff</span>
+
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">fcc111</span><span class="p">(</span><span class="s2">&quot;Pt&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">a</span><span class="o">=</span><span class="n">a0</span><span class="p">)</span>
+<span class="n">sites</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">indic</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">atoms</span><span class="p">):</span>
+    <span class="n">sites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Site</span><span class="p">(</span><span class="n">stype</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">covered</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ind</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+<span class="n">events</span> <span class="o">=</span> <span class="p">[</span><span class="n">Adsorption</span><span class="p">,</span> <span class="n">Desorption</span><span class="p">]</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">SystemBase</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">sites</span><span class="o">=</span><span class="n">sites</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">set_neighbors</span><span class="p">(</span><span class="n">Ncutoff</span><span class="p">)</span>
+
+<span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;pA&quot;</span><span class="p">:</span> <span class="mf">10.</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Parallel Simulation&quot;</span><span class="p">}</span>
+
+<span class="n">sim</span> <span class="o">=</span> <span class="n">simple_NKMC</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+                  <span class="n">tend</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
+                  <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
+                  <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">)</span>
+
+<span class="n">sim</span><span class="o">.</span><span class="n">run_kmc</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For further explanation about using MPI4PY within ASE, please see the <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/ase/parallel.html">ASE documentation on parallel calculations</a>.</p>
+<p>In general, it can be useful to assign a large <code class="code docutils literal notranslate"><span class="pre">tend</span></code> and let the bash-script runtime determine the end of simulation. Because the code itself writes out log-files regularly, one will not loose any informations by letting the script runtime determine the end of the simulation.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sites.html" class="btn btn-neutral float-right" title="Special site-rules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="A_B2_reac.html" class="btn btn-neutral float-left" title="Adsorption and reaction of species A and B2" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, Division of Chemical Physics, Chalmers University of Technology
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

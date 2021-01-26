@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
 
   
   
@@ -37,8 +39,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Special site-rules" href="sites.html" />
-    <link rel="prev" title="Periodic boundary conditions" href="pbc.html" /> 
+    <link rel="next" title="Calculating a turnover frequency" href="tof.html" />
+    <link rel="prev" title="Accelerating kMC" href="acceleration.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -94,13 +96,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on a Pt nanoparticle</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tof.html">Calculating a turnover frequency</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pbc.html">Periodic boundary conditions</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Adsorbate-adsorbate interactions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sites.html">Special site-rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on Pt(111)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="acceleration.html">Accelerating kMC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="parallel.html">Parallel simulations</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Adsorbate-adsorbate interactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tof.html">Calculating a turnover frequency</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../options.html">Options</a></li>
@@ -172,10 +171,10 @@
   
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
-        <a href="sites.html" class="btn btn-neutral float-right" title="Special site-rules" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="tof.html" class="btn btn-neutral float-right" title="Calculating a turnover frequency" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pbc.html" class="btn btn-neutral float-left" title="Periodic boundary conditions" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="acceleration.html" class="btn btn-neutral float-left" title="Accelerating kMC" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -201,7 +200,7 @@ represented as a list of lists:</p>
     <span class="n">EOCO</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c1"># How O affects CO (eV).</span>
 
     <span class="n">HInttwo</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">ECOCO</span><span class="p">,</span> <span class="n">EOCO</span><span class="p">],</span>
-               <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">ECOO</span><span class="p">,</span> <span class="n">EOO</span><span class="p">]]</span>  <span class="c1"># Two body interaction Hamiltonian 3x3 beacuse 0 = empty.</span>
+               <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">ECOO</span><span class="p">,</span> <span class="n">EOO</span><span class="p">]]</span>  <span class="c1"># Two body interaction Hamiltonian 3x3 because 0 = empty.</span>
 
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">cov_NN</span><span class="p">:</span>  <span class="c1"># For each covered Neighbor, give a repulsion:</span>
         <span class="n">repulsion</span> <span class="o">+=</span> <span class="n">HInttwo</span><span class="p">[</span><span class="n">cov_self</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
@@ -255,10 +254,10 @@ of the events as</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="sites.html" class="btn btn-neutral float-right" title="Special site-rules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="tof.html" class="btn btn-neutral float-right" title="Calculating a turnover frequency" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pbc.html" class="btn btn-neutral float-left" title="Periodic boundary conditions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="acceleration.html" class="btn btn-neutral float-left" title="Accelerating kMC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -268,7 +267,7 @@ of the events as</p>
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2019, Mikkel Jørgensen
+        &copy; Copyright 2021, Division of Chemical Physics, Chalmers University of Technology
 
     </p>
   </div>

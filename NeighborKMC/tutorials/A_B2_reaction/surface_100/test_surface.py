@@ -5,10 +5,10 @@ import numpy as np
 from ase.io import write
 from ase.build import fcc100
 import sys
-from user_sites import Site
-from user_system import System
-from user_kmc import NeighborKMC
-from user_events import (B2AdsEvent, B2DesEvent, 
+from .user_sites import Site
+from .user_system import System
+from .user_kmc import NeighborKMC
+from .user_events import (B2AdsEvent, B2DesEvent, 
                          AAdsEvent, ADesEvent, ABreactEvent, ADiffEvent, BDiffEvent)
 
 def run_test():
@@ -34,11 +34,11 @@ def run_test():
 
     # Define the sites from ase.Atoms.
     # ------------------------------------------
-    atoms = fcc100('Pt',a=a, size=(10,10,1) )
+    atoms = fcc100('Pt',a=a, size=(20,20,1) )
     sites = []
     # Create a site for each surface-atom:
     for i in range(len(atoms)):
-        sites.append(Site(stype=0, covered=0, ind=[i]))
+        sites.append(Site(stype=0, covered=0, ind=i))
 
     # Instantiate a system, events, and simulation.
     # ---------------------------------------------
@@ -49,18 +49,13 @@ def run_test():
     
     events = [B2AdsEvent, B2DesEvent, AAdsEvent,ADesEvent,ABreactEvent,ADiffEvent,BDiffEvent]
 
-    # Specify what events are each others' reverse.
-    reverse_events = {0: 1, 2:3, 5:5, 6:6}
-
 #    parameters = {"pCO": pCO, "pO2": pO2, "T": T,
-    parameters = { "Name": "AB reaction simulation",
-                  "reverses ": reverse_events}
+    parameters = { "Name": "AB reaction simulation"}
 
     # Instantiate simulator object.
     sim = NeighborKMC(system=p, tend=tend,
                       parameters=parameters,
-                      events=events,
-                      rev_events=reverse_events)
+                      events=events)
 
     # Run the simulation.
     sim.run_kmc()

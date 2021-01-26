@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
 
   
   
@@ -193,13 +195,14 @@
 </div>
 <div class="section" id="setup">
 <h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
-<p><strong class="program">MonteCoffee</strong> is presently installed, simply by copying all
-contents of <cite>NeighborKMC/</cite> to a run-directory.</p>
+<p><strong class="program">MonteCoffee</strong> is presently installed, simply by copying (or linking) the base-file folder to the
+run-directory which contains the user-specific files.</p>
 <p>To verify that the code runs successfully on your current workstation, you
 can run:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">test</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
+<p>in one of the tutorial folders.</p>
 </div>
 <div class="section" id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
@@ -208,6 +211,8 @@ can run:</p>
 <li><p><a class="reference external" href="https://www.numpy.org/">Numpy</a> used for array manipulations.</p></li>
 <li><p><a class="reference external" href="https://matplotlib.org/">Matplotlib</a> for plotting results.</p></li>
 <li><p><a class="reference external" href="https://wiki.fysik.dtu.dk/ase">ASE</a> for handling atomic structures.</p></li>
+<li><p><a class="reference external" href="https://docs.h5py.org/en/stable/">h5py</a> for handling file output and compression</p></li>
+<li><p><a class="reference external" href="https://mpi4py.readthedocs.io/en/stable/#">mpi4py</a> for running various kMC simulations in parallel</p></li>
 </ul>
 </dd>
 </dl>
@@ -235,7 +240,7 @@ can run:</p>
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2019, Mikkel Jørgensen
+        &copy; Copyright 2021, Division of Chemical Physics, Chalmers University of Technology
 
     </p>
   </div>

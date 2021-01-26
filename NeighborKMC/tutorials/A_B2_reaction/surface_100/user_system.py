@@ -69,12 +69,10 @@ class System(SystemBase):
         # Set the neighbor list for each site using distances.
         # ------------------------------------------
         for i, s in enumerate(self.sites):
-            # Position of site
-            pcur = self.atoms[s.ind[0]].position
 
             for j, sother in enumerate(self.sites):
                 # Length of distance vector:
-                dcur = self.atoms.get_distance(s.ind[0], sother.ind[0], mic=pbc)
+                dcur = self.atoms.get_distance(s.ind, sother.ind, mic=pbc)
 
                 # If the site is a neighbor:
                 if dcur < Ncutoff+0.00001 and j != i:

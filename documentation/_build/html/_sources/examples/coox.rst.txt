@@ -1,19 +1,32 @@
 .. _coox:
 .. index:: CO oxidation
 
-CO oxidation on a Pt nanoparticle
+CO oxidation on Pt(111)
 *************************************
 
-To begin running :program:`MonteCoffee` simulations, there are only a few required steps.
-The entire tutorial is shown in `test.py <../api/NeighborKMC.html#module-NeighborKMC.test>`_ and the references to the other modules mentioned herein.
+We present here the CO oxidation on Pt(111) which is presented along with the oxidation on Pt nanoparticles in: `M. Jørgensen and H. Grönbeck, ACS Catal., 7, 5054-5061 (2017) <https://pubs.acs.org/doi/10.1021/acscatal.7b01194>`_ . 
 
-Here, CO oxidation is simulated a Pt truncated octahedron with an energy landscape based on conventional coordination numbers.
-In this guide, species 0 denotes empty sites, 1 is CO and 2 refers to O.
+For the CO oxidation the following five chemical reactions have to be considered:
 
-Define constants
-----------------------
-Any global constants can be defined in `user_constants.py <../_modules/NeighborKMC/user_constants.html>`_.
-Next, parameters must be set and stored in a dictionary as:
+.. math:: 
+   
+   O_2 + 2^* & \longleftrightarrow  2O^* \\
+   CO + * & \longleftrightarrow  CO* \\
+   CO^* + O^* & \longrightarrow  CO_2 \\
+   CO^* + * & \longleftrightarrow  * + CO^* \\
+   O^* + * & \longleftrightarrow  * + O^*
+
+   
+which are dissociative adsorption of Oxygen, adsorption of CO, reaction of adsorbed O and CO to CO\ :sub:`2` and CO and O diffusion. In the model it is assumed that the reaction to CO\ :sub:`2` is not reversible and the reaction product is directly desorbing. 
+
+In this example, species 0 denotes empty sites, 1 is CO and 2 refers to O. All energies were obtained using density functional theory and are given in the paper mentioned above. 
+
+Define constants and parameters
+-------------------------------
+
+Any global constants can be defined in `user_constants.py <../api/NeighborKMC.examples.surface.html#module-NeighborKMC.examples.Pt_111_COOx.user_constants>`_. In this example this file stores physical constants but also the calculated vibrations of the various adsorbed species and of the CO\ :sub:`2` formation transition state and their physical properties.
+ 
+Next, the simulation parameters must be set and stored in a dictionary:
 
 .. code-block:: python
 
@@ -21,81 +34,37 @@ Next, parameters must be set and stored in a dictionary as:
      pCO = 2E3  # CO pressure
      pO2 = 1E3  # O2 pressure
      tend = 1E-3  # End time of simulation (s)
-     parameters = {"pCO": pCO, "pO2": pO2, "T": T,
-                   "Name": "COOx Simulation",
-                   "reverses ": reverse_events}
-     a = 4.00  # Lattice Parameter (not related to DFT!)
-     Ncutoff = a / np.sqrt(2.) + 0.05  # Nearest neighbor cutoff
 
+Here the Temperature is set to 800 K, and the pressure ratio of CO to O\ :sub:`2` to 2:1. The pressure is given in Pa. Also the end time is defined, but because we are interested mainly in steady-state properties, the simulation is run until steady-state is reached and usually stopped before the given end time reached. 
 
 Define sites and system
 ----------------------------
-One site is defined for each surface atom using an :class:`Ase.Atoms` object.
-We start with an empty list of sites and a nanoparticle in `ASE`:
+
+One site is defined for each surface atom using an :class:`Ase.Atoms` object. We are using the :class:`ase.build` class to construct our (111) surface. It consists of only one layer, because its only purpose is to simplify the site-connectivity set-up. Therefor, the used lattice-parameter is also not related to any results of density functional theory calculations or experiments. 
+Thus starting with an empty list of sites we construct a :math:`10x10` surface consisting of 100 atoms:
 
 .. code-block:: python
 
-     from ase.cluster import Octahedron
+     from ase.build import fcc111
      from user_sites import Site
 
      sites = []
-     particle = Octahedron("Pt", length=12, cutoff=3, latticeconstant=a)
+     a = 4.00  # Lattice Parameter (not related to DFT!)
+     Ncutoff = a / np.sqrt(2.) + 0.05  # Nearest neighbor cutoff
+     atoms = fcc111("Pt", a = a, size = (10,10,1))
+     atoms.write('surface.traj')
 
-Now we define one site for each surface atom in particle finding the coordination numbers:
-
-.. code-block:: python
-
-     # First find CN of each atom:
-     CNS = np.zeros(len(atoms))
-     for i, at in enumerate(atoms):
-         pcur = at.position
-         dp = np.sqrt([(p[0] - pcur[0]) ** 2. + (p[1] - pcur[1]) ** 2. +
-                       (p[2] - pcur[2]) ** 2. for p in atoms.positions])
-         CNS[i] = len([val for val in dp if 0. < val < a / np.sqrt(2) + 0.01])
-
-     # Define surface atoms as non-bulk.
-     surface_atom_ids = [i for i in range(len(CNS)) if CNS[i] < 12]
-
-In this example, let each coordination number corresponds to a unique site-type :code:`stype`:
-
-.. code-block:: python
-
-     stypes = {}  # site-types: (111),(100),edge,corner.
-     for i, k in enumerate(sorted(list(set(CNS)))):
-         stypes[k] = i
-
-Now we can create a site, free of adsorbates, for each surface atom with a :code:`stype` that corresponds to the coordination number:
+We also have written out the prepared surface as `.traj` file to see if it looks as intended. As next step we have to add a site for each surface atom. Although from density functional theory calculations we know that the oxygen preferably adsorbs on fcc sites and the CO on top sites, we assume here all sites to be equal but use the corresponding energies of the preferred sites.
 
 .. code-block:: python
 
      # Create a site for each surface-atom:
-     for i, indic in enumerate(surface_atom_ids):
-         sites.append(Site(stype=stypes[CNS[indic]],
-                           covered=0, ind=[indic]))
+     for i in range(len(atoms)): 
+         sites.append(Site(stype=0,
+                           covered=0, ind=i))
 
-Here, the block :code:`ind=[indic]` stores the index of the atom in the :class:`ASE.Atoms` object on the :class:`NeighborKMC.user_sites.Site` object.
+Here, the block :code:`ind=[i]` stores the index of the atom in the :class:`ASE.Atoms` object on the :class:`NeighborKMC.user_sites.Site` object, which can be later on used to write out `.traj`-files during the simulation. 
 
-
-Finally, we need to define neighborlists. It is simplest to define this according to the nearest neighbor distances:
-
-.. code-block:: python
-
-     # Set the neighbor list for each site using distances.
-
-     for i, s in enumerate(sites):
-         pcur = atoms[s.ind[0]].position # position of site
-         for j, sother in enumerate(sites):
-             pother = atoms[sother.ind[0]].position # position of potential neighbor site:
-             # Length of distance vector:
-             dpabs = np.sqrt((pother[0] - pcur[0]) ** 2. +
-                             (pother[1] - pcur[1]) ** 2. +
-                             (pother[2] - pcur[2]) ** 2.)
-
-             # If the site is a neighbor:
-             if dpabs < Ncutoff and j != i:
-                 s.neighbors.append(j)
-
- 
 Now the :class:`NeighborKMC.user_system.System` object can be defined from the collection of sites:
 
 .. code-block:: python
@@ -105,64 +74,90 @@ Now the :class:`NeighborKMC.user_system.System` object can be defined from the c
                 sites=sites)
 
 
-Define reaction energies and entropies
---------------------------------------------
-In this step, the reaction energies, or methods to calculate these, are defined in `user_energy.py <../api/NeighborKMC.html#module-NeighborKMC.user_energy>`_.
-**In principle, one may skip this section** and simply define reaction energy barriers directly (see :ref:`define events <defeventsquick>`). However, we believe this
-step is useful for keeping an overview of the coding of the energy landscape.
-
-In this example from  `user_energy.py <../api/NeighborKMC.html#module-NeighborKMC.user_energy>`_, the adsorption energies of CO and O are stored as lists (functions of coordination number), the reaction energy barrier as a function `get_Ea(ECO, EO)`, and diffusion barriers as constants:
+In addition to the overall system, we also need to define neighbor lists. It is simplest to define this according to the nearest neighbor distances. Thus we call in the main definition file of our kMC simulation:
 
 .. code-block:: python
 
-     EadsCO = [1.36 + 0.25 * (9 - CN) for CN in [6, 7, 8, 9]]
-     EadsO = [0.97 + 0.2 * (9 - CN) for CN in [6, 7, 8, 9]]
+     p.set_neighbors(Ncutoff,pbc = True)
 
-     EdiffCO = 0.046 # CO diffusion barrier
-     EdiffO = 0.5 # O diffusion barrier
+which sets the global neighbor list based on distances for our System. Because we are using a surface, periodic boundary conditions are desirable. The actual function is then defined in :class:`NeighborKMC.user_sites.Site` and looks as follows:
 
-     def get_Ea(ECO, EO):
-        dEO = EO - EadsO[-1]  # Oxygen energy relative to uncovered Pt(111)
-        dECO = ECO - EadsCO[-1]  # CO energy relative to uncovered Pt(111)
-        dETS = 0.824 * (dEO + dECO)  # How much larger is the energy of CO and O wrt Pt(111)
-        Ea = 1.08 + dETS - dECO - dEO  # Translate the barriers relative to Pt(111)
+.. code-block:: python
+
+    def set_neighbors(self, Ncutoff, pbc=False):
+
+        if self.atoms is None:
+            raise Warning("Tried to set neighbor-distances in user_system.set_neighbors() with self.atom = None")
+
+        for i, s in enumerate(self.sites):  #For all sites
+            for j, sother in enumerate(self.sites): #Check all the other sites 
+                dcur = self.atoms.get_distance(s.ind, sother.ind, mic=pbc) # use ase function get_distance
+                if dcur < Ncutoff and j != i:
+                    s.neighbors.append(j)        #add site j to neighbor list of site i
+        if len(self.neighbors) == 0:             #check if neighbors exists -- otherwise the site will not interact with each other
+            self.neighbors = [s.neighbors for s in self.sites]
+            self.verify_nlist()
+
+
+ 
+Define reaction energies and entropies
+--------------------------------------------
+In this step, the reaction energies, or methods to calculate these, are defined in `user_energy.py <../api/NeighborKMC.examples.surface.html#module-NeighborKMC.examples.Pt_111_COOx.user_energy>`_ and the entropies in `user_entropy.py <../api/NeighborKMC.examples.surface.html#module-NeighborKMC.examples.Pt_111_COOx.user_entropy>`_. That makes it simple to do all the book-keeping accordingly. 
+
+We used the from density functional theory obtained energies for the adsorption of Oxygen on the fcc site and of CO on the top site and diffusion constants for Oxygen to diffuse from fcc to fcc site and for CO for from top to top site. It should be noted that the adsorption energies are in this example defined positively in contradiction to the more generally used negative notation in theoretical papers. 
+
+.. code-block:: python
+
+     EadsCO = 1.36 
+     EadsO = 0.97 
+
+     EdiffCO = 0.08 # CO diffusion barrier
+     EdiffO = 0.58 # O diffusion barrier
+
+From the adsorption energies the activation energy for the CO\ :sub:`2` formation is calculated from the BEP relations according to: 
+
+.. code-block:: python
+
+    def get_Ea(ECO, EO):
+        ETS = 0.824 * (-EO -ECO) + 0.168 + 0.47238  # How much larger is the energy of CO and O wrt Pt(111)
+        Ea = ETS + ECO + EO  # Translate the barriers relative to Pt(111)
         return Ea
 
-Repulsive adsorbate-adsorbate interactions are also defined as a method in  `user_energy.py <../api/NeighborKMC.html#module-NeighborKMC.user_energy>`_:
+The reason why not one single activation energy is used, are the repulsive adsorbate-adsorbate interactions which depend locally on the coverage of the neighbors of the reaction site:
 
 .. code-block:: python
 
      def get_repulsion(cov_self, cov_NN, stype):
          repulsion = 0.
-         ECOCO = 0.19  # 0.38 # How CO affects CO
-         EOO = 0.32  # How O affects O - double since it is called from get barrier of O2
+         ECOCO = 0.19  #  How CO affects CO
+         EOO = 0.32  # How O affects O 
          ECOO = 0.3  # How CO affects O
          EOCO = 0.3  # How O affects CO
          HInttwo = [[0., 0., 0.], [0., ECOCO, EOCO],
-                   [0., ECOO, EOO]]  # Two body interaction Hamiltonian 3x3 beacuse 0 = empty.
+                   [0., ECOO, EOO]]  # Two body interaction Hamiltonian 3x3 because 0 = empty.
          for j in cov_NN:  # For each covered Neighbor, give a repulsion:
              repulsion += HInttwo[cov_self][j]
 
          return repulsion
 
-Entropies are stored in `user_entropy.py <../api/NeighborKMC.html#module-NeighborKMC.user_entropy>`_, where the entropy is defined for gas-phase CO and oxygen,
-as well as a method to calculate harmonic adsorbate entropy. For definitions of the functions, we refer to `user_entropy.py <../api/NeighborKMC.html#module-NeighborKMC.user_entropy>`_.
+The in `user_entropy.py <../api/NeighborKMC.examples.surface.html#module-NeighborKMC.examples.Pt_111_COOx.user_entropy>`_ stored entropies are included in the calculation of the rates as will be shown in the next section. Generally we define here the entropy for gas-phase CO and oxygen, as well as a method to calculate harmonic adsorbate entropy. The definitions of this functions can be looked up in this file directly. 
 
 .. _defeventsquick:
 
 Define events
 --------------
-Here event-types are defined, which are stored in `user_events.py <../api/NeighborKMC.html#module-NeighborKMC.user_events>`_.
+Here event-types are defined, which are stored in `user_events.py <../api/NeighborKMC.examples.surface.html#module-NeighborKMC.examples.Pt_111_COOx.user_events>`_.
 For each possible type of event, a class is derived from :class:`NeighborKMC.base.events.EventBase`.
-Take the example of an event where CO+O forms :math:`\mathrm{CO_2}`. This event is defined in `user_events.py <../api/NeighborKMC.html#module-NeighborKMC.user_events>`_ as follows.
+For example take the :math:`\mathrm{CO_2}` formation. This event is defined in `user_events.py <../api/NeighborKMC.examples.surface.html#module-NeighborKMC.examples.Pt_111_COOx.user_events>`_ as follows.
 
 First we import the necessary functions, classes, and constants:
 
 .. code-block:: python
 
      from base.events import EventBase
-     from user_entropy import get_entropy_CO, get_entropy_O2, get_entropy_ads, get_Zvib
-     from user_constants import mCO, mO2, Asite, modes_COads, modes_Oads, kB, eV2J, s0CO, s0O, h
+     from user_entropy import get_Zvib, get_Z_CO, get_Z_O2
+     from user_constants import mCO, mO2, Asite, modes_COads, modes_Oads,\
+             modes_TS_COOx, modes_COgas, modes_O2gas, kB, eV2J, s0CO, s0O, h,
      from user_energy import EadsCO, EadsO, get_Ea, get_repulsion, EdiffCO, EdiffO
 
 Now we derive a class to contain the event:
@@ -171,8 +166,9 @@ Now we derive a class to contain the event:
 
      class COOxEvent(EventBase):
          def __init__(self, params):
-             self.Zratio = (get_Zvib(params["T"], modes_COads) *
-                           get_Zvib(params["T"], modes_Oads)) ** 0.66
+             Zads = get_Zvib(params["T"], modes_COads) * get_Zvib(params["T"], modes_Oads)
+             Zts = get_Zvib(params["T"], modes_TS_COOx)
+             self.Zratio = Zts / Zads 
              EventBase.__init__(self, params)
 
 The constructor :code:`__init__(self,params)` is attaches relevant parameters to the object, and :code:`self.Zratio` is the ratio
@@ -182,42 +178,37 @@ that returns True if the event is possible on the current site-pair:
 .. code-block:: python
 
          def possible(self, system, site, other_site):
-             # If site is covered with CO and other site free
-             if (system.sites[site].covered == 1 and
-                    system.sites[other_site].covered == 2):
+             if (system.sites[site].covered == 1 and system.sites[other_site].covered == 2) or \
+                   (system.sites[site].covered == 2 and system.sites[other_site].covered == 1):
                  return True
              else:
                  return False
 
-Thus, for the event to be possible, the site needs to be covered by 1 (CO) and the neighbor site by 2 (O).
-Now we also need to define a function :code:`get_rate(self, system, i_site, other_site)` that returns the rate constant:
+Thus, for the event to be possible, the site needs to be covered by 1 (CO) and the neighbor site by 2 (O) or the other way round. That is originated by the use of singe neighbor site pairs. Thus a pair with the indexes (10,11) would be the same as (11,10) in the code to avoid double counting in the time list.
+
+Next we need to define a function :code:`get_rate(self, system, i_site, other_site)` that returns the rate constant:
 
 .. code-block:: python
 
         def get_rate(self, system, i_site, other_site):
-            # Find the adsorption energy for the site-type
-            stype = system.sites[i_site].stype
-            stype_other = system.sites[other_site].stype
-            ECO = EadsCO[stype]
-            EO = EadsO[stype_other]
-            # Find the Nearest neighbor repulsion
-            Ncovs = [system.sites[n].covered for n in
-                     system.neighbors[i_site]]
-            Nothercovs = [system.sites[n].covered for n
-                          in system.neighbors[other_site]]
-            ECO -= get_repulsion(1, Ncovs, stype)
-            EO -= get_repulsion(2, Nothercovs, stype_other)
+            ECO = EadsCO
+            EO = EadsO
+            if system.sites[site].covered == 1:
+                Ncovs_CO = [system.sites[n].covered for n in system.neighbors[site] ]
+                Ncovs_O = [system.sites[n].covered for n in system.neighbors[other_site]]
+            else:
+                Ncovs_CO = [system.sites[n].covered for n in system.neighbors[other_site] ]
+                Ncovs_O = [system.sites[n].covered for n in system.neighbors[site]]
+            ECO -= get_repulsion(1, Ncovs_CO, 0)
+            EO -= get_repulsion(2, Ncovs_O, 0)
             Ea = max(0., get_Ea(ECO, EO)) # No negative energy barriers
+            return self.alpha * self.Zratio * np.exp(-Ea/(kB * self.params['T'])) * kB * self.params['T'] / h
 
-            return self.alpha * self.Zratio * np.exp(-Ea /
-                                                     (kB * self.params['T'])) * kB * self.params['T'] / h
-
-The site-types are used to obtain the adsorption energies, and the repulsions are added to the adsorption energies.
+The adsorption energies are fixed, but weakens in the case of any repulsions. 
 A call is made to :code:`get_Ea(ECO, EO)` to obtain the reaction energy barrier.
-**It is important to multiply rate constants with** :code:`self.alpha` **if this event is supposed to be** :ref:`accelerated <accelerating>`.
-This is because :code:`self.alpha` is the slowing-down factor that is adjusted dynamically for each event during simulation.
+The rate constant is multiplied with :code:`self.alpha`, because :code:`self.alpha` is the slowing-down factor that is adjusted dynamically for each event during simulation.
 
-Finally each event requires a method :code:`do_event(self,system, site, other_site)` to perform modifications to the site-occupations when fired:
+Also the event requires a method :code:`do_event(self,system, site, other_site)` to perform modifications to the site-occupations when fired:
 
 .. code-block:: python
 
@@ -225,7 +216,14 @@ Finally each event requires a method :code:`do_event(self,system, site, other_si
             system.sites[site].covered = 0
             system.sites[other_site].covered = 0
 
-In this case, the two sites containing CO and O are simply emptied. Now, assume we have defined an event for each type of reaction desired:
+In this case, the two sites containing CO and O are simply emptied. At the end we define the method :code:`get_involve_other(self)` to define if the neighboring sides are actually involved in the event:
+
+.. code-block:: python
+
+        def get_involve_other(self):
+            return True
+
+After giving this example for one event, the other events can be defined similarly. How to define single site and dissociative adsorption is also shown in the :ref:`tutorials`. Only the rates have to be adjusted according to transition state theory. Having all events for each type of reaction defined in this order:
 
     - (0) :class:`NeighborKMC.user_events.COAdsEvent` for CO adsorption.
     - (1) :class:`NeighborKMC.user_events.CODesEvent` for CO desorption.
@@ -235,16 +233,15 @@ In this case, the two sites containing CO and O are simply emptied. Now, assume 
     - (5) :class:`NeighborKMC.user_events.ODiffEvent` for O diffusion.
     - (6) :class:`NeighborKMC.user_events.COOxEvent` for CO+O -> CO2.
 
-To accelerate the simulation we need to specify which events are each others reverse and store the event-class references in a list:
+we can now store the event-class references in a list for the NeighborKMC simulations and define accordingly a list of reverse events. In this example the CO (O) adsorption and desorption are reverse to each other. In addition are the diffusion processes reverse to themselves. The CO oxidation itself is not reversible. Thus it isn't defined in this list.
 
 .. code-block:: python
 
-     reverse_events = {0: 1, 2: 3, 4: 4, 5: 5}
      events = [COAdsEvent, CODesEvent, OAdsEvent,
                ODesEvent, CODiffEvent,
                ODiffEvent, COOxEvent]
+     reverse_events = {0: 1, 2: 3, 4: 4, 5: 5}
 
-Here event 0 has a reverse event 1, 2 has 3, 4 and 5 are their own inverses because they are diffusion, and 6 is left out because it is assumed irreversible.
 The numbering of events is determined by the order in the list :code:`events` defined here.
 
 Define and run simulation
@@ -259,7 +256,7 @@ Now the simulation object :class:`NeighborKMC.user_kmc.NeighborKMC` can be defin
                        parameters=parameters,
                        events=events,
                        rev_events=reverse_events)
-     result = sim.run_kmc()
+     sim.run_kmc()
      print("Simulation end time reached ! ! !")
 
 
@@ -281,29 +278,15 @@ The results are analyzed by reading in the :ref:`code output <output>`. For exam
      cov_O = [sum([1 for val in covs[i] if val == 2]) / Nsites for i in range(len(covs))]
      cov_free = [sum([1 for val in covs[i] if val == 0]) / Nsites for i in range(len(covs))]
 
-If we need to analyze it for each site-type, the site-types need to be read. For corners, this may look like:
-
-.. code-block:: python
-
-     stypes = np.loadtxt("stypes.txt")
-     icnr = [i for i in range(len(stypes)) if stypes[i]==0]
-     Ncnr = float(len(icnr)) # Number of corner sites
-     cov_CO_corners = [sum([1 for j,val in enumerate(covs[i]) if val == 1 and j in icnr]) / Ncnr
-                       for i in range(len(covs))]
-
 Typically, a turnover frequency is also relevant to calculate:
 
 .. code-block:: python
 
-     Nevents = 7 # How many types of events are there.
-     sid_ev = np.loadtxt("sid_ev.txt").reshape(-1,stypes.shape[0],Nevents)
-     TOF = sum(sid_ev[-1][-1]) / (Nsites*time[-1]) # How many CO+O->CO2 has fired per time and site.
+     evs_exec = np.loadtxt("evs_exec.txt")
+     TOF = evs_exec[-1] / (Nsites*time[-1]) # How many CO+O->CO2 has fired per time and site.
 
-Often it can be useful to discard points out of steady-state by selecting only part of :code:`sid_ev`.
-To draw statistically sound conclusions, it is recommended that multiple identically prepared simulations are performed
-(see  tutorials :ref:`Parallel simulations <parallel>` and :ref:`calculating turnover frequencies <tof>`).
-
-
+Often it can be useful to discard points out of steady-state. The detailed evolution of the time with the sites can be found in `detail_site_event_evol.hdf5`.
+To draw statistically sound conclusions, it is recommended that multiple identically prepared simulations are performed and in this case at least 100 CO oxidation events are performed in the steady state. 
 
 
 

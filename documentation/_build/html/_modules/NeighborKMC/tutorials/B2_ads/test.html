@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
 
   
   
@@ -171,19 +173,6 @@
 <span class="kn">from</span> <span class="nn">.user_kmc</span> <span class="kn">import</span> <span class="n">NeighborKMC</span>
 <span class="kn">from</span> <span class="nn">.user_events</span> <span class="kn">import</span> <span class="p">(</span><span class="n">B2AdsEvent</span><span class="p">,</span> <span class="n">B2DesEvent</span><span class="p">)</span>
 
-<div class="viewcode-block" id="readFile"><a class="viewcode-back" href="../../../../api/NeighborKMC.tutorials.B2_ads.html#NeighborKMC.tutorials.B2_ads.test.readFile">[docs]</a><span class="k">def</span> <span class="nf">readFile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-  <span class="sd">&quot;&quot;&quot;Reads in a text file and gives back a list which has the structure of columns, rows</span>
-
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="n">List</span><span class="o">=</span><span class="p">[[]</span> <span class="k">for</span> <span class="n">tt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">)]</span>
-  <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-  <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
-    <span class="n">parts</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-      <span class="n">List</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
-  <span class="k">return</span> <span class="n">List</span></div>
-
 <div class="viewcode-block" id="run_test"><a class="viewcode-back" href="../../../../api/NeighborKMC.tutorials.B2_ads.html#NeighborKMC.tutorials.B2_ads.test.run_test">[docs]</a><span class="k">def</span> <span class="nf">run_test</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Runs the simulation of the dissociativ B2 adsorption and desorption over a surface.</span>
 
@@ -197,19 +186,17 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Define constants.</span>
     <span class="c1"># ------------------------------------------</span>
-    <span class="n">tend</span> <span class="o">=</span> <span class="mf">5.</span>  <span class="c1"># End time of simulation (s)</span>
+    <span class="n">tend</span> <span class="o">=</span> <span class="mf">10.</span>  <span class="c1"># End time of simulation (s)</span>
     <span class="n">a</span> <span class="o">=</span> <span class="mf">4.00</span>  <span class="c1"># Lattice Parameter (not related to DFT!)</span>
     <span class="n">Ncutoff</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.05</span>  <span class="c1"># Nearest neighbor cutoff</span>
     <span class="c1"># Clear up old output files.</span>
     <span class="c1"># ------------------------------------------</span>
     <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;time.txt&quot;</span><span class="p">,</span> <span class="p">[])</span>
     <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;coverages.txt&quot;</span><span class="p">,</span> <span class="p">[])</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;sid_ev.txt&quot;</span><span class="p">,</span> <span class="p">[])</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;sid_ev_other.txt&quot;</span><span class="p">,</span> <span class="p">[])</span>
 
     <span class="c1"># Define the sites from ase.Atoms.</span>
     <span class="c1"># ------------------------------------------</span>
-    <span class="n">atoms</span> <span class="o">=</span> <span class="n">fcc100</span><span class="p">(</span><span class="s2">&quot;Pt&quot;</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">atoms</span> <span class="o">=</span> <span class="n">fcc100</span><span class="p">(</span><span class="s2">&quot;Pt&quot;</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
     <span class="n">sites</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">atoms</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;surf.traj&#39;</span><span class="p">)</span>
     <span class="c1"># Create a site for each surface-atom:</span>
@@ -226,52 +213,17 @@
     
     <span class="n">events</span> <span class="o">=</span> <span class="p">[</span><span class="n">B2AdsEvent</span><span class="p">,</span> <span class="n">B2DesEvent</span><span class="p">]</span>
 
-    <span class="c1"># Specify what events are each others&#39; reverse.</span>
-    <span class="n">reverse_events</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
-
 <span class="c1">#    parameters = {&quot;pCO&quot;: pCO, &quot;pO2&quot;: pO2, &quot;T&quot;: T,</span>
-    <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;B2 ads/des Simulation&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;reverses &quot;</span><span class="p">:</span> <span class="n">reverse_events</span><span class="p">}</span>
+    <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;B2 ads/des Simulation&quot;</span><span class="p">}</span>
 
     <span class="c1"># Instantiate simulator object.</span>
     <span class="n">sim</span> <span class="o">=</span> <span class="n">NeighborKMC</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">tend</span><span class="o">=</span><span class="n">tend</span><span class="p">,</span>
                       <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
-                      <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">,</span>
-                      <span class="n">rev_events</span><span class="o">=</span><span class="n">reverse_events</span><span class="p">)</span>
+                      <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">)</span>
 
     <span class="c1"># Run the simulation.</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">run_kmc</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Simulation end time reached ! ! !&quot;</span><span class="p">)</span>
-
-    <span class="c1"># Plot the coverages:</span>
-    <span class="c1"># ------------------------------------------</span>
-    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-    <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
-<span class="c1">#</span>
-    <span class="n">fs</span> <span class="o">=</span> <span class="mi">20</span>
-    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">3.5</span>
-    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;mathtext.default&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;rm&#39;</span>
-    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;mathtext.rm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Arial&#39;</span>
-    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Arial&#39;</span>
-    <span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;font&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">fs</span><span class="p">)</span>
-<span class="c1">#</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;time.txt&quot;</span><span class="p">)</span>
-    <span class="n">covs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;coverages.txt&quot;</span><span class="p">)</span>
-<span class="c1">#</span>
-    <span class="n">cov_B2</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">([</span><span class="mi">1</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">covs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">covs</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">covs</span><span class="p">))]</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">cov_B2</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;N-KMC 100x10&quot;</span><span class="p">)</span>
-
-    <span class="n">data_MF</span> <span class="o">=</span> <span class="n">readFile</span><span class="p">(</span><span class="s1">&#39;ads_b2_mf.dat&#39;</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_MF</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">data_MF</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;g-&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Coverage&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="c1">#</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;Compare_MF_KMC.pdf&#39;</span><span class="p">,</span><span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span></div>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Simulation end time reached ! ! !&quot;</span><span class="p">)</span></div>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">run_test</span><span class="p">()</span>
@@ -289,7 +241,7 @@
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2019, Mikkel Jørgensen
+        &copy; Copyright 2021, Division of Chemical Physics, Chalmers University of Technology
 
     </p>
   </div>

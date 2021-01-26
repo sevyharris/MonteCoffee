@@ -1,0 +1,36 @@
+.. _options_sec:
+.. index:: Options
+
+
+Options
+**************
+
+The configurations and options in :program:`MonteCoffee` are specified in the file `kMC_options.cfg`, and are loaded by
+`load_options() <api/NeighborKMC.base.html#NeighborKMC.base.kmc.NeighborKMCBase.load_options>`_.
+The options contained in `kMC_options.cfg` are:
+
+    - **nspecies** (int): how many species are included in the simulation. This integer decides how many coverages are written to the log.
+
+    - **savesteps** (int): Number of Monte Carlo steps between saving the .txt files.
+    
+    - **logsteps** (int): Number of steps to skip when saving .txt files and printing the log. Setting it to 1000 makes the log output and code save every 1000th simulation step.
+    
+    - **tinfinity** (float): The time to consider infinite. This time is set for the occourence time of impossible events.
+    
+    - **savecovs** (bool): If True, the site-occupations (coverages) are saved periodically to coverages.txt.
+    
+    - **verbose** (bool): If True, prints verbose information.
+
+    - **write_atoms** (bool): If True, write out traj files of coverages (may have to be customnized depending on the system).
+    
+Options solely related relates to the acceleration of kMC simulations (See :ref:`accelerating <accelerating>`):
+
+    - **use_scaling_algorithm** (bool): If True, the time acceleration scheeme will be used.
+    
+    - **delta** (float): The reversibility tolerance for quasi-equilibrated events. This determines the criterion for whether reactions are quasi-equilibrated. Setting delta=0.25 implies that there must be no more than 25 percent difference in rates of a forward and backward reaction to deem it quasi-equilibrated.
+    
+    - **nf** (int): A factor that separates fast and slow events. nf = 1000 means that quasi-equilibrated events are slowed down to maximally 1000 times the non-equilibrated events.
+    
+    - **ns** (int): The frequency of adjusting barriers for quasi-equilibrated events.
+    
+    - **ne** (int): How many events back to remember when adjusting barriers of quasi-equilibrated events, and the minimum number of times an event must be observed before scaling.

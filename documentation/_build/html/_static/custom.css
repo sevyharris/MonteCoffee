@@ -1,0 +1,72 @@
+figure.fig-customn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+    font-style: normal;
+} 
+
+.align-center {
+    text-align: left;
+    font-style: normal;
+} 
+
+.ntext {
+   text-align: left;
+   font-style: normal;
+   color: blue;
+}  
+ 
+.red {
+  color: red;
+}      
+         
+        
+/* override table width restrictions */
+@media screen and (min-width: 767px) {
+
+   .wy-table-responsive table td {
+      /* !important prevents the common CSS stylesheets from overriding
+         this as on RTD they are loaded after this stylesheet */
+      white-space: normal !important;
+      background-color: transparent !important; 
+   }
+
+  .wy-table-responsive tbody, tr, td, th {
+      border: none !important;
+      border-width: 0 !important;
+      border-color: transparent !important;
+   }
+
+   .wy-table-responsive {
+      overflow: visible !important;
+   }
+}
+
+table.rows th {
+    background-color: #FFFFFF;
+    border-style: solid solid solid solid;
+    border-width: 0px 0px 0px 0px;
+    border-color: #FFFFFF;
+    text-align: left;
+}
+table.rows td {
+    border-style: solid solid solid solid;
+    border-width: 0px 0px 0px 0px;
+    border-color: #FFFFFF;
+}
+
+table.rows tr {
+    border-style: solid solid solid solid;
+    border-width: 0px 0px 0px 0px;
+    border-color: #FFFFFF;
+}
+
+
+table.rows tr:nth-child(odd) {
+    background-color: #FFFFFF; 
+} 
+
+table.rows tr:nth-child(even) {
+    background-color: #FFFFFF;
+} 

@@ -28,9 +28,3 @@ For a minimal working example of how to perform kinetic Monte Carlo with :progra
    literature
    glossary
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

@@ -11,7 +11,7 @@ Module: user_sites
 """
 
 import numpy as np
-from base.system import SystemBase
+from .base.system import SystemBase
 
 
 class System(SystemBase):

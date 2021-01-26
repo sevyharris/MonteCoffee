@@ -10,13 +10,13 @@ Module: base.events for documentation about the methods possible(), get_rate(), 
 """
 
 import numpy as np
-from base.events import EventBase
-from user_entropy import get_Zvib, get_Z_CO, get_Z_O2
+from .base.events import EventBase
+from .user_entropy import get_Zvib, get_Z_CO, get_Z_O2
 
-from user_constants import mCO, mO2, Asite, modes_COads, \
+from .user_constants import mCO, mO2, Asite, modes_COads, \
     modes_Oads, modes_TS_COOx, modes_COgas, modes_O2gas, kB, eV2J, s0CO, s0O, h
 
-from user_energy import EadsCO, EadsO, get_Ea, \
+from .user_energy import EadsCO, EadsO, get_Ea, \
     get_repulsion, EdiffCO, EdiffO
 
 
@@ -51,7 +51,7 @@ class COAdsEvent(EventBase):
 
 class CODesEvent(EventBase):
     """CO desorption event class.
-    The event is CO* -> CO(g) + *.
+    The event is CO\* -> CO(g) + \*.
     The event is possible if the site is CO-covered.  
     The rate comes from the forward rate and the
     equilibrium constant.  

@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
 
   
   
@@ -95,6 +97,9 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="A_ads.html">Adsorption of atomic species A on surface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="B2_ads.html">Dissociative Adsorption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="A_B2_reac.html">Adsorption and reaction of species A and B2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel.html">Parallel simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sites.html">Special site-rules</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
@@ -179,6 +184,8 @@
             
   <div class="section" id="tutorials">
 <span id="id1"></span><h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h1>
+<p>The tutorials assume that the different elements of <strong class="program">MonteCoffee</strong> are split
+into the user_* files. All files described here are provided in the Tutorial folder which is downloaded from <strong class="program">GIT</strong>. Additionally we provide information on how to run parallel simulations using <strong class="program">MonteCoffee</strong> and give some ideas about special site rules for more complex systems.</p>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -190,18 +197,24 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="B2_ads.html">Dissociative Adsorption</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="B2_ads.html#define-constants">Define constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="B2_ads.html#define-sites-and-system">Define sites and system</a></li>
-<li class="toctree-l2"><a class="reference internal" href="B2_ads.html#define-reaction-energies-and-entropies">Define reaction energies and entropies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="B2_ads.html#define-events">Define events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="B2_ads.html#define-and-run-simulation">Define and run simulation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="B2_ads.html#analyze-results">Analyze results</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="A_B2_reac.html">Adsorption and reaction of species A and B2</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="A_B2_reac.html#define-events">Define events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="A_B2_reac.html#reaction-over-a-100-surface">Reaction over a (100) surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="A_B2_reac.html#reaction-over-a-nanoparticle">Reaction over a nanoparticle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="parallel.html">Parallel simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sites.html">Special site-rules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sites.html#custom-site-attributes">Custom site-attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sites.html#using-stype-for-everything">Using stype for everything</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<p>The user interface is essential to <strong class="program">MonteCoffee</strong> as the
-code works as a programmable application.</p>
 <p><a class="reference external" href="../_modules/index.html">See the source code for each module</a>.</p>
 </div>
 
@@ -226,7 +239,7 @@ code works as a programmable application.</p>
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2019, Mikkel Jørgensen
+        &copy; Copyright 2021, Division of Chemical Physics, Chalmers University of Technology
 
     </p>
   </div>

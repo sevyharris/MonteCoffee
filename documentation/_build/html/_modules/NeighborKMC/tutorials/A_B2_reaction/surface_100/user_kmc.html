@@ -1,0 +1,445 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>NeighborKMC.tutorials.A_B2_reaction.surface_100.user_kmc &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+        <script src="../../../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="../../../../../_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../overview.html">Code overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../quick.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/index.html">User interface (API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>NeighborKMC.tutorials.A_B2_reaction.surface_100.user_kmc</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for NeighborKMC.tutorials.A_B2_reaction.surface_100.user_kmc</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Defines the NeighborKMC class used to run a MonteCoffee simulation.</span>
+
+<span class="sd">The module defines the main simulation class (NeighborKMC), which is used</span>
+<span class="sd">to run the simulation. The main engine is found in base.kmc.</span>
+
+<span class="sd">See Also</span>
+<span class="sd">--------</span>
+<span class="sd">Module: base.kmc</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">ase.io</span>
+<span class="kn">from</span> <span class="nn">base.kmc</span> <span class="kn">import</span> <span class="n">NeighborKMCBase</span>
+<span class="kn">from</span> <span class="nn">base.logging</span> <span class="kn">import</span> <span class="n">Log</span>
+<span class="kn">from</span> <span class="nn">.user_sites</span> <span class="kn">import</span> <span class="n">Site</span>
+<span class="kn">from</span> <span class="nn">.user_events</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pyclbr</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+
+<div class="viewcode-block" id="NeighborKMC"><a class="viewcode-back" href="../../../../../api/NeighborKMC.tutorials.A_B2_reaction.surface_100.html#NeighborKMC.tutorials.A_B2_reaction.surface_100.user_kmc.NeighborKMC">[docs]</a><span class="k">class</span> <span class="nc">NeighborKMC</span><span class="p">(</span><span class="n">NeighborKMCBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Controls the kMC simulation.</span>
+<span class="sd">            </span>
+<span class="sd">    Calls constructor of NeighborKMCBase objects, and  </span>
+<span class="sd">    loads in the user-specified event-list in load_events().</span>
+
+<span class="sd">    The variable self.evs_exec is initialized as a list to</span>
+<span class="sd">    count the number of times each event-type is executed.  </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    system: System</span>
+<span class="sd">        The system instance to perform the simulation on.</span>
+<span class="sd">    tend: float</span>
+<span class="sd">        Simulation end-time.</span>
+<span class="sd">    parameters: dict</span>
+<span class="sd">        Parameters used, which are dumped to the log file.</span>
+<span class="sd">        Example: parameters = {&#39;pCO&#39;:1E2,&#39;T&#39;:700,&#39;Note&#39;:&#39;Test simulation&#39;}</span>
+<span class="sd">    events: list(classobj)</span>
+<span class="sd">        A list pointing to the event classes that defines the events.</span>
+<span class="sd">        The order of list is kept consistently throughout the simulation.</span>
+<span class="sd">        For example, given the event classes:</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            class AdsEvent(EventBase):</span>
+<span class="sd">                def __init__(self):</span>
+<span class="sd">                ...</span>
+
+<span class="sd">            class DesEvent(EventBase):</span>
+<span class="sd">                def __init__(self):</span>
+<span class="sd">                ...</span>
+
+<span class="sd">        One should define events as a list of class names as</span>
+
+<span class="sd">        &gt;&gt;&gt; events = [AdsEvent, DesEvent]</span>
+
+<span class="sd">    rev_events: dict</span>
+<span class="sd">        Specifying which events are reverse to each other, following the order `self.events`.</span>
+<span class="sd">        This dict is used for temporal acceleration.</span>
+<span class="sd">        For example, if we have an adsorption and desorption event that are each others reverse, a</span>
+<span class="sd">        third non-reversible event, and a diffusion event that is its own reverse:</span>
+
+<span class="sd">        &gt;&gt;&gt; events = [AdsEvent, DesEvent, ThirdEvent, DiffusionEvent]</span>
+
+<span class="sd">        Then rev_events is defined as</span>
+
+<span class="sd">        &gt;&gt;&gt; rev_events = {0:1,3:3}.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    --------</span>
+<span class="sd">    Assume that we have defined a System object (system), a list of event **classes** (events), and the</span>
+<span class="sd">    dict of reverse events (rev_events). Then a NeighborKMC object is instantiated and simulation is run as:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        nkmc = NeighborKMC(system=system,</span>
+<span class="sd">                           tend=1.,</span>
+<span class="sd">                           parameters=params,</span>
+<span class="sd">                           events=events,</span>
+<span class="sd">                           rev_events=rev_events)</span>
+<span class="sd">        nkmc.run_kmc()</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    ---------</span>
+<span class="sd">    Module: base.kmc</span>
+<span class="sd">    Module: base.basin</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">tend</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="p">{},</span> <span class="n">events</span><span class="o">=</span><span class="p">[],</span> <span class="n">rev_events</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="p">[</span><span class="n">ev</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span> <span class="k">for</span> <span class="n">ev</span> <span class="ow">in</span> <span class="n">events</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reverses</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># Set later</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_reverses</span><span class="p">(</span><span class="n">rev_events</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evs_exec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">system_evolution</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+        <span class="n">NeighborKMCBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="n">system</span><span class="p">,</span>
+                                 <span class="n">tend</span><span class="o">=</span><span class="n">tend</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
+
+<div class="viewcode-block" id="NeighborKMC.load_reverses"><a class="viewcode-back" href="../../../../../api/NeighborKMC.tutorials.A_B2_reaction.surface_100.html#NeighborKMC.tutorials.A_B2_reaction.surface_100.user_kmc.NeighborKMC.load_reverses">[docs]</a>    <span class="k">def</span> <span class="nf">load_reverses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rev_events</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prepares the reverse_event dict.</span>
+<span class="sd">               </span>
+<span class="sd">        Method makes the dict self.reverses two sided, and performs</span>
+<span class="sd">        a check that each event only has one reverse in the end.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        rev_events: dict</span>
+<span class="sd">            Specifying which events are reverse to each other, as described in</span>
+<span class="sd">            the constructor of NeighborKMC.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        -------</span>
+<span class="sd">        Warning:</span>
+<span class="sd">            If an reversible event has more than one reverse.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reverses</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">rev_events</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">rev_events</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reverses</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
+
+        <span class="c1"># Make sure each event only has one reverse</span>
+        <span class="k">if</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reverses</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reverses</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="ow">or</span> \
+                <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reverses</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reverses</span><span class="o">.</span><span class="n">values</span><span class="p">())):</span>
+            <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span><span class="s1">&#39;Error in user_kmc.NeighborKMC.load_reverses(). An event has more than one reverse.&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NeighborKMC.run_kmc"><a class="viewcode-back" href="../../../../../api/NeighborKMC.tutorials.A_B2_reaction.surface_100.html#NeighborKMC.tutorials.A_B2_reaction.surface_100.user_kmc.NeighborKMC.run_kmc">[docs]</a>    <span class="k">def</span> <span class="nf">run_kmc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Runs a kmc simulation.</span>
+<span class="sd">               </span>
+<span class="sd">        Method starts the simulation by initializing the log,  </span>
+<span class="sd">        initializes lists to keep track of time and step  </span>
+<span class="sd">        numbers.</span>
+
+<span class="sd">        It saves information about the site-indices in `siteids.txt`,</span>
+<span class="sd">        and the site-types in `stypes.txt`.</span>
+
+<span class="sd">        While the simulation runs (self.t &lt; self.tend),</span>
+<span class="sd">        Monte Carlo steps are performed by calling self.frm_step().</span>
+
+<span class="sd">        Every self.LogSteps, a line is added to the simulation</span>
+<span class="sd">        log.</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loading logging and counters...&#39;</span><span class="p">)</span>
+
+        <span class="n">logparams</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">logparams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="n">logparams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;tend&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tend</span><span class="p">,</span>
+                          <span class="s2">&quot;Nsites&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">Nsites</span><span class="p">,</span>
+                          <span class="s2">&quot;Number of events&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">),</span>
+                          <span class="s2">&quot;Number of site-types (stypes)&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="n">m</span><span class="o">.</span><span class="n">stype</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">])))</span>
+                          <span class="p">})</span>
+        <span class="n">accelparams</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;on&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_scaling_algorithm</span><span class="p">,</span> <span class="s2">&quot;Ns&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ns</span><span class="p">,</span> <span class="s2">&quot;Nf&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span> <span class="s2">&quot;ne&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ne</span><span class="p">}</span>
+        <span class="n">log</span> <span class="o">=</span> <span class="n">Log</span><span class="p">(</span><span class="n">logparams</span><span class="p">,</span><span class="n">accelparams</span><span class="p">)</span>
+
+        <span class="c1"># Save txt files with site information:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;siteids.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">ind</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">])</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;stypes.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">stype</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_coverages</span><span class="p">:</span>
+           <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;detail_site_event_evol.hdf5&#39;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+           <span class="n">d</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,(</span><span class="mi">1</span><span class="p">,),</span><span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,),</span> <span class="n">chunks</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+           <span class="n">d</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;site&quot;</span><span class="p">,(</span><span class="mi">1</span><span class="p">,),</span><span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,),</span> <span class="n">chunks</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+           <span class="n">d</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;othersite&quot;</span><span class="p">,(</span><span class="mi">1</span><span class="p">,),</span><span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,),</span> <span class="n">chunks</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+           <span class="n">d</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,(</span><span class="mi">1</span><span class="p">,),</span><span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,),</span> <span class="n">chunks</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Initialize time and step counters</span>
+        <span class="n">stepN_CNT</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stepNMC</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">stepSaveN</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Running simulation.&#39;</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">tend</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">frm_step</span><span class="p">()</span>
+
+            <span class="c1"># Log every self.LogSteps step.</span>
+            <span class="k">if</span> <span class="n">stepN_CNT</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">LogSteps</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> Covs :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">get_coverages</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nspecies</span><span class="p">))</span>
+
+                <span class="n">log</span><span class="o">.</span><span class="n">dump_point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stepNMC</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">evs_exec</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+<span class="c1">#                self.MCstep.append(stepNMC)</span>
+
+                <span class="n">covs_cur</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">covered</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covered</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">covs_cur</span><span class="p">)</span>
+                <span class="n">stepN_CNT</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="n">stepSaveN</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c1"># Save every self.SaveSteps steps.</span>
+            <span class="k">if</span> <span class="n">stepSaveN</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">SaveSteps</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save_txt</span><span class="p">()</span>
+                <span class="n">stepSaveN</span> <span class="o">=</span> <span class="mf">0.</span>
+
+            <span class="n">stepN_CNT</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stepNMC</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">log</span><span class="o">.</span><span class="n">dump_point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stepNMC</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">evs_exec</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_txt</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="NeighborKMC.save_txt"><a class="viewcode-back" href="../../../../../api/NeighborKMC.tutorials.A_B2_reaction.surface_100.html#NeighborKMC.tutorials.A_B2_reaction.surface_100.user_kmc.NeighborKMC.save_txt">[docs]</a>    <span class="k">def</span> <span class="nf">save_txt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Saves txt files containing the simulation data.</span>
+
+<span class="sd">        Calls the behind-the-scenes save_txt() method of the base class.</span>
+<span class="sd">        The user should add any optional writes in this method, which</span>
+<span class="sd">        is called every self.SaveSteps steps.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        --------</span>
+<span class="sd">        Add the following line to the end of the method:</span>
+
+<span class="sd">        &gt;&gt;&gt; np.savetxt(&quot;user_stype_ev.txt&quot;, self.stype_ev[0])</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">Log</span><span class="o">.</span><span class="n">save_txt</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, Division of Chemical Physics, Chalmers University of Technology
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

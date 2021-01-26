@@ -14,10 +14,11 @@ The first output contains all the dictionary of parameters, passed as the input 
 
 .. code-block:: python
 
-    Mikkel Jorgensen
+    Mikkel Jorgensen (2015-2019)
+    Noemi Bosio (since 2019)
+    Elisabeth M. Dietze (since 2020)
     Chalmers University of Technology
     Goteborg, Sweden
-    2015-2019
     --------------------------------------------------------------------------------
     Simulation parameters
     pCO       :    2000.0
@@ -28,6 +29,7 @@ The first output contains all the dictionary of parameters, passed as the input 
     tend      :    1e-07
     Nsites    :    432
     --------------------------------------------------------------------------------
+    No time acceleration used.
 
 Next the log begins with printing the simulation step, the time the log-point was dumped, the simulation time, and the number of events fired, respectively:
 
@@ -43,11 +45,12 @@ The ordering of `Events Called` is determined by the order of which the paramete
 Results as .txt files
 ------------------------
 
-:program:`MonteCoffee` generates its output as plaintext (.txt) files, as determined by the method
-`save_txt() in base.NeighborKMC <api/NeighborKMC.base.html#NeighborKMC.base.kmc.NeighborKMCBase.save_txt>`_.
+:program:`MonteCoffee` generates its output as plain-text (.txt) file for basic output and as object in the HDF5 format for more advanced output, as determined by the method
+`save_txt() in base.NeighborKMC <api/NeighborKMC.base.html#NeighborKMC.base.logging.NeighborKMCBase.save_txt>`_.
+
 If desired, this method can be altered to output other information during runtime. The output files are generated using `numpy's savetxt() method <https://docs.scipy.org/doc/numpy/reference/generated/numpy.savetxt.html>`_, and can therefore be loaded using `np.loadtxt() <https://docs.scipy.org/doc/numpy/reference/generated/numpy.loadtxt.html>`_.
 
-The code ouputs the following .txt files once prior to simulation:
+The code outputs the following .txt files once prior to simulation:
 
     - **siteids.txt**: The index of each site, passed as the parameter :code:`ind` when instantiating a :class:`NeighborKMC.user_sites.Site` object. This is useful for storing an :class:`Ase.Atoms` object.
     
@@ -56,33 +59,29 @@ The code ouputs the following .txt files once prior to simulation:
 During the simulation the following .txt files are updated with a frequency specified in :ref:`Options <options_sec>`:
 
     - **mcstep.txt**: The Monte Carlo step corresponding to each line in the other .txt files. This is directly dependent on the updating frequency.
-    - **time.txt**: The simulation time in seconds for every logged monte carlo step.
+    - **time.txt**: The simulation time in seconds for every logged Monte Carlo step.
     - **coverages.txt**: The coverages at each time-step for each lattice-site. The coverages are structured as :code:`coverages[mcstep][site_number]`.
     - **evs_exec.txt**: The total number of event-type executions. For example, to find the total number of executions of event number 0:
-    
-    >>> evs_exec = np.loadtxt("evs_exec.txt")
-    >>> N1 = evs_exec[0]
-    
-    - **sid_ev.txt**: Contains the number events that happened at each site. The array is saved and reset periodically, and therefore the first dimension reflects the number of times the array was written. The array is saved by appending to the .txt file and therefore it is read in by calling numpy's reshape:
+   
+      .. code-block:: python
+       
+           evs_exec = np.loadtxt("evs_exec.txt")
+           N1 = evs_exec[0]
 
-    .. code-block:: python
+  
+    - **detail_site_event_evol.hdf5**: The detailed time evolution of the system, which saves every step. The file can be read in as follows:
 
-        import numpy as np
-        stypes = np.loadtxt("stypes.txt")
-        Nsites = stypes.shape[0]
-        sid_ev = np.loadtxt("sid_ev.txt").reshape(-1, Nsites, Nevents)
+      .. code-block:: python
+      
+           with h5py.File('detail_site_event_evol.hdf5','a') as f2:
+               time_list = np.array(f2["time"]) 
+               event_list = np.array(f2["event"]) 
+               site_list = np.array(f2["site"]) 
+               othersite_list = np.array(f2["othersite"]) 
 
-    Where Nevents refers to the number of event types included in the simulation. The array is then structured as :code:`sid_ev[saved_step][site_number][event_number]`.
-    To find the total number of times event no 0 has been fired for each save [or call to `save_txt() <api/NeighborKMC.base.html#NeighborKMC.base.kmc.NeighborKMCBase.save_txt>`_], a sum is made which corresponds to the output of `evs_exec.txt`:
-    
-    >>> N0_total = [sum(s[:,0])  for s in sid_ev]
-
-    To find the number of executions of event 0 after half the number of total time steps (perhaps steady-state):
-    
-    >>> N0_half_t = sum(N0_total[len(N0_total)/2:])
-    
-    - **sid_ev_other.txt**: Contains the number events that happened, where the site is a neighbor site [see `get_rate(system, site, other_site) <api/NeighborKMC.base.html#NeighborKMC.base.events.EventBase.get_rate>`_]. The array is structured as :code:`sid_ev_other[saved_step, other_site_number, event_number]`. The array is loaded as for `sid_ev.txt`. 
-    
+     Working with this file, one has to be careful, because it can be rather big, despite the compression. In principle hdf5 can be read also with any other hdf5 supporting 
+     programming language. 
+ 
 For further information about analyzing output, see :ref:`analyzecoox` and :ref:`Calculating a turnover frequency <tof>`.
     
     

@@ -1,0 +1,295 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>NeighborKMC.examples.Pt_111_COOx.test &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="../../../../_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Code overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quick.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">User interface (API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>NeighborKMC.examples.Pt_111_COOx.test</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for NeighborKMC.examples.Pt_111_COOx.test</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Script that runs a full example of CO oxidation.</span>
+<span class="sd"> </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">write</span>
+<span class="kn">from</span> <span class="nn">ase.build</span> <span class="kn">import</span> <span class="n">fcc111</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span><span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">.user_sites</span> <span class="kn">import</span> <span class="n">Site</span>
+<span class="kn">from</span> <span class="nn">.user_system</span> <span class="kn">import</span> <span class="n">System</span>
+<span class="kn">from</span> <span class="nn">.user_kmc</span> <span class="kn">import</span> <span class="n">NeighborKMC</span>
+<span class="kn">from</span> <span class="nn">.user_events</span> <span class="kn">import</span> <span class="p">(</span><span class="n">OAdsEvent</span><span class="p">,</span> <span class="n">ODesEvent</span><span class="p">,</span> 
+                         <span class="n">COAdsEvent</span><span class="p">,</span> <span class="n">CODesEvent</span><span class="p">,</span> <span class="n">COOxEvent</span><span class="p">,</span> <span class="n">CODiffEvent</span><span class="p">,</span> <span class="n">ODiffEvent</span><span class="p">)</span>
+
+<div class="viewcode-block" id="run_test"><a class="viewcode-back" href="../../../../api/NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.test.run_test">[docs]</a><span class="k">def</span> <span class="nf">run_test</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Runs the test of A adsorption and desorption over a surface.</span>
+
+<span class="sd">    First, constants are defined and old output files cleared.</span>
+<span class="sd">    Next, the sites, events, system and simulation objects</span>
+<span class="sd">    are loaded, and the simulation is performed.</span>
+
+<span class="sd">    Last, the results are read in from the generated.txt files,</span>
+<span class="sd">    and plotted using matplotlib.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Define constants.</span>
+    <span class="c1"># ------------------------------------------</span>
+    <span class="n">tend</span> <span class="o">=</span> <span class="mf">4.</span>  <span class="c1"># End time of simulation (s)</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="mf">800.</span>   <span class="c1"># Temperature of simulation in K</span>
+    <span class="n">pCO</span> <span class="o">=</span> <span class="mf">2E3</span>  <span class="c1"># CO pressure in Pa</span>
+    <span class="n">pO2</span> <span class="o">=</span> <span class="mf">1E3</span>  <span class="c1"># O2 pressure in Pa</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mf">4.00</span>  <span class="c1"># Lattice Parameter (not related to DFT!)</span>
+    <span class="n">Ncutoff</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.05</span>  <span class="c1"># Nearest neighbor cutoff</span>
+    <span class="c1"># Clear up old output files.</span>
+    <span class="c1"># ------------------------------------------</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;time.txt&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;coverages.txt&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;evs_exec.txt&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;mcstep.txt&quot;</span><span class="p">,</span> <span class="p">[])</span>
+ 
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;rm detail_site_event_evol.hdf5&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Define the sites from ase.Atoms.</span>
+    <span class="c1"># ------------------------------------------</span>
+    <span class="n">atoms</span> <span class="o">=</span> <span class="n">fcc111</span><span class="p">(</span><span class="s2">&quot;Pt&quot;</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">atoms</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;surface.traj&#39;</span><span class="p">)</span>
+    <span class="n">sites</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Create a site for each surface-atom:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)):</span>
+        <span class="n">sites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Site</span><span class="p">(</span><span class="n">stype</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                          <span class="n">covered</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ind</span><span class="o">=</span><span class="n">i</span><span class="p">))</span>
+
+    <span class="c1"># Instantiate a system, events, and simulation.</span>
+    <span class="c1"># ---------------------------------------------</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">sites</span><span class="o">=</span><span class="n">sites</span><span class="p">)</span>
+
+    <span class="c1"># Set the global neighborlist based on distances:</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">set_neighbors</span><span class="p">(</span><span class="n">Ncutoff</span><span class="p">,</span><span class="n">pbc</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">events</span> <span class="o">=</span> <span class="p">[</span><span class="n">COAdsEvent</span><span class="p">,</span> <span class="n">CODesEvent</span><span class="p">,</span> <span class="n">OAdsEvent</span><span class="p">,</span> <span class="n">ODesEvent</span><span class="p">,</span> <span class="n">CODiffEvent</span><span class="p">,</span> <span class="n">ODiffEvent</span><span class="p">,</span> <span class="n">COOxEvent</span><span class="p">]</span>
+
+    <span class="c1"># Specify what events are each others&#39; reverse.</span>
+    <span class="n">reverse_events</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="mi">5</span><span class="p">}</span>
+    <span class="c1">#reverse_events = {0:1, 2:3, 4:4, 5:5}</span>
+
+    <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;pCO&quot;</span><span class="p">:</span> <span class="n">pCO</span><span class="p">,</span> <span class="s2">&quot;pO2&quot;</span><span class="p">:</span> <span class="n">pO2</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span>
+                  <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;COOx Pt(111) reaction simulation&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;reverses &quot;</span><span class="p">:</span> <span class="n">reverse_events</span><span class="p">}</span>
+
+    <span class="c1"># Instantiate simulator object.</span>
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">NeighborKMC</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">tend</span><span class="o">=</span><span class="n">tend</span><span class="p">,</span>
+                      <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
+                      <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">,</span>
+                      <span class="n">rev_events</span><span class="o">=</span><span class="n">reverse_events</span><span class="p">)</span>
+
+    <span class="c1"># Run the simulation.</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">run_kmc</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Simulation end time reached ! ! !&quot;</span><span class="p">)</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">run_test</span><span class="p">()</span>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, Division of Chemical Physics, Chalmers University of Technology
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

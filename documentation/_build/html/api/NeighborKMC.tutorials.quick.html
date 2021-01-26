@@ -1,0 +1,449 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quick start &mdash; MonteCoffee  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Atomic adsorption and desorption" href="NeighborKMC.tutorials.A_ads.html" />
+    <link rel="prev" title="NeighborKMC.tutorials" href="NeighborKMC.tutorials.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> MonteCoffee
+          
+
+          
+            
+            <img src="../_static/avatar.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Code overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User interface (API)</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="NeighborKMC.html">NeighborKMC package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="NeighborKMC.base.html">NeighborKMC.base package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="NeighborKMC.tutorials.html">NeighborKMC.tutorials</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Quick start</a></li>
+<li class="toctree-l4"><a class="reference internal" href="NeighborKMC.tutorials.A_ads.html">Atomic adsorption and desorption</a></li>
+<li class="toctree-l4"><a class="reference internal" href="NeighborKMC.tutorials.B2_ads.html">Dissociative Adsorption of type B<sub>2</sub></a></li>
+<li class="toctree-l4"><a class="reference internal" href="NeighborKMC.tutorials.A_B2_reaction.surface_100.html">Reaction of A + B<sub>2</sub> on a (100) surface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="NeighborKMC.tutorials.A_B2_reaction.truncated_octahedron.html">Reaction of A + B<sub>2</sub> on a NP</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="NeighborKMC.examples.surface.html">NeighborKMC.examples.surface package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../literature.html">Additional reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MonteCoffee</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">User interface (API)</a> &raquo;</li>
+        
+          <li><a href="NeighborKMC.html">NeighborKMC package</a> &raquo;</li>
+        
+          <li><a href="NeighborKMC.tutorials.html">NeighborKMC.tutorials</a> &raquo;</li>
+        
+      <li>Quick start</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/NeighborKMC.tutorials.quick.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="NeighborKMC.tutorials.A_ads.html" class="btn btn-neutral float-right" title="Atomic adsorption and desorption" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="NeighborKMC.tutorials.html" class="btn btn-neutral float-left" title="NeighborKMC.tutorials" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quick-start">
+<span id="quickfile"></span><h1>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-NeighborKMC.tutorials.quick.run_quick">
+<span id="neighborkmc-tutorials-quick-run-quick-py"></span><h2>NeighborKMC.tutorials.quick.run_quick.py<a class="headerlink" href="#module-NeighborKMC.tutorials.quick.run_quick" title="Permalink to this headline">¶</a></h2>
+<p>Script that runs a very simple NN-kMC from one file only to have a quick start.</p>
+<dl class="py class">
+<dt id="NeighborKMC.tutorials.quick.run_quick.Adsorption">
+<em class="property">class </em><code class="sig-prename descclassname">NeighborKMC.tutorials.quick.run_quick.</code><code class="sig-name descname">Adsorption</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/quick/run_quick.html#Adsorption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.quick.run_quick.Adsorption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="base.html#base.events.EventBase" title="base.events.EventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">base.events.EventBase</span></code></a></p>
+<dl class="py method">
+<dt id="NeighborKMC.tutorials.quick.run_quick.Adsorption.do_event">
+<code class="sig-name descname">do_event</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">system</span></em>, <em class="sig-param"><span class="n">site</span></em>, <em class="sig-param"><span class="n">other_site</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/quick/run_quick.html#Adsorption.do_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.quick.run_quick.Adsorption.do_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Template method to perform the event.</p>
+<p>Method needs to be overridden in user_events.py.
+Should change system site coverages by changing
+system.sites[i_site].covered and
+system.sites[other_site].covered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>system</strong> (<a class="reference internal" href="NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.user_system.System" title="NeighborKMC.examples.Pt_111_COOx.user_system.System"><em>System</em></a>) – The system, which the simulation is performed on.</p></li>
+<li><p><strong>i_site</strong> (<em>int</em>) – Index of site in the system.sites list.</p></li>
+<li><p><strong>i_other</strong> (<em>int</em>) – Index of other/neighbor site in the system.sites list.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="NeighborKMC.tutorials.quick.run_quick.Adsorption.get_involve_other">
+<code class="sig-name descname">get_involve_other</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/quick/run_quick.html#Adsorption.get_involve_other"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.quick.run_quick.Adsorption.get_involve_other" title="Permalink to this definition">¶</a></dt>
+<dd><p>Template method to decide if neighboring atoms are effected by event.</p>
+<p>Method needs to be overridden in user_events.py.
+Should return True if event effects neighboring atoms and False if not (e.g. single atom adsorption).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="NeighborKMC.tutorials.quick.run_quick.Adsorption.get_rate">
+<code class="sig-name descname">get_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">system</span></em>, <em class="sig-param"><span class="n">site</span></em>, <em class="sig-param"><span class="n">other_site</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/quick/run_quick.html#Adsorption.get_rate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.quick.run_quick.Adsorption.get_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Template method to determine the rate constant.</p>
+<p>Method needs to be overridden in user_events.py.
+Should return the reaction rate on site number
+i_site, and i_other for multi-site reactions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>system</strong> (<a class="reference internal" href="NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.user_system.System" title="NeighborKMC.examples.Pt_111_COOx.user_system.System"><em>System</em></a>) – The system, which the simulation is performed on.</p></li>
+<li><p><strong>i_site</strong> (<em>int</em>) – Index of site in the system.sites list.</p></li>
+<li><p><strong>i_other</strong> (<em>int</em>) – Index of other/neighbor site in the system.sites list.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>Rate constant of event</strong> – The rate-constant given the current occupation patterns around the
+site-pair i_site and i_other.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="NeighborKMC.tutorials.quick.run_quick.Adsorption.possible">
+<code class="sig-name descname">possible</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">system</span></em>, <em class="sig-param"><span class="n">site</span></em>, <em class="sig-param"><span class="n">other_site</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/quick/run_quick.html#Adsorption.possible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.quick.run_quick.Adsorption.possible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Template method to determine if event is possible.</p>
+<p>Method needs to be overridden in user_events.py.
+Should return True if an event is possible on
+site number i_site and possible a neighbor
+site i_other, given the current site occupations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>system</strong> (<a class="reference internal" href="NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.user_system.System" title="NeighborKMC.examples.Pt_111_COOx.user_system.System"><em>System</em></a>) – The system, which the simulation is performed on.</p></li>
+<li><p><strong>i_site</strong> (<em>int</em>) – Index of site in the system.sites list.</p></li>
+<li><p><strong>i_other</strong> (<em>int</em>) – Index of other/neighbor site in the system.sites list.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>possible</strong> – True if event is possible on site-pair i_site and i_other.
+False if event is impossible on site-pair i_site and i_other.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="NeighborKMC.tutorials.quick.run_quick.Desorption">
+<em class="property">class </em><code class="sig-prename descclassname">NeighborKMC.tutorials.quick.run_quick.</code><code class="sig-name descname">Desorption</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/quick/run_quick.html#Desorption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.quick.run_quick.Desorption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="base.html#base.events.EventBase" title="base.events.EventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">base.events.EventBase</span></code></a></p>
+<dl class="py method">
+<dt id="NeighborKMC.tutorials.quick.run_quick.Desorption.do_event">
+<code class="sig-name descname">do_event</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">system</span></em>, <em class="sig-param"><span class="n">site</span></em>, <em class="sig-param"><span class="n">other_site</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/quick/run_quick.html#Desorption.do_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.quick.run_quick.Desorption.do_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Template method to perform the event.</p>
+<p>Method needs to be overridden in user_events.py.
+Should change system site coverages by changing
+system.sites[i_site].covered and
+system.sites[other_site].covered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>system</strong> (<a class="reference internal" href="NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.user_system.System" title="NeighborKMC.examples.Pt_111_COOx.user_system.System"><em>System</em></a>) – The system, which the simulation is performed on.</p></li>
+<li><p><strong>i_site</strong> (<em>int</em>) – Index of site in the system.sites list.</p></li>
+<li><p><strong>i_other</strong> (<em>int</em>) – Index of other/neighbor site in the system.sites list.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="NeighborKMC.tutorials.quick.run_quick.Desorption.get_involve_other">
+<code class="sig-name descname">get_involve_other</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/quick/run_quick.html#Desorption.get_involve_other"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.quick.run_quick.Desorption.get_involve_other" title="Permalink to this definition">¶</a></dt>
+<dd><p>Template method to decide if neighboring atoms are effected by event.</p>
+<p>Method needs to be overridden in user_events.py.
+Should return True if event effects neighboring atoms and False if not (e.g. single atom adsorption).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="NeighborKMC.tutorials.quick.run_quick.Desorption.get_rate">
+<code class="sig-name descname">get_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">system</span></em>, <em class="sig-param"><span class="n">site</span></em>, <em class="sig-param"><span class="n">other_site</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/quick/run_quick.html#Desorption.get_rate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.quick.run_quick.Desorption.get_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Template method to determine the rate constant.</p>
+<p>Method needs to be overridden in user_events.py.
+Should return the reaction rate on site number
+i_site, and i_other for multi-site reactions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>system</strong> (<a class="reference internal" href="NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.user_system.System" title="NeighborKMC.examples.Pt_111_COOx.user_system.System"><em>System</em></a>) – The system, which the simulation is performed on.</p></li>
+<li><p><strong>i_site</strong> (<em>int</em>) – Index of site in the system.sites list.</p></li>
+<li><p><strong>i_other</strong> (<em>int</em>) – Index of other/neighbor site in the system.sites list.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>Rate constant of event</strong> – The rate-constant given the current occupation patterns around the
+site-pair i_site and i_other.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="NeighborKMC.tutorials.quick.run_quick.Desorption.possible">
+<code class="sig-name descname">possible</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">system</span></em>, <em class="sig-param"><span class="n">site</span></em>, <em class="sig-param"><span class="n">other_site</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/quick/run_quick.html#Desorption.possible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.quick.run_quick.Desorption.possible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Template method to determine if event is possible.</p>
+<p>Method needs to be overridden in user_events.py.
+Should return True if an event is possible on
+site number i_site and possible a neighbor
+site i_other, given the current site occupations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>system</strong> (<a class="reference internal" href="NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.user_system.System" title="NeighborKMC.examples.Pt_111_COOx.user_system.System"><em>System</em></a>) – The system, which the simulation is performed on.</p></li>
+<li><p><strong>i_site</strong> (<em>int</em>) – Index of site in the system.sites list.</p></li>
+<li><p><strong>i_other</strong> (<em>int</em>) – Index of other/neighbor site in the system.sites list.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>possible</strong> – True if event is possible on site-pair i_site and i_other.
+False if event is impossible on site-pair i_site and i_other.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="NeighborKMC.tutorials.quick.run_quick.simple_NKMC">
+<em class="property">class </em><code class="sig-prename descclassname">NeighborKMC.tutorials.quick.run_quick.</code><code class="sig-name descname">simple_NKMC</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">system</span></em>, <em class="sig-param"><span class="n">tend</span></em>, <em class="sig-param"><span class="n">parameters</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">events</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/quick/run_quick.html#simple_NKMC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.quick.run_quick.simple_NKMC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="base.html#base.kmc.NeighborKMCBase" title="base.kmc.NeighborKMCBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">base.kmc.NeighborKMCBase</span></code></a></p>
+<dl class="py method">
+<dt id="NeighborKMC.tutorials.quick.run_quick.simple_NKMC.run_kmc">
+<code class="sig-name descname">run_kmc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/quick/run_quick.html#simple_NKMC.run_kmc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.quick.run_quick.simple_NKMC.run_kmc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the kMC simulation (abstract method)</p>
+<p>This method must be overridden by the child class in user_kmc.NeighborKMC.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>NotImplementedError:</strong> – If called.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="NeighborKMC.tutorials.A_ads.html" class="btn btn-neutral float-right" title="Atomic adsorption and desorption" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="NeighborKMC.tutorials.html" class="btn btn-neutral float-left" title="NeighborKMC.tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, Division of Chemical Physics, Chalmers University of Technology
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

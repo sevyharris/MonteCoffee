@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
 
   
   
@@ -37,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="NeighborKMC.examples" href="NeighborKMC.examples.html" />
+    <link rel="next" title="Reaction of A + B2 on a (100) surface" href="NeighborKMC.tutorials.A_B2_reaction.surface_100.html" />
     <link rel="prev" title="Atomic adsorption and desorption" href="NeighborKMC.tutorials.A_ads.html" /> 
 </head>
 
@@ -99,11 +101,14 @@
 <li class="toctree-l2 current"><a class="reference internal" href="NeighborKMC.html">NeighborKMC package</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="NeighborKMC.base.html">NeighborKMC.base package</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="NeighborKMC.tutorials.html">NeighborKMC.tutorials</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="NeighborKMC.tutorials.quick.html">Quick start</a></li>
 <li class="toctree-l4"><a class="reference internal" href="NeighborKMC.tutorials.A_ads.html">Atomic adsorption and desorption</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Dissociative Adsorption of type B<sub>2</sub></a></li>
+<li class="toctree-l4"><a class="reference internal" href="NeighborKMC.tutorials.A_B2_reaction.surface_100.html">Reaction of A + B<sub>2</sub> on a (100) surface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="NeighborKMC.tutorials.A_B2_reaction.truncated_octahedron.html">Reaction of A + B<sub>2</sub> on a NP</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="NeighborKMC.examples.html">NeighborKMC.examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="NeighborKMC.examples.surface.html">NeighborKMC.examples.surface package</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +184,7 @@
   
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
-        <a href="NeighborKMC.examples.html" class="btn btn-neutral float-right" title="NeighborKMC.examples" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="NeighborKMC.tutorials.A_B2_reaction.surface_100.html" class="btn btn-neutral float-right" title="Reaction of A + B2 on a (100) surface" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="NeighborKMC.tutorials.A_ads.html" class="btn btn-neutral float-left" title="Atomic adsorption and desorption" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -196,12 +201,6 @@
 <div class="section" id="module-NeighborKMC.tutorials.B2_ads.test">
 <span id="neighborkmc-tutorials-b2-ads-test-py"></span><h2>NeighborKMC.tutorials.B2_ads.test.py<a class="headerlink" href="#module-NeighborKMC.tutorials.B2_ads.test" title="Permalink to this headline">¶</a></h2>
 <p>Script that runs the tutorial of B2 adsorption and desorption on a surface</p>
-<dl class="py function">
-<dt id="NeighborKMC.tutorials.B2_ads.test.readFile">
-<code class="sig-prename descclassname">NeighborKMC.tutorials.B2_ads.test.</code><code class="sig-name descname">readFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">r</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/B2_ads/test.html#readFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.test.readFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads in a text file and gives back a list which has the structure of columns, rows</p>
-</dd></dl>
-
 <dl class="py function">
 <dt id="NeighborKMC.tutorials.B2_ads.test.run_test">
 <code class="sig-prename descclassname">NeighborKMC.tutorials.B2_ads.test.</code><code class="sig-name descname">run_test</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/tutorials/B2_ads/test.html#run_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.tutorials.B2_ads.test.run_test" title="Permalink to this definition">¶</a></dt>
@@ -316,7 +315,10 @@ Performing the event removes two B from two sites.</p>
 to run the simulation. The main engine is found in base.kmc.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p>Module <a class="reference internal" href="NeighborKMC.base.html#module-NeighborKMC.base.kmc" title="NeighborKMC.base.kmc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NeighborKMC.base.kmc</span></code></a></p>
+<dl class="simple">
+<dt><code class="xref py py-mod docutils literal notranslate"><span class="pre">Module</span></code></dt><dd><p>base.kmc</p>
+</dd>
+</dl>
 </div>
 <dl class="py class">
 <dt id="NeighborKMC.tutorials.B2_ads.user_kmc.NeighborKMC">
@@ -330,9 +332,10 @@ count the number of times each event-type is executed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>system</strong> (<a class="reference internal" href="NeighborKMC.examples.GCN.html#NeighborKMC.examples.NP_general_coordination_number.user_system.System" title="NeighborKMC.examples.NP_general_coordination_number.user_system.System"><em>System</em></a>) – The system instance to perform the simulation on.</p></li>
+<li><p><strong>system</strong> (<a class="reference internal" href="NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.user_system.System" title="NeighborKMC.examples.Pt_111_COOx.user_system.System"><em>System</em></a>) – The system instance to perform the simulation on.</p></li>
 <li><p><strong>tend</strong> (<em>float</em>) – Simulation end-time.</p></li>
-<li><p><strong>parameters</strong> (<em>dict</em>) – Parameters used, which are dumped to the log file.</p></li>
+<li><p><strong>parameters</strong> (<em>dict</em>) – Parameters used, which are dumped to the log file.
+Example: parameters = {‘pCO’:1E2,’T’:700,’Note’:’Test simulation’}</p></li>
 <li><p><strong>events</strong> (<em>list</em><em>(</em><em>classobj</em><em>)</em>) – <p>A list pointing to the event classes that defines the events.
 The order of list is kept consistently throughout the simulation.
 For example, given the event classes:</p>
@@ -378,8 +381,12 @@ dict of reverse events (rev_events). Then a NeighborKMC object is instantiated a
 </div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p>Module <a class="reference internal" href="NeighborKMC.base.html#module-NeighborKMC.base.kmc" title="NeighborKMC.base.kmc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NeighborKMC.base.kmc</span></code></a>
-Module <a class="reference internal" href="NeighborKMC.base.html#module-NeighborKMC.base.basin" title="NeighborKMC.base.basin"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NeighborKMC.base.basin</span></code></a></p>
+<dl class="simple">
+<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></dt><dd><p>base.kmc</p>
+</dd>
+<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></dt><dd><p>base.basin</p>
+</dd>
+</dl>
 </div>
 <dl class="py method">
 <dt id="NeighborKMC.tutorials.B2_ads.user_kmc.NeighborKMC.load_reverses">
@@ -468,7 +475,7 @@ according to coverages.</p>
 <dd><p>The sites that constitute the system.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>list(<a class="reference internal" href="NeighborKMC.examples.GCN.html#NeighborKMC.examples.NP_general_coordination_number.user_sites.Site" title="NeighborKMC.examples.NP_general_coordination_number.user_sites.Site">Site</a>)</p>
+<dd class="field-odd"><p>list(<a class="reference internal" href="NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.user_sites.Site" title="NeighborKMC.examples.Pt_111_COOx.user_sites.Site">Site</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -529,7 +536,7 @@ than Ncutoff in this direction in self.atoms.</p></li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="NeighborKMC.examples.html" class="btn btn-neutral float-right" title="NeighborKMC.examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="NeighborKMC.tutorials.A_B2_reaction.surface_100.html" class="btn btn-neutral float-right" title="Reaction of A + B2 on a (100) surface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="NeighborKMC.tutorials.A_ads.html" class="btn btn-neutral float-left" title="Atomic adsorption and desorption" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -542,7 +549,7 @@ than Ncutoff in this direction in self.atoms.</p></li>
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2019, Mikkel Jørgensen
+        &copy; Copyright 2021, Division of Chemical Physics, Chalmers University of Technology
 
     </p>
   </div>

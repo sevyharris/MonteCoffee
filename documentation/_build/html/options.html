@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
 
   
   
@@ -38,7 +40,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="User interface (API)" href="api/index.html" />
-    <link rel="prev" title="Parallel simulations" href="examples/parallel.html" /> 
+    <link rel="prev" title="Calculating a turnover frequency" href="examples/tof.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -164,7 +166,7 @@
         <a href="api/index.html" class="btn btn-neutral float-right" title="User interface (API)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="examples/parallel.html" class="btn btn-neutral float-left" title="Parallel simulations" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="examples/tof.html" class="btn btn-neutral float-left" title="Calculating a turnover frequency" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -181,22 +183,31 @@ The options contained in <cite>kMC_options.cfg</cite> are:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p><strong>nspecies</strong> (int): how many species are included in the simulation. This integer decides how many coverages are written to the log.</p></li>
-<li><p><strong>nninteractions</strong> (int): describes the extent of the nearest neighbor interactions. Specifying 1 makes the local search for newly enabled events extent to second nearest neighbor. See <a class="reference external" href="api/NeighborKMC.base.html#NeighborKMC.base.kmc.NeighborKMCBase.frm_update">frm_update()</a>.</p></li>
+<li><p><strong>nninteractions</strong> (int): describes the extent of the nearest neighbor interactions. Specifying 1 makes the local search for newly enabled events extent to second nearest neighbor.</p></li>
 <li><p><strong>savesteps</strong> (int): Number of Monte Carlo steps between saving the .txt files.</p></li>
 <li><p><strong>logsteps</strong> (int): Number of steps to skip when saving .txt files and printing the log. Setting it to 1000 makes the log output and code save every 1000th simulation step.</p></li>
-<li><p><strong>tinfinity</strong> (float): The time to consider infinite. This time is set for the occourence time of impossible events.</p></li>
+<li><p><strong>tinfinity</strong> (float): The time to consider infinite. This time is set for the occurrence time of impossible events.</p></li>
 <li><p><strong>savecovs</strong> (bool): If True, the site-occupations (coverages) are saved periodically to coverages.txt.</p></li>
 <li><p><strong>verbose</strong> (bool): If True, prints verbose information.</p></li>
+<li><p><strong>write_atoms</strong> (bool): If True, write out traj files of coverages (may have to be customized depending on the system).</p></li>
 </ul>
 </div></blockquote>
 <p>Options solely related relates to the acceleration of kMC simulations (See <a class="reference internal" href="examples/acceleration.html#accelerating"><span class="std std-ref">accelerating</span></a>):</p>
 <blockquote>
+<div><ul>
+<li><p><strong>use_scaling_algorithm</strong> (str): If None or False, no time acceleration will be used. In the current version the following three schemes are available:</p>
+<blockquote>
 <div><ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">scale_constant</span></code> – scaling with a constant factor</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">scale_rate</span></code> – scaling based on the reaction rates</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">scale_rate_constant</span></code> – scaling based on the reaction rate constants</p></li>
+</ul>
+</div></blockquote>
+</li>
 <li><p><strong>delta</strong> (float): The reversibility tolerance for quasi-equilibrated events. This determines the criterion for whether reactions are quasi-equilibrated. Setting delta=0.25 implies that there must be no more than 25 percent difference in rates of a forward and backward reaction to deem it quasi-equilibrated.</p></li>
 <li><p><strong>nf</strong> (int): A factor that separates fast and slow events. nf = 1000 means that quasi-equilibrated events are slowed down to maximally 1000 times the non-equilibrated events.</p></li>
 <li><p><strong>ns</strong> (int): The frequency of adjusting barriers for quasi-equilibrated events.</p></li>
 <li><p><strong>ne</strong> (int): How many events back to remember when adjusting barriers of quasi-equilibrated events, and the minimum number of times an event must be observed before scaling.</p></li>
-<li><p><strong>usekavg</strong> (bool): If True, the average rate-constant of non-equilibrated events in the superbasin is used to scale the barriers of the quasi-equilibrated events, and not the actual rates. <cite>usekavg=True</cite> provides a more stable time-step, but can be overly conservative.</p></li>
 </ul>
 </div></blockquote>
 </div>
@@ -212,7 +223,7 @@ The options contained in <cite>kMC_options.cfg</cite> are:</p>
         <a href="api/index.html" class="btn btn-neutral float-right" title="User interface (API)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="examples/parallel.html" class="btn btn-neutral float-left" title="Parallel simulations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="examples/tof.html" class="btn btn-neutral float-left" title="Calculating a turnover frequency" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -222,7 +233,7 @@ The options contained in <cite>kMC_options.cfg</cite> are:</p>
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2019, Mikkel Jørgensen
+        &copy; Copyright 2021, Division of Chemical Physics, Chalmers University of Technology
 
     </p>
   </div>

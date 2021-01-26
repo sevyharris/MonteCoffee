@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
 
   
   
@@ -37,8 +39,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Periodic boundary conditions" href="pbc.html" />
-    <link rel="prev" title="CO oxidation on a Pt nanoparticle" href="coox.html" /> 
+    <link rel="next" title="Options" href="../options.html" />
+    <link rel="prev" title="Adsorbate-adsorbate interactions" href="adsads.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -94,13 +96,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on a Pt nanoparticle</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Calculating a turnover frequency</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pbc.html">Periodic boundary conditions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adsads.html">Adsorbate-adsorbate interactions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sites.html">Special site-rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on Pt(111)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="acceleration.html">Accelerating kMC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="parallel.html">Parallel simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adsads.html">Adsorbate-adsorbate interactions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Calculating a turnover frequency</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../options.html">Options</a></li>
@@ -172,10 +171,10 @@
   
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
-        <a href="pbc.html" class="btn btn-neutral float-right" title="Periodic boundary conditions" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../options.html" class="btn btn-neutral float-right" title="Options" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="coox.html" class="btn btn-neutral float-left" title="CO oxidation on a Pt nanoparticle" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="adsads.html" class="btn btn-neutral float-left" title="Adsorbate-adsorbate interactions" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -225,7 +224,7 @@ To calculate the system’s overall TOF, we load in the time, and events that we
 </div>
 <p>Here, the last half of the simulation is used, and for all unique types of sites the indices are noted.
 Then the number of sites with the current stype is noted, and finally the TOF is calculated.</p>
-<p><strong>Statistical averaging</strong> should be done to address the convergence of the TOF. This can be done by <a class="reference internal" href="parallel.html#parallel"><span class="std std-ref">running multiple
+<p><strong>Statistical averaging</strong> should be done to address the convergence of the TOF. This can be done by <a class="reference internal" href="../tutorials/parallel.html#parallel"><span class="std std-ref">running multiple
 identical simulations in parallel</span></a>.</p>
 </div>
 
@@ -237,10 +236,10 @@ identical simulations in parallel</span></a>.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pbc.html" class="btn btn-neutral float-right" title="Periodic boundary conditions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../options.html" class="btn btn-neutral float-right" title="Options" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="coox.html" class="btn btn-neutral float-left" title="CO oxidation on a Pt nanoparticle" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="adsads.html" class="btn btn-neutral float-left" title="Adsorbate-adsorbate interactions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -250,7 +249,7 @@ identical simulations in parallel</span></a>.</p>
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2019, Mikkel Jørgensen
+        &copy; Copyright 2021, Division of Chemical Physics, Chalmers University of Technology
 
     </p>
   </div>

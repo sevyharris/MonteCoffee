@@ -32,7 +32,7 @@ class B2AdsEvent(EventBase):
 
     def get_rate(self, system, site, other_site):
         R = .5 
-        return  R * self.alpha 
+        return  R
 
     def do_event(self, system, site, other_site):
         system.sites[site].covered = 1
@@ -61,7 +61,7 @@ class B2DesEvent(EventBase):
 
     def get_rate(self, system, site, other_site):
         R = .5 
-        return R * self.alpha
+        return R
 
     def do_event(self, system, site, other_site):
         system.sites[site].covered = 0
@@ -88,7 +88,9 @@ class AAdsEvent(EventBase):
     def get_rate(self, system, site, other_site):
         if system.sites[site].stype == 0: 
            R = 1.
-        return  R * self.alpha 
+        elif system.sites[site].stype == 1: 
+           R = 1.
+        return  R 
 
     def do_event(self, system, site, other_site):
         system.sites[site].covered = 2 
@@ -98,7 +100,7 @@ class AAdsEvent(EventBase):
 
 class ADesEvent(EventBase):
     """A desorption event class.
-    The event is A* -> A + *.
+    The event is A\* -> A + \*.
     """
 
     def __init__(self, params):
@@ -112,7 +114,7 @@ class ADesEvent(EventBase):
 
     def get_rate(self, system, site, other_site):
         R = 1. 
-        return R * self.alpha
+        return R 
 
     def do_event(self, system, site, other_site):
         system.sites[site].covered = 0
@@ -135,8 +137,8 @@ class ABreactEvent(EventBase):
             return False
 
     def get_rate(self, system, site, other_site):
-        R = .5 
-        return R * self.alpha
+        R = .1 
+        return R  
 
 
     def do_event(self, system, site, other_site):
@@ -161,8 +163,8 @@ class ADiffEvent(EventBase):
             return False
 
     def get_rate(self, system, site, other_site):
-        R = 100. 
-        return R * self.alpha
+        R = 1. 
+        return R 
 
 
     def do_event(self, system, site, other_site):
@@ -189,8 +191,8 @@ class BDiffEvent(EventBase):
             return False
 
     def get_rate(self, system, site, other_site):
-        R = 100.
-        return R * self.alpha
+        R = 1.
+        return R 
 
 
     def do_event(self, system, site, other_site):

@@ -1,15 +1,16 @@
-"""Script that runs a full example of CO oxidation.
+"""Script that runs A+B2 reaction over a truncated Octahedron 
  
 """
 import numpy as np
 from ase.io import write
 from ase.cluster import Octahedron
 import sys
-from user_sites import Site
-from user_system import System
-from user_kmc import NeighborKMC
-from user_events import (B2AdsEvent, B2DesEvent, 
+from .user_sites import Site
+from .user_system import System
+from .user_kmc import NeighborKMC
+from .user_events import (B2AdsEvent, B2DesEvent, 
                          AAdsEvent, ADesEvent, ABreactEvent, ADiffEvent, BDiffEvent)
+import os
 
 def run_test():
     """Runs the test of A adsorption and desorption over a surface.
@@ -24,7 +25,7 @@ def run_test():
     """
     # Define constants.
     # ------------------------------------------
-    tend = 5.  # End time of simulation (s)
+    tend = 40.  # End time of simulation (s)
     a = 4.00  # Lattice Parameter (not related to DFT!)
     Ncutoff = a / np.sqrt(2.) + 0.05  # Nearest neighbor cutoff
     # Clear up old output files.
@@ -36,7 +37,7 @@ def run_test():
 
     # Define the sites from ase.Atoms.
     # ------------------------------------------
-    atoms = Octahedron("Pt", 12, cutoff=4, latticeconstant = a)
+    atoms = Octahedron("Pt", 8, cutoff=3, latticeconstant = a)
     sites = []
     write('trunc_octa.traj', atoms)
     # Create a site for each surface-atom:
@@ -57,7 +58,7 @@ def run_test():
         else:
             sstype = 1
         sites.append(Site(stype=sstype,
-                          covered=0, ind=[indic]))
+                          covered=0, ind=indic))
 
     # Instantiate a system, events, and simulation.
     # ---------------------------------------------
@@ -68,18 +69,13 @@ def run_test():
     
     events = [B2AdsEvent, B2DesEvent, AAdsEvent,ADesEvent,ABreactEvent,ADiffEvent,BDiffEvent]
 
-    # Specify what events are each others' reverse.
-    reverse_events = {0: 1, 2:3, 5:5, 6:6}
-
 #    parameters = {"pCO": pCO, "pO2": pO2, "T": T,
-    parameters = { "Name": "AB reaction simulation",
-                  "reverses ": reverse_events}
+    parameters = { "Name": "AB reaction simulation"}
 
     # Instantiate simulator object.
     sim = NeighborKMC(system=p, tend=tend,
                       parameters=parameters,
-                      events=events,
-                      rev_events=reverse_events)
+                      events=events)
 
     # Run the simulation.
     sim.run_kmc()

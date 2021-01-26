@@ -15,7 +15,7 @@ to contain all reaction entropies.
 """
 
 import numpy as np
-from user_constants import *
+from .user_constants import *
 
 # Constants
 # -------------

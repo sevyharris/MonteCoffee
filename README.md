@@ -42,6 +42,8 @@ To build documentation manually, see *documentation/HOWTO_BUILD_DOCUMENTATION.tx
 
 - Noemi Bosio, Chalmers university of technology, Sweden.
 
+- Elisabeth M. Dietze, Chalmers university of technology, Sweden.
+
 ## Troubles / Ideas / Questions?
 
 Please post an issue to the git, and we will try to reply ASAP.

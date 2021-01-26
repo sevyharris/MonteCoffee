@@ -5,9 +5,9 @@ Adsorption of atomic species A on surface
 ******************************************
 
 In this first tutorial the first steps to run and set-up a :program:`MonteCoffee` simulation are shown, which require only a view steps. 
-The entire files needed for this tutorial are shown in `test.py <../api/NeighborKMC.tutorials.A_ads.html#module-NeighborKMC.tutrials.A_ads.test>`_ and the references to the other modules mentioned herein.
+The entire files needed for this tutorial are shown in `test.py <../api/NeighborKMC.tutorials.A_ads.html#module-NeighborKMC.tutorials.A_ads.test>`_ and the references to the other modules mentioned herein.
 
-In this guide the simple adsorption/desorption of an atomic species on a plain surface is demonstrated and the results compaired to the solution of a mean-field model. The reaction to simulate is:
+In this guide the simple adsorption/desorption of an atomic species on a plain surface is demonstrated and the results compared to the solution of a mean-field model. The reaction to simulate is:
 
 .. math::
 
@@ -23,7 +23,7 @@ with :math:`\theta` the coverage of species A, :math:`t` the time and :math:`r_{
 
 Before the simulation, constants, reaction sites and system as well as the events have to defined which will be shown in the next steps.  
 
-First, various  parameters must be set and which can be stort in a parameter-dictionairy:
+First, various  parameters must be set and which can be stored in a parameter-dictionary:
 
 .. code-block:: python
 
@@ -57,7 +57,7 @@ Now we can create a site, free of adsorbates, for each surface atom with a :code
 
 Here, the block :code:`ind=[i]` stores the index of the atom in the :class:`ASE.Atoms` object on the :class:`NeighborKMC.user_sites.Site` object.
 
-Finally, we need to define neighborlists. It is simplest to define this according to the nearest neighbor distances:
+Finally, we need to define neighbor lists. It is simplest to define this according to the nearest neighbor distances:
 
 .. code-block:: python
 
@@ -66,7 +66,7 @@ Finally, we need to define neighborlists. It is simplest to define this accordin
      for i, s in enumerate(sites):
          for j, sother in enumerate(sites):
              # Length of distance vector:
-             dcur = self.atoms.getdistance(s.ind[0], sother.ind[0], mic = pbc)
+             dcur = self.atoms.get_distance(s.ind[0], sother.ind[0], mic = pbc)
 
              # If the site is a neighbor:
              if dcur < Ncutoff and j != i:
@@ -130,22 +130,20 @@ Each event requires a method :code:`do_event(self,system, site, other_site)` to 
 
 In this case, up on adsorption the site is covered with the species A, represented by the number 1 within the code. 
 
-To take care of the correct time evolution of the :program:`MonteCoffee` we introduce an aditional block wich returns if either neighboring sites are involved or not. Here no neighbouring sites are involved, thus we :code:`return False`. 
+To take care of the correct time evolution in :program:`MonteCoffee` we introduce an additional block which returns if either neighboring sites are involved or not. Here no neighboring sites are involved, thus we :code:`return False`. 
 
 .. code-block:: python 
 
         def get_involve_other(self):
             return False 
 
-To know which events are reverse to each other we store:
+Finally, the events are stored in the main simulation file, in a list:
 
 .. code-block:: python
 
-     reverse_events = {0: 1}
      events = [AAdsEvent, ADesEvent]
 
-Here event 0 has a reverse event 1.
-The numbering of events is determined by the order in the list :code:`events` defined here.
+The numbering of events is determined by the order in the list :code:`events` defined here and the output is numbered accordingly. 
 
 Define and run simulation
 -----------------------------
@@ -191,7 +189,7 @@ To compare the effect of the used simulation surface on the result and also comp
 
 .. image:: ../images/compare_MF_kMC.pdf 
 
-If an increase in the number of sites is not possible, it is recommanded that multiple identically prepared simulations are performed.
+If an increase in the number of sites is not possible, it is recommended that multiple identically prepared simulations are performed.
 (see example on :ref:`Parallel simulations <parallel>` and :ref:`calculating turnover frequencies <tof>`).
 
 

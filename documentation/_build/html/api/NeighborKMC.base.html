@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
 
   
   
@@ -108,7 +110,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="NeighborKMC.tutorials.html">NeighborKMC.tutorials</a></li>
-<li class="toctree-l3"><a class="reference internal" href="NeighborKMC.examples.html">NeighborKMC.examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="NeighborKMC.examples.surface.html">NeighborKMC.examples.surface package</a></li>
 </ul>
 </li>
 </ul>
@@ -208,10 +210,11 @@ This is mainly based on the work of Dybeck et al. (<a class="reference external"
 <code class="sig-prename descclassname">NeighborKMC.base.basin.</code><code class="sig-name descname">leave_superbasin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sim</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/base/basin.html#leave_superbasin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.base.basin.leave_superbasin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Leaves the superbasin.</p>
 <p>Resets all rate-scalings and statistics
-connected to the superbasin.</p>
+connected to the superbasin. The sufficiently executed event list is
+reset with rescaling.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>sim</strong> (<a class="reference internal" href="NeighborKMC.examples.GCN.html#NeighborKMC.examples.NP_general_coordination_number.user_kmc.NeighborKMC" title="NeighborKMC.examples.NP_general_coordination_number.user_kmc.NeighborKMC"><em>NeighborKMC</em></a>) – main simulator object to perform rescaling of events for.</p>
+<dd class="field-odd"><p><strong>sim</strong> (<a class="reference internal" href="NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.user_kmc.NeighborKMC" title="NeighborKMC.examples.Pt_111_COOx.user_kmc.NeighborKMC"><em>NeighborKMC</em></a>) – main simulator object to perform rescaling of events for.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -220,43 +223,25 @@ connected to the superbasin.</p>
 <dt id="NeighborKMC.base.basin.rescaling">
 <code class="sig-prename descclassname">NeighborKMC.base.basin.</code><code class="sig-name descname">rescaling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sim</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/base/basin.html#rescaling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.base.basin.rescaling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rescales the times of occurrences for events.</p>
-<p>Rescales the times according to each quasi-equilibrated
+<p>Rescales the times according to each quasi-equilibrated and sufficiently executed
 events <em>alpha</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>sim</strong> (<a class="reference internal" href="NeighborKMC.examples.GCN.html#NeighborKMC.examples.NP_general_coordination_number.user_kmc.NeighborKMC" title="NeighborKMC.examples.NP_general_coordination_number.user_kmc.NeighborKMC"><em>NeighborKMC</em></a>) – main simulator object to perform rescaling of events for.</p>
+<dd class="field-odd"><p><strong>sim</strong> (<a class="reference internal" href="NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.user_kmc.NeighborKMC" title="NeighborKMC.examples.Pt_111_COOx.user_kmc.NeighborKMC"><em>NeighborKMC</em></a>) – main simulator object to perform rescaling of events for.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="NeighborKMC.base.basin.scaling_ks">
-<code class="sig-prename descclassname">NeighborKMC.base.basin.</code><code class="sig-name descname">scaling_ks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sim</span></em>, <em class="sig-param"><span class="n">noneqevents</span></em>, <em class="sig-param"><span class="n">dtS</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/base/basin.html#scaling_ks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.base.basin.scaling_ks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes rate-constant based superbasin escape rate.</p>
-<p>Calculates superbasin escape rate according to the maximal rate-constant of
-events escaping the superbasin. This can be good for stability of the time-step.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sim</strong> (<a class="reference internal" href="NeighborKMC.examples.GCN.html#NeighborKMC.examples.NP_general_coordination_number.user_kmc.NeighborKMC" title="NeighborKMC.examples.NP_general_coordination_number.user_kmc.NeighborKMC"><em>NeighborKMC</em></a>) – main simulator object to perform rescaling of events for.</p></li>
-<li><p><strong>noneqevents</strong> (<em>array-like</em>) – The indices of events that are not in equilibrium, according to the loading
-order passed to <em>sim</em>.</p></li>
-<li><p><strong>dtS</strong> (<em>float</em>) – The time spent in current superbasin (not used, but here for technical reasons as
-scaling_rs() needs this argument.)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The estimated superbasin escape-rate.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
+<dt id="NeighborKMC.base.basin.scale_constant">
+<code class="sig-prename descclassname">NeighborKMC.base.basin.</code><code class="sig-name descname">scale_constant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sim</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/base/basin.html#scale_constant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.base.basin.scale_constant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rate based on a constant frequency factor for deeceleration
+as used for example by Hoffmann and Bligaard</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="NeighborKMC.base.basin.scaling_rs">
-<code class="sig-prename descclassname">NeighborKMC.base.basin.</code><code class="sig-name descname">scaling_rs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sim</span></em>, <em class="sig-param"><span class="n">noneqevents</span></em>, <em class="sig-param"><span class="n">dtS</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/base/basin.html#scaling_rs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.base.basin.scaling_rs" title="Permalink to this definition">¶</a></dt>
+<dt id="NeighborKMC.base.basin.scale_rate">
+<code class="sig-prename descclassname">NeighborKMC.base.basin.</code><code class="sig-name descname">scale_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sim</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/base/basin.html#scale_rate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.base.basin.scale_rate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rate based superbasin escape time.</p>
 <p>Calculates superbasin escape time
 according to non-equilibrated event rates escaping
@@ -266,11 +251,9 @@ of Dybeck et al.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>sim</strong> (<a class="reference internal" href="NeighborKMC.examples.GCN.html#NeighborKMC.examples.NP_general_coordination_number.user_kmc.NeighborKMC" title="NeighborKMC.examples.NP_general_coordination_number.user_kmc.NeighborKMC"><em>NeighborKMC</em></a>) – main simulator object to perform rescaling of events for.</p></li>
+<li><p><strong>sim</strong> (<a class="reference internal" href="NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.user_kmc.NeighborKMC" title="NeighborKMC.examples.Pt_111_COOx.user_kmc.NeighborKMC"><em>NeighborKMC</em></a>) – main simulator object to perform rescaling of events for.</p></li>
 <li><p><strong>noneqevents</strong> (<em>list</em><em>(</em><em>int</em><em>)</em>) – The indices of events that are not in equilibrium, according to the loading
 order passed to <em>sim</em>.</p></li>
-<li><p><strong>dtS</strong> (<em>float</em>) – The time spent in current superbasin (not used, but here for technical reasons as
-scaling_rs() needs this argument.)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -280,6 +263,12 @@ scaling_rs() needs this argument.)</p></li>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="NeighborKMC.base.basin.scale_rate_constant">
+<code class="sig-prename descclassname">NeighborKMC.base.basin.</code><code class="sig-name descname">scale_rate_constant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sim</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/base/basin.html#scale_rate_constant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.base.basin.scale_rate_constant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rates based on the mean of the current observation period</p>
 </dd></dl>
 
 <dl class="py function">
@@ -294,9 +283,10 @@ of the generalized temporal acceleration scheme of Dybeck et al.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>sim</strong> (<a class="reference internal" href="NeighborKMC.examples.GCN.html#NeighborKMC.examples.NP_general_coordination_number.user_kmc.NeighborKMC" title="NeighborKMC.examples.NP_general_coordination_number.user_kmc.NeighborKMC"><em>NeighborKMC</em></a>) – main simulator object to perform rescaling of events for.</p></li>
+<li><p><strong>sim</strong> (<a class="reference internal" href="NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.user_kmc.NeighborKMC" title="NeighborKMC.examples.Pt_111_COOx.user_kmc.NeighborKMC"><em>NeighborKMC</em></a>) – main simulator object to perform rescaling of events for.</p></li>
 <li><p><strong>evtype</strong> (<em>int</em>) – The index of the event-type of the currently attempted Monte Carlo step.</p></li>
 <li><p><strong>dt</strong> (<em>float</em>) – The time-step of the currently attempted Monte Carlo step.</p></li>
+<li><p><strong>do_scaling</strong> (<em>bool</em>) – Bool if the rate constants are to be rescaled or not.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
@@ -377,7 +367,7 @@ system.sites[other_site].covered.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>system</strong> (<a class="reference internal" href="NeighborKMC.examples.GCN.html#NeighborKMC.examples.NP_general_coordination_number.user_system.System" title="NeighborKMC.examples.NP_general_coordination_number.user_system.System"><em>System</em></a>) – The system, which the simulation is performed on.</p></li>
+<li><p><strong>system</strong> (<a class="reference internal" href="NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.user_system.System" title="NeighborKMC.examples.Pt_111_COOx.user_system.System"><em>System</em></a>) – The system, which the simulation is performed on.</p></li>
 <li><p><strong>i_site</strong> (<em>int</em>) – Index of site in the system.sites list.</p></li>
 <li><p><strong>i_other</strong> (<em>int</em>) – Index of other/neighbor site in the system.sites list.</p></li>
 </ul>
@@ -403,7 +393,7 @@ i_site, and i_other for multi-site reactions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>system</strong> (<a class="reference internal" href="NeighborKMC.examples.GCN.html#NeighborKMC.examples.NP_general_coordination_number.user_system.System" title="NeighborKMC.examples.NP_general_coordination_number.user_system.System"><em>System</em></a>) – The system, which the simulation is performed on.</p></li>
+<li><p><strong>system</strong> (<a class="reference internal" href="NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.user_system.System" title="NeighborKMC.examples.Pt_111_COOx.user_system.System"><em>System</em></a>) – The system, which the simulation is performed on.</p></li>
 <li><p><strong>i_site</strong> (<em>int</em>) – Index of site in the system.sites list.</p></li>
 <li><p><strong>i_other</strong> (<em>int</em>) – Index of other/neighbor site in the system.sites list.</p></li>
 </ul>
@@ -429,7 +419,7 @@ site i_other, given the current site occupations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>system</strong> (<a class="reference internal" href="NeighborKMC.examples.GCN.html#NeighborKMC.examples.NP_general_coordination_number.user_system.System" title="NeighborKMC.examples.NP_general_coordination_number.user_system.System"><em>System</em></a>) – The system, which the simulation is performed on.</p></li>
+<li><p><strong>system</strong> (<a class="reference internal" href="NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.user_system.System" title="NeighborKMC.examples.Pt_111_COOx.user_system.System"><em>System</em></a>) – The system, which the simulation is performed on.</p></li>
 <li><p><strong>i_site</strong> (<em>int</em>) – Index of site in the system.sites list.</p></li>
 <li><p><strong>i_other</strong> (<em>int</em>) – Index of other/neighbor site in the system.sites list.</p></li>
 </ul>
@@ -457,181 +447,57 @@ simulations with the first reaction method.</p>
 <em class="property">class </em><code class="sig-prename descclassname">NeighborKMC.base.kmc.</code><code class="sig-name descname">NeighborKMCBase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">system</span></em>, <em class="sig-param"><span class="n">tend</span></em>, <em class="sig-param"><span class="n">parameters</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/base/kmc.html#NeighborKMCBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.base.kmc.NeighborKMCBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Main class for performing MonteCoffee simulations.</p>
-<p>Assigns a system to the simulation, stores parameters,
+<blockquote>
+<div><p>Assigns a system to the simulation, stores parameters,
 and reads in software configuration from the separate
 file kMC_options.cfg.
 Then it sets the time equal to zero and prepares to perform
 frm kinetic Monte Carlo simulations.</p>
-<dl class="py attribute">
-<dt id="NeighborKMC.base.kmc.NeighborKMCBase.system">
-<code class="sig-name descname">system</code><a class="headerlink" href="#NeighborKMC.base.kmc.NeighborKMCBase.system" title="Permalink to this definition">¶</a></dt>
-<dd><p>The system instance to perform the simulation on.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="NeighborKMC.examples.GCN.html#NeighborKMC.examples.NP_general_coordination_number.user_system.System" title="NeighborKMC.examples.NP_general_coordination_number.user_system.System">System</a></p>
+<p>Attributes:</p>
+<dl class="simple">
+<dt>system: System</dt><dd><p>The system instance to perform the simulation on.</p>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="NeighborKMC.base.kmc.NeighborKMCBase.tend">
-<code class="sig-name descname">tend</code><a class="headerlink" href="#NeighborKMC.base.kmc.NeighborKMCBase.tend" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simulation end-time, given in seconds.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>float</p>
+<dt>tend: float</dt><dd><p>Simulation end-time, given in seconds.</p>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="NeighborKMC.base.kmc.NeighborKMCBase.parameters">
-<code class="sig-name descname">parameters</code><a class="headerlink" href="#NeighborKMC.base.kmc.NeighborKMCBase.parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>parameters used to calculate rate-constants and to dump to log files.
+<dt>parameters: dict</dt><dd><p>parameters used to calculate rate-constants and to dump to log files.
 Example: parameters = {‘pCO’:1E2,’T’:700,’Note’:’Test simulation’}</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>dict</p>
+</dd>
+<dt>t: float</dt><dd><p>Current simulation time in seconds.</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="NeighborKMC.base.kmc.NeighborKMCBase.t">
-<code class="sig-name descname">t</code><a class="headerlink" href="#NeighborKMC.base.kmc.NeighborKMCBase.t" title="Permalink to this definition">¶</a></dt>
-<dd><p>Current simulation time in seconds.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt>
-<code class="sig-name descname">\*Attributes used to keep track of events (where and when they happen)*</code></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="NeighborKMC.base.kmc.NeighborKMCBase.siteslist">
-<code class="sig-name descname">siteslist</code><a class="headerlink" href="#NeighborKMC.base.kmc.NeighborKMCBase.siteslist" title="Permalink to this definition">¶</a></dt>
-<dd><p>The list of sites for each specific event.
+<p><em>Attributes used to keep track of events (where and when they happen)</em></p>
+<dl class="simple">
+<dt>siteslist: list(int)</dt><dd><p>The list of sites for each specific event.
 This list has the length: len(self.events)*len(self.sites)*len(self.sites).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>list(int)</p>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="NeighborKMC.base.kmc.NeighborKMCBase.other_sitelist">
-<code class="sig-name descname">other_sitelist</code><a class="headerlink" href="#NeighborKMC.base.kmc.NeighborKMCBase.other_sitelist" title="Permalink to this definition">¶</a></dt>
-<dd><p>The list of neighbor sites for each specific event.
+<dt>other_sitelist: list(int)</dt><dd><p>The list of neighbor sites for each specific event.
 This list has the length: len(self.events)*len(self.sites)*len(self.sites).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>list(int)</p>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="NeighborKMC.base.kmc.NeighborKMCBase.lastsel">
-<code class="sig-name descname">lastsel</code><a class="headerlink" href="#NeighborKMC.base.kmc.NeighborKMCBase.lastsel" title="Permalink to this definition">¶</a></dt>
-<dd><p>The int of the last selected site.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>int</p>
+<dt>lastsel: int</dt><dd><p>The int of the last selected site.</p>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="NeighborKMC.base.kmc.NeighborKMCBase.lastother">
-<code class="sig-name descname">lastother</code><a class="headerlink" href="#NeighborKMC.base.kmc.NeighborKMCBase.lastother" title="Permalink to this definition">¶</a></dt>
-<dd><p>The int of the last selected neighbor site.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>int</p>
+<dt>lastother: int</dt><dd><p>The int of the last selected neighbor site.</p>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="NeighborKMC.base.kmc.NeighborKMCBase.rindex">
-<code class="sig-name descname">rindex</code><a class="headerlink" href="#NeighborKMC.base.kmc.NeighborKMCBase.rindex" title="Permalink to this definition">¶</a></dt>
-<dd><p>The index of the specific events in lists like self.frm_times. For example to find the indices
+<dt>rindex: list(list(list(int)))):</dt><dd><p>The index of the specific events in lists like self.frm_times. For example to find the indices
 of site no i and event no j and neighbor number k to site i, call
 rindex[i][j][k].</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>list(list(list(int)))):</p>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="NeighborKMC.base.kmc.NeighborKMCBase.possible_evs">
-<code class="sig-name descname">possible_evs</code><a class="headerlink" href="#NeighborKMC.base.kmc.NeighborKMCBase.possible_evs" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of events that are possible, used for superbasin algorithms.
+<dt>possible_evs: list(int):</dt><dd><p>List of events that are possible, used for superbasin algorithms.
 This list has the length: len(self.events)*len(self.sites)*len(self.sites).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>list(int):</p>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="NeighborKMC.base.kmc.NeighborKMCBase.evs">
-<code class="sig-name descname">evs</code><a class="headerlink" href="#NeighborKMC.base.kmc.NeighborKMCBase.evs" title="Permalink to this definition">¶</a></dt>
-<dd><p>The event numbers for each specific event.
+<dt>evs: numpy.ndarray(int):</dt><dd><p>The event numbers for each specific event.
 This list has the length: len(self.events)*len(self.sites)*len(self.sites).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>numpy.ndarray(int):</p>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="NeighborKMC.base.kmc.NeighborKMCBase.rs">
-<code class="sig-name descname">rs</code><a class="headerlink" href="#NeighborKMC.base.kmc.NeighborKMCBase.rs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Rate constants of specific events.
+<dt>rs: numpy.ndarray(float)</dt><dd><p>Rate constants of specific events.
 This list has the length: len(self.events)*len(self.sites)*len(self.sites).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>numpy.ndarray(float)</p>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="NeighborKMC.base.kmc.NeighborKMCBase.wheres">
-<code class="sig-name descname">wheres</code><a class="headerlink" href="#NeighborKMC.base.kmc.NeighborKMCBase.wheres" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of all the positions of the event-types in the lists with length
+<dt>wheres: list(list(int)):</dt><dd><p>List of all the positions of the event-types in the lists with length
 len(self.events)*len(self.sites)*len(self.sites). To find all site-indices where event i
 happens, call wheres[i].</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>list(list(int)):</p>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="NeighborKMC.base.kmc.NeighborKMCBase.involve_other">
-<code class="sig-name descname">involve_other</code><a class="headerlink" href="#NeighborKMC.base.kmc.NeighborKMCBase.involve_other" title="Permalink to this definition">¶</a></dt>
-<dd><p>-False if the event happens only on one specific site
+<dt>involve_other: bool:</dt><dd><p>-False if the event happens only on one specific site
 -True if the event modifies two or more sites</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>bool:</p>
 </dd>
 </dl>
-</dd></dl>
-
 <p><em>Statistics counting attributes used to log and write output</em></p>
 <dl class="simple">
 <dt>SaveSteps: int</dt><dd><p>The number of Monte Carlo steps between saving the .txt files.</p>
@@ -640,15 +506,14 @@ happens, call wheres[i].</p>
 </dd>
 <dt>tinfinity: float</dt><dd><p>What time to put impossible events to.</p>
 </dd>
-<dt>nninter: int</dt><dd><p>The extent of the adsorbate-adsorbate interactions, given as the number
-of nearest-neighbor interactions.</p>
-</dd>
 <dt>Nspecies: int</dt><dd><p>How many different types of species are in the simulation. Used to
 print and log.</p>
 </dd>
+<dt>nninter: int</dt><dd><p>How deep is the nearest-neighbor interaction (depth of effect of event on neighbor properties)</p>
+</dd>
 <dt>verbose: bool</dt><dd><p>If True, the code prints verbose information.</p>
 </dd>
-<dt>save_coverages: bool</dt><dd><p>If True, coverages are saved to coverages.txt. This can result in
+<dt>save_coverages: bool</dt><dd><p>If True, coverages are saved to coverages.txt and the site, othersite and event evolution in detail_site_event_evol.hdf5. This can result in
 large files.</p>
 </dd>
 <dt>write_atoms: bool</dt><dd><p>If True, the surface atoms are written with the step number in the filename. It has to be adjusted for adsorption species individually.</p>
@@ -665,15 +530,7 @@ large files.</p>
 To find the site-occupation at step no self.MCstep[i] and site j, call
 covered[i][j].</p>
 </dd>
-<dt>stype_ev: dict(list(int))</dt><dd><p>How many events are fired of each type (values) for each site type (keys).</p>
-</dd>
-<dt>stype_ev_other: dict(list(int))</dt><dd><p>How many events are fired for neighbor sites of each type (values) for each site type (keys).</p>
-</dd>
-<dt>sid_ev: dict(list(int))</dt><dd><p>How many events are fired of each type for each site-index. To find the number event j fired
-on site number i, call sid_ev[i][j].</p>
-</dd>
-<dt>sid_ev_other: dict(list(int))</dt><dd><p>How many events are fired of each type for each other-site-index. To find the number event j fired
-on site number i, call sid_ev[i][j].</p>
+<dt>system_evolution: list(list())</dt><dd><p>List which contains a list of the fired event with at site, other site and time</p>
 </dd>
 <dt>used_ijk: list(tuples(site,event,othersite))</dt><dd><p>List of tuples representing the unique neighbor-event pairs avoiding double counting.</p>
 </dd>
@@ -682,7 +539,7 @@ on site number i, call sid_ev[i][j].</p>
 <dl class="simple">
 <dt>equilEV: list(int)</dt><dd><p>A list of the event-indices that are quasi-equilibrated.</p>
 </dd>
-<dt>scaling_func: function</dt><dd><p>Reference to a function to compute the superbasin-escape rate.</p>
+<dt>Suffex: list(int)</dt><dd><p>A list of the event-indices that are quasi-equilibrated and sufficiently executed.</p>
 </dd>
 <dt>tgen: list(float)</dt><dd><p>A list of when each specific event was generated.
 This list has the length: len(self.events)*len(self.sites)*len(self.sites).</p>
@@ -690,8 +547,7 @@ This list has the length: len(self.events)*len(self.sites)*len(self.sites).</p>
 <dt>us: list(float)</dt><dd><p>A list of random deviates used when each specific event was generated.
 This list has the length: len(self.events)*len(self.sites)*len(self.sites).</p>
 </dd>
-<dt>ks: list(float)</dt><dd><p>A list of rate-constants obtained when each specific event was generated.
-This list has the length: len(self.events)*len(self.sites)*len(self.sites).</p>
+<dt>rescale: bool</dt><dd><p>Defines if the rates have to be rescaled and frm timelist updated.</p>
 </dd>
 <dt>r_S: numpy.ndarray(float)</dt><dd><p>The cumulative rates in the current superbasin.</p>
 </dd>
@@ -699,38 +555,27 @@ This list has the length: len(self.events)*len(self.sites)*len(self.sites).</p>
 </dd>
 <dt>nem: numpy.ndarray(int)</dt><dd><p>The number of times an event was performed the last self.ne steps</p>
 </dd>
-</dl>
-<p>Nm: list(numpy.ndarray(int))</p>
-<dl class="simple">
+<dt>use_scaling_algorithm: bool</dt><dd><p>Defines if the rate constants are scaled in any way or not</p>
+</dd>
 <dt>delta: float</dt><dd><p>Reversibility tolerance to determine if reactions have become quasi-equilibrated.</p>
 </dd>
-<dt>Nf: int</dt><dd><p>The average number of steps a quasi-equilibrated event should be observed in each superbasin.
-When self.usekavg == True, this simply means that a low Nf is more aggressive scaling.</p>
+<dt>Nf: int</dt><dd><p>The average number of steps a quasi-equilibrated event should be observed in each superbasin.</p>
 </dd>
 <dt>Ns: int</dt><dd><p>The frequency of barrier scaling.</p>
 </dd>
 <dt>ne: int</dt><dd><p>The minimum number of times to see a quasi-equilibrated event in each superbasin.</p>
 </dd>
-<dt>usekavg: bool</dt><dd><p>Use average rate-constants to scale the rate-constants as opposed
-to rates.</p>
-</dd>
-<dt>ksavg: list(float):</dt><dd><p>The average rate-constant for each event type.</p>
-</dd>
-<dt>Suffex: list(int)</dt><dd><p>List of sufficiently executed events.</p>
-</dd>
 <dt>isup: int</dt><dd><p>How many steps were taken in the current superbasin.</p>
 </dd>
-<dt>pm: int</dt><dd><p>Step floor divisor to determine position in self.nem.</p>
-</dd>
 </dl>
+</div></blockquote>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></dt><dd><p>user_kmc</p>
-</dd>
-<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></dt><dd><p>base.basin</p>
+<dt>Module <a class="reference internal" href="#module-NeighborKMC.base.basin" title="NeighborKMC.base.basin"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NeighborKMC.base.basin</span></code></a></dt><dd><p>for documentation about the superbasin.</p>
 </dd>
 </dl>
+<p>user_kmc - files in the tutorial/examples folder for aditional specifications.</p>
 </div>
 <dl class="py method">
 <dt id="NeighborKMC.base.kmc.NeighborKMCBase.frm_init">
@@ -808,7 +653,7 @@ options from <em>kMC_options.cfg</em>.</p>
 <p>Defines the Log class to log results of a kMC run.</p>
 <dl class="py class">
 <dt id="NeighborKMC.base.logging.Log">
-<em class="property">class </em><code class="sig-prename descclassname">NeighborKMC.base.logging.</code><code class="sig-name descname">Log</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/base/logging.html#Log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.base.logging.Log" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">NeighborKMC.base.logging.</code><code class="sig-name descname">Log</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span></em>, <em class="sig-param"><span class="n">accelparams</span><span class="o">=</span><span class="default_value">{'on': False}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/base/logging.html#Log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.base.logging.Log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Handles logging of kMC simulations.</p>
 <p>Initializes a filename based on the CPU date and time.
@@ -875,7 +720,7 @@ visualize the reaction trajectory. This is currently not implemented.</p>
 
 <dl class="py method">
 <dt id="NeighborKMC.base.logging.Log.save_txt">
-<code class="sig-name descname">save_txt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/base/logging.html#Log.save_txt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.base.logging.Log.save_txt" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save_txt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">save_step</span><span class="o">=</span><span class="default_value">1000.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/NeighborKMC/base/logging.html#Log.save_txt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborKMC.base.logging.Log.save_txt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves txt files containing the simulation data.</p>
 <p>Saves the number of events executed on
 the different types of sites, the time vs mcstep,
@@ -1016,7 +861,7 @@ by the method verify_nlist().</p>
 <dd><p>The list of sites that constitute the system.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="NeighborKMC.examples.GCN.html#NeighborKMC.examples.NP_general_coordination_number.user_sites.Site" title="NeighborKMC.examples.NP_general_coordination_number.user_sites.Site">Site</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="NeighborKMC.examples.surface.html#NeighborKMC.examples.Pt_111_COOx.user_sites.Site" title="NeighborKMC.examples.Pt_111_COOx.user_sites.Site">Site</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1132,7 +977,7 @@ also be present in the neighborlist of A.</p>
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2019, Mikkel Jørgensen
+        &copy; Copyright 2021, Division of Chemical Physics, Chalmers University of Technology
 
     </p>
   </div>

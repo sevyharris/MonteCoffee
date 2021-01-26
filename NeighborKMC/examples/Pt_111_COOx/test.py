@@ -5,10 +5,10 @@ import numpy as np
 from ase.io import write
 from ase.build import fcc111
 import sys,os
-from user_sites import Site
-from user_system import System
-from user_kmc import NeighborKMC
-from user_events import (OAdsEvent, ODesEvent, 
+from .user_sites import Site
+from .user_system import System
+from .user_kmc import NeighborKMC
+from .user_events import (OAdsEvent, ODesEvent, 
                          COAdsEvent, CODesEvent, COOxEvent, CODiffEvent, ODiffEvent)
 
 def run_test():
@@ -41,7 +41,7 @@ def run_test():
 
     # Define the sites from ase.Atoms.
     # ------------------------------------------
-    atoms = fcc111("Pt", a = a, size = (10,10,1))
+    atoms = fcc111("Pt", a = a, size = (5,5,1))
     atoms.write('surface.traj')
     sites = []
     # Create a site for each surface-atom:

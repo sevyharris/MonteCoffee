@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
 
   
   
@@ -37,8 +39,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Parallel simulations" href="parallel.html" />
-    <link rel="prev" title="Special site-rules" href="sites.html" /> 
+    <link rel="next" title="Adsorbate-adsorbate interactions" href="adsads.html" />
+    <link rel="prev" title="CO oxidation on Pt(111)" href="coox.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -94,13 +96,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on a Pt nanoparticle</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tof.html">Calculating a turnover frequency</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pbc.html">Periodic boundary conditions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adsads.html">Adsorbate-adsorbate interactions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sites.html">Special site-rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on Pt(111)</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Accelerating kMC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="parallel.html">Parallel simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adsads.html">Adsorbate-adsorbate interactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tof.html">Calculating a turnover frequency</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../options.html">Options</a></li>
@@ -172,10 +171,10 @@
   
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
-        <a href="parallel.html" class="btn btn-neutral float-right" title="Parallel simulations" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="adsads.html" class="btn btn-neutral float-right" title="Adsorbate-adsorbate interactions" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sites.html" class="btn btn-neutral float-left" title="Special site-rules" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="coox.html" class="btn btn-neutral float-left" title="CO oxidation on Pt(111)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -186,27 +185,54 @@
             
   <span class="target" id="accelerating"></span><div class="section" id="accelerating-kmc">
 <span id="index-0"></span><h1>Accelerating kMC<a class="headerlink" href="#accelerating-kmc" title="Permalink to this headline">¶</a></h1>
-<p>The acceleration of kMC in <strong class="program">MonteCoffee</strong> is based on the <cite>Generalized temporal acceleration scheme</cite> of <a class="reference internal" href="../literature.html#literature"><span class="std std-ref">Dybeck et al</span></a>.
-The code determines which events are fast and likely quasi-equilibrated, and slows down these events periodically.
-This is done by comparing the rates or rate constants (see <a class="reference internal" href="../options.html#options-sec"><span class="std std-ref">options</span></a>) of frequently executed
-quasi-equilibrated events to the infrequently executed quasi-equilibrated events and non-equilibrated events. In that manner,
-the fastest events are slowed down until a non-equilibrated event proceeds and the rate-constants are unscaled again.</p>
-<p>After a scaling period of  <span class="math notranslate nohighlight">\(N_s\)</span> steps, the algorithm determines if any new reactions have become quasi-equilibrated
+<p>In <strong class="program">MonteCoffee</strong> three different time acceleration schemes are implemented.
+All of them are based on the super-basin hopping concept, e.g. explained here: <cite>Generalized temporal acceleration scheme</cite> (<a class="reference internal" href="../literature.html#literature"><span class="std std-ref">Dybeck et al</span></a>).
+Best, one can picture this form of time acceleration in the following way: While executing reactions a super-basin <span class="math notranslate nohighlight">\(S\)</span> is explored. The already explored
+region is called <span class="math notranslate nohighlight">\(S_A\)</span> and the region to be explored, <span class="math notranslate nohighlight">\(S_B\)</span>. The explored area is extended while executing reversible reactions. The whole super-basin <span class="math notranslate nohighlight">\(S\)</span> can be left
+up-on executing a non reversible reaction, belonging to <span class="math notranslate nohighlight">\(S_N\)</span>. The scaling is based on the average time needed to exit the current super-basin <span class="math notranslate nohighlight">\(S\)</span>.
+The following picture visualizes the described super-basin ‘hopping’. On the left side, the super-basin <span class="math notranslate nohighlight">\(S\)</span> is shown and how it is exited, entering a new super-basin <span class="math notranslate nohighlight">\(S'\)</span> on the right side, by an event belonging to <span class="math notranslate nohighlight">\(S_N\)</span>.</p>
+<img alt="../_images/visualization_superbasin.pdf" class="align-center" src="../_images/visualization_superbasin.pdf" />
+<p>The most basic is the scaling of equilibrated reactions <span class="math notranslate nohighlight">\(R_\mathrm{eq}\)</span> with a
+constant factor <span class="math notranslate nohighlight">\(N_\mathrm{f}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[R_\mathrm{eq} = \frac{1}{N_\mathrm{f}} \cdot R.\]</div>
+<p>The other two methods are based on the rate constants or the rate respectively. The scaling of the rate is adapted from the <cite>Generalized temporal acceleration scheme</cite> by <a class="reference internal" href="../literature.html#literature"><span class="std std-ref">Dybeck et al</span></a> and the rate constant based scaling follows the same principle.
+In general, the code determines which events are fast and thus likely quasi-equilibrated, and slows down these events periodically.
+This is done by comparing the rates (rate constants) of frequently executed
+quasi-equilibrated events with infrequently executed quasi-equilibrated events and non-equilibrated events. In that manner,
+the fastest events are continuously slowed down until a non-equilibrated event proceeds upon which the rate constants are unscaled again.</p>
+<p>In detail, after a scaling period of  <span class="math notranslate nohighlight">\(N_s\)</span> steps, the algorithm determines if any new reactions have become quasi-equilibrated
 by comparing the number of times the event has proceeded forward and backward the last <span class="math notranslate nohighlight">\(n_e\)</span> simulation steps.
-A reaction is deemed quasi-equilibrated if it has been fired at least <span class="math notranslate nohighlight">\(n_e\)</span> times, and for the last <span class="math notranslate nohighlight">\(n_e\)</span> steps:</p>
+A reaction is deemed quasi-equilibrated if it has been executed at least <span class="math notranslate nohighlight">\(n_e\)</span> times, and fulfills:</p>
 <div class="math notranslate nohighlight">
 \begin{equation}
-\dfrac{|N_f - N_b|}{N_f + N_b} &lt; \delta
-\end{equation}</div><p>where <span class="math notranslate nohighlight">\(\delta \in [0,1]\)</span> is a tolerance for determining if the event is reversible. The quasi-equilibrated reactions are slowed down every <span class="math notranslate nohighlight">\(N_s\)</span> steps with the factor</p>
+\dfrac{|n_f - n_b|}{n_f + n_b} &lt; \delta
+\end{equation}</div><p>where <span class="math notranslate nohighlight">\(\delta \in [0,1]\)</span> is a tolerance for determining if the event is reversible and <span class="math notranslate nohighlight">\(n_{f,b}\)</span> are
+the number of executed forward and backward events of one type of reaction.
+The quasi-equilibrated reaction scaling factor is updated every <span class="math notranslate nohighlight">\(N_s\)</span> steps:</p>
 <div class="math notranslate nohighlight">
 \begin{equation}
 \alpha_m = N_f\dfrac{2r_S}{r_{m,f}+r_{m,b}}
-\end{equation}</div><p>where <span class="math notranslate nohighlight">\(N_f\)</span> is a factor to separate quasi-equilibrated an non-equilibrated events, <span class="math notranslate nohighlight">\(r_S\)</span> is the sum of
-rates of non-equilibrated or non-sufficiently-executed events, and <span class="math notranslate nohighlight">\(r_{m,f},r_{m,b}\)</span> are the forward and backward rates of the reaction in question.</p>
-<p>In <strong class="program">MonteCoffee</strong>, it is default to use the average <cite>rate-constants</cite> instead of rates as described above.
-This is chosen because rate-constants are more stable, and using rates can lead to unreasonable time-steps for multiple systems.
-Rate-constant based scaling is, however, conservative and can be switched off in <a class="reference internal" href="../options.html#options-sec"><span class="std std-ref">kMC_options.cfg</span></a>.</p>
-<p>To accelerate the MonteCoffee simulation, in principle just specify which events are each others reverse reactions.
+\end{equation}</div><p>where <span class="math notranslate nohighlight">\(N_f\)</span> is a factor to separate quasi-equilibrated and non-equilibrated events, <span class="math notranslate nohighlight">\(r_S\)</span> is the sum of
+rates of non-equilibrated and non-sufficiently-executed events, and <span class="math notranslate nohighlight">\(r_{m,f},r_{m,b}\)</span> are the forward and backward rates of the reaction in question.
+The factor of 2 accounts for the forth and back reaction.</p>
+<p>For the rate based scaling <span class="math notranslate nohighlight">\(r_S\)</span> is defined as:</p>
+<div class="math notranslate nohighlight">
+\[r_S = \sum_{n\in S_A}\sum_{m\in S_B,S_N}r_{m,n}\cdot\Delta t_n\]</div>
+<p>with the sum over the observation time period (<span class="math notranslate nohighlight">\(n\)</span>) which the system spend in the superbasin <span class="math notranslate nohighlight">\(S_A\)</span> and all processes (<span class="math notranslate nohighlight">\(m\)</span>) which are either non-reversible
+(in <span class="math notranslate nohighlight">\(S_N\)</span>) or not sufficiently executed (in <span class="math notranslate nohighlight">\(S_B\)</span>). The rate of the forward reaction <span class="math notranslate nohighlight">\(r_{m,f}\)</span> is, similarly to the back reaction,
+(<span class="math notranslate nohighlight">\(r_{m,b}\)</span>) defined as:</p>
+<div class="math notranslate nohighlight">
+\[r_{m,f} = \sum_{n\in S_A}r_n^f\cdot\Delta t_n\]</div>
+<p>Here <span class="math notranslate nohighlight">\(m\)</span> is the index of the equilibrated event of which the factor <span class="math notranslate nohighlight">\(\alpha_m\)</span> is calculated.</p>
+<p>For the scaling based on the rate constant not the sum over the observation period is evaluated,
+but the mean of the rate constant over the time period spend in <span class="math notranslate nohighlight">\(S_A\)</span>.
+With changing the variable from <span class="math notranslate nohighlight">\(r\)</span> to <span class="math notranslate nohighlight">\(k\)</span> one gets:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}k_S &amp;= \sum_{m\in S_B, S_N} \left\langle k_m \right\rangle_{n\in S_A}\\
+k_{m,f} &amp;= \left\langle k^f \right\rangle_{n\in S_A}\end{split}\]</div>
+<p><span class="math notranslate nohighlight">\(k_{m,b}\)</span> is similar to <span class="math notranslate nohighlight">\(k_{m,f}\)</span>, only for the corresponding back reaction.</p>
+<p>In practice, to accelerate the MonteCoffee simulation, one needs in principle just to specify which events are each others reverse reactions.
 Assume that we have two event-classes named <cite>A</cite> and <cite>B</cite> that are reverse reactions to each other, and a irreversible event called <cite>Z</cite>.
 To accelerate the simulation, we instantiate the <code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_kmc.NeighborKMC</span></code> object as follows</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">user_kmc</span> <span class="kn">import</span> <span class="n">NeighborKMC</span>
@@ -221,7 +247,7 @@ To accelerate the simulation, we instantiate the <code class="xref py py-class d
                   <span class="n">rev_events</span><span class="o">=</span><span class="n">reverse_events</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><strong>N.B.</strong> one must ensure that the <cite>get_rate()</cite> method of all reversible events multiplies the return with <code class="code docutils literal notranslate"><span class="pre">self.alpha</span></code>, for example as:</p>
+<p><strong>Note</strong> one must ensure that the <cite>get_rate()</cite> method of all reversible events multiplies the return with <code class="code docutils literal notranslate"><span class="pre">self.alpha</span></code>, for example as:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
 <span class="o">...</span>
     <span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
@@ -229,6 +255,74 @@ To accelerate the simulation, we instantiate the <code class="xref py py-class d
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">R</span>  <span class="c1"># alpha needed for temporal acceleration.</span>
 </pre></div>
 </div>
+<p>After defining the different events and reversed events the question is which different parameters to use for the time acceleration.
+In principle we have a four-dimensional parameter space (<span class="math notranslate nohighlight">\(\delta,n_e,N_s \mathrm{and} N_f\)</span>).
+Nevertheless by some intuition and looking what this parameters actually are and do, we can reduce the necessity of converging all of them.</p>
+<p>First we take a look on the parameter <span class="math notranslate nohighlight">\(\delta\)</span>. It defines when a process has reached equilibrium. Because of statistical fluctuations it is sensible to choose a value within <span class="math notranslate nohighlight">\(\delta \in [0.1,0.3]\)</span>, but in principle any of these values is fine. The second easily to determine parameter is <span class="math notranslate nohighlight">\(n_e\)</span>, which is the number of least executions of either the forward or the reverse reaction for an event to be registered as quasi-equilibrated. From a conceptional point of view it is reasonable to choose <span class="math notranslate nohighlight">\(50 &lt; n_e &lt; 500\)</span>. With 50 necessary executions before an event is accounted as quasi equilibrated one ensures the kinetic consistency but if <span class="math notranslate nohighlight">\(n_e\)</span> is too large the simulation time is unnecessarily prolonged.</p>
+<p>The other two parameters <span class="math notranslate nohighlight">\(N_s\)</span> and <span class="math notranslate nohighlight">\(N_f\)</span> can not be so easily guessed and thus it is recommended to converge them separately. Here <span class="math notranslate nohighlight">\(N_s\)</span> is the number of steps after which we check if quasi-equilibrated events are sufficiently executed and if that is the case, update the time acceleration parameter <code class="code docutils literal notranslate"><span class="pre">self.alpha</span></code>. In principle, one doesn’t expect too many changes, depending on <span class="math notranslate nohighlight">\(N_s\)</span>, thus the most important parameter to converge is <span class="math notranslate nohighlight">\(N_f\)</span>.</p>
+<p>In the following we show the convergence of the time acceleration parameters for the three schemes and their efficiency compared to a normal kinetic MonteCarlo simulation at the example
+of CO oxidation over a Pt(111) surface. For the simulations we chose <span class="math notranslate nohighlight">\(\delta = 0.2\)</span> and <span class="math notranslate nohighlight">\(n_e = 100\)</span>.
+The parameters for the CO oxidation are: <span class="math notranslate nohighlight">\(T=800\)</span> K, <span class="math notranslate nohighlight">\(p_{\mathrm{CO}}=2\cdot 10^3\)</span> Pa and <span class="math notranslate nohighlight">\(p_{\mathrm{O}_2}=10^3\)</span> Pa. The Pt(111) surface is modeled using
+a <span class="math notranslate nohighlight">\(14\times 14\)</span> surface, consisting of 196 surface sites and applying periodic boundary conditions. The reason to do time acceleration, is because of events on very different
+time scales, as can be seen in the following figure:</p>
+<img alt="../_images/reaction_rates_Pt_COOx.pdf" class="align-center" src="../_images/reaction_rates_Pt_COOx.pdf" />
+<p>The presented energetics in this example are based on <a class="reference external" href="https://pubs.acs.org/doi/10.1021/acscatal.7b01194">M. Jørgensen and H. Grönbeck, ACS Catal., 7, 5054-5061 (2017)</a> , with the diffusion energy of CO <span class="math notranslate nohighlight">\(E_\mathrm{CO}^\mathrm{diff}=0.53\)</span> eV,
+instead of 0.08 eV to achieve comparability between the kinetic MonteCarlo and time accelerated kinetic MonteCarlo. For completeness we include in
+<a class="reference internal" href="#figconstrat"><span class="std std-numref">Fig. 4</span></a> also the results of the very low activation energy for diffusion of CO. In principle, the overall TOF is mainly determined by the slow events.
+Thus as long as CO diffusion is fast in comparison with with other events, the result is unaffected.
+Overall the rates for CO oxidation on Pt(111) are not so dissimilar. Thus the achieved efficiency by using time acceleration is not particularly high.</p>
+<p>In the following, we show the convergence of the turn over frequency (TOF) per site per second with respect to <span class="math notranslate nohighlight">\(N_f\)</span>
+and the corresponding efficiency which is defined as ratio of <span class="math notranslate nohighlight">\(N^{80}_\mathrm{kMC}\)</span> to <span class="math notranslate nohighlight">\(N^{80}_\mathrm{accel.}\)</span> for the three
+different time acceleration schemes (<code class="code docutils literal notranslate"><span class="pre">scale_constant</span></code>, <code class="code docutils literal notranslate"><span class="pre">scale_rate_constant</span></code> and <code class="code docutils literal notranslate"><span class="pre">scale_rate</span></code>). The efficiency is defined so,
+that if <span class="math notranslate nohighlight">\(N^{80}_\mathrm{kMC} &gt; N^{80}_\mathrm{accel.}\)</span> then the accelerated simulation has a higher efficiency than the
+standard kinetic Monte Carlo and the efficiency is larger than 1.</p>
+<p><a class="reference internal" href="#figconstscal"><span class="std std-numref">Fig. 3</span></a> A shows the results obtained using the time acceleration option: <code class="code docutils literal notranslate"><span class="pre">scale_constant</span></code>, which is the simplest scheme
+of the three implemented. It can be seen that up to <span class="math notranslate nohighlight">\(N_f=100\)</span> the TOF obtained in the blue curve agrees well with the reference value.
+Only if the scaling is too harsh, the simulation becomes diffusion limited. For demonstration, the code was modified in a way to allow
+for overall scaling of reaction constants after their first equilibration (no rescaling). It can be seen that this method is extremely sensitive to the
+chosen <span class="math notranslate nohighlight">\(N_f\)</span>-value. Therefor, that possibility is not available generally. <a class="reference internal" href="#figconstscal"><span class="std std-numref">Fig. 3</span></a> B, gives the efficiency for
+the simulations resulting in the correct TOF. It can be seen that with increasing value of <span class="math notranslate nohighlight">\(N_f\)</span>, the number of kMC steps to form 80
+CO<sub>2</sub> molecules is drastically reduced.</p>
+<div class="figure align-default" id="id1">
+<span id="figconstscal"></span><a class="reference internal image-reference" href="../_images/constant_scaling.pdf"><img alt="../_images/constant_scaling.pdf" src="../_images/constant_scaling.pdf" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">A) Convergence of the TOF with respect to <span class="math notranslate nohighlight">\(N_f\)</span> for constant scaling with
+rescaling (blue) or without (orange). The black solid line gives the reference obtained
+from a normal kMC simulation and the dotted lines the corresponding error range.
+B) Speed-up of the simulation using constant scaling with rescaling compared after the
+execution of 80 CO<sub>2</sub> formation reactions.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<p><a class="reference internal" href="#figconstrat"><span class="std std-numref">Fig. 4</span></a> A shows the convergence of the TOF with respect to <span class="math notranslate nohighlight">\(N_f\)</span> for the scaling based on the rate constants. It can be seen that
+only for <span class="math notranslate nohighlight">\(N_f \geq 50\)</span>, the TOF is converged to the reference value. It should be noted, that the mean value, doesn’t hit exactly
+the black line, but the error of the kMC run is beside the long run time still quite large. Thus being close to the actual value is acceptable.
+In <a class="reference internal" href="#figconstrat"><span class="std std-numref">Fig. 4</span></a> B, the speed-up of the simulation compared to the normal kMC is shown. Clearly the effect of the used scaling is
+relatively small compared to <a class="reference internal" href="#figconstscal"><span class="std std-numref">Fig. 3</span></a> B. Thus for the here presented relatively simple CO<sub>2</sub> formation, the scaling using a
+constant value is the most effective. Anyway that may not be the case for a complex reaction network including very different reactions.</p>
+<div class="figure align-default" id="id2">
+<span id="figconstrat"></span><a class="reference internal image-reference" href="../_images/rate_constant_scaling.pdf"><img alt="../_images/rate_constant_scaling.pdf" src="../_images/rate_constant_scaling.pdf" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 4 </span><span class="caption-text">A) Convergence of the TOF with respect to <span class="math notranslate nohighlight">\(N_f\)</span> for scaling based on the rate constants. The black solid line gives the
+reference obtained from a normal kMC simulation and the dotted lines the corresponding error range.
+B) Speed-up of the simulation using scaling based on the rate constants compared to the normal kMC simulation after
+the execution of 80 CO<sub>2</sub> formation reactions.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+<p>The convergence with respect to the TOF using the scaling based on the rate is presented in <a class="reference internal" href="#figrate"><span class="std std-numref">Fig. 5</span></a> for A,B: <span class="math notranslate nohighlight">\(N_f\)</span>
+and C,D: <span class="math notranslate nohighlight">\(N_s\)</span>. The TOF converges only for high <span class="math notranslate nohighlight">\(N_f \geq 10^4\)</span>. Nevertheless a speed-up of the simulation is still observed.
+Investigating for this example also the effect of <span class="math notranslate nohighlight">\(N_s\)</span> on the TOF, it can bee seen that the overall TOF for <span class="math notranslate nohighlight">\(N_s \geq 100\)</span>
+is not effected by any of the chosen values.</p>
+<div class="figure align-default" id="id3">
+<span id="figrate"></span><a class="reference internal image-reference" href="../_images/rate_scaling.pdf"><img alt="../_images/rate_scaling.pdf" src="../_images/rate_scaling.pdf" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5 </span><span class="caption-text">A) Convergence of the TOF with respect to <span class="math notranslate nohighlight">\(N_f\)</span> for scaling based on the reaction rate. The black solid line gives the
+reference obtained from a normal kMC simulation and the dotted lines the corresponding error range.
+B) Speed-up of the simulation using scaling based on the reaction rate compared to the normal kMC simulation after
+the execution of 80 CO<sub>2</sub> formation reactions.
+C) Convergence of the TOF with respect to <span class="math notranslate nohighlight">\(N_s\)</span> for scaling based on the reaction rate. The black solid line gives the
+reference obtained from a normal kMC simulation and the dotted lines the corresponding error range.
+D) Speed-up of the simulation using scaling based on the reaction rate compared to the normal kMC simulation for different
+<span class="math notranslate nohighlight">\(N_s\)</span>, after the execution of 80 CO<sub>2</sub> formation reactions.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+<p>As here presented, the various acceleration schemes are very different in respect of their parameters, but having the same general
+effect: speeding up the simulation compared to a standard kMC simulation. Which acceleration scheme to use depends solely on
+the system in hand and personal preferences.</p>
+<p>In the following we list some additional tips how to handle fast events:</p>
 <p><strong>Tip 1</strong> to slow down identical reactions, say CO adsorption, on different types of sites separately, simply define two event-classes, for example <code class="code docutils literal notranslate"><span class="pre">COAdsCorner</span></code> and <code class="code docutils literal notranslate"><span class="pre">COAdsEdge</span></code>.</p>
 <p><strong>Tip 2</strong> diffusion events are often fast. They are, in principle, their own reverse and can be added as</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reverse_events</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">:</span><span class="mi">3</span><span class="p">}</span>
@@ -246,10 +340,10 @@ constant offset to the diffusion barriers to slow them down further. This should
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="parallel.html" class="btn btn-neutral float-right" title="Parallel simulations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="adsads.html" class="btn btn-neutral float-right" title="Adsorbate-adsorbate interactions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sites.html" class="btn btn-neutral float-left" title="Special site-rules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="coox.html" class="btn btn-neutral float-left" title="CO oxidation on Pt(111)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -259,7 +353,7 @@ constant offset to the diffusion barriers to slow them down further. This should
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2019, Mikkel Jørgensen
+        &copy; Copyright 2021, Division of Chemical Physics, Chalmers University of Technology
 
     </p>
   </div>

@@ -1,0 +1,18 @@
+.. _tutorials:
+
+Tutorials
+********************
+
+The tutorials assume that the different elements of :program:`MonteCoffee` are split
+into the user_* files. All files descriped here are provided in the Tutorial folder which is downloaded from :program:`GIT`. Aditionally we provide information on how to run parallel simulations using :program:`MonteCoffee` and give some ideas about special site rules for more complex systems. 
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   A_ads
+   B2_ads   
+   parallel
+   sites
+
+`See the source code for each module <../_modules/index.html>`_.
