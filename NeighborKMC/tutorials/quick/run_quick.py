@@ -111,7 +111,7 @@ Ncutoff = a0 / np.sqrt(2.) + 0.05  # Nearest neighbor cutoff
 
 for i, s in enumerate(sites):
       for j, sother in enumerate(sites):
-          dcur = atoms.get_distance(s.ind[0], sother.ind[0], mic=True)
+          dcur = atoms.get_distance(s.ind, sother.ind, mic=True)
           if dcur < Ncutoff and j != i:
               s.neighbors.append(j)
 
