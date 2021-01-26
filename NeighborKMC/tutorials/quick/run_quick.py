@@ -103,7 +103,7 @@ atoms = fcc111("Pt", size=(10, 10, 1), a=a0)
 sites = []
 # Define a site for each atom that is empty with no pre-defined neighbors:
 for i in range(len(atoms)):
-    sites.append(SiteBase(stype=0, covered=0, ind=[i]))
+    sites.append(SiteBase(stype=0, covered=0, ind=i))
 
 ## Init system, neighborlists
 p = SystemBase(atoms=atoms, sites=sites)
