@@ -194,6 +194,7 @@ enable two different types of reactions. All defined events must implement four 
 </ul>
 </div></blockquote>
 <p>The first event class is an adsorption, that is possible if the pair of neighbor sites is empty.
+Each eventclass can be given a name which is only used in the output.
 The adsorption class has a rate-constant that is linearly dependent on the pressure, and
 if executed, it covers the sites with species 1:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">base.events</span> <span class="kn">import</span> <span class="n">EventBase</span>
@@ -201,7 +202,7 @@ if executed, it covers the sites with species 1:</p>
 <span class="k">class</span> <span class="nc">Adsorption</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
-        <span class="n">EventBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="n">EventBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Adsorption&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
 
@@ -227,7 +228,7 @@ if executed, it covers the sites with species 1:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Desorption</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
-        <span class="n">EventBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="n">EventBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Desorption&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
 

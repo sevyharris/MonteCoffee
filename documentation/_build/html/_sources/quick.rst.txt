@@ -23,6 +23,7 @@ enable two different types of reactions. All defined events must implement four 
 
 
 The first event class is an adsorption, that is possible if the pair of neighbor sites is empty.
+Each eventclass can be given a name which is only used in the output.
 The adsorption class has a rate-constant that is linearly dependent on the pressure, and
 if executed, it covers the sites with species 1:
 
@@ -33,7 +34,7 @@ if executed, it covers the sites with species 1:
     class Adsorption(EventBase):
 
         def __init__(self, params):
-            EventBase.__init__(self, params)
+            EventBase.__init__(self, params, name='Adsorption')
 
         def possible(self, system, site, other_site):
 
@@ -62,7 +63,7 @@ Now we define the reverse desorption-event with a constant rate:
     class Desorption(EventBase):
 
         def __init__(self, params):
-            EventBase.__init__(self, params)
+            EventBase.__init__(self, params, name='Desorption')
 
         def possible(self, system, site, other_site):
 
