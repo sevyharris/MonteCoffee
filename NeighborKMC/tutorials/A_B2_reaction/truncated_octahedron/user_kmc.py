@@ -14,8 +14,8 @@ import numpy as np
 import ase.io
 from base.kmc import NeighborKMCBase
 from base.logging import Log
-from .user_sites import Site
-from .user_events import *
+from user_sites import Site
+from user_events import *
 import pyclbr
 import h5py
 
@@ -154,7 +154,8 @@ class NeighborKMC(NeighborKMCBase):
         logparams.update({"tend": self.tend,
                           "Nsites": self.system.Nsites,
                           "Number of events": len(self.events),
-                          "Number of site-types (stypes)": len(list(set([m.stype for m in self.system.sites])))
+                          "Number of site-types (stypes)": len(list(set([m.stype for m in self.system.sites]))),
+                          "Events": [(aa.name) for aa in self.events] 
                           })
         accelparams = {"on" : self.use_scaling_algorithm, "Ns" : self.Ns, "Nf": self.Nf, "ne" : self.ne}
         log = Log(logparams,accelparams)

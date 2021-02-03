@@ -21,7 +21,7 @@ class B2AdsEvent(EventBase):
     """
 
     def __init__(self, params):
-        EventBase.__init__(self, params)
+        EventBase.__init__(self, params, name='B2AdsEvent')
 
     def possible(self, system, site, other_site):
 
@@ -51,7 +51,7 @@ class B2DesEvent(EventBase):
     """
 
     def __init__(self, params):
-        EventBase.__init__(self, params)
+        EventBase.__init__(self, params,name='B2DesEvent')
 
     def possible(self, system, site, other_site):
         if system.sites[site].covered == 1 and system.sites[other_site].covered == 1:
@@ -76,7 +76,7 @@ class AAdsEvent(EventBase):
     """
 
     def __init__(self, params):
-        EventBase.__init__(self, params)
+        EventBase.__init__(self, params, name='AAdsEvent')
 
     def possible(self, system, site, other_site):
 
@@ -102,7 +102,7 @@ class ADesEvent(EventBase):
     """
 
     def __init__(self, params):
-        EventBase.__init__(self, params)
+        EventBase.__init__(self, params,name='ADesEvent')
 
     def possible(self, system, site, other_site):
         if system.sites[site].covered == 2:
@@ -126,7 +126,7 @@ class ABreactEvent(EventBase):
     """
 
     def __init__(self, params):
-        EventBase.__init__(self, params)
+        EventBase.__init__(self, params,name='ABreactEvent')
 
     def possible(self, system, site, other_site):
         if (system.sites[site].covered == 1 and system.sites[other_site].covered == 2) or (system.sites[site].covered == 2 and system.sites[other_site].covered == 1):
@@ -152,7 +152,7 @@ class ADiffEvent(EventBase):
     """
 
     def __init__(self, params):
-        EventBase.__init__(self, params)
+        EventBase.__init__(self, params,name='ADiffEvent')
 
     def possible(self, system, site, other_site):
         if (system.sites[site].covered == 2 and system.sites[other_site].covered == 0) or (system.sites[site].covered == 0 and system.sites[other_site].covered == 2):
@@ -180,7 +180,7 @@ class BDiffEvent(EventBase):
     """
 
     def __init__(self, params):
-        EventBase.__init__(self, params)
+        EventBase.__init__(self, params,name='BDiffEvent')
 
     def possible(self, system, site, other_site):
         if (system.sites[site].covered == 1 and system.sites[other_site].covered == 0) or (system.sites[site].covered == 0 and system.sites[other_site].covered == 1):

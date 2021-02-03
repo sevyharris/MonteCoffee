@@ -24,7 +24,8 @@ class AAdsEvent(EventBase):
     """
 
     def __init__(self, params):
-        EventBase.__init__(self, params)
+        name = 'AadsEvent'
+        EventBase.__init__(self, params,name)
 
     def possible(self, system, site, other_site):
         if system.sites[site].covered == 0:
@@ -55,7 +56,8 @@ class ADesEvent(EventBase):
     """
 
     def __init__(self, params):
-        EventBase.__init__(self, params)
+        name = 'ADesEvent'
+        EventBase.__init__(self, params,name)
 
     def possible(self, system, site, other_site):
         # If site is covered with A (species no. 1).
@@ -87,7 +89,8 @@ class ADiffEvent(EventBase):
     """
 
     def __init__(self, params):
-        EventBase.__init__(self, params)
+        name = 'ADiffEvent'
+        EventBase.__init__(self, params,name)
 
     def possible(self, system, site, other_site):
 

@@ -39,10 +39,11 @@ class EventBase:
 
     """
 
-    def __init__(self, params={}):
+    def __init__(self, params={}, name='no-name'):
         self.params = params
         self.alpha = 1.
-        self.diffev = False  # Is it a diffusion event.
+        self.diffev = False
+        self.name = name 
 
     def possible(self, system, site, other_site):
         """Template method to determine if event is possible.

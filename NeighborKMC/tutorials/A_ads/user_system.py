@@ -72,7 +72,7 @@ class System(SystemBase):
             # Position of site
             for j, sother in enumerate(self.sites):
                 # Length of distance vector:
-                dcur = self.atoms.get_distance(s.ind[0], sother.ind[0], mic=pbc)
+                dcur = self.atoms.get_distance(s.ind, sother.ind, mic=pbc)
 
                 # If the site is a neighbor:
                 if dcur < Ncutoff and j != i:

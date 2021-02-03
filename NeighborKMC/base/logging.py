@@ -70,7 +70,7 @@ class Log:
             f.write('\n'+'-'*80+'\n'*3)
             f.write('kinetic Monte Carlo Log \n\n')
             f.write('{:<10s} {:^20s} {:^30s} {:<10s}'.format('Step',
-                    'time[hr:min:s]','Sim time [s]','Events called \n'))
+                    'time[hr:min:s]','Sim time [s]',str(parameters["Events"])+' \n'))
 
     def write_line(self, string):
         """Writes a line to the log.

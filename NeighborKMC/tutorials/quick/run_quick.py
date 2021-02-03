@@ -13,7 +13,7 @@ from base.logging import Log
 class Adsorption(EventBase):
 
     def __init__(self, params):
-        EventBase.__init__(self, params)
+        EventBase.__init__(self, params, name='Adsorption')
 
     def possible(self, system, site, other_site):
 
@@ -37,7 +37,7 @@ class Adsorption(EventBase):
 class Desorption(EventBase):
 
     def __init__(self, params):
-        EventBase.__init__(self, params)
+        EventBase.__init__(self, params, name='Desorption')
 
     def possible(self, system, site, other_site):
 
@@ -72,7 +72,8 @@ class simple_NKMC(NeighborKMCBase):
         logparams.update({"tend": self.tend,
                            "Nsites": self.system.Nsites,
                            "Number of events": len(self.events),
-                           "Number of site-types (stypes)": len(list(set([m.stype for m in self. system.sites])))
+                           "Number of site-types (stypes)": len(list(set([m.stype for m in self. system.sites]))),
+                           "Events": [aa.name for aa in self.events]
                            })
         log = Log(logparams)
     

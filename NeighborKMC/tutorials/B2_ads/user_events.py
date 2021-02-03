@@ -22,7 +22,7 @@ class B2AdsEvent(EventBase):
     """
 
     def __init__(self, params):
-        EventBase.__init__(self, params)
+        EventBase.__init__(self, params, name='B2AdsEvent')
 
     def possible(self, system, site, other_site):
 
@@ -52,7 +52,7 @@ class B2DesEvent(EventBase):
     """
 
     def __init__(self, params):
-        EventBase.__init__(self, params)
+        EventBase.__init__(self, params,name='B2DesEvent')
 
     def possible(self, system, site, other_site):
         if system.sites[site].covered == 1 and system.sites[other_site].covered == 1:

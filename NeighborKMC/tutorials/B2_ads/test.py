@@ -37,7 +37,7 @@ def run_test():
     # Create a site for each surface-atom:
     for i in range(len(atoms)):
         sites.append(Site(stype=0,
-                          covered=0, ind=[i]))
+                          covered=0, ind=i))
 
     # Instantiate a system, events, and simulation.
     # ---------------------------------------------
