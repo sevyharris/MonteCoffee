@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Dissociative Adsorption" href="B2_ads.html" />
-    <link rel="prev" title="Tutorials" href="index.html" /> 
+    <link rel="prev" title="Quick start" href="quick.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -91,10 +91,9 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../overview.html">Code overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quick.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Code overview</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quick.html">Quick start</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Adsorption of atomic species A on surface</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#define-sites-and-system">Define sites and system</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#define-events">Define events</a></li>
@@ -104,16 +103,16 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="B2_ads.html">Dissociative Adsorption</a></li>
 <li class="toctree-l2"><a class="reference internal" href="A_B2_reac.html">Adsorption and reaction of species A and B2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on Pt(111)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="parallel.html">Parallel simulations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sites.html">Special site-rules</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Special features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../options.html">Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">User interface (API)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cite.html">How to cite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../literature.html">Additional reading</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 </ul>
 
             
@@ -181,7 +180,7 @@
         <a href="B2_ads.html" class="btn btn-neutral float-right" title="Dissociative Adsorption" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="quick.html" class="btn btn-neutral float-left" title="Quick start" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -192,9 +191,9 @@
             
   <span class="target" id="a-ads"></span><div class="section" id="adsorption-of-atomic-species-a-on-surface">
 <span id="index-0"></span><h1>Adsorption of atomic species A on surface<a class="headerlink" href="#adsorption-of-atomic-species-a-on-surface" title="Permalink to this headline">¶</a></h1>
-<p>In this first tutorial the first steps to run and set-up a <strong class="program">MonteCoffee</strong> simulation are shown, which require only a view steps.
-The entire files needed for this tutorial are shown in <a class="reference external" href="../api/NeighborKMC.tutorials.A_ads.html#module-NeighborKMC.tutorials.A_ads.test">test.py</a> and the references to the other modules mentioned herein.</p>
-<p>In this guide the simple adsorption/desorption of an atomic species on a plain surface is demonstrated and the results compared to the solution of a mean-field model. The reaction to simulate is:</p>
+<p>In this tutorial we show how to set-up a <strong class="program">MonteCoffee</strong> simulation, requiring only a view steps.
+The entire files needed for this tutorial are in <a class="reference external" href="../api/NeighborKMC.tutorials.A_ads.html#module-NeighborKMC.tutorials.A_ads.test">test.py</a> and the references to the other modules mentioned herein.</p>
+<p>In this tutorial the simple adsorption/desorption of an atomic species on a plain surface is demonstrated and the results compared to the solution of a mean-field model. The reaction to simulate is:</p>
 <div class="math notranslate nohighlight">
 \[A + * \longleftrightarrow A^*\]</div>
 <p>and the time evolution of the coverage of species A according to the mean-field model (see e.g.: <a class="reference external" href="http://aip.scitation.org/doi/10.1063/1.461138">Fichthorn and Weinberg</a>)</p>
@@ -202,7 +201,7 @@ The entire files needed for this tutorial are shown in <a class="reference exter
 \[\theta(t) = \frac{r_A}{r_A+r_D}(1-e^{-(r_A+r_D)*t})\]</div>
 <p>with <span class="math notranslate nohighlight">\(\theta\)</span> the coverage of species A, <span class="math notranslate nohighlight">\(t\)</span> the time and <span class="math notranslate nohighlight">\(r_{A,D}\)</span> the rate of adsorption and desorption respectively.</p>
 <p>Before the simulation, constants, reaction sites and system as well as the events have to defined which will be shown in the next steps.</p>
-<p>First, various  parameters must be set and which can be stored in a parameter-dictionary:</p>
+<p>First, various  parameters must be set and stored in a parameter-dictionary:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tend</span> <span class="o">=</span> <span class="mf">10.</span>  <span class="c1"># End time of simulation (s)</span>
 <span class="n">latt_param</span> <span class="o">=</span> <span class="mf">4.00</span>  <span class="c1"># Lattice Parameter (not related directly to DFT (but could be) )</span>
 <span class="n">Ncutoff</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.05</span>  <span class="c1"># Nearest neighbor cutoff</span>
@@ -211,7 +210,7 @@ The entire files needed for this tutorial are shown in <a class="reference exter
 <div class="section" id="define-sites-and-system">
 <h2>Define sites and system<a class="headerlink" href="#define-sites-and-system" title="Permalink to this headline">¶</a></h2>
 <p>One site is defined for each surface atom using an <code class="xref py py-class docutils literal notranslate"><span class="pre">Ase.Atoms</span></code> object.
-We start with an empty list of sites and a fcc(100) surface in <strong class="program">ASE</strong>. That a Pt surface is chosen as example as no special meaning and for this example any
+We start with an empty list of sites and a fcc(100) surface in <strong class="program">ASE</strong>. That a Pt surface is chosen as example has no special meaning and for this example any
 kind of atom could be chosen:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.build</span> <span class="kn">import</span> <span class="n">fcc</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">user_sites</span> <span class="kn">import</span> <span class="n">Site</span>
@@ -224,17 +223,17 @@ kind of atom could be chosen:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a site for each surface-atom:</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)):</span>
     <span class="n">sites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Site</span><span class="p">(</span><span class="n">stype</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                      <span class="n">covered</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ind</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                      <span class="n">covered</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ind</span><span class="o">=</span><span class="n">i</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Here, the block <code class="code docutils literal notranslate"><span class="pre">ind=[i]</span></code> stores the index of the atom in the <code class="xref py py-class docutils literal notranslate"><span class="pre">ASE.Atoms</span></code> object on the <code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_sites.Site</span></code> object.</p>
+<p>Here, the block <code class="code docutils literal notranslate"><span class="pre">ind=i</span></code> stores the index of the atom in the <code class="xref py py-class docutils literal notranslate"><span class="pre">ASE.Atoms</span></code> object on the <code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_sites.Site</span></code> object.</p>
 <p>Finally, we need to define neighbor lists. It is simplest to define this according to the nearest neighbor distances:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set the neighbor list for each site using distances.</span>
 
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sites</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">sother</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sites</span><span class="p">):</span>
         <span class="c1"># Length of distance vector:</span>
-        <span class="n">dcur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_distance</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sother</span><span class="o">.</span><span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mic</span> <span class="o">=</span> <span class="n">pbc</span><span class="p">)</span>
+        <span class="n">dcur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_distance</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">ind</span><span class="p">,</span> <span class="n">sother</span><span class="o">.</span><span class="n">ind</span><span class="p">,</span> <span class="n">mic</span> <span class="o">=</span> <span class="n">pbc</span><span class="p">)</span>
 
         <span class="c1"># If the site is a neighbor:</span>
         <span class="k">if</span> <span class="n">dcur</span> <span class="o">&lt;</span> <span class="n">Ncutoff</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">:</span>
@@ -284,7 +283,7 @@ Now we also need to define a function <code class="code docutils literal notrans
     <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">1</span>
 </pre></div>
 </div>
-<p>In this case, up on adsorption the site is covered with the species A, represented by the number 1 within the code.</p>
+<p>In this case, upon adsorption the site is covered with the species A, represented by the number 1 within the code.</p>
 <p>To take care of the correct time evolution in <strong class="program">MonteCoffee</strong> we introduce an additional block which returns if either neighboring sites are involved or not. Here no neighboring sites are involved, thus we <code class="code docutils literal notranslate"><span class="pre">return</span> <span class="pre">False</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_involve_other</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">return</span> <span class="kc">False</span>
@@ -314,7 +313,7 @@ Now we also need to define a function <code class="code docutils literal notrans
 </div>
 <div class="section" id="analyze-results">
 <h2>Analyze results<a class="headerlink" href="#analyze-results" title="Permalink to this headline">¶</a></h2>
-<p>The results are analyzed by reading in the <a class="reference internal" href="../output.html#output"><span class="std std-ref">code output</span></a>. Here, we would like to calculate the A coverage as a function of time for the entire system:</p>
+<p>The results are analyzed by reading in the <a class="reference internal" href="../overview/output.html#output"><span class="std std-ref">code output</span></a>. Here, we would like to calculate the A coverage as a function of time for the entire system:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;time.txt&quot;</span><span class="p">)</span>
 <span class="n">covs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;coverages.txt&quot;</span><span class="p">)</span>
@@ -330,7 +329,7 @@ Now we also need to define a function <code class="code docutils literal notrans
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;coverage_spec_A.pdf&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>To compare the effect of the used simulation surface on the result and also compare to the result of the mean-field model in the following a plot is shown with surface sizes of (5x5), (10x10) and (100x10) corresponding to 25, 100 and 1000 surface sites respectively. Also shown is the result of a very simple first-reaction kinetic MonteCarlo code with 1000 sites.</p>
+<p>To compare the effect of the used simulation surface on the result and also compare to the result of the mean-field model in the following a plot is shown with surface sizes of (5x5), (10x10) and (100x10) corresponding to 25, 100 and 1000 surface sites respectively.</p>
 <img alt="../_images/compare_MF_kMC.pdf" src="../_images/compare_MF_kMC.pdf" />
 <p>If an increase in the number of sites is not possible, it is recommended that multiple identically prepared simulations are performed.
 (see example on <a class="reference internal" href="parallel.html#parallel"><span class="std std-ref">Parallel simulations</span></a> and <a class="reference internal" href="../examples/tof.html#tof"><span class="std std-ref">calculating turnover frequencies</span></a>).</p>
@@ -348,7 +347,7 @@ Now we also need to define a function <code class="code docutils literal notrans
         <a href="B2_ads.html" class="btn btn-neutral float-right" title="Dissociative Adsorption" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="quick.html" class="btn btn-neutral float-left" title="Quick start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

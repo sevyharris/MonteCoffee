@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Parallel simulations" href="parallel.html" />
+    <link rel="next" title="CO oxidation on Pt(111)" href="coox.html" />
     <link rel="prev" title="Dissociative Adsorption" href="B2_ads.html" /> 
 </head>
 
@@ -91,10 +91,9 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../overview.html">Code overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quick.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Code overview</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quick.html">Quick start</a></li>
 <li class="toctree-l2"><a class="reference internal" href="A_ads.html">Adsorption of atomic species A on surface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="B2_ads.html">Dissociative Adsorption</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Adsorption and reaction of species A and B2</a><ul>
@@ -103,16 +102,16 @@
 <li class="toctree-l3"><a class="reference internal" href="#reaction-over-a-nanoparticle">Reaction over a nanoparticle</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on Pt(111)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="parallel.html">Parallel simulations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sites.html">Special site-rules</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Special features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../options.html">Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">User interface (API)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cite.html">How to cite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../literature.html">Additional reading</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 </ul>
 
             
@@ -177,7 +176,7 @@
   
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
-        <a href="parallel.html" class="btn btn-neutral float-right" title="Parallel simulations" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="coox.html" class="btn btn-neutral float-right" title="CO oxidation on Pt(111)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="B2_ads.html" class="btn btn-neutral float-left" title="Dissociative Adsorption" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -199,7 +198,7 @@ A^* + ^* \longleftrightarrow * + A^*    \\
 B_2(g) + 2^* \longleftrightarrow 2B^*  \\
 B^* + ^* \longleftrightarrow ^*+B^*      \\
 A^*+B^* \longrightarrow AB(g) + 2^*\end{split}\]</div>
-<p>Thus additional to the already described events of atomar and dissociative adsorption, the diffusion of species <span class="math notranslate nohighlight">\(A\)</span> and
+<p>Thus additional to the already described events of single atom and dissociative adsorption, the diffusion of species <span class="math notranslate nohighlight">\(A\)</span> and
 <span class="math notranslate nohighlight">\(B\)</span>, as well as the formation and desorption of <span class="math notranslate nohighlight">\(AB\)</span> has to be implemented. In the following we present first
 the event classes which are additionally needed and are the same for the nanoparticle and the surface.</p>
 <div class="section" id="define-events">
@@ -217,7 +216,7 @@ we derive a class to contain the event:</p>
 <p>The constructor <code class="code docutils literal notranslate"><span class="pre">__init__(self,params)</span></code> attaches relevant parameters to the object.
 We need a function <cite>possible(self,system, site, other_site)</cite> that returns True if the event is possible on the current site-pair.
 Here we assume that the species A is assigned to the coverage number:2. A diffusion event can take place if the site is covered
-with A and the neighbor site empty or wise versa.</p>
+with A and the neighbor site empty or vice versa.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
     <span class="c1"># If site is uncovered</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
@@ -267,7 +266,7 @@ with A and the neighbor site empty or wise versa.</p>
     <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
 </div>
-<p>In this shown example, it is assumed that the desorption of the formed product AB is instantaneous without the possibility to re-absorb and split into A and B.</p>
+<p>In this example, it is assumed that the desorption of the formed product AB is instantaneous without the possibility to re-absorb and split into A and B.</p>
 </div>
 <div class="section" id="reaction-over-a-100-surface">
 <h2>Reaction over a (100) surface<a class="headerlink" href="#reaction-over-a-100-surface" title="Permalink to this headline">¶</a></h2>
@@ -310,8 +309,8 @@ different types of sites are visualized.</p>
 </pre></div>
 </div>
 <p>but to assign the site types to the surface atoms, we use the coordination number to distinguish them,
-the (111) facet sites having a coordination number of 9. So coordination number of each atom
-is calculated and a list, <code class="code docutils literal notranslate"><span class="pre">surface_atom_ids</span></code> created in which the surface atom ids
+the (111) facet sites having a coordination number of 9. The coordination number of each atom
+is calculated and a list, <code class="code docutils literal notranslate"><span class="pre">surface_atom_ids</span></code> created in which the surface atom ids’
 (coordination number &lt; 12) are stored.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="n">CNS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">))</span>
  <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">at</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">atoms</span><span class="p">):</span>
@@ -322,8 +321,8 @@ is calculated and a list, <code class="code docutils literal notranslate"><span 
 <span class="n">surface_atom_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">CNS</span><span class="p">))</span> <span class="k">if</span> <span class="n">CNS</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>In different to the surface, each site has now stype assigned which is either 0 or 1. For the surface all
-sites had the same stype.</p>
+<p>In difference to the (100) surface, each site has now <code class="code docutils literal notranslate"><span class="pre">stype</span></code> assigned which is either 0 or 1. For the (100) surface all
+sites have the same <code class="code docutils literal notranslate"><span class="pre">stype=0</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">indic</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">surface_atom_ids</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">CNS</span><span class="p">[</span><span class="n">indic</span><span class="p">]</span> <span class="o">==</span> <span class="mi">9</span><span class="p">:</span>
         <span class="n">sstype</span> <span class="o">=</span> <span class="mi">0</span>
@@ -333,10 +332,10 @@ sites had the same stype.</p>
 </pre></div>
 </div>
 <p>The neighbor list is calculated for the surface atom shell only (the atoms saved in the sites-list).
-Now not all atoms have the same number of direct neighbors, but according to their coordination number.</p>
-<p>In the following we keep all rates fixed to the surface ones, beside the rates for the A adsorption.
+All atoms for the nanoparticle do not have the same number of direct neighbors.</p>
+<p>In the following we keep all rates fixed to the (100) surface ones, beside the rates for the A adsorption.
 For the A adsorption we are going to employ different, site-dependent adsorption rates. Therefore, beside
-ensuring that the side is empty, also the stype has to be considered to determine the adsorption rate.
+ensuring that the site is empty, also the <code class="code docutils literal notranslate"><span class="pre">stype</span></code> has to be considered to determine the adsorption rate.
 That is done in the following way in the <code class="xref py py-class docutils literal notranslate"><span class="pre">AAdsEvent</span></code> :</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -347,9 +346,9 @@ That is done in the following way in the <code class="xref py py-class docutils 
 </pre></div>
 </div>
 <p>To see the effect of the rate of the A adsorption on the turn over frequency (TOF) of the
-simulation, we study the four different possible combinations: First using either a rate constant
+simulation, we study four different combinations: First using either a rate constant
 of 1 s<sup>-1</sup> or 10 s<sup>-1</sup> on both sites and second by using the mixed cases, having  1  s<sup>-1</sup>
-for <code class="code docutils literal notranslate"><span class="pre">stype=0</span></code> and  10 s<sup>-1</sup> for <code class="code docutils literal notranslate"><span class="pre">stype=1</span></code> or wise versa. The results can be seen
+for <code class="code docutils literal notranslate"><span class="pre">stype=0</span></code> and  10 s<sup>-1</sup> for <code class="code docutils literal notranslate"><span class="pre">stype=1</span></code> or vice versa. The results can be seen
 in <a class="reference internal" href="#figab2-nano"><span class="std std-numref">Fig. 2</span></a>. In the case of employing the same rate for the A adsorption as for the B adsorption
 the TOF is the highest, and with having a 10 times faster A adsorption than B adsorption, it being the lowest.
 In the case of high A adsorption, the sites are blocked leading to poisoning. For the mixed cases,
@@ -373,7 +372,7 @@ and blue <code class="code docutils literal notranslate"><span class="pre">stype
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="parallel.html" class="btn btn-neutral float-right" title="Parallel simulations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="coox.html" class="btn btn-neutral float-right" title="CO oxidation on Pt(111)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="B2_ads.html" class="btn btn-neutral float-left" title="Dissociative Adsorption" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

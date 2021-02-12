@@ -17,14 +17,11 @@ For a minimal working example of how to perform kinetic Monte Carlo with :progra
    :caption: Contents:
 
    installation
-   overview
-   quick
-   output
+   overview/overview
    tutorials/index
    examples/index
    options
    api/index
    cite
    literature
-   glossary
 

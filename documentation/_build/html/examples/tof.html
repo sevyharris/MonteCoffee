@@ -91,12 +91,9 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../overview.html">Code overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quick.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Code overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on Pt(111)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Special features</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="acceleration.html">Accelerating kMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adsads.html">Adsorbate-adsorbate interactions</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Calculating a turnover frequency</a></li>
@@ -106,7 +103,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">User interface (API)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cite.html">How to cite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../literature.html">Additional reading</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 </ul>
 
             
@@ -153,7 +149,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="index.html">Examples</a> &raquo;</li>
+          <li><a href="index.html">Special features</a> &raquo;</li>
         
       <li>Calculating a turnover frequency</li>
     
@@ -185,7 +181,7 @@
             
   <span class="target" id="tof"></span><div class="section" id="calculating-a-turnover-frequency">
 <span id="index-0"></span><h1>Calculating a turnover frequency<a class="headerlink" href="#calculating-a-turnover-frequency" title="Permalink to this headline">¶</a></h1>
-<p>A Turnover Frequency (TOF) can simply be calculated from the number of times a product is formed per site and second.
+<p>The turnover frequency (TOF) can be calculated from the number of times a product is formed per site and second.
 The same procedure can be followed for the individual elementary step rates.
 The script <cite>analyze_tof.py</cite> provides a complete example of how the TOF can be calculated.</p>
 <p>Assume that the event list is instantiated as</p>
@@ -194,7 +190,7 @@ The script <cite>analyze_tof.py</cite> provides a complete example of how the TO
 </pre></div>
 </div>
 <p>Where X is the forward reaction of a step that generates the product molecule, and Z is the reverse reaction that consumes one product molecule.
-To calculate the system’s overall TOF, we load in the time, and events that were executed (see <a class="reference internal" href="../output.html#output"><span class="std std-ref">output</span></a>)</p>
+To calculate the system’s overall TOF, we load in the time, and events that were executed (see <a class="reference internal" href="../overview/output.html#output"><span class="std std-ref">output</span></a>)</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="n">evs_exec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;evs_exec.txt&quot;</span><span class="p">)</span>
 <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;time.txt&quot;</span><span class="p">)</span>

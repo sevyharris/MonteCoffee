@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Examples &mdash; MonteCoffee  documentation</title>
+  <title>Special features &mdash; MonteCoffee  documentation</title>
   
 
   
@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="CO oxidation on Pt(111)" href="coox.html" />
+    <link rel="next" title="Accelerating kMC" href="acceleration.html" />
     <link rel="prev" title="Special site-rules" href="../tutorials/sites.html" /> 
 </head>
 
@@ -91,12 +91,9 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../overview.html">Code overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quick.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Code overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on Pt(111)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Special features</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="acceleration.html">Accelerating kMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adsads.html">Adsorbate-adsorbate interactions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tof.html">Calculating a turnover frequency</a></li>
@@ -106,7 +103,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">User interface (API)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cite.html">How to cite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../literature.html">Additional reading</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 </ul>
 
             
@@ -153,7 +149,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Examples</li>
+      <li>Special features</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -169,7 +165,7 @@
   
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
-        <a href="coox.html" class="btn btn-neutral float-right" title="CO oxidation on Pt(111)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="acceleration.html" class="btn btn-neutral float-right" title="Accelerating kMC" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../tutorials/sites.html" class="btn btn-neutral float-left" title="Special site-rules" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -181,28 +177,18 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="examples">
-<span id="id1"></span><h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
-<p>We present in this section the CO oxidation over Pt(111) as example to demonstrate how the different parts of the code may work in practice together and how to approach a real system. In the first part the various files needed for the kinetic MonteCarlo simulation are defined. Afterwards we show how the time acceleration works and how to converge the different parameters. In the next step results obtained with the time acceleration are presented and the importance of adsorbate-adsorbate interactions pointed out.</p>
+  <div class="section" id="special-features">
+<span id="examples"></span><h1>Special features<a class="headerlink" href="#special-features" title="Permalink to this headline">¶</a></h1>
+<p>We present in this section different special features needed to treat real systems. We show how the time acceleration works and how to converge the different parameters and present results obtained with the time acceleration.
+In addition, the importance of adsorbate-adsorbate interactions are pointed out and how turn-over frequencies are calculated.</p>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="coox.html">CO oxidation on Pt(111)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="coox.html#define-constants-and-parameters">Define constants and parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="coox.html#define-sites-and-system">Define sites and system</a></li>
-<li class="toctree-l2"><a class="reference internal" href="coox.html#define-reaction-energies-and-entropies">Define reaction energies and entropies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="coox.html#define-events">Define events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="coox.html#define-and-run-simulation">Define and run simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="coox.html#analyze-results">Analyze results</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="acceleration.html">Accelerating kMC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="adsads.html">Adsorbate-adsorbate interactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tof.html">Calculating a turnover frequency</a></li>
 </ul>
 </div>
-<p>The user interface is essential to <strong class="program">MonteCoffee</strong> as the
-code works as a programmable application.</p>
 <p><a class="reference external" href="../_modules/index.html">See the source code for each module</a>.</p>
 </div>
 
@@ -214,7 +200,7 @@ code works as a programmable application.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="coox.html" class="btn btn-neutral float-right" title="CO oxidation on Pt(111)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="acceleration.html" class="btn btn-neutral float-right" title="Accelerating kMC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../tutorials/sites.html" class="btn btn-neutral float-left" title="Special site-rules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

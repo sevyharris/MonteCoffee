@@ -25,7 +25,7 @@ The options contained in `kMC_options.cfg` are:
 
     - **write_atoms** (bool): If True, write out traj files of coverages (may have to be customized depending on the system).
     
-Options solely related relates to the acceleration of kMC simulations (See :ref:`accelerating <accelerating>`):
+Options solely related to the acceleration of kMC simulations (See :ref:`accelerating <accelerating>`):
 
     - **use_scaling_algorithm** (str): If None or False, no time acceleration will be used. In the current version the following three schemes are available:
 
@@ -39,4 +39,4 @@ Options solely related relates to the acceleration of kMC simulations (See :ref:
     
     - **ns** (int): The frequency of adjusting barriers for quasi-equilibrated events.
     
-    - **ne** (int): How many events back to remember when adjusting barriers of quasi-equilibrated events, and the minimum number of times an event must be observed before scaling.
+    - **ne** (int): The number of events executed for a reaction in forward and backward direction for the reaction to be considered equilibrated. 

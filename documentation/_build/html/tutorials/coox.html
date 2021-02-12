@@ -39,8 +39,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Accelerating kMC" href="acceleration.html" />
-    <link rel="prev" title="Examples" href="index.html" /> 
+    <link rel="next" title="Parallel simulations" href="parallel.html" />
+    <link rel="prev" title="Adsorption and reaction of species A and B2" href="A_B2_reac.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -91,11 +91,12 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../overview.html">Code overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quick.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Code overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quick.html">Quick start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="A_ads.html">Adsorption of atomic species A on surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="B2_ads.html">Dissociative Adsorption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="A_B2_reac.html">Adsorption and reaction of species A and B2</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">CO oxidation on Pt(111)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#define-constants-and-parameters">Define constants and parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#define-sites-and-system">Define sites and system</a></li>
@@ -105,16 +106,15 @@
 <li class="toctree-l3"><a class="reference internal" href="#analyze-results">Analyze results</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="acceleration.html">Accelerating kMC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adsads.html">Adsorbate-adsorbate interactions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tof.html">Calculating a turnover frequency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel.html">Parallel simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sites.html">Special site-rules</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Special features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../options.html">Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">User interface (API)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cite.html">How to cite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../literature.html">Additional reading</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 </ul>
 
             
@@ -161,7 +161,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="index.html">Examples</a> &raquo;</li>
+          <li><a href="index.html">Tutorials</a> &raquo;</li>
         
       <li>CO oxidation on Pt(111)</li>
     
@@ -169,7 +169,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/examples/coox.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/tutorials/coox.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -179,10 +179,10 @@
   
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
-        <a href="acceleration.html" class="btn btn-neutral float-right" title="Accelerating kMC" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="parallel.html" class="btn btn-neutral float-right" title="Parallel simulations" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral float-left" title="Examples" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="A_B2_reac.html" class="btn btn-neutral float-left" title="Adsorption and reaction of species A and B2" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -193,7 +193,7 @@
             
   <span class="target" id="coox"></span><div class="section" id="co-oxidation-on-pt-111">
 <span id="index-0"></span><h1>CO oxidation on Pt(111)<a class="headerlink" href="#co-oxidation-on-pt-111" title="Permalink to this headline">¶</a></h1>
-<p>We present here the CO oxidation on Pt(111) which is presented along with the oxidation on Pt nanoparticles in: <a class="reference external" href="https://pubs.acs.org/doi/10.1021/acscatal.7b01194">M. Jørgensen and H. Grönbeck, ACS Catal., 7, 5054-5061 (2017)</a> .</p>
+<p>We present here the CO oxidation on Pt(111) which is published along with the oxidation on Pt nanoparticles in: <a class="reference external" href="https://pubs.acs.org/doi/10.1021/acscatal.7b01194">M. Jørgensen and H. Grönbeck, ACS Catal., 7, 5054-5061 (2017)</a> .</p>
 <p>For the CO oxidation the following five chemical reactions have to be considered:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}O_2 + 2^* &amp; \longleftrightarrow  2O^* \\
@@ -201,15 +201,15 @@ CO + * &amp; \longleftrightarrow  CO* \\
 CO^* + O^* &amp; \longrightarrow  CO_2 \\
 CO^* + * &amp; \longleftrightarrow  * + CO^* \\
 O^* + * &amp; \longleftrightarrow  * + O^*\end{split}\]</div>
-<p>which are dissociative adsorption of Oxygen, adsorption of CO, reaction of adsorbed O and CO to CO<sub>2</sub> and CO and O diffusion. In the model it is assumed that the reaction to CO<sub>2</sub> is not reversible and the reaction product is directly desorbing.</p>
+<p>which are dissociative adsorption of oxygen, adsorption of CO, reaction of adsorbed O and CO to CO<sub>2</sub> and CO and O diffusion. In the model it is assumed that the reaction to CO<sub>2</sub> is not reversible and the reaction product is directly desorbing.</p>
 <p>In this example, species 0 denotes empty sites, 1 is CO and 2 refers to O. All energies were obtained using density functional theory and are given in the paper mentioned above.</p>
 <div class="section" id="define-constants-and-parameters">
 <h2>Define constants and parameters<a class="headerlink" href="#define-constants-and-parameters" title="Permalink to this headline">¶</a></h2>
 <p>Any global constants can be defined in <a class="reference external" href="../api/NeighborKMC.examples.surface.html#module-NeighborKMC.examples.Pt_111_COOx.user_constants">user_constants.py</a>. In this example this file stores physical constants but also the calculated vibrations of the various adsorbed species and of the CO<sub>2</sub> formation transition state and their physical properties.</p>
 <p>Next, the simulation parameters must be set and stored in a dictionary:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">T</span> <span class="o">=</span> <span class="mf">800.</span>  <span class="c1"># Temperature</span>
-<span class="n">pCO</span> <span class="o">=</span> <span class="mf">2E3</span>  <span class="c1"># CO pressure</span>
-<span class="n">pO2</span> <span class="o">=</span> <span class="mf">1E3</span>  <span class="c1"># O2 pressure</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">T</span> <span class="o">=</span> <span class="mf">800.</span>  <span class="c1"># Temperature (K)</span>
+<span class="n">pCO</span> <span class="o">=</span> <span class="mf">2E3</span>  <span class="c1"># CO pressure (Pa)</span>
+<span class="n">pO2</span> <span class="o">=</span> <span class="mf">1E3</span>  <span class="c1"># O2 pressure (Pa)</span>
 <span class="n">tend</span> <span class="o">=</span> <span class="mf">1E-3</span>  <span class="c1"># End time of simulation (s)</span>
 </pre></div>
 </div>
@@ -217,7 +217,7 @@ O^* + * &amp; \longleftrightarrow  * + O^*\end{split}\]</div>
 </div>
 <div class="section" id="define-sites-and-system">
 <h2>Define sites and system<a class="headerlink" href="#define-sites-and-system" title="Permalink to this headline">¶</a></h2>
-<p>One site is defined for each surface atom using an <code class="xref py py-class docutils literal notranslate"><span class="pre">Ase.Atoms</span></code> object. We are using the <code class="xref py py-class docutils literal notranslate"><span class="pre">ase.build</span></code> class to construct our (111) surface. It consists of only one layer, because its only purpose is to simplify the site-connectivity set-up. Therefor, the used lattice-parameter is also not related to any results of density functional theory calculations or experiments.
+<p>One site is defined for each surface atom using an <code class="xref py py-class docutils literal notranslate"><span class="pre">Ase.Atoms</span></code> object. We are using the <code class="xref py py-class docutils literal notranslate"><span class="pre">ase.build</span></code> class to construct our (111) surface. It consists of only one layer, because its only purpose is to simplify the site-connectivity set-up. Therefore, the used lattice-parameter is also not related to any results of density functional theory calculations or experiments.
 Thus starting with an empty list of sites we construct a <span class="math notranslate nohighlight">\(10x10\)</span> surface consisting of 100 atoms:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.build</span> <span class="kn">import</span> <span class="n">fcc111</span>
 <span class="kn">from</span> <span class="nn">user_sites</span> <span class="kn">import</span> <span class="n">Site</span>
@@ -229,14 +229,14 @@ Thus starting with an empty list of sites we construct a <span class="math notra
 <span class="n">atoms</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;surface.traj&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We also have written out the prepared surface as <cite>.traj</cite> file to see if it looks as intended. As next step we have to add a site for each surface atom. Although from density functional theory calculations we know that the oxygen preferably adsorbs on fcc sites and the CO on top sites, we assume here all sites to be equal but use the corresponding energies of the preferred sites.</p>
+<p>We also have written out the prepared surface as <cite>.traj</cite> file to see if it looks as intended. As next step we have to add a site for each surface atom. Although we know that the oxygen preferably adsorbs on fcc sites and the CO on top sites, we assume here all sites to be equal (coarse-graining) but use the corresponding energies of the preferred sites.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a site for each surface-atom:</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)):</span>
     <span class="n">sites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Site</span><span class="p">(</span><span class="n">stype</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                       <span class="n">covered</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ind</span><span class="o">=</span><span class="n">i</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Here, the block <code class="code docutils literal notranslate"><span class="pre">ind=[i]</span></code> stores the index of the atom in the <code class="xref py py-class docutils literal notranslate"><span class="pre">ASE.Atoms</span></code> object on the <code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_sites.Site</span></code> object, which can be later on used to write out <cite>.traj</cite>-files during the simulation.</p>
+<p>Here, the block <code class="code docutils literal notranslate"><span class="pre">ind=i</span></code> stores the index of the atom in the <code class="xref py py-class docutils literal notranslate"><span class="pre">ASE.Atoms</span></code> object on the <code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_sites.Site</span></code> object, which can be later on used to write out <cite>.traj</cite>-files during the simulation.</p>
 <p>Now the <code class="xref py py-class docutils literal notranslate"><span class="pre">NeighborKMC.user_system.System</span></code> object can be defined from the collection of sites:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">user_system</span> <span class="kn">import</span> <span class="n">System</span>
 <span class="n">p</span> <span class="o">=</span> <span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="c1"># store ASE.Atoms as well</span>
@@ -267,7 +267,8 @@ Thus starting with an empty list of sites we construct a <span class="math notra
 <div class="section" id="define-reaction-energies-and-entropies">
 <h2>Define reaction energies and entropies<a class="headerlink" href="#define-reaction-energies-and-entropies" title="Permalink to this headline">¶</a></h2>
 <p>In this step, the reaction energies, or methods to calculate these, are defined in <a class="reference external" href="../api/NeighborKMC.examples.surface.html#module-NeighborKMC.examples.Pt_111_COOx.user_energy">user_energy.py</a> and the entropies in <a class="reference external" href="../api/NeighborKMC.examples.surface.html#module-NeighborKMC.examples.Pt_111_COOx.user_entropy">user_entropy.py</a>. That makes it simple to do all the book-keeping accordingly.</p>
-<p>We used the from density functional theory obtained energies for the adsorption of Oxygen on the fcc site and of CO on the top site and diffusion constants for Oxygen to diffuse from fcc to fcc site and for CO for from top to top site. It should be noted that the adsorption energies are in this example defined positively in contradiction to the more generally used negative notation in theoretical papers.</p>
+<p>We used the from density functional theory obtained energies for the adsorption of oxygen on the fcc site and of CO on the top site and diffusion constants for oxygen to diffuse from fcc to fcc site and for CO for from top to top site.
+In this example, the adsorption energies are defined to be positiv in contradiction to the more generally used negative notation in theoretical papers.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">EadsCO</span> <span class="o">=</span> <span class="mf">1.36</span>
 <span class="n">EadsO</span> <span class="o">=</span> <span class="mf">0.97</span>
 
@@ -321,7 +322,7 @@ For example take the <span class="math notranslate nohighlight">\(\mathrm{CO_2}\
         <span class="n">EventBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The constructor <code class="code docutils literal notranslate"><span class="pre">__init__(self,params)</span></code> is attaches relevant parameters to the object, and <code class="code docutils literal notranslate"><span class="pre">self.Zratio</span></code> is the ratio
+<p>The constructor <code class="code docutils literal notranslate"><span class="pre">__init__(self,params)</span></code>  attaches relevant parameters to the object, and <code class="code docutils literal notranslate"><span class="pre">self.Zratio</span></code> is the ratio
 between the partition functions in the initial state and transition state, used to calculate the rate constant in transition state theory. We need a function <cite>possible(self,system, site, other_site)</cite>
 that returns True if the event is possible on the current site-pair:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
@@ -332,7 +333,7 @@ that returns True if the event is possible on the current site-pair:</p>
         <span class="k">return</span> <span class="kc">False</span>
 </pre></div>
 </div>
-<p>Thus, for the event to be possible, the site needs to be covered by 1 (CO) and the neighbor site by 2 (O) or the other way round. That is originated by the use of singe neighbor site pairs. Thus a pair with the indexes (10,11) would be the same as (11,10) in the code to avoid double counting in the time list.</p>
+<p>Thus, for the event to be possible, the site needs to be covered by 1 (CO) and the neighbor site by 2 (O) or the other way round. That is originated by the use of single neighbor site pairs. Thus a pair with the indexes (10,11) would be the same as (11,10) in the code to avoid double counting in the time list.</p>
 <p>Next we need to define a function <code class="code docutils literal notranslate"><span class="pre">get_rate(self,</span> <span class="pre">system,</span> <span class="pre">i_site,</span> <span class="pre">other_site)</span></code> that returns the rate constant:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">i_site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
     <span class="n">ECO</span> <span class="o">=</span> <span class="n">EadsCO</span>
@@ -349,7 +350,7 @@ that returns True if the event is possible on the current site-pair:</p>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Zratio</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">Ea</span><span class="o">/</span><span class="p">(</span><span class="n">kB</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]))</span> <span class="o">*</span> <span class="n">kB</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">h</span>
 </pre></div>
 </div>
-<p>The adsorption energies are fixed, but weakens in the case of any repulsions.
+<p>The adsorption energies are fixed, but weaken in the case of any repulsions.
 A call is made to <code class="code docutils literal notranslate"><span class="pre">get_Ea(ECO,</span> <span class="pre">EO)</span></code> to obtain the reaction energy barrier.
 The rate constant is multiplied with <code class="code docutils literal notranslate"><span class="pre">self.alpha</span></code>, because <code class="code docutils literal notranslate"><span class="pre">self.alpha</span></code> is the slowing-down factor that is adjusted dynamically for each event during simulation.</p>
 <p>Also the event requires a method <code class="code docutils literal notranslate"><span class="pre">do_event(self,system,</span> <span class="pre">site,</span> <span class="pre">other_site)</span></code> to perform modifications to the site-occupations when fired:</p>
@@ -358,12 +359,12 @@ The rate constant is multiplied with <code class="code docutils literal notransl
     <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
 </div>
-<p>In this case, the two sites containing CO and O are simply emptied. At the end we define the method <code class="code docutils literal notranslate"><span class="pre">get_involve_other(self)</span></code> to define if the neighboring sides are actually involved in the event:</p>
+<p>In this case, the two sites containing CO and O are simply emptied. At the end we define the method <code class="code docutils literal notranslate"><span class="pre">get_involve_other(self)</span></code> to define if the neighboring sites are actually involved in the event:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_involve_other</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">return</span> <span class="kc">True</span>
 </pre></div>
 </div>
-<p>After giving this example for one event, the other events can be defined similarly. How to define single site and dissociative adsorption is also shown in the <a class="reference internal" href="../tutorials/index.html#tutorials"><span class="std std-ref">Tutorials</span></a>. Only the rates have to be adjusted according to transition state theory. Having all events for each type of reaction defined in this order:</p>
+<p>After giving this example for one event, the other events can be defined similarly. How to define single site and dissociative adsorption was shown before. Only the rates have to be adjusted according to transition state theory. Having all events for each type of reaction defined in this order:</p>
 <blockquote>
 <div><ul class="simple">
 <li><ol class="arabic simple" start="0">
@@ -420,7 +421,7 @@ The rate constant is multiplied with <code class="code docutils literal notransl
 </div>
 <div class="section" id="analyze-results">
 <span id="analyzecoox"></span><h2>Analyze results<a class="headerlink" href="#analyze-results" title="Permalink to this headline">¶</a></h2>
-<p>The results are analyzed by reading in the <a class="reference internal" href="../output.html#output"><span class="std std-ref">code output</span></a>. For example, if we need to calculate the CO and O coverage as a function of time for the entire system:</p>
+<p>The results are analyzed by reading in the <a class="reference internal" href="../overview/output.html#output"><span class="std std-ref">code output</span></a>. For example, if we need to calculate the CO and O coverage as a function of time for the entire system:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;time.txt&quot;</span><span class="p">)</span>
 <span class="n">covs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;coverages.txt&quot;</span><span class="p">)</span>
@@ -448,10 +449,10 @@ To draw statistically sound conclusions, it is recommended that multiple identic
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="acceleration.html" class="btn btn-neutral float-right" title="Accelerating kMC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="parallel.html" class="btn btn-neutral float-right" title="Parallel simulations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="A_B2_reac.html" class="btn btn-neutral float-left" title="Adsorption and reaction of species A and B2" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

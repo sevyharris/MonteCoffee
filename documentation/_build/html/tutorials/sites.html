@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Examples" href="../examples/index.html" />
+    <link rel="next" title="Special features" href="../examples/index.html" />
     <link rel="prev" title="Parallel simulations" href="parallel.html" /> 
 </head>
 
@@ -91,13 +91,13 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../overview.html">Code overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quick.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Code overview</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quick.html">Quick start</a></li>
 <li class="toctree-l2"><a class="reference internal" href="A_ads.html">Adsorption of atomic species A on surface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="B2_ads.html">Dissociative Adsorption</a></li>
 <li class="toctree-l2"><a class="reference internal" href="A_B2_reac.html">Adsorption and reaction of species A and B2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on Pt(111)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="parallel.html">Parallel simulations</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Special site-rules</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#custom-site-attributes">Custom site-attributes</a></li>
@@ -106,12 +106,11 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Special features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../options.html">Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">User interface (API)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cite.html">How to cite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../literature.html">Additional reading</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 </ul>
 
             
@@ -176,7 +175,7 @@
   
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
-        <a href="../examples/index.html" class="btn btn-neutral float-right" title="Examples" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../examples/index.html" class="btn btn-neutral float-right" title="Special features" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="parallel.html" class="btn btn-neutral float-left" title="Parallel simulations" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -194,11 +193,11 @@
 <h2>Custom site-attributes<a class="headerlink" href="#custom-site-attributes" title="Permalink to this headline">¶</a></h2>
 <p>Sites in <strong class="program">MonteCoffee</strong>, per default only contain a variable that determine their type named <code class="code docutils literal notranslate"><span class="pre">stype</span></code>.
 Stype is used to analyze the rates and coverages over different sites in a system. However, to calculate reaction energies,
-it can be nice to attach a coordination number to the class as well. This can simply be done by adding a parameter <code class="code docutils literal notranslate"><span class="pre">coordination_number</span></code> to the
+it can be good to attach a coordination number to the class as well. This can simply be done by adding a parameter <code class="code docutils literal notranslate"><span class="pre">coordination_number</span></code> to the
 constructor in <a class="reference external" href="../api/NeighborKMC.html#module-NeighborKMC.user_sites">user_sites.py</a> as</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Site</span><span class="p">(</span><span class="n">SiteBase</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">covered</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ind</span><span class="o">=</span><span class="p">[],</span> <span class="n">lattice_pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coordination_number</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">covered</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lattice_pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coordination_number</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">SiteBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="n">stype</span><span class="p">,</span> <span class="n">covered</span><span class="o">=</span><span class="n">covered</span><span class="p">,</span> <span class="n">ind</span><span class="o">=</span><span class="n">ind</span><span class="p">,</span>
                           <span class="n">lattice_pos</span><span class="o">=</span><span class="n">lattice_pos</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cn</span> <span class="o">=</span> <span class="n">coordination_number</span>
@@ -221,8 +220,8 @@ coordination numbers we have 20 different types of sites, thus <code class="code
 <p>To use <code class="code docutils literal notranslate"><span class="pre">stype</span></code>, let us assume that we have defined</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">user_sites</span> <span class="kn">import</span> <span class="n">Site</span>
 <span class="kn">from</span> <span class="nn">user_system</span>
-<span class="n">s1</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">stype</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">s2</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">stype</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">s1</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">stype</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">s2</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">stype</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">covered</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>One example of a special rule is to make events that are only possible if <code class="code docutils literal notranslate"><span class="pre">stype</span> <span class="pre">==</span> <span class="pre">1</span></code>:</p>
@@ -241,7 +240,7 @@ coordination numbers we have 20 different types of sites, thus <code class="code
 <span class="o">...</span>
 
     <span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
-        <span class="n">R</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">*</span><span class="n">stype</span><span class="o">+</span><span class="mf">0.1</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">*</span><span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">stype</span><span class="o">+</span><span class="mf">0.1</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">*</span><span class="n">R</span>
 </pre></div>
 </div>
@@ -274,7 +273,7 @@ based on the average site-type number of the two sites.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../examples/index.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../examples/index.html" class="btn btn-neutral float-right" title="Special features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="parallel.html" class="btn btn-neutral float-left" title="Parallel simulations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

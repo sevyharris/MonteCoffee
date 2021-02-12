@@ -91,10 +91,9 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../overview.html">Code overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quick.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../output.html">Code output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Code overview</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quick.html">Quick start</a></li>
 <li class="toctree-l2"><a class="reference internal" href="A_ads.html">Adsorption of atomic species A on surface</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Dissociative Adsorption</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#define-events">Define events</a></li>
@@ -102,16 +101,16 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="A_B2_reac.html">Adsorption and reaction of species A and B2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coox.html">CO oxidation on Pt(111)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="parallel.html">Parallel simulations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sites.html">Special site-rules</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Special features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../options.html">Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">User interface (API)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cite.html">How to cite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../literature.html">Additional reading</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 </ul>
 
             
@@ -193,7 +192,7 @@
 <p>This tutorials moves on from the very basic single atom adsorption to the dissociative adsorption of a diatomic molecule of type B<sub>2</sub>:</p>
 <div class="math notranslate nohighlight">
 \[B_2 + 2^* \longleftrightarrow B^* + B^*\]</div>
-<p>Comming from the tutorial of the single atom adsorption the main changes are done in the definition of the events, which are presented here together with some comparison between a mean-field model and the kinetic Monte Carlo simulation.
+<p>With respect to the case of the single atom adsorption the main changes are done in the definition of the events. They are presented together with some comparison to a mean-field model.
 The entire tutorial is shown in <a class="reference external" href="../api/NeighborKMC.tutorials.B2_ads.html#module-NeighborKMC.tutorials.B2_ads.test">test.py</a> and the references to the other modules mentioned therein.</p>
 <div class="section" id="define-events">
 <h2>Define events<a class="headerlink" href="#define-events" title="Permalink to this headline">¶</a></h2>
@@ -219,8 +218,7 @@ We need a function <cite>possible(self,system, site, other_site)</cite> that ret
         <span class="k">return</span> <span class="kc">False</span>
 </pre></div>
 </div>
-<p>Thus, for the event to be possible, the site and the other_site need to be empty.
-Now we also need to define a function <code class="code docutils literal notranslate"><span class="pre">get_rate(self,</span> <span class="pre">system,</span> <span class="pre">i_site,</span> <span class="pre">other_site)</span></code> that returns the rate constant. To keep this as simple as possible, the rate constant is chosen to be <span class="math notranslate nohighlight">\(R=1\)</span>.</p>
+<p>Now we also need to define a function <code class="code docutils literal notranslate"><span class="pre">get_rate(self,</span> <span class="pre">system,</span> <span class="pre">i_site,</span> <span class="pre">other_site)</span></code> that returns the rate constant. To keep this as simple as possible, the rate constant is chosen to be <span class="math notranslate nohighlight">\(R=1\)</span>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">i_site</span><span class="p">,</span> <span class="n">other_site</span><span class="p">):</span>
     <span class="n">R</span> <span class="o">=</span> <span class="mf">1.</span>
     <span class="k">return</span> <span class="n">R</span>
@@ -232,7 +230,7 @@ Now we also need to define a function <code class="code docutils literal notrans
     <span class="n">system</span><span class="o">.</span><span class="n">sites</span><span class="p">[</span><span class="n">other_site</span><span class="p">]</span><span class="o">.</span><span class="n">covered</span> <span class="o">=</span> <span class="mi">1</span>
 </pre></div>
 </div>
-<p>In this case, up on adsorption the site and also the other_site is covered with the species B, represented by the number 1 within the code.</p>
+<p>In this case, upon adsorption the site and also the other_site is covered with the species B, represented by the number 1 within the code.</p>
 <p>To take care of the correct time evolution in <strong class="program">MonteCoffee</strong> we introduce an additional block which returns if either neighboring sites are involved or not. Here the neighboring sites are involved, thus we <code class="code docutils literal notranslate"><span class="pre">return</span> <span class="pre">True</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_involve_other</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">return</span> <span class="kc">True</span>
@@ -242,7 +240,7 @@ Now we also need to define a function <code class="code docutils literal notrans
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">events</span> <span class="o">=</span> <span class="p">[</span><span class="n">B2AdsEvent</span><span class="p">,</span> <span class="n">B2DesEvent</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Thus to run a kinetic Monte Carlo simulation of dissoiative adsorption, only the user_event.py file has to be changed, and the imported events updated in <a class="reference external" href="../api/NeighborKMC.tutorials.B2_ads.html#module-NeighborKMC.tutorials.B2_ads.test">test.py</a>.</p>
+<p>Thus to run a kinetic Monte Carlo simulation of dissoiative adsorption, only the user_event.py file has to be changed with respect to the single atom adsorption, and the imported events updated in <a class="reference external" href="../api/NeighborKMC.tutorials.B2_ads.html#module-NeighborKMC.tutorials.B2_ads.test">test.py</a>.</p>
 </div>
 <div class="section" id="analyze-results">
 <h2>Analyze results<a class="headerlink" href="#analyze-results" title="Permalink to this headline">¶</a></h2>
@@ -251,11 +249,11 @@ coverages <span class="math notranslate nohighlight">\({\theta_i}\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\frac{d\theta_B}{dt} &amp; = k^{+}\theta_*^2 - k^-\theta_B^2 \\
 \theta_* &amp; = 1 - \theta_B\end{split}\]</div>
-<p>with <span class="math notranslate nohighlight">\(k^{+,-}\)</span>, being the rate of the furth and back reaction respectively. Comparing the mean-field results with kinetic Monte Carlo simulations is only in this very simple cases, which do not include any adsorbate-adsorbate interactions or diffusion limitations possible. Also one has to account in the mean-field model for the coordination number of the surface site
+<p>with <span class="math notranslate nohighlight">\(k^{+,-}\)</span>, being the rate of the forth and back reaction respectively. Comparing the mean-field results with kinetic Monte Carlo simulations is only in this very simple cases, which do not include any adsorbate-adsorbate interactions or diffusion limitations possible. Also one has to account in the mean-field model for the coordination number of the surface site
 over which the reaction takes place. Using the (100) surface, we have 4 possible pairs of neighbouring sites at which the adsorption can happen. In consequence, <span class="math notranslate nohighlight">\(k^{+,-}\)</span> has to be multiplied by 4.
 In the following image, the time evolution for both models is shown for various system sizes in the case of the kinetic Monte Carlo simulation.</p>
 <img alt="../_images/compare_MF_kMC_B2_ads.pdf" src="../_images/compare_MF_kMC_B2_ads.pdf" />
-<p>As for the atomic adsorption, both models agree and an increase in surface size reduces the variations of the kinetic Monte Carlo simulation.</p>
+<p>As for the single atom adsorption, both models agree and an increase in surface size reduces the variations of the kinetic Monte Carlo simulation.</p>
 </div>
 </div>
 

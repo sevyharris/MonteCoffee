@@ -3,7 +3,7 @@
 
 Calculating a turnover frequency
 *************************************
-A Turnover Frequency (TOF) can simply be calculated from the number of times a product is formed per site and second.
+The turnover frequency (TOF) can be calculated from the number of times a product is formed per site and second.
 The same procedure can be followed for the individual elementary step rates.
 The script `analyze_tof.py` provides a complete example of how the TOF can be calculated.
 

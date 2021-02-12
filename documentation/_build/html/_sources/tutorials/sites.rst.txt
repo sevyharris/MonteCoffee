@@ -8,14 +8,14 @@ Custom site-attributes
 ----------------------------
 Sites in :program:`MonteCoffee`, per default only contain a variable that determine their type named :code:`stype`.
 Stype is used to analyze the rates and coverages over different sites in a system. However, to calculate reaction energies,
-it can be nice to attach a coordination number to the class as well. This can simply be done by adding a parameter :code:`coordination_number` to the
+it can be good to attach a coordination number to the class as well. This can simply be done by adding a parameter :code:`coordination_number` to the
 constructor in `user_sites.py <../api/NeighborKMC.html#module-NeighborKMC.user_sites>`_ as
 
 .. code-block:: python
 
     class Site(SiteBase):
 
-        def __init__(self, stype=0, covered=0, ind=[], lattice_pos=None, coordination_number=None):
+        def __init__(self, stype=0, covered=0, ind=None, lattice_pos=None, coordination_number=None):
             SiteBase.__init__(self, stype=stype, covered=covered, ind=ind,
                               lattice_pos=lattice_pos)
             self.cn = coordination_number
@@ -45,8 +45,8 @@ To use :code:`stype`, let us assume that we have defined
 
      from user_sites import Site
      from user_system
-     s1 = Site(stype = 0, covered = 0, ind = [0])
-     s2 = Site(stype = 1, covered = 0, ind = [1])
+     s1 = Site(stype = 0, covered = 0, ind = 0)
+     s2 = Site(stype = 1, covered = 0, ind = 1)
 
 One example of a special rule is to make events that are only possible if :code:`stype == 1`:
 
@@ -70,7 +70,7 @@ Another special rule is to return a different rate-constant based on :code:`styp
      ...
 
          def get_rate(self, system, site, other_site):
-             R = 1000*stype+0.1
+             R = 1000*system.sites[site].stype+0.1
              return self.alpha*R
 
 This can be useful when having multiple different sites on a nanoparticle.
