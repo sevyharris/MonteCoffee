@@ -14,7 +14,7 @@ on a fcc(100) surface and a truncated octahedral nanoparticle. The reaction is m
    B^* + ^* \longleftrightarrow ^*+B^*      \\
    A^*+B^* \longrightarrow AB(g) + 2^*     
 
-Thus additional to the already described events of atomar and dissociative adsorption, the diffusion of species :math:`A` and
+Thus additional to the already described events of single atom and dissociative adsorption, the diffusion of species :math:`A` and
 :math:`B`, as well as the formation and desorption of :math:`AB` has to be implemented. In the following we present first
 the event classes which are additionally needed and are the same for the nanoparticle and the surface. 
 
@@ -36,7 +36,7 @@ we derive a class to contain the event:
 The constructor :code:`__init__(self,params)` attaches relevant parameters to the object. 
 We need a function `possible(self,system, site, other_site)` that returns True if the event is possible on the current site-pair.
 Here we assume that the species A is assigned to the coverage number:2. A diffusion event can take place if the site is covered
-with A and the neighbor site empty or wise versa. 
+with A and the neighbor site empty or vice versa. 
 
 .. code-block:: python
 
@@ -102,7 +102,7 @@ and after the formation of AB, both sites: code:`site` and code:`other_site` are
         system.sites[site].covered = 0
         system.sites[other_site].covered = 0
 
-In this shown example, it is assumed that the desorption of the formed product AB is instantaneous without the possibility to re-absorb and split into A and B. 
+In this example, it is assumed that the desorption of the formed product AB is instantaneous without the possibility to re-absorb and split into A and B. 
 
 Reaction over a (100) surface
 -----------------------------
@@ -154,8 +154,8 @@ The atoms are defined as follows:
     write('trunc_octa.traj', atoms) # see how the nanoparticle looks like
 
 but to assign the site types to the surface atoms, we use the coordination number to distinguish them,
-the (111) facet sites having a coordination number of 9. So coordination number of each atom 
-is calculated and a list, :code:`surface_atom_ids` created in which the surface atom ids 
+the (111) facet sites having a coordination number of 9. The coordination number of each atom 
+is calculated and a list, :code:`surface_atom_ids` created in which the surface atom ids' 
 (coordination number < 12) are stored. 
 
 .. code-block:: python 
@@ -168,8 +168,8 @@ is calculated and a list, :code:`surface_atom_ids` created in which the surface 
         CNS[i] = len([val for val in dp if 0. < val < a / np.sqrt(2) + 0.01])
    surface_atom_ids = [i for i in range(len(CNS)) if CNS[i] < 12]
 
-In different to the surface, each site has now stype assigned which is either 0 or 1. For the surface all 
-sites had the same stype.
+In difference to the (100) surface, each site has now :code:`stype` assigned which is either 0 or 1. For the (100) surface all 
+sites have the same :code:`stype=0`.
 
 .. code-block:: python
 
@@ -181,11 +181,11 @@ sites had the same stype.
         sites.append(Site(stype=sstype, covered=0, ind=indic))
 
 The neighbor list is calculated for the surface atom shell only (the atoms saved in the sites-list). 
-Now not all atoms have the same number of direct neighbors, but according to their coordination number.
+All atoms for the nanoparticle do not have the same number of direct neighbors.
 
-In the following we keep all rates fixed to the surface ones, beside the rates for the A adsorption.
+In the following we keep all rates fixed to the (100) surface ones, beside the rates for the A adsorption.
 For the A adsorption we are going to employ different, site-dependent adsorption rates. Therefore, beside
-ensuring that the side is empty, also the stype has to be considered to determine the adsorption rate.
+ensuring that the site is empty, also the :code:`stype` has to be considered to determine the adsorption rate.
 That is done in the following way in the :class:`AAdsEvent` :
 
 .. code-block:: python
@@ -198,9 +198,9 @@ That is done in the following way in the :class:`AAdsEvent` :
         return  R
 
 To see the effect of the rate of the A adsorption on the turn over frequency (TOF) of the
-simulation, we study the four different possible combinations: First using either a rate constant
+simulation, we study four different combinations: First using either a rate constant
 of 1 s\ :sup:`-1` or 10 s\ :sup:`-1` on both sites and second by using the mixed cases, having  1  s\ :sup:`-1`
-for :code:`stype=0` and  10 s\ :sup:`-1` for :code:`stype=1` or wise versa. The results can be seen 
+for :code:`stype=0` and  10 s\ :sup:`-1` for :code:`stype=1` or vice versa. The results can be seen 
 in :numref:`figAB2_nano`. In the case of employing the same rate for the A adsorption as for the B adsorption
 the TOF is the highest, and with having a 10 times faster A adsorption than B adsorption, it being the lowest. 
 In the case of high A adsorption, the sites are blocked leading to poisoning. For the mixed cases,

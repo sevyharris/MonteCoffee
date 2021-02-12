@@ -6,9 +6,9 @@ Accelerating kMC
 
 In :program:`MonteCoffee` three different time acceleration schemes are implemented. 
 All of them are based on the super-basin hopping concept, e.g. explained here: `Generalized temporal acceleration scheme` (:ref:`Dybeck et al <literature>`). 
-Best, one can picture this form of time acceleration in the following way: While executing reactions a super-basin :math:`S` is explored. The already explored
+One can picture this form of time acceleration in the following way: While executing reactions a super-basin :math:`S` is explored. The already explored
 region is called :math:`S_A` and the region to be explored, :math:`S_B`. The explored area is extended while executing reversible reactions. The whole super-basin :math:`S` can be left
-up-on executing a non reversible reaction, belonging to :math:`S_N`. The scaling is based on the average time needed to exit the current super-basin :math:`S`. 
+upon executing a non reversible reaction, belonging to :math:`S_N`. The scaling is based on the average time needed to exit the current super-basin :math:`S`. 
 The following picture visualizes the described super-basin 'hopping'. On the left side, the super-basin :math:`S` is shown and how it is exited, entering a new super-basin :math:`S'` on the right side, by an event belonging to :math:`S_N`. 
 
 .. image:: ../images/visualization_superbasin.pdf
@@ -51,7 +51,7 @@ The quasi-equilibrated reaction scaling factor is updated every :math:`N_s` step
 
 where :math:`N_f` is a factor to separate quasi-equilibrated and non-equilibrated events, :math:`r_S` is the sum of
 rates of non-equilibrated and non-sufficiently-executed events, and :math:`r_{m,f},r_{m,b}` are the forward and backward rates of the reaction in question. 
-The factor of 2 accounts for the forth and back reaction. 
+The factor of 2 accounts for the forward and backward reaction. 
 
 For the rate based scaling :math:`r_S` is defined as:
 
@@ -69,9 +69,9 @@ with the sum over the observation time period (:math:`n`) which the system spend
 
 Here :math:`m` is the index of the equilibrated event of which the factor :math:`\alpha_m` is calculated. 
 
-For the scaling based on the rate constant not the sum over the observation period is evaluated, 
+For the scaling based on the rate constant, not the sum over the observation period is evaluated, 
 but the mean of the rate constant over the time period spend in :math:`S_A`.
-With changing the variable from :math:`r` to :math:`k` one gets:
+Changing the variable from :math:`r` to :math:`k` one gets:
 
 .. math:: 
 
@@ -80,7 +80,7 @@ With changing the variable from :math:`r` to :math:`k` one gets:
 
 :math:`k_{m,b}` is similar to :math:`k_{m,f}`, only for the corresponding back reaction. 
 
-In practice, to accelerate the MonteCoffee simulation, one needs in principle just to specify which events are each others reverse reactions.
+In practice, to accelerate the MonteCoffee simulation, one needs to specify which events are each others reverse reactions.
 Assume that we have two event-classes named `A` and `B` that are reverse reactions to each other, and a irreversible event called `Z`.
 To accelerate the simulation, we instantiate the :class:`NeighborKMC.user_kmc.NeighborKMC` object as follows
 
@@ -141,7 +141,7 @@ standard kinetic Monte Carlo and the efficiency is larger than 1.
 of the three implemented. It can be seen that up to :math:`N_f=100` the TOF obtained in the blue curve agrees well with the reference value. 
 Only if the scaling is too harsh, the simulation becomes diffusion limited. For demonstration, the code was modified in a way to allow 
 for overall scaling of reaction constants after their first equilibration (no rescaling). It can be seen that this method is extremely sensitive to the
-chosen :math:`N_f`-value. Therefor, that possibility is not available generally. :numref:`figconstscal` B, gives the efficiency for 
+chosen :math:`N_f`-value. Therefore, that possibility is not available generally. :numref:`figconstscal` B, gives the efficiency for 
 the simulations resulting in the correct TOF. It can be seen that with increasing value of :math:`N_f`, the number of kMC steps to form 80
 CO\ :sub:`2` molecules is drastically reduced.  
 
@@ -176,7 +176,7 @@ constant value is the most effective. Anyway that may not be the case for a comp
 The convergence with respect to the TOF using the scaling based on the rate is presented in :numref:`figrate` for A,B: :math:`N_f` 
 and C,D: :math:`N_s`. The TOF converges only for high :math:`N_f \geq 10^4`. Nevertheless a speed-up of the simulation is still observed.
 Investigating for this example also the effect of :math:`N_s` on the TOF, it can bee seen that the overall TOF for :math:`N_s \geq 100` 
-is not effected by any of the chosen values. 
+is not affected by any of the chosen values. 
 
 .. _figrate:
 .. figure:: ../images/rate_scaling.pdf  

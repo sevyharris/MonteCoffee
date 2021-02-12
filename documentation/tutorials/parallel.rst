@@ -44,7 +44,7 @@ To submit a simulation, defined in a file `kmc_master_parallel.py`, in an enviro
     
     
 This script copies all python files in MonteCoffee to a compute node, and cds into the simulation directory ($TMPDIR) on the node.
-Then a while loop copies all dirs called run_* back to the submission directory every half hour. The script named `kmc_master_parallel.py` is then executed with mpirun. The script `kmc_master_parallel.py` can at first be very similar to the :ref:`quick-start example <quick>`. For simplification the detailed definitions as in :ref:`quick-start <quick>` are not given her, so that one can see the differences. Mainly they are in the first part of the code. 
+Then a while loop copies all dirs called run_* back to the submission directory every half hour. The script named `kmc_master_parallel.py` is then executed with mpirun. The script `kmc_master_parallel.py` can at first be very similar to the :ref:`quick-start example <quick>`. For simplification the detailed definitions as in :ref:`quick-start <quick>` are not given here, so that one can see the differences. Mainly they are in the first part of the code. 
 
 .. code-block:: python
 
@@ -90,7 +90,7 @@ Then a while loop copies all dirs called run_* back to the submission directory 
     sim.run_kmc()
 
 
-For further explanation about using MPI4PY within ASE, please see the `ASE documentation on parallel calculations <https://wiki.fysik.dtu.dk/ase/ase/parallel.html>`_. 
+For further explanations about using MPI4PY within ASE, please see the `ASE documentation on parallel calculations <https://wiki.fysik.dtu.dk/ase/ase/parallel.html>`_. 
 
 In general, it can be useful to assign a large :code:`tend` and let the bash-script runtime determine the end of simulation. Because the code itself writes out log-files regularly, one will not loose any informations by letting the script runtime determine the end of the simulation.
 

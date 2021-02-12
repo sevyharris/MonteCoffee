@@ -4,7 +4,7 @@
 CO oxidation on Pt(111)
 *************************************
 
-We present here the CO oxidation on Pt(111) which is presented along with the oxidation on Pt nanoparticles in: `M. Jørgensen and H. Grönbeck, ACS Catal., 7, 5054-5061 (2017) <https://pubs.acs.org/doi/10.1021/acscatal.7b01194>`_ . 
+We present here the CO oxidation on Pt(111) which is published along with the oxidation on Pt nanoparticles in: `M. Jørgensen and H. Grönbeck, ACS Catal., 7, 5054-5061 (2017) <https://pubs.acs.org/doi/10.1021/acscatal.7b01194>`_ . 
 
 For the CO oxidation the following five chemical reactions have to be considered:
 
@@ -17,7 +17,7 @@ For the CO oxidation the following five chemical reactions have to be considered
    O^* + * & \longleftrightarrow  * + O^*
 
    
-which are dissociative adsorption of Oxygen, adsorption of CO, reaction of adsorbed O and CO to CO\ :sub:`2` and CO and O diffusion. In the model it is assumed that the reaction to CO\ :sub:`2` is not reversible and the reaction product is directly desorbing. 
+which are dissociative adsorption of oxygen, adsorption of CO, reaction of adsorbed O and CO to CO\ :sub:`2` and CO and O diffusion. In the model it is assumed that the reaction to CO\ :sub:`2` is not reversible and the reaction product is directly desorbing. 
 
 In this example, species 0 denotes empty sites, 1 is CO and 2 refers to O. All energies were obtained using density functional theory and are given in the paper mentioned above. 
 
@@ -30,9 +30,9 @@ Next, the simulation parameters must be set and stored in a dictionary:
 
 .. code-block:: python
 
-     T = 800.  # Temperature
-     pCO = 2E3  # CO pressure
-     pO2 = 1E3  # O2 pressure
+     T = 800.  # Temperature (K)
+     pCO = 2E3  # CO pressure (Pa)
+     pO2 = 1E3  # O2 pressure (Pa)
      tend = 1E-3  # End time of simulation (s)
 
 Here the Temperature is set to 800 K, and the pressure ratio of CO to O\ :sub:`2` to 2:1. The pressure is given in Pa. Also the end time is defined, but because we are interested mainly in steady-state properties, the simulation is run until steady-state is reached and usually stopped before the given end time reached. 
@@ -40,7 +40,7 @@ Here the Temperature is set to 800 K, and the pressure ratio of CO to O\ :sub:`2
 Define sites and system
 ----------------------------
 
-One site is defined for each surface atom using an :class:`Ase.Atoms` object. We are using the :class:`ase.build` class to construct our (111) surface. It consists of only one layer, because its only purpose is to simplify the site-connectivity set-up. Therefor, the used lattice-parameter is also not related to any results of density functional theory calculations or experiments. 
+One site is defined for each surface atom using an :class:`Ase.Atoms` object. We are using the :class:`ase.build` class to construct our (111) surface. It consists of only one layer, because its only purpose is to simplify the site-connectivity set-up. Therefore, the used lattice-parameter is also not related to any results of density functional theory calculations or experiments. 
 Thus starting with an empty list of sites we construct a :math:`10x10` surface consisting of 100 atoms:
 
 .. code-block:: python
@@ -54,7 +54,7 @@ Thus starting with an empty list of sites we construct a :math:`10x10` surface c
      atoms = fcc111("Pt", a = a, size = (10,10,1))
      atoms.write('surface.traj')
 
-We also have written out the prepared surface as `.traj` file to see if it looks as intended. As next step we have to add a site for each surface atom. Although from density functional theory calculations we know that the oxygen preferably adsorbs on fcc sites and the CO on top sites, we assume here all sites to be equal but use the corresponding energies of the preferred sites.
+We also have written out the prepared surface as `.traj` file to see if it looks as intended. As next step we have to add a site for each surface atom. Although we know that the oxygen preferably adsorbs on fcc sites and the CO on top sites, we assume here all sites to be equal (coarse-graining) but use the corresponding energies of the preferred sites.
 
 .. code-block:: python
 
@@ -63,7 +63,7 @@ We also have written out the prepared surface as `.traj` file to see if it looks
          sites.append(Site(stype=0,
                            covered=0, ind=i))
 
-Here, the block :code:`ind=[i]` stores the index of the atom in the :class:`ASE.Atoms` object on the :class:`NeighborKMC.user_sites.Site` object, which can be later on used to write out `.traj`-files during the simulation. 
+Here, the block :code:`ind=i` stores the index of the atom in the :class:`ASE.Atoms` object on the :class:`NeighborKMC.user_sites.Site` object, which can be later on used to write out `.traj`-files during the simulation. 
 
 Now the :class:`NeighborKMC.user_system.System` object can be defined from the collection of sites:
 
@@ -104,7 +104,8 @@ Define reaction energies and entropies
 --------------------------------------------
 In this step, the reaction energies, or methods to calculate these, are defined in `user_energy.py <../api/NeighborKMC.examples.surface.html#module-NeighborKMC.examples.Pt_111_COOx.user_energy>`_ and the entropies in `user_entropy.py <../api/NeighborKMC.examples.surface.html#module-NeighborKMC.examples.Pt_111_COOx.user_entropy>`_. That makes it simple to do all the book-keeping accordingly. 
 
-We used the from density functional theory obtained energies for the adsorption of Oxygen on the fcc site and of CO on the top site and diffusion constants for Oxygen to diffuse from fcc to fcc site and for CO for from top to top site. It should be noted that the adsorption energies are in this example defined positively in contradiction to the more generally used negative notation in theoretical papers. 
+We used the from density functional theory obtained energies for the adsorption of oxygen on the fcc site and of CO on the top site and diffusion constants for oxygen to diffuse from fcc to fcc site and for CO for from top to top site. 
+In this example, the adsorption energies are defined to be positiv in contradiction to the more generally used negative notation in theoretical papers. 
 
 .. code-block:: python
 
@@ -171,7 +172,7 @@ Now we derive a class to contain the event:
              self.Zratio = Zts / Zads 
              EventBase.__init__(self, params)
 
-The constructor :code:`__init__(self,params)` is attaches relevant parameters to the object, and :code:`self.Zratio` is the ratio
+The constructor :code:`__init__(self,params)`  attaches relevant parameters to the object, and :code:`self.Zratio` is the ratio
 between the partition functions in the initial state and transition state, used to calculate the rate constant in transition state theory. We need a function `possible(self,system, site, other_site)`
 that returns True if the event is possible on the current site-pair:
 
@@ -184,7 +185,7 @@ that returns True if the event is possible on the current site-pair:
              else:
                  return False
 
-Thus, for the event to be possible, the site needs to be covered by 1 (CO) and the neighbor site by 2 (O) or the other way round. That is originated by the use of singe neighbor site pairs. Thus a pair with the indexes (10,11) would be the same as (11,10) in the code to avoid double counting in the time list.
+Thus, for the event to be possible, the site needs to be covered by 1 (CO) and the neighbor site by 2 (O) or the other way round. That is originated by the use of single neighbor site pairs. Thus a pair with the indexes (10,11) would be the same as (11,10) in the code to avoid double counting in the time list.
 
 Next we need to define a function :code:`get_rate(self, system, i_site, other_site)` that returns the rate constant:
 
@@ -204,7 +205,7 @@ Next we need to define a function :code:`get_rate(self, system, i_site, other_si
             Ea = max(0., get_Ea(ECO, EO)) # No negative energy barriers
             return self.alpha * self.Zratio * np.exp(-Ea/(kB * self.params['T'])) * kB * self.params['T'] / h
 
-The adsorption energies are fixed, but weakens in the case of any repulsions. 
+The adsorption energies are fixed, but weaken in the case of any repulsions. 
 A call is made to :code:`get_Ea(ECO, EO)` to obtain the reaction energy barrier.
 The rate constant is multiplied with :code:`self.alpha`, because :code:`self.alpha` is the slowing-down factor that is adjusted dynamically for each event during simulation.
 
@@ -216,14 +217,14 @@ Also the event requires a method :code:`do_event(self,system, site, other_site)`
             system.sites[site].covered = 0
             system.sites[other_site].covered = 0
 
-In this case, the two sites containing CO and O are simply emptied. At the end we define the method :code:`get_involve_other(self)` to define if the neighboring sides are actually involved in the event:
+In this case, the two sites containing CO and O are simply emptied. At the end we define the method :code:`get_involve_other(self)` to define if the neighboring sites are actually involved in the event:
 
 .. code-block:: python
 
         def get_involve_other(self):
             return True
 
-After giving this example for one event, the other events can be defined similarly. How to define single site and dissociative adsorption is also shown in the :ref:`tutorials`. Only the rates have to be adjusted according to transition state theory. Having all events for each type of reaction defined in this order:
+After giving this example for one event, the other events can be defined similarly. How to define single site and dissociative adsorption was shown before. Only the rates have to be adjusted according to transition state theory. Having all events for each type of reaction defined in this order:
 
     - (0) :class:`NeighborKMC.user_events.COAdsEvent` for CO adsorption.
     - (1) :class:`NeighborKMC.user_events.CODesEvent` for CO desorption.

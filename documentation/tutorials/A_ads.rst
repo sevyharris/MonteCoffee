@@ -4,10 +4,10 @@
 Adsorption of atomic species A on surface
 ******************************************
 
-In this first tutorial the first steps to run and set-up a :program:`MonteCoffee` simulation are shown, which require only a view steps. 
-The entire files needed for this tutorial are shown in `test.py <../api/NeighborKMC.tutorials.A_ads.html#module-NeighborKMC.tutorials.A_ads.test>`_ and the references to the other modules mentioned herein.
+In this tutorial we show how to set-up a :program:`MonteCoffee` simulation, requiring only a view steps. 
+The entire files needed for this tutorial are in `test.py <../api/NeighborKMC.tutorials.A_ads.html#module-NeighborKMC.tutorials.A_ads.test>`_ and the references to the other modules mentioned herein.
 
-In this guide the simple adsorption/desorption of an atomic species on a plain surface is demonstrated and the results compared to the solution of a mean-field model. The reaction to simulate is:
+In this tutorial the simple adsorption/desorption of an atomic species on a plain surface is demonstrated and the results compared to the solution of a mean-field model. The reaction to simulate is:
 
 .. math::
 
@@ -23,7 +23,7 @@ with :math:`\theta` the coverage of species A, :math:`t` the time and :math:`r_{
 
 Before the simulation, constants, reaction sites and system as well as the events have to defined which will be shown in the next steps.  
 
-First, various  parameters must be set and which can be stored in a parameter-dictionary:
+First, various  parameters must be set and stored in a parameter-dictionary:
 
 .. code-block:: python
 
@@ -35,7 +35,7 @@ First, various  parameters must be set and which can be stored in a parameter-di
 Define sites and system
 ----------------------------
 One site is defined for each surface atom using an :class:`Ase.Atoms` object.
-We start with an empty list of sites and a fcc(100) surface in :program:`ASE`. That a Pt surface is chosen as example as no special meaning and for this example any 
+We start with an empty list of sites and a fcc(100) surface in :program:`ASE`. That a Pt surface is chosen as example has no special meaning and for this example any 
 kind of atom could be chosen:
 
 .. code-block:: python
@@ -53,9 +53,9 @@ Now we can create a site, free of adsorbates, for each surface atom with a :code
      # Create a site for each surface-atom:
      for i in range(len(atoms)):
          sites.append(Site(stype=0,
-                           covered=0, ind=[i]))
+                           covered=0, ind=i))
 
-Here, the block :code:`ind=[i]` stores the index of the atom in the :class:`ASE.Atoms` object on the :class:`NeighborKMC.user_sites.Site` object.
+Here, the block :code:`ind=i` stores the index of the atom in the :class:`ASE.Atoms` object on the :class:`NeighborKMC.user_sites.Site` object.
 
 Finally, we need to define neighbor lists. It is simplest to define this according to the nearest neighbor distances:
 
@@ -66,7 +66,7 @@ Finally, we need to define neighbor lists. It is simplest to define this accordi
      for i, s in enumerate(sites):
          for j, sother in enumerate(sites):
              # Length of distance vector:
-             dcur = self.atoms.get_distance(s.ind[0], sother.ind[0], mic = pbc)
+             dcur = self.atoms.get_distance(s.ind, sother.ind, mic = pbc)
 
              # If the site is a neighbor:
              if dcur < Ncutoff and j != i:
@@ -128,7 +128,7 @@ Each event requires a method :code:`do_event(self,system, site, other_site)` to 
         def do_event(self, system, site, other_site):
             system.sites[site].covered = 1
 
-In this case, up on adsorption the site is covered with the species A, represented by the number 1 within the code. 
+In this case, upon adsorption the site is covered with the species A, represented by the number 1 within the code. 
 
 To take care of the correct time evolution in :program:`MonteCoffee` we introduce an additional block which returns if either neighboring sites are involved or not. Here no neighboring sites are involved, thus we :code:`return False`. 
 
@@ -185,7 +185,7 @@ This can be plotted as done in the following example with :code:`matplotlib`
      plt.ylabel("Coverage")
      plt.savefig('coverage_spec_A.pdf')
 
-To compare the effect of the used simulation surface on the result and also compare to the result of the mean-field model in the following a plot is shown with surface sizes of (5x5), (10x10) and (100x10) corresponding to 25, 100 and 1000 surface sites respectively. Also shown is the result of a very simple first-reaction kinetic MonteCarlo code with 1000 sites. 
+To compare the effect of the used simulation surface on the result and also compare to the result of the mean-field model in the following a plot is shown with surface sizes of (5x5), (10x10) and (100x10) corresponding to 25, 100 and 1000 surface sites respectively. 
 
 .. image:: ../images/compare_MF_kMC.pdf 
 

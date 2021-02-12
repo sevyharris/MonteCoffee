@@ -10,9 +10,11 @@ into the user_* files. All files described here are provided in the Tutorial fol
    :maxdepth: 2
    :caption: Contents:
 
+   quick
    A_ads
    B2_ads  
    A_B2_reac 
+   coox
    parallel
    sites
 

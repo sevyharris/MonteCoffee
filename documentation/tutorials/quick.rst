@@ -4,10 +4,7 @@
 
 Quick start
 **********************************
-This tutorial provides a minimal working example of how to run :program:`MonteCoffee`. The file can be found in the Tutorials (:ref:`quickfile`). 
-For a full in-depth tutorial see :ref:`tutorials` about setting up different types of events and reactions using generic rate constants. For the CO oxidation
-reaction based on `M. Jørgensen and H. Grönbeck ACS Catal. 7, 5054-5061 (2017) <https://doi.org/10.1021/acscatal.7b01194>`_ for the Pt (111) surface and Pt 
-nanoparticles see :ref:`examples` .
+This tutorial provides a minimal working example of how to run :program:`MonteCoffee`. For simplicity this example puts all definitions in one file. This structure is different from the following tutorials.  
 
 For this very first, simple example, all free energy barriers are assumed constant. Two different events are implemented, and neighbors are calculated from inter-atomic distances in an :class:`ASE.Atoms` object. For simplicity, this guide shows how to setup a simulation in a single python script. In principle it is similar to the second tutorial on diatomic adsorption and desorption (see :ref:`b2ads_tut`).
 
@@ -133,7 +130,7 @@ Here, the system is created and the sites are connected by calculating a neighbo
 
 **Step 4. Instantiate a NeighborKMC object and run**
 
-Now we are ready to instantiate a :class:`NeighborKMC.NeighborKMCBase` object, which is connecting the ingredients created in the previous step. The main part of the kinetic Monte Carlo procedure is in the :class:`NeighborKMC.NeighborKMCBase`, but some details and logging one has to define oneself. That is done here in the class: :class:`simple_NKMC`.
+Now we are ready to instantiate a :class:`NeighborKMC.NeighborKMCBase` object, which is connecting the ingredients created in the previous step. The main part of the kinetic Monte Carlo procedure is in the :class:`NeighborKMC.NeighborKMCBase`, but some details and logging should be defined by the user. That is done here in the class: :class:`simple_NKMC`.
 
 .. code-block:: python
 
