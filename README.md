@@ -38,11 +38,11 @@ To build documentation manually, see *documentation/HOWTO_BUILD_DOCUMENTATION.tx
 
 ## Developers
 
-- Mikkel Jørgensen, Chalmers university of technology, Sweden.
+- Mikkel Jørgensen, Chalmers University of Technology, Sweden.
 
-- Noemi Bosio, Chalmers university of technology, Sweden.
+- Noemi Bosio, Chalmers University of Technology, Sweden.
 
-- Elisabeth M. Dietze, Chalmers university of technology, Sweden.
+- Elisabeth M. Dietze, Chalmers University of Technology, Sweden.
 
 ## Troubles / Ideas / Questions?
 
