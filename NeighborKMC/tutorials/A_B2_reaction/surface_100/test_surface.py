@@ -34,7 +34,7 @@ def run_test():
 
     # Define the sites from ase.Atoms.
     # ------------------------------------------
-    atoms = fcc100('Pt',a=a, size=(10,10,1) )
+    atoms = fcc100('Pt',a=a, size=(20,20,1) )
     sites = []
     # Create a site for each surface-atom:
     for i in range(len(atoms)):

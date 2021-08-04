@@ -164,7 +164,7 @@ class Log:
         # Save global neighborlist to one file
         if self.save_coverages:
             with open("coverages.txt", "ab") as f2:
-                np.savetxt(f2, self.covered)
+                np.savetxt(f2, self.covered,delimiter=" ", fmt="%s") # added to make it possible to save strings also
 
             with h5py.File("detail_site_event_evol.hdf5", "a") as f2:
                 size_shape = int(len(self.system_evolution[0]))

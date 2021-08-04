@@ -385,7 +385,7 @@ class NeighborKMCBase:
                                 self.us[poslist] = random.uniform(0,1)
                                 self.executed_poslist.append(poslist)
                        
-                        elif poss_now and not self.possible_evs[poslist]: # if possible now, but not possible before (newly enabled) 
+                        elif poss_now and not self.possible_evs[poslist]: # if possible now, but not possible before (newly enabled)
                             rcur = e.get_rate(self.system, i, other)
                             self.rs[poslist] = rcur
                             u = random.uniform(0,1)
