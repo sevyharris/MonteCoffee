@@ -173,6 +173,7 @@ class NeighborKMC(NeighborKMCBase):
            d = f.create_dataset("site",(1,),maxshape=(None,), chunks = True, dtype='int')
            d = f.create_dataset("othersite",(1,),maxshape=(None,), chunks = True, dtype='int')
            d = f.create_dataset("event",(1,),maxshape=(None,), chunks = True, dtype='int')
+           f.close()
 
         # Initialize time and step counters
         stepN_CNT = 0
