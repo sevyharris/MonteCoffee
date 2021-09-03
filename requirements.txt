@@ -1,5 +1,5 @@
 numpy
+h5py
 sphinx
 sphinx_rtd_theme
 ase
-h5py
