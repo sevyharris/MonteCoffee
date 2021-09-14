@@ -13,6 +13,7 @@ In addition, the importance of adsorbate-adsorbate interactions are pointed out 
    acceleration
    adsads
    tof
+   restart
 
 
 `See the source code for each module <../_modules/index.html>`_.
