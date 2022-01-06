@@ -13,14 +13,14 @@ Module: user_sites
 
 class SystemBase:
     """Defines a system class to perform kMC.
-            
+
     Method assigns an ASE.Atoms object (atoms)
     to the object and assigns a list of sites (sites).
-    
+
     A neighbor list (neighbors) is initialized
     from the sites, which is checked for inconsistencies
     by the method verify_nlist().
-    
+
     Attributes
     -----------
     atoms: ase.atoms
@@ -40,26 +40,26 @@ class SystemBase:
 
     def verify_nlist(self):
         """Tests the neighborlist for inconsistency.
-        
-        The method checks if neighborlists are assymetric:  
+
+        The method checks if neighborlists are assymetric:
         If A is a neighbor to B, then B must
-        also be present in the neighborlist of A.  
-        
+        also be present in the neighborlist of A.
+
         Raises
         ---------
         Warning:
             If the neighborlist is assymetric.
-        
+
         """
         for i, s in enumerate(self.neighbors):
             for nn in s:
                 if i not in self.neighbors[nn]:
-                    raise Warning("Site " + str(i) + " is a neighbor to site " +
-                                  str(nn) + " but not vice-versa")
+                    raise Warning("Site " + str(i) + " is a neighbor to site "
+                                  + str(nn) + " but not vice-versa")
 
     def get_ncovs(self, i_site):
         """Gets the coverage on nearest neighbor sites.
-            
+
         Retrieves and returns the occupations of the nearest neighbor
         sites to the site with index `i_site` in `self.sites`.
 
@@ -72,7 +72,7 @@ class SystemBase:
         -----------
         covs: list(int)
             List of species occupying the nearest neighbor sites.
-            
+
         """
         covs = [self.sites[n].covered for n in self.neighbors[i_site]]
         return covs
@@ -89,14 +89,13 @@ class SystemBase:
         """
         cov = []
         for species in range(N_species + 1):
-            cspec = [self.sites[i].covered for i \
-                     in range(self.Nsites) if \
+            cspec = [self.sites[i].covered for i
+                     in range(self.Nsites) if
                      self.sites[i].covered == species]
 
             cov.append(float(len(cspec)) / float(self.Nsites))
 
         return cov
-
 
     def find_nn_recurse(self, sim, update_sites, recursion=0):
         """Deep search of first nearest neighbors.
