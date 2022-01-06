@@ -12,12 +12,12 @@ Module: user_sites
 
 class SiteBase:
     """Class that templates site objects.
-            
+
     Assigns a site type (stype) to the site, the
     species covers the site (covered), atomic indices
     that constitute the site (ind), and the sites
     that are nearest-neighbors (neighbors).
-    
+
     Attributes
     ------------
     stype: int

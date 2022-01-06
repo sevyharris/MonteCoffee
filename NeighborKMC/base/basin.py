@@ -8,6 +8,7 @@ This is mainly based on the work of Dybeck et al. (https://doi.org/10.1021/acs.j
 import numpy as np
 from statistics import mean
 
+
 def rescaling(sim):
     """Rescales the times of occurrences for events.
 
@@ -18,7 +19,7 @@ def rescaling(sim):
     ----------
     sim: NeighborKMC
         main simulator object to perform rescaling of events for.
- 
+
     """
     if len(sim.Suffex) > 0:
         for ev in sim.Suffex:
@@ -39,15 +40,16 @@ def rescaling(sim):
                         sim.frm_times[i] = sim.t - np.log(sim.us[i]) / sim.rs[i]
                 except:
                     sim.frm_times[i] = sim.tinfinity
-    
+
         if sim.events[sim.Suffex[0]].alpha == 1:
-           sim.Suffex = []  
+            sim.Suffex = []
+
 
 def leave_superbasin(sim):
     """Leaves the superbasin.
 
     Resets all rate-scalings and statistics
-    connected to the superbasin. The sufficiently executed event list is 
+    connected to the superbasin. The sufficiently executed event list is
     reset with rescaling.
 
     Parameters
@@ -96,18 +98,19 @@ def scale_rate(sim):
     do_scaling = False
     noneqevents = [i for i in range(len(sim.events)) if i not in sim.Suffex]
     if len(noneqevents) > 0:
-        r_S = sum([sim.r_S[neqev] for neqev in noneqevents]) 
+        r_S = sum([sim.r_S[neqev] for neqev in noneqevents])
     else:
         r_S = max(sim.r_S)
 
     for ev in [e for e in sim.equilEV if e in sim.Suffex]:
-        rmev = sim.r_S[ev] 
-        rmrev = sim.r_S[sim.reverses[ev]] 
-        alpham = min(2.*r_S / (rmev + rmrev) *sim.Nf , 1)
-        print (ev, alpham, 2.* r_S/(rmev+rmrev) )
+        rmev = sim.r_S[ev]
+        rmrev = sim.r_S[sim.reverses[ev]]
+        alpham = min(2.0 * r_S / (rmev + rmrev) * sim.Nf, 1)
+        print(ev, alpham, 2.0 * r_S / (rmev + rmrev))
         sim.events[ev].alpha = alpham
         do_scaling = True
-    return do_scaling 
+    return do_scaling
+
 
 def scale_constant(sim):
     """Rate based on a constant frequency factor for deeceleration
@@ -116,9 +119,9 @@ def scale_constant(sim):
     """
     do_scaling = False
     for ev in [e for e in sim.equilEV if e in sim.Suffex]:
-       alpham = min(1./float(sim.Nf),1.)
-       sim.events[ev].alpha = alpham
-       do_scaling = True
+        alpham = min(1.0 / float(sim.Nf), 1.)
+        sim.events[ev].alpha = alpham
+        do_scaling = True
     return do_scaling
 
 
@@ -128,18 +131,18 @@ def scale_rate_constant(sim):
     do_scaling = False
     noneqevents = [i for i in range(len(sim.events)) if i not in sim.Suffex and not sim.nem[i] == 0]
     if len(noneqevents) > 0:
-        k_S = sum([(float(sim.k_S[neqev])/float(sum(sim.nem))) for neqev in noneqevents]) 
+        k_S = sum([(float(sim.k_S[neqev]) / float(sum(sim.nem))) for neqev in noneqevents])
     else:
-        k_S = max(sim.k_S)/float(sum(sim.nem))
+        k_S = max(sim.k_S) / float(sum(sim.nem))
 
     for ev in [e for e in sim.equilEV if e in sim.Suffex]:
-        kmev = (sim.k_S[ev]/sum(sim.nem)) 
-        kmrev = (sim.k_S[sim.reverses[ev]]/sum(sim.nem)) 
-        alpham = min( 2.0 * k_S / (kmev + kmrev) * sim.Nf, 1)
-        #print ( 2.*k_S /(kmev+ kmrev),  alpham,ev)
+        kmev = (sim.k_S[ev] / sum(sim.nem))
+        kmrev = (sim.k_S[sim.reverses[ev]] / sum(sim.nem))
+        alpham = min(2.0 * k_S / (kmev + kmrev) * sim.Nf, 1)
+        # print ( 2.*k_S /(kmev+ kmrev),  alpham,ev)
         sim.events[ev].alpha = alpham
         do_scaling = True
-    return do_scaling 
+    return do_scaling
 
 
 def superbasin(sim, evtype, dt):
@@ -162,10 +165,10 @@ def superbasin(sim, evtype, dt):
 
     dt: float
         The time-step of the currently attempted Monte Carlo step.
-    
+
     do_scaling: bool
-        Bool if the rate constants are to be rescaled or not. 
-    
+        Bool if the rate constants are to be rescaled or not.
+
 
     Raises
     --------
@@ -214,6 +217,3 @@ def superbasin(sim, evtype, dt):
 
     sim.isup += 1
     return do_scaling
-
-
-
