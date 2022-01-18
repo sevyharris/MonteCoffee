@@ -4,6 +4,7 @@ import base.kmc
 import base.logging
 import numpy as np
 import h5py
+import os
 
 
 class NeighborKMC(base.kmc.NeighborKMCBase):
@@ -90,6 +91,8 @@ class NeighborKMC(base.kmc.NeighborKMCBase):
         if self.verbose:
             print('\nRunning simulation.')
 
+        frame_number = 0
+        os.makedirs('frames', exist_ok=True)
         while self.t < self.tend:
 
             self.frm_step()
@@ -100,6 +103,8 @@ class NeighborKMC(base.kmc.NeighborKMCBase):
                     print("Time : ", self.t, "\t Covs :", self.system.get_coverages(self.Nspecies))
 
                 log.dump_point(self.stepNMC, self.t, self.evs_exec)
+                log.save_system(self.system, os.path.join('frames', f'atoms_{frame_number:04}.xyz'))
+                log.save_system_pickle(self.system, os.path.join('frames', f'atoms_{frame_number:04}.pkl'))
 
                 self.times.append(self.t)
                 # self.MCstep.append(stepNMC)
@@ -117,6 +122,7 @@ class NeighborKMC(base.kmc.NeighborKMCBase):
 
             stepN_CNT += 1
             self.stepNMC += 1
+            frame_number += 1
 
         log.dump_point(self.stepNMC, self.t, self.evs_exec)
         self.save_txt()

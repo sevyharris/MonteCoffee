@@ -1,6 +1,11 @@
 import base.events
 import user_sites
 
+from ase import Atoms
+from ase.build import add_adsorbate
+
+CO = Atoms('CO', positions=[(0, 0, 0), (0, 0, 1.0)])
+
 
 # TODO define single and double adsorption - ask if triple is pertinent?
 class COAdsorption(base.events.EventBase):
@@ -25,6 +30,7 @@ class COAdsorption(base.events.EventBase):
     def do_event(self, system, site, other_site):
         # cover one sites with species 1 (dissociative adsorption)
         system.sites[site].covered = user_sites.SPECIES_COX
+        # add_adsorbate(system.atoms, CO, 2.0, 'ontop')
 
     def get_involve_other(self):
         return False

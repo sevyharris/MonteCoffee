@@ -41,7 +41,8 @@ for i in range(len(atoms)):
         user_sites.Site(
             stype=user_sites.SITE_FCC111_TOP,
             covered=user_sites.SPECIES_X,
-            ind=i
+            ind=i,
+            lattice_pos=atoms[i].position,
         )
     )
     # TODO add bridge and holow sites
