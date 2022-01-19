@@ -21,9 +21,8 @@ class COOxidation(base.events.EventBase):
             return False
 
     def get_rate(self, system, site, other_site):
-        R = 100000.0
+        R = 0.003785332000679931  # Wintterlin
         return R
-        # TODO compute diffusion rate
 
     def do_event(self, system, site, other_site):
         system.sites[other_site].covered = user_sites.SPECIES_X
@@ -50,7 +49,7 @@ class COAdsorption(base.events.EventBase):
             return False
 
     def get_rate(self, system, site, other_site):
-        R = 1.0 * self.params['pCO']
+        R = 0.002  # Wintterlin
         return R
 
     def do_event(self, system, site, other_site):
@@ -77,7 +76,7 @@ class O2Adsorption(base.events.EventBase):
             return False
 
     def get_rate(self, system, site, other_site):
-        R = 1.0 * self.params['pO2']
+        R = 1e-9  # made up
         return R
 
     def do_event(self, system, site, other_site):
@@ -99,7 +98,7 @@ class CODesorption(base.events.EventBase):
             return False
 
     def get_rate(self, system, site, other_site):
-        R = 1.0
+        R = 1.6375917641003068e-12  # Wintterlin
         return R
 
     def do_event(self, system, site, other_site):
@@ -121,7 +120,7 @@ class O2Desorption(base.events.EventBase):
             return False
 
     def get_rate(self, system, site, other_site):
-        R = 1.0
+        R = 1.0e-9  # made up
         return R
 
     def do_event(self, system, site, other_site):
@@ -144,7 +143,7 @@ class CODiffusion(base.events.EventBase):
             return False
 
     def get_rate(self, system, site, other_site):
-        R = 10.0
+        R = 100.0
         return R
         # TODO compute diffusion rate
 
@@ -168,7 +167,7 @@ class ODiffusion(base.events.EventBase):
             return False
 
     def get_rate(self, system, site, other_site):
-        R = 10.0
+        R = 6.567403407570781  # Wintterlin
         return R
         # TODO get diffusion rate
 
@@ -178,4 +177,3 @@ class ODiffusion(base.events.EventBase):
 
     def get_involve_other(self):
         return False
-
