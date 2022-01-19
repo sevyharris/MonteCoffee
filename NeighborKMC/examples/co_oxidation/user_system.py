@@ -48,10 +48,9 @@ class System(base.system.SystemBase):
                     # if np.abs(self.atoms[other_site.ind].position[0] - self.atoms[site.ind].position[0]) > 2.0 * Ncutoff:
                     break
 
-
     def cover_system(self, species, coverage):
         # TODO multispecies coverage
-        n_covered = int(np.round(coverage * len(self.system.sites)))
-        chosen_sites = np.random.choice(len(self.system.sites), n_covered)
+        n_covered = int(np.round(coverage * len(self.sites)))
+        chosen_sites = np.random.choice(len(self.sites), n_covered)
         for c in chosen_sites:
-            self.system.sites[c].covered = species
+            self.sites[c].covered = species
