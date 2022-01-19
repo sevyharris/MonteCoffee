@@ -7,6 +7,32 @@ from ase.build import add_adsorbate
 CO = Atoms('CO', positions=[(0, 0, 0), (0, 0, 1.0)])
 
 
+class COOxidation(base.events.EventBase):
+    def __init__(self, params):
+        base.events.EventBase.__init__(self, params, name='COOxidation')
+
+    def possible(self, system, site, other_site):
+        if (system.sites[site].covered == user_sites.SPECIES_COX
+            and system.sites[other_site].covered == user_sites.SPECIES_OX) or \
+                (system.sites[site].covered == user_sites.SPECIES_OX
+                 and system.sites[other_site].covered == user_sites.SPECIES_COX):
+            return True
+        else:
+            return False
+
+    def get_rate(self, system, site, other_site):
+        R = 100000.0
+        return R
+        # TODO compute diffusion rate
+
+    def do_event(self, system, site, other_site):
+        system.sites[other_site].covered = user_sites.SPECIES_X
+        system.sites[site].covered = user_sites.SPECIES_X
+
+    def get_involve_other(self):
+        return False
+
+
 # TODO define single and double adsorption - ask if triple is pertinent?
 class COAdsorption(base.events.EventBase):
     """
@@ -103,7 +129,7 @@ class O2Desorption(base.events.EventBase):
         system.sites[other_site].covered = user_sites.SPECIES_X
 
     def get_involve_other(self):
-        return False
+        return True
 
 
 class CODiffusion(base.events.EventBase):
@@ -118,7 +144,7 @@ class CODiffusion(base.events.EventBase):
             return False
 
     def get_rate(self, system, site, other_site):
-        R = 1.0
+        R = 10.0
         return R
         # TODO compute diffusion rate
 
@@ -142,7 +168,7 @@ class ODiffusion(base.events.EventBase):
             return False
 
     def get_rate(self, system, site, other_site):
-        R = 1.0
+        R = 10.0
         return R
         # TODO get diffusion rate
 
@@ -152,3 +178,4 @@ class ODiffusion(base.events.EventBase):
 
     def get_involve_other(self):
         return False
+
