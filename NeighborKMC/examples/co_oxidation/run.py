@@ -26,7 +26,7 @@ print("CO Oxidation Practice")
 T = 247  # Kelvin
 pCO = 20.0  # Pascals
 pO2 = 10.0  # Pascals
-t_end = 0.1  # seconds
+t_end = 1.0  # seconds
 a = 4.0
 Ncutoff = a / np.sqrt(2.0) + 0.05
 atoms = ase.build.fcc111('Pt', a=a, size=(20, 20, 1))
@@ -56,6 +56,7 @@ sites.sort(key=x_sort)
 
 gameboard = user_system.System(atoms=atoms, sites=sites)
 gameboard.set_neighbors(Ncutoff, pbc=True)
+gameboard.cover_system(user_sites.SPECIES_OX, 0.25)
 
 events = [
     user_events.COAdsorption,
