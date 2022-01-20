@@ -1,3 +1,12 @@
+# Note
+This version is copied from https://gitlab.com/sevyharris/MonteCoffee, which is a fork of https://gitlab.com/ChemPhysChalmers/MonteCoffee
+
+I used the following commands to rewrite the git history without the 100MB+ files that were preventing automatic transfer to Github
+```
+git filter-branch --tree-filter 'rm -f NeighborKMC/tutorials/A_ads/result/cov_100x10.txt' HEAD
+git filter-branch -f --tree-filter 'rm -f NeighborKMC/tutorials/B2_ads/result/cov_10x100.txt' HEAD
+```
+
 # What is MonteCoffee?
 MonteCoffee is an application for performing kinetic Monte Carlo 
 (kMC) simulations. The program is written as a set of Python modules, which
