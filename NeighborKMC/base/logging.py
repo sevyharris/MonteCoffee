@@ -7,6 +7,7 @@ import numpy as np
 from ase.io import write
 from ase import Atoms
 import h5py
+import pickle
 
 
 class Log:
@@ -195,3 +196,15 @@ class Log:
         self.times = []
         self.covered = []
         self.system_evolution = [[] for i in range(4)]
+
+    def save_system(self, system, filename):
+        """Writes all ase Atoms to a file"""
+
+        self.write_line('Saving system snapshot to {filename}')
+        write(filename, system.atoms)
+
+    def save_system_pickle(self, system, filename):
+        """Writes all ase Atoms to a file"""
+
+        with open(filename, 'wb') as f:
+            pickle.dump(system, f)

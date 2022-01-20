@@ -303,8 +303,12 @@ class NeighborKMCBase:
 
         for i, s in enumerate(self.system.sites):
             NNcur = self.system.neighbors[i]
+
+            # # randomize the nearest neighbor order
+            random.shuffle(NNcur)
             for j, e in enumerate(self.events):
                 for k, other_site in enumerate(NNcur):
+
                     used_ijk = True if (i, j, other_site) in self.used_ijk or (other_site, j, i) in self.used_ijk else False  # Check if the pair is already in list
                     if e.possible(self.system, i, other_site) and not used_ijk:
                         rcur = e.get_rate(self.system, i, other_site)
